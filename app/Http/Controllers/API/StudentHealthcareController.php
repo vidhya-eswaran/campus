@@ -13,32 +13,36 @@ class StudentHealthcareController extends Controller
     public function addHealthcareRecord(Request $request)
     {
         $requestData = $request->validate([
-            'studentId' => 'required',
+            'admissionNo' => 'required',
+            'hostel_name'=> 'nullable',
             'treatmentType' => 'nullable',
             'fromDate' => 'nullable',
             'toDate' => 'nullable',
             'natureOfSkiness' => 'nullable',
             'cost' => 'nullable',
-            'hostel_name'=> 'nullable',
-            'remarks'=>'nullable',
-            // 'status' => 'nullable',
+            'fatherName' => 'nullable',
+            'fatherNumber' => 'nullable',
+            'motherName' => 'nullable',
+            'motherNumber' => 'nullable',
         ]);
 
         // Create healthcare record
         $healthcareRecord = HealthcareRecord::create([
-            'student_id' => $requestData['studentId'],
+            'admission_no' => $requestData['admissionNo'],
             'treatment_type' => $requestData['treatmentType'],
             'from_date' => $requestData['fromDate'],
             'to_date' => $requestData['toDate'],
             'cost' => $requestData['cost'],
             'nature_of_sickness' => $requestData['natureOfSkiness'],
             'hostel_name' => $requestData['hostel_name'],
-            'remarks'=>$requestData['remarks'],
-            // 'status' => $requestData['status'],
+            'father_name' => $requestData['fatherName'],
+            'father_number' => $requestData['fatherNumber'],
+            'mother_name' => $requestData['motherName'],
+            'mother_number' => $requestData['motherNumber'],
         ]);
         LifecycleLogger::log(
             "Healthcare Record Created",
-            $requestData['studentId'], // assuming this is same as User ID
+            $requestData['admissionNo'], // assuming this is same as User ID
             'healthcare_record_created',
             [
                 'treatment_type' => $requestData['treatmentType'],
@@ -47,7 +51,6 @@ class StudentHealthcareController extends Controller
                 'cost' => $requestData['cost'],
                 'nature_of_sickness' => $requestData['natureOfSkiness'],
                 'hostel_name' => $requestData['hostel_name'],
-                'remarks'=>$requestData['remarks'],
             ]
         );
         return response()->json(['message' => 'Healthcare record added successfully!', 'healthcare_record' => $healthcareRecord], 201);
@@ -63,27 +66,31 @@ class StudentHealthcareController extends Controller
         }
 
         $requestData = $request->validate([
-           'studentId' => 'required',
+            'admissionNo' => 'required',
+            'hostel_name'=> 'nullable',
             'treatmentType' => 'nullable',
             'fromDate' => 'nullable',
             'toDate' => 'nullable',
             'natureOfSkiness' => 'nullable',
             'cost' => 'nullable',
-            'hostel_name'=> 'nullable',
-            'remarks'=> 'nullable',
-            // 'status' => 'nullable',
+            'fatherName' => 'nullable',
+            'fatherNumber' => 'nullable',
+            'motherName' => 'nullable',
+            'motherNumber' => 'nullable',
         ]);
 
         $healthcareRecord->update([
-            'student_id' => $requestData['studentId'],
+           'admission_no' => $requestData['admissionNo'],
             'treatment_type' => $requestData['treatmentType'],
             'from_date' => $requestData['fromDate'],
             'to_date' => $requestData['toDate'],
-            'nature_of_sickness' => $requestData['natureOfSkiness'],
             'cost' => $requestData['cost'],
+            'nature_of_sickness' => $requestData['natureOfSkiness'],
             'hostel_name' => $requestData['hostel_name'],
-            'remarks' => $requestData['remarks'],
-           // 'status' => $requestData['status'],
+            'father_name' => $requestData['fatherName'],
+            'father_number' => $requestData['fatherNumber'],
+            'mother_name' => $requestData['motherName'],
+            'mother_number' => $requestData['motherNumber'],
         ]);
 
         return response()->json(['message' => 'Healthcare record updated successfully!', 'healthcare_record' => $healthcareRecord], 200);
@@ -91,92 +98,92 @@ class StudentHealthcareController extends Controller
 
     // View healthcare record by ID
   public function viewHealthcareRecord($id)
-{
-    // Fetch the healthcare record by ID
-    $healthcareRecord = HealthcareRecord::find($id);
+    {
+        // Fetch the healthcare record by ID
+        $healthcareRecord = HealthcareRecord::find($id);
 
-    // Check if the healthcare record exists
-    if (!$healthcareRecord) {
-        return response()->json(['message' => 'Healthcare record not found'], 404);
-    }
-$roll_no= User::where('id', $healthcareRecord->student_id)->value('roll_no');
-    // Fetch the student details related to this healthcare record
-    $student = Student::where('roll_no',$roll_no)->first();
-
-    // If student is found, add student details to healthcare record
-    if ($student) {
-        $healthcareRecord->studentName = $student->STUDENT_NAME;
-        $healthcareRecord->admissionNo = $student->admission_no;
-        $healthcareRecord->class = $student->SOUGHT_STD;
-        $healthcareRecord->section = User::where('id', $healthcareRecord->student_id)->value('sec') ?? '';
-        $healthcareRecord->father_mobile_no = $student->MOBILE_NUMBER;
-        $healthcareRecord->father_name = $student->FATHER;
-        $healthcareRecord->mother_name = $student->MOTHER;
-        $healthcareRecord->mother_mobile_no = $student->WHATS_APP_NO;
-        $healthcareRecord->roll_no = $student->roll_no;
-         
-        
-    } else {
-        // If no student found, add empty or default values
-        $healthcareRecord->studentName = null;
-        $healthcareRecord->admissionNo = null;
-        $healthcareRecord->class = null;
-        $healthcareRecord->section = null;
-        $healthcareRecord->father_mobile_no =null;
-        $healthcareRecord->father_name = null;
-        $healthcareRecord->mother_name = null;
-        $healthcareRecord->mother_mobile_no =null;
-        $healthcareRecord->roll_no = null;
-
-    }
-
-    // Return the healthcare record with student details
-    return response()->json(['healthcare_record' => $healthcareRecord], 200);
-}
-
-    // View all healthcare records
-  public function viewAllHealthcareRecords()
-{
-    // Fetch all healthcare records
-    $healthcareRecords = HealthcareRecord::all();
-
-    // Add student details for each healthcare record
-    $healthcareRecordsWithStudentDetails = $healthcareRecords->map(function ($record) {
-        // Fetch the student by student_id
-        $roll_no= User::where('id', $record->student_id)->value('roll_no');
-
+        // Check if the healthcare record exists
+        if (!$healthcareRecord) {
+            return response()->json(['message' => 'Healthcare record not found'], 404);
+        }
+        $roll_no= User::where('admission_no', $healthcareRecord->admission_no)->value('roll_no');
+        // Fetch the student details related to this healthcare record
         $student = Student::where('roll_no',$roll_no)->first();
-    // Fetch the student details related to this healthcare record
-         // If student is found, merge the student details into the record
+        // dd($roll_no);
+        // If student is found, add student details to healthcare record
         if ($student) {
-            $record->studentName = $student->STUDENT_NAME;
-            $record->admissionNo = $student->admission_no;
-            $record->class = $student->SOUGHT_STD;
-            $record->section =  User::where('id', $record->student_id)->value('sec');
-            $record->father_mobile_no = $student->MOBILE_NUMBER;
-            $record->father_name = $student->FATHER;
-            $record->mother_name = $student->MOTHER;
-            $record->mother_mobile_no = $student->WHATS_APP_NO;
-            $record->roll_no = $student->roll_no;
+            $healthcareRecord->studentName = $student->STUDENT_NAME;
+            $healthcareRecord->admissionNo = $student->admission_no;
+            $healthcareRecord->class = $student->SOUGHT_STD;
+            $healthcareRecord->section = User::where('id', $healthcareRecord->admission_no)->value('sec') ?? '';
+            $healthcareRecord->father_mobile_no = $student->MOBILE_NUMBER;
+            $healthcareRecord->father_name = $student->FATHER;
+            $healthcareRecord->mother_name = $student->MOTHER;
+            $healthcareRecord->mother_mobile_no = $student->WHATS_APP_NO;
+            $healthcareRecord->roll_no = $student->roll_no;
+
+
         } else {
             // If no student found, add empty or default values
-            $record->studentName = null;
-            $record->admissionNo = null;
-            $record->class = null;
-            $record->section = null;
-            $record->father_mobile_no =null;
-            $record->father_name = null;
-            $record->mother_name = null;
-            $record->mother_mobile_no =null;
-            $record->roll_no = null;
+            $healthcareRecord->studentName = null;
+            $healthcareRecord->admissionNo = null;
+            $healthcareRecord->class = null;
+            $healthcareRecord->section = null;
+            $healthcareRecord->father_mobile_no =null;
+            $healthcareRecord->father_name = null;
+            $healthcareRecord->mother_name = null;
+            $healthcareRecord->mother_mobile_no =null;
+            $healthcareRecord->roll_no = null;
 
         }
 
-        return $record;
-    });
+        // Return the healthcare record with student details
+        return response()->json(['healthcare_record' => $healthcareRecord], 200);
+    }
 
-    // Return healthcare records with student details
-    return response()->json(['healthcare_records' => $healthcareRecordsWithStudentDetails], 200);
-}
+    // View all healthcare records
+  public function viewAllHealthcareRecords()
+    {
+        // Fetch all healthcare records
+        $healthcareRecords = HealthcareRecord::all();
+
+        // Add student details for each healthcare record
+        $healthcareRecordsWithStudentDetails = $healthcareRecords->map(function ($record) {
+            // Fetch the student by admission_no
+            $roll_no= User::where('admission_no', $record->admission_no)->value('roll_no');
+
+            $student = Student::where('roll_no',$roll_no)->first();
+        // Fetch the student details related to this healthcare record
+            // If student is found, merge the student details into the record
+            if ($student) {
+                $record->studentName = $student->STUDENT_NAME;
+                $record->admissionNo = $student->admission_no;
+                $record->class = $student->SOUGHT_STD;
+                $record->section =  User::where('id', $record->admission_no)->value('sec');
+                $record->father_mobile_no = $student->MOBILE_NUMBER;
+                $record->father_name = $student->FATHER;
+                $record->mother_name = $student->MOTHER;
+                $record->mother_mobile_no = $student->WHATS_APP_NO;
+                $record->roll_no = $student->roll_no;
+            } else {
+                // If no student found, add empty or default values
+                $record->studentName = null;
+                $record->admissionNo = null;
+                $record->class = null;
+                $record->section = null;
+                $record->father_mobile_no =null;
+                $record->father_name = null;
+                $record->mother_name = null;
+                $record->mother_mobile_no =null;
+                $record->roll_no = null;
+
+            }
+
+            return $record;
+        });
+
+        // Return healthcare records with student details
+        return response()->json(['healthcare_records' => $healthcareRecordsWithStudentDetails], 200);
+    }
 
 }

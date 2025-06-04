@@ -56,24 +56,10 @@ class genrateInvoiceController extends Controller
             $records = FeesMap::where('status', '=', 1)->where('invoice_generated', '=', 0)->where('standard', '=',  $request->input('std'))->where('group', '=', $request->input('group'))->where('fees_heading', '!=', 'school fees')->orderBy('id', 'DESC')->get();
         }
         $data = [];
-        // foreach ($records as $record) {
-        //     $data[] = [
-        //         'id' => $record->id,
-        //         'standard' => $record->standard,
-        //         'group' => $record->group,
-        //         'amount' => $record->amount,
-        //         'fees_heading' => $record->fees_heading,
-        //         'fees_sub_heading' => $record->fees_sub_heading,
-        //         'due_date' => $record->due_date,
-        //         'acad_year' => $record->acad_year,
-        //         'created_by' => $record->created_by,
 
-        //     ];
-        // }
         $concatenatedHeadings = '';
 
         foreach ($records as $record) {
-            // $concatenatedHeadings .= 'Fee Heading: ' . $record->fees_heading . ' - Subheading: ' . $record->fees_sub_heading . ' - Amount: ' . $record->amount . '<br>';
             $concatenatedHeadings .=  $record->fees_heading . '-' . $record->fees_sub_heading . '-' . $record->amount . '<br>';
         }
         if ($cata == "school fees") {
@@ -89,7 +75,7 @@ class genrateInvoiceController extends Controller
     {
         $validator = Validator::make(
             $request->all(),
-            //`id`, `student_id`, `roll_no`, `discount_cat`, `dis_amount`, `year`, `created_by`, `created_at`, `updated_at` FROM 
+            //`id`, `student_id`, `roll_no`, `discount_cat`, `dis_amount`, `year`, `created_by`, `created_at`, `updated_at` FROM
             [
                 'student_id' => 'nullable',
                 'roll_no' => 'nullable',
@@ -139,7 +125,7 @@ class genrateInvoiceController extends Controller
     //     }
     //     return response()->json(['data' => $users]);
     // }
-    
+
 public function getDiscountCategories()
 {
     $categories = SchoolFeeDiscount::select('discount_cat')
@@ -149,7 +135,7 @@ public function getDiscountCategories()
 
     return response()->json(['categories' => $categories]);
 }
-    
+
 public function readDiscount(Request $request)
 {
     $fromDate = $request->input('fromDate');
@@ -299,7 +285,7 @@ $student->created_att =  Carbon::parse($student->created_at )->format('d/m/Y h:i
                     }
                 }
             }
- 
+
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (!empty($fees_items_details)) {
 
@@ -338,7 +324,7 @@ $student->created_att =  Carbon::parse($student->created_at )->format('d/m/Y h:i
                 //     }
                 // }
 
-                //////////////////////////////////////////////////////////// 
+                ////////////////////////////////////////////////////////////
                 $invoice_lists = GenerateInvoiceView::select('invoice_no')->get();
                 $usedInvoiceIdsNos = array();
                 $usedInvoiceIdsCount =  $invoice_lists->count();
@@ -360,7 +346,7 @@ $student->created_att =  Carbon::parse($student->created_at )->format('d/m/Y h:i
                 //     ->where('closed_status', 0)
                 //     ->first();
 
-                // this is total correct for test it changed to 
+                // this is total correct for test it changed to
 
                 //$amount = 3;
                 $total_invoice_amount = 0;
@@ -373,7 +359,7 @@ $student->created_att =  Carbon::parse($student->created_at )->format('d/m/Y h:i
                     $discountSum = SchoolFeeDiscount::where('student_id', $userData->id)->where('invoicefeescat', '!=', 'school fees')->where('status', 1)->sum('dis_amount');
                     $discountSum_l = SchoolFeeDiscount::where('student_id', $userData->id)->where('invoicefeescat', '!=', 'school fees')->where('status', 1)->get();
                 }
-                //////////////////////////////////end of Pendinding amount /////////////////////////////////////               
+                //////////////////////////////////end of Pendinding amount /////////////////////////////////////
                 // $discountSum = SchoolFeeDiscount::where('student_id', $userData->id)->where('status', 1)->sum('dis_amount');
                 // $discountSum_l = SchoolFeeDiscount::where('student_id', $userData->id)->get();
                 $dis_items_details = array(); // Fees items details json for invoice print
@@ -395,13 +381,13 @@ $student->created_att =  Carbon::parse($student->created_at )->format('d/m/Y h:i
                     // Update the discount status in the database
                     $discountId = $disrecord->id; // Assuming you have a discount_id field in the $disrecord object
                 }
-                ///////////////////////end of discount concordination//////////////////////////////                
+                ///////////////////////end of discount concordination//////////////////////////////
                 // Generate a unique invoice number
                 // do {
                 //     $randomNumber = rand(1111, 9999);
                 //     $invoice_no = 'SVS' . date('dMy') . $randomNumber . date('His');
                 // } while (in_array(strtoupper($invoice_no), $usedInvoiceIdsNos));
-                
+
                 // $invoice_no = strtoupper($invoice_no);
                 $invoice_no = FastInvoiceHelper::generateInvoiceWithPrefix($fees_cat);
                  // array_push($usedInvoiceIdsNos, $invoice_no);
@@ -455,7 +441,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                     'payment_status' =>  $data->payment_status,
                     'created_by' => $data->created_by
                 ];
-                
+
                                 try {
                     LifecycleLogger::log(
                         "Invoice Generated: {$invoice_no}",
@@ -492,12 +478,12 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                         'inv_amt' => $amount,
                         'due_amount' => $newDues,
                          's_excess_amount' => ($data->fees_cat === 'school') ? $newExcess : 0, // Inline assignment for s_excess_amount
-                         'h_excess_amount' => ($data->fees_cat !== 'school') ? $newExcess : 0, 
+                         'h_excess_amount' => ($data->fees_cat !== 'school') ? $newExcess : 0,
                         'type' => $data->fees_cat, // Set accordingly
                          'created_at' => now(),
                         'updated_at' => now()
                     ]);
-                    
+
  DB::table('generate_invoice_views')
     ->where('student_id', $userData->id)
     ->where('fees_cat', $data->fees_cat)
@@ -507,12 +493,12 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
     ->where('id',  $userData->id) // Specify the user ID you want to update
     ->update([
         'excess_amount' =>  ($data->fees_cat === 'school') ? $newExcess : 0,
-        'h_excess_amount' => ($data->fees_cat !== 'school') ? $newExcess : 0, 
+        'h_excess_amount' => ($data->fees_cat !== 'school') ? $newExcess : 0,
         'updated_at' => now() // Update the timestamp
     ]);
-         
-                
-                
+
+
+
                 //////////////////////////////////invoice created //////////////////////////////////////////////////
                 // if ($GenerateInvoiceView) {
                 //     try {
@@ -569,7 +555,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                     //     Log::error('Exception: ' . $e->getMessage());
                     // }
 
-             
+
 
                     if (!empty($discountId)) { // Find the discount record
                         $discount = SchoolFeeDiscount::find($discountId);
@@ -626,7 +612,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                 }
             }
         }
-    
+
         //////////////////end of each user //////////////////////end of each user////////////////////end of each user//////
         return response()->json(['data' => $dataFeeMaps, 'concatenatedHeadingsresult' =>  $concatenatedHeadingsresult, 'status' => 'updated']);
     }
@@ -665,7 +651,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
             if ($excess_amount !== null && is_numeric($excess_amount)) {
                 $amount += $excess_amount;
             }
-            
+
         } else {
             $spexcess_amount = User::where('id', $request->sponsor)->first();
             if ($spexcess_amount->excess_amount < $amount) {
@@ -687,7 +673,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                 $totalInvoiceAmountActual =  number_format($totalInvoiceAmount, 2, '.', '');
                 $amountActual = number_format($amount, 2, '.', '');
                 if ($totalInvoiceAmountActual > $amountActual) {
-                  
+
                     $balance_amount = $totalInvoiceAmountActual - $amountActual;
                     $pending_amount = number_format($balance_amount, 2, '.', '');
                     $payment_status = "Partial Paid";
@@ -702,13 +688,13 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                     $payment_status = "Paid";
                     $upexcess_amount = 0;
                 }
- 
+
                 $record = GenerateInvoiceView::where('invoice_no', $invoiceDetails->invoice_no)->first();
-                
+
                 if (!$record) {
                     throw new \Exception("Invoice not found On cash payment line 695: " . $invoiceDetails->invoice_no);
                 }
-                
+
                 // Update the invoice
                 $record->update([
                     'payment_status' => $payment_status,
@@ -718,14 +704,14 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                     'additionalDetails' => $additionalDetails,
                     'mode' => $mode
                 ]);
-                
+
                 // Generate Receipt ID using fees category from the original record
                 $transactionId = FastInvoiceHelper::generateReceiptWithPrefix($record->fees_cat);
 
 
 
                 $payment_order_data['internal_txn_id'] = $transactionId;
-                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention 
+                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention
                 $payment_order_data['amount'] = $amount;
                 $payment_order_data['maxAmount'] = null;
                 //Payment user details
@@ -733,7 +719,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                 $payment_order_data['custID']  = $invoiceDetails->student_id;
                 $payment_order_data['mobNo'] = null;
 
-                //Payment 
+                //Payment
                 $payment_order_data['paymentMode'] = $mode;
                 $payment_order_data['accNo'] = null;
                 $payment_order_data['debitStartDate'] = null;
@@ -885,7 +871,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                 $transactionId = randomId(); // randomId(1000,10000,'STU',['STU12345'])  use for string randomId
 
                 $payment_order_data['internal_txn_id'] = $transactionId;
-                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention 
+                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention
                 $payment_order_data['amount'] = $amount;
                 $payment_order_data['maxAmount'] = null;
                 //Payment user details
@@ -893,7 +879,7 @@ $excess1 = $generateInvoiceViewModel->getMostRecentExcess($userData->id,$data->f
                 $payment_order_data['custID']  = $invoiceDetails->student_id;
                 $payment_order_data['mobNo'] = null;
 
-                //Payment 
+                //Payment
                 $payment_order_data['paymentMode'] = $mode;
                 $payment_order_data['accNo'] = null;
                 $payment_order_data['debitStartDate'] = null;
@@ -1069,44 +1055,44 @@ public function ReciptSearch(Request $request)
     // Return the options as JSON
     return response()->json($options);
 }
-///////////////////////////////////////////   
+///////////////////////////////////////////
 
  public function listgenrate(Request $request)
     {
         $dateFormat = 'Y-m-d';
         $fromre = $request->input('fromDate');
         $tore = $request->input('toDate');
-    
+
         $draw = $request->input('draw');
         $start = $request->input('start');
         $length = $request->input('length');
-        
+
 
         $skip = $request->input('start') ?? 0;
         $take = $request->input('length') ?? 15;
         $searchTerm = $request->input('search.value') ?? '';
-        
+
         $std =  $request->input('std')??'';
         $org=  $request->input('selectedGen')??'';
-      
+
         if ($request->input('selectedGen') == 'Organisation') {
-          $org=1; 
+          $org=1;
         }else{
-          $org=0; 
+          $org=0;
         }
 
         $studentsQuery = GenerateInvoiceView::orderBy('slno', 'desc');
-            
-        
+
+
         // Conditionally add whereBetween if from and to are present
         // return response()->json(['data' => $fromre, $tore  ]);
 
         if ($fromre !== null && $tore !== null) {
-            
+
 // Log the input values
         logger()->info('From input: ' . $fromre);
         logger()->info('To input: ' . $tore);
-        
+
         $fromDate = Carbon::createFromFormat($dateFormat, $fromre);
         $toDate = Carbon::createFromFormat($dateFormat, $tore);
         $from = $fromDate->format('Y-m-d');
@@ -1116,13 +1102,13 @@ public function ReciptSearch(Request $request)
             if ($std) {
               $studentsQuery->where('standard', $std);
           }
-      
+
           if ($org == 1) {
               $studentsQuery->where('sponser_id', '!=', '');
           }
-        }elseif ($fromre == null && $tore == null) {  
-            
-          
+        }elseif ($fromre == null && $tore == null) {
+
+
           // $fromDate = Carbon::createFromFormat($dateFormat, $fromre);
           // $toDate = Carbon::createFromFormat($dateFormat, $tore);
           // $from = $fromDate->format('Y-m-d');
@@ -1132,7 +1118,7 @@ public function ReciptSearch(Request $request)
               if ($std) {
                 $studentsQuery->where('standard', $std);
             }
-        
+
             if ($org == 1) {
                 $studentsQuery->where('sponser_id', '!=', '');
             }
@@ -1148,17 +1134,17 @@ public function ReciptSearch(Request $request)
                     'due_date', 'cash_amount', 'paid_amount', 'invoice_pending_amount', 'payment_status',
                     'invoice_status', 'additionalDetails', 'mode', 'created_by', 'created_at', 'updated_at',
                 ];
-    
+
                 foreach ($columns as $column) {
                     $query->orWhere($column, 'like', '%' . $searchTerm . '%');
                 }
  $query->orWhereHas('sponsors', function ($query) use ($searchTerm) {
         $query->where('name', 'like', '%' . $searchTerm . '%');
-    });      
+    });
 
 });
         }
-        $count = $studentsQuery->count();    
+        $count = $studentsQuery->count();
 
         $students = $studentsQuery->skip($start)->take($length)->get();
         $studentst = $studentsQuery->get();
@@ -1177,10 +1163,10 @@ $totalPaidAmount = ByPayInformation::whereIn('invoice_id', $studentst->pluck('sl
 $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst->pluck('slno'))
     ->latest()
     ->value('due_amount');
-    
 
-      //  $count = GenerateInvoiceView::count();    
-        //  $count = GenerateInvoiceView::orderBy('slno', 'desc') 
+
+      //  $count = GenerateInvoiceView::count();
+        //  $count = GenerateInvoiceView::orderBy('slno', 'desc')
         // ->orderBy('slno', 'desc')
         // ->count();
         // $students = GenerateInvoiceView::orderBy('slno', 'desc')->get();
@@ -1426,47 +1412,47 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
 
         // Convert dates to the format used in the database
 
-       
+
         $std =  $request->input('std')??'';
         $org=  $request->input('selectedGen')??'';
-      
+
         if ($request->input('selectedGen') == 'Organisation') {
-          $org=1; 
+          $org=1;
         }else{
-          $org=0; 
+          $org=0;
         }
         $query = GenerateInvoiceView::query();
 
         if ($from && $to && !$acad_year) {
           $query->whereBetween(DB::raw('DATE(created_at)'), [$from, $to]);
-      
+
           if ($std) {
               $query->where('standard', $std);
           }
-      
+
           if ($org == 1) {
               $query->where('sponser_id', '!=', '');
           }
-      
+
           $query->orderByDesc('slno');
       } elseif (!$from && !$to && !$acad_year) {
 
           if ($std) {
               $query->where('standard', $std);
           }
-      
+
           if ($org == 1) {
               $query->where('sponser_id', '!=', '');
           }
-      
+
           $query->orderByDesc('slno');
-          
+
       } elseif ($from && $to && $acad_year) {
           $query->where('acad_year', $acad_year)
               ->whereBetween(DB::raw('DATE(created_at)'), [$from, $to])
               ->orderByDesc('slno');
       }
-      
+
 
         $students = $query->get();
         // Calculate totals
@@ -1476,7 +1462,7 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
         $totalPaidAmount = $students->sum('paid_amount');
         $totalInvoicePendingAmount = $students->sum('invoice_pending_amount');
 
-       
+
 
         return response()->json([
          // 'data'=>$students,
@@ -1489,15 +1475,15 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
             ],
         ]);
     }
-    
-    
+
+
 
     public function docGenerate(Request $request)
     {
         $cata = $request->input('cat');
-        $fees_cat = $cata == "school fees" ? 'school' : 'other'; 
-        $invoiceTypeString = $cata == "school fees" ? 'S' : 'O'; 
-        
+        $fees_cat = $cata == "school fees" ? 'school' : 'other';
+        $invoiceTypeString = $cata == "school fees" ? 'S' : 'O';
+
         $userDatas = User::where('status', '=', 1)
                          ->where('standard', '=',  $request->input('std'))
                          ->where('user_type', '=', 'student')
@@ -1509,20 +1495,20 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
         return $query;
     })
                          ->get();
-    
+
         $invoiceData = [];
-        
-    
+
+
         foreach ($userDatas as $userData) {
-           
+
             unset($fees_items_details);
             $concatenatedHeadings = '';
-            $fees_items_details = array(); 
+            $fees_items_details = array();
 
             if ($cata == "school fees") {
                 $records = StudentFeesMap::where('status', '=', 1)->where('invoice_generated', '=', 0)->where('student_id', '=', $userData->id)->where('standard', '=',  $request->input('std'))->where('fee_heading', '=', $request->input('cat'))->orderBy('slno', 'DESC')->get();
                 //dd($records);
-                
+
                 if ($records) {
 
                     foreach ($records as $record) {
@@ -1554,7 +1540,7 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
                 }
             }
             //dd($fees_items_details);
- 
+
             if (!empty($fees_items_details)) {
 
                 $data = (object)[];
@@ -1585,7 +1571,7 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
                 $year = date('y');
                 $month = date('m');
                 $rondomIdString = 'GI' . $invoiceTypeString . $month . $year;
-               
+
                 $total_invoice_amount = 0;
                 $pending_amount = 0;
 
@@ -1596,31 +1582,31 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
                     $discountSum = SchoolFeeDiscount::where('student_id', $userData->id)->where('invoicefeescat', '!=', 'school fees')->where('status', 1)->sum('dis_amount');
                     $discountSum_l = SchoolFeeDiscount::where('student_id', $userData->id)->where('invoicefeescat', '!=', 'school fees')->where('status', 1)->get();
                 }
-               
+
                 $dis_items_details = array(); // Fees items details json for invoice print
 
                 $amount = (null !==  $discountSum) ? ($data->amount -  $discountSum) :  $data->amount;
-                
+
                     $total_invoice_amount =  $amount;
-             
+
 
                 foreach ($discountSum_l as $disrecord) {
                     $dis_items = (object) [];
                     $dis_items->discount_cat = $disrecord->discount_cat;
                     $dis_items->dis_amount = $disrecord->dis_amount;
-                    array_push($dis_items_details, $dis_items); 
-                    
-                    $discountId = $disrecord->id; 
+                    array_push($dis_items_details, $dis_items);
+
+                    $discountId = $disrecord->id;
                 }
-                
+
                 do {
                     $randomNumber = rand(1111, 9999);
                     $invoice_no = 'SVS' . date('dMy') . $randomNumber . date('His');
                 } while (in_array(strtoupper($invoice_no), $usedInvoiceIdsNos));
-                
+
                 $invoice_no = strtoupper($invoice_no);
                 array_push($usedInvoiceIdsNos, $invoice_no);
-                
+
 
                 $dataFeeMaps = [
                     'student_id' => $userData->id,
@@ -1637,7 +1623,7 @@ $totalInvoicePendingAmount = ByPayInformation::whereIn('invoice_id', $studentst-
                     'fees_glance' =>  $data->fees_glance,
                     'fees_cat' => $data->fees_cat,
                    'fees_items_details' => json_encode($data->fees_items_details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-                    'discount_items_details' => 
+                    'discount_items_details' =>
 implode(', ', array_map(function($item) {
     // Convert object to array if necessary
     $itemArray = is_object($item) ? (array) $item : $item;
@@ -1655,17 +1641,17 @@ implode(', ', array_map(function($item) {
                     'payment_status' =>  $data->payment_status,
                     'created_by' => $data->created_by
                 ];
-                
+
                 $invoiceData[] = $dataFeeMaps;
-                
+
             }
         }
-        
+
         return response()->json([
               'invoicedata' =>  $invoiceData
         ]);
         //dd($invoiceData);
-    
+
       //  return Excel::download(new InvoicesExport(collect($invoiceData)), 'invoices.xlsx');
     }
 // public function cashgenratetwo(Request $request)
@@ -1743,7 +1729,7 @@ implode(', ', array_map(function($item) {
 //             $school_excess = 0;
 //             $hostel_excess = 0;
 //         }
-       
+
 //         // Student is paying
 //         if ($invoiceDetails->fees_cat == 'school') {
 //             $student_excess_amount = $student->excess_amount ?? 0;
@@ -1886,7 +1872,7 @@ implode(', ', array_map(function($item) {
 //     ]);
 
 //     $payment_order_data['internal_txn_id'] = $transactionId;
-//                 $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention 
+//                 $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention
 //                 $payment_order_data['amount'] = $amount;
 //                 $payment_order_data['maxAmount'] = null;
 //                 //Payment user details
@@ -1894,7 +1880,7 @@ implode(', ', array_map(function($item) {
 //                 $payment_order_data['custID']  = $invoiceDetails->student_id;
 //                 $payment_order_data['mobNo'] = null;
 
-//                 //Payment 
+//                 //Payment
 //                 $payment_order_data['paymentMode'] = $mode;
 //                 $payment_order_data['accNo'] = null;
 //                 $payment_order_data['debitStartDate'] = null;
@@ -1961,7 +1947,7 @@ implode(', ', array_map(function($item) {
 //                     'created_at' => now(),
 //                     'updated_at' => now()
 //                 ]);
-       
+
 //     return response()->json([
 //         'message' => 'Payment processed successfully.',
 //         'pending_amount' => $pending_amount,
@@ -2018,7 +2004,7 @@ implode(', ', array_map(function($item) {
 //     // Handle the excess amount for student or sponsor
 //     if (!$sponsor) {
 //         //New Logic Start
-        
+
 //         if($paymentInformation->type === "school"){
 //             $most_recent_s_excess = $s_excess;
 //             $most_recent_h_excess = 0;
@@ -2055,7 +2041,7 @@ implode(', ', array_map(function($item) {
 //             $school_excess = 0;
 //             $hostel_excess = 0;
 //         }
-       
+
 //         // Student is paying
 //         if ($invoiceDetails->fees_cat === 'school') {
 //             $student_excess_amount = (int)$student->excess_amount ?? 0;
@@ -2093,17 +2079,17 @@ implode(', ', array_map(function($item) {
 //     } else {
 //         // Sponsor is paying (logic remains the same)
 //         $sponsorUser = User::find($sponsor);
- 
+
 
 //         if (!$sponsorUser) {
 //             return response()->json(['message' => 'Sponsor not found.'], 404);
 //         }
-        
+
 //         if($amount < $most_recent_dues){
 //             // return response()->json(['amt' => $amount,'most' => $most_recent_dues,'jjj'=>($sponsorUser->excess_amount < $amount),'logic'=>'big'], 404);
-            
+
 //             // $dues = $most_recent_dues - $amount;
-             
+
 //   if ($invoiceDetails->fees_cat == 'school') {
 //           if ($sponsorUser->excess_amount <= 0 || $sponsorUser->excess_amount < $amount) {
 //     return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
@@ -2121,8 +2107,8 @@ implode(', ', array_map(function($item) {
 //             $excess_source = 'sponsor_h_excess_amount';
 //             $sponsorUser->h_excess_amount -= $amount;
 //         }
-        
-            
+
+
 //         }
 //         elseif($amount > $most_recent_dues){
 //             // $dues = $most_recent_dues - $amount;
@@ -2155,21 +2141,21 @@ implode(', ', array_map(function($item) {
 //                 // $studentupdate->save();
 //                 User::where('id', $invoiceDetails->student_id)->update(['h_excess_amount' => $student_excess_amount + $amount - $most_recent_dues]);
 
-//             }        
+//             }
 //         }
-      
+
 //   //  return response()->json(['message' =>   $student->excess_amount], 201);
 
 //         $excess_amount_used = $amount; // Track sponsor's excess used
 //         $payed_amount = $amount; // For sponsor, the payed amount is the full amount paid
 //         $sponsorUser->save();
-        
+
 //         if ($sponsor) {
 //             $totalInvoiceAmountActual = number_format($invoiceDetails->total_invoice_amount, 2, '.', '');
 //             $previousTransactions = Invoice_list::where('invoice_id', $invoiceDetails->slno)->sum('transaction_amount');
 //             $pending_amount = $totalInvoiceAmountActual - ($previousTransactions + $payed_amount);
 //             // $dues = $pending_amount;
-           
+
 //         } else {
 //             // $dues = 0;
 //         }
@@ -2202,10 +2188,10 @@ implode(', ', array_map(function($item) {
 //                 $hostel_excess= $excessaddamount - $most_recent_dues;
 //                  $school_excess = 0;
 //             }
-//             }     
-        
-        
-        
+//             }
+
+
+
 //     }
 
 //     // Calculate pending amount by subtracting previous transactions
@@ -2311,7 +2297,7 @@ implode(', ', array_map(function($item) {
 //         'h_excess_amount' => $hostel_excess ?? null,
 //     ]);
 //     $payment_order_data['internal_txn_id'] = $transactionId;
-//                 $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention 
+//                 $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention
 //                 $payment_order_data['amount'] = $amount;
 //                 $payment_order_data['maxAmount'] = null;
 //                 //Payment user details
@@ -2319,7 +2305,7 @@ implode(', ', array_map(function($item) {
 //                 $payment_order_data['custID']  = $invoiceDetails->student_id;
 //                 $payment_order_data['mobNo'] = null;
 
-//                 //Payment 
+//                 //Payment
 //                 $payment_order_data['paymentMode'] = $mode;
 //                 $payment_order_data['accNo'] = null;
 //                 $payment_order_data['debitStartDate'] = null;
@@ -2403,7 +2389,7 @@ implode(', ', array_map(function($item) {
 //                     'updated_at' => now()
 //                 ]);
 //         /////////////////////////////////////////////////////////////////
-        
+
 //           // Get the student's email
 // $studentEmail = User::find($invoiceDetails->student_id)->value('email');
 
@@ -2411,9 +2397,9 @@ implode(', ', array_map(function($item) {
 // $downloadLink = "http://santhoshavidhyalaya.com/svsportaladmintest/PaymentReceipt12345678912345678" . "/$transactionId";
 
 // // Queue the email with the download link
-// //Mail::to($invoiceDetails->email)->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));     
-// Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));     
-            
+// //Mail::to($invoiceDetails->email)->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));
+// Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));
+
 //     return response()->json([
 //         'message' => 'Payment processed successfully.',
 //         'pending_amount' => $pending_amount,
@@ -2470,7 +2456,7 @@ Log::info('1.invoiceDetails', ['invoiceDetails' => $invoiceDetails]);
     // Handle the excess amount for student or sponsor
     if (!$sponsor) {
         //New Logic Start
-        
+
         if($paymentInformation->type === "school"){
             $most_recent_s_excess = $s_excess;
             $most_recent_h_excess = 0;
@@ -2507,7 +2493,7 @@ Log::info('1.invoiceDetails', ['invoiceDetails' => $invoiceDetails]);
             $school_excess = 0;
             $hostel_excess = 0;
         }
-       
+
         // Student is paying
         if ($invoiceDetails->fees_cat === 'school') {
             $student_excess_amount = (int)$student->excess_amount ?? 0;
@@ -2561,7 +2547,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
 
         if($amount < $most_recent_dues){
             // return response()->json(['amt' => $amount,'most' => $most_recent_dues,'jjj'=>($sponsorUser->excess_amount < $amount),'logic'=>'big'], 404);
-            
+
             // $dues = $most_recent_dues - $amount;
                          Log::info('4.AMOUNT < mOST RECENT');
 
@@ -2569,7 +2555,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                       if ($sponsorUser->excess_amount <= 0 || $sponsorUser->excess_amount < $amount) {
                 return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
                                                                                                      }
-             
+
                         $student_excess_amount = $sponsorUser->excess_amount ?? 0;
                         $excess_source = 'sponsor_excess_amount';
                         $sponsorUser->excess_amount -= $amount;
@@ -2577,13 +2563,13 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                           if ($sponsorUser->h_excess_amount <= 0 || $sponsorUser->h_excess_amount < $amount) {
                     return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
                                                                                                              }
-                
+
                             $student_excess_amount = $sponsorUser->h_excess_amount ?? 0;
                             $excess_source = 'sponsor_h_excess_amount';
                             $sponsorUser->h_excess_amount -= $amount;
         }
-        
-            
+
+
         }
         elseif($amount > $most_recent_dues){
                     // $dues = $most_recent_dues - $amount;
@@ -2602,7 +2588,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                     // }
                     //  return response()->json(['message' =>   $student_excess_amount + $amount - $most_recent_dues], 201);
                     User::where('id', $invoiceDetails->student_id)->update(['excess_amount' => $student_excess_amount + $amount - $most_recent_dues]);
-        
+
                 } else {
                          if ($sponsorUser->h_excess_amount <= 0 || $sponsorUser->excess_amount < $amount) {
                             return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
@@ -2615,33 +2601,33 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                         // $studentupdate->h_excess_amount = $remainingexcess;
                         // $studentupdate->save();
                         User::where('id', $invoiceDetails->student_id)->update(['h_excess_amount' => $student_excess_amount + $amount - $most_recent_dues]);
-        
-                    }        
+
+                    }
         }
       else {
                 Log::info('5.AMOUNT == MOST RECENT AMOUNT = INVOICE AMOUNT ');
-                
+
                 if ($invoiceDetails->fees_cat == 'school') {
                     if ($sponsorUser->excess_amount <= 0 || $sponsorUser->excess_amount < $amount) {
                         return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
                     }
-            
+
                     $student_excess_amount = $sponsorUser->excess_amount ?? 0;
                     $excess_source = 'sponsor_excess_amount';
                     $sponsorUser->excess_amount -= $amount;
-            
+
                     // No extra excess to transfer to student, since it's exact match
                     // No update needed for student excess amount
-            
+
                 } else {
                     if ($sponsorUser->h_excess_amount <= 0 || $sponsorUser->h_excess_amount < $amount) {
                         return response()->json(['message' => 'Sponsor has insufficient funds.'], 422);
                     }
-            
+
                     $student_excess_amount = $sponsorUser->h_excess_amount ?? 0;
                     $excess_source = 'sponsor_h_excess_amount';
                     $sponsorUser->h_excess_amount -= $amount;
-            
+
                     // No extra excess to transfer to student, since it's exact match
                     // No update needed for student h_excess_amount
                 }
@@ -2663,7 +2649,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
             $previousTransactions = Invoice_list::where('invoice_id', $invoiceDetails->slno)->sum('transaction_amount');
             $pending_amount = $totalInvoiceAmountActual - ($previousTransactions + $payed_amount);
             // $dues = $pending_amount;
-           
+
         } else {
             // $dues = 0;
         }
@@ -2707,10 +2693,10 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
        Log::info('2105.hostel_excess', ['excessaddamount' => $excessaddamount,'most_recent_dues' => $most_recent_dues,'hostel_excess' => $hostel_excess]);
 
             }
-            }     
-        
-        
-        
+            }
+
+
+
     }
 
     // Calculate pending amount by subtracting previous transactions
@@ -2816,7 +2802,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
         'h_excess_amount' => $hostel_excess ?? null,
     ]);
     $payment_order_data['internal_txn_id'] = $transactionId;
-                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention 
+                $payment_order_data['user_id'] = $invoiceDetails->student_id;  // user id need to mention
                 $payment_order_data['amount'] = $amount;
                 $payment_order_data['maxAmount'] = null;
                 //Payment user details
@@ -2824,7 +2810,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                 $payment_order_data['custID']  = $invoiceDetails->student_id;
                 $payment_order_data['mobNo'] = null;
 
-                //Payment 
+                //Payment
                 $payment_order_data['paymentMode'] = $mode;
                 $payment_order_data['accNo'] = null;
                 $payment_order_data['debitStartDate'] = null;
@@ -2907,7 +2893,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
-                
+
                 if ($invoiceDetails->fees_cat == 'school') {
                 $student_excess_amount = $student->excess_amount ?? 0;
                     User::where('id', $invoiceDetails->student_id)->update(['excess_amount' => ($student_excess_amount + $school_excess)]);
@@ -2919,7 +2905,7 @@ Log::info('2.sponsorUser', ['sponsorUser' => $sponsorUser]);
                 // $remainingexcess = ($student_excess_amount ?? 0) + ($amount ?? 0) - ($most_recent_dues ?? 0);
                 // $studentupdate->h_excess_amount = $remainingexcess;
                 // $studentupdate->save();
-                
+
         /////////////////////////////////////////////////////////////////
         $LOG = [
     'student_id' => $invoiceDetails->student_id,
@@ -2969,9 +2955,9 @@ $studentEmail = User::find($invoiceDetails->student_id)->value('email');
 $downloadLink = "http://santhoshavidhyalaya.com/svsportaladmintest/PaymentReceipt12345678912345678" . "/$transactionId";
 
 // Queue the email with the download link
-//Mail::to($invoiceDetails->email)->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));     
-//Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));     
-            
+//Mail::to($invoiceDetails->email)->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));
+//Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink,$amount,$payment_status,$transactionId));
+
     return response()->json([
         'message' => 'Payment processed successfully.',
         'pending_amount' => $pending_amount,
@@ -2995,7 +2981,7 @@ public function deletereciptview(Request $request)
                             ->first();
         return response()->json([
             'receipt' => $invoiceDetails,
-        ]); 
+        ]);
     }
 
     return response()->json([
@@ -3016,7 +3002,7 @@ public function deleteinvoiceview(Request $request)
 
         return response()->json([
             'receipt' => $invoiceDetails,
-        ]); 
+        ]);
     }
 
     return response()->json([
@@ -3033,7 +3019,7 @@ public function deleteinvoicetwo(Request $request)
 
         // Retrieve the record from invoice_lists
         $invoiceDetails = Invoice_list::where('invoice_id', $slno)->first();
-        
+
 
         // Retrieve all records from by_pay_informations
         $byPayInformations = DB::table('by_pay_informations')
@@ -3142,13 +3128,13 @@ public function deleteinvoicetwo(Request $request)
                     $studentId = $invoice->student_id;
         $feesCat = $invoice->fees_cat;
 
-                    
+
                     // Delete the record from GenerateInvoiceView
                     $invoice->delete();
 
                     // Delete corresponding records from ByPayInformation where 'invoice_id' matches 'slno'
                     ByPayInformation::where('invoice_id', $slno)->delete();
-                    
+
                         $latestInvoice = GenerateInvoiceView::where('student_id', $studentId)
                                 ->where('fees_cat', $feesCat)
                                 ->orderBy('updated_at', 'desc')
@@ -3224,7 +3210,7 @@ public function deleterecipt(Request $request)
                                          ->whereNull('inv_amt') // Ensure it's a receipt
                                          ->orderBy('created_at', 'desc')
                                          ->first();
-        
+
         // Ensure the receipt being deleted is the latest one
         if ($latestReceipt && $latestReceipt->id != $receipt->id) {
             return response()->json([
@@ -3244,10 +3230,10 @@ public function deleterecipt(Request $request)
                     ->where('transactionId', $transactionId)
                     ->delete();
                                     if ($receipt->sponsor && $receipt->sponsor != null) {
-                                        
+
                         $amt = $receipt->amount;
                         $sponsor = User::where('id', $receipt->sponsor)->first();
-                        
+
                         if ($receipt->type == 'school') {
                             $sponsor['excess_amount'] += floatval($amt);
                             $sponsor->save();
@@ -3264,9 +3250,9 @@ public function deleterecipt(Request $request)
 
                 Invoice_list::where('payment_transaction_id', $transactionId)
                     ->delete();
-                   
+
                 $ByPayResult = DB::table('by_pay_informations')->whereNull('inv_amt')->where('invoice_id', $receipt->invoice_id)->latest('id')->first();
-                    
+
                 if($ByPayResult != ""){
                     if($ByPayResult->due_amount != "" || $ByPayResult->due_amount != 0){
                         $payment_status = "Partial Paid";
@@ -3313,7 +3299,7 @@ public function deleterecipt(Request $request)
  public function deleterecipttwo(Request $request)
 {
     $requestData = $request->all();
-    
+
     if (isset($requestData['transactionId'])) {
         $transactionId = $requestData['transactionId'];
 

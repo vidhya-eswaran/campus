@@ -14,7 +14,7 @@ use App\Http\Controllers\API\listUserController;
 use App\Http\Controllers\API\sponserMapController;
 use App\Http\Controllers\API\dashboardController;
 //master
-//use App\Http\Controllers\API\sectionmasterController;
+use App\Http\Controllers\API\sectionmasterController;
 use App\Http\Controllers\API\classmasterController;
 use App\Http\Controllers\API\DiscountCategoryMasterController;
 use App\Http\Controllers\API\paymentmasterController;
@@ -291,10 +291,11 @@ Route::post('/feesmap-insertByID', [feesmapController::class, 'insertByID']);
 
 //master 
 //section
-// Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
-// Route::get('/section-master-read', [sectionmasterController::class, 'read']);
-// Route::post('/section-master-update', [sectionmasterController::class, 'update']);
-// Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
+Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
+Route::get('/section-master-read', [sectionmasterController::class, 'read']);
+Route::get('/section-master-view/{id}', [sectionmasterController::class, 'viewbyid']);
+Route::post('/section-master-update', [sectionmasterController::class, 'update']);
+Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
 //class
 Route::post('/class-master-insert', [classmasterController::class, 'insert']);
 Route::get('/class-master-read', [classmasterController::class, 'read']);
