@@ -1,0 +1,47 @@
+[
+  {
+    "module": "Student Management - Application",
+    "purpose": "Application Submission Acknowledgement",
+    "variables": [],
+    "emailTemplate": {
+      "subject": "Application Submitted Successfully – Next Steps",
+      "body": "Dear Parent,\n\nWe are pleased to inform you that your child’s application has been successfully submitted through our online portal.\n\nKindly note that we may require some mandatory documents or information. We would contact you over email or your registered mobile number.\n\nIf you have any questions or need assistance, feel free to contact our admissions team.\n\nThank you for choosing Santhosha Vidhyalaya\n\nWarm regards,\nAdmissions Coordinator\nSanthosha Vidhyalaya\n80125 12143"
+    }
+  },
+  {
+    "module": "Fee Management - donation from Sponsor",
+    "purpose": "Donation Receipt",
+    "variables": ["sponsor_name", "receipt_number", "date_of_donation", "amount"],
+    "emailTemplate": {
+      "subject": "Thank You – Your Donation Receipt is Ready",
+      "body": "Dear {{sponsor_name}},\n\nThank you for your valuable contribution to Santhosha Vidhyalaya. We deeply appreciate your support.\n\nPlease find attached your donation receipt for your recent contribution:\n\nReceipt No: {{receipt_number}}\nDate: {{date_of_donation}}\nAmount: ₹{{amount}}\n\nYou may use this receipt for your records.\n\nIf you have any questions or need further assistance, feel free to contact us at 80125 12144\n\nWarm regards,\n\nPrincipal\nSanthosha Vidhyalaya\nwww.SanthoshaVidhyalaya.com"
+    }
+  },
+  {
+    "module": "Hostel Admission",
+    "purpose": "Hostel Admission Open Notification",
+    "variables": ["application_link"],
+    "emailTemplate": {
+      "subject": "",
+      "body": "Dear Parent,\n\nWe are pleased to inform you that Hostel Admission process is now open.\n\nYou may submit your application by clicking the link below:\n\n {{application_link}}\n\nKindly ensure that you complete the application before the deadline to secure a place for your child.\n\nFor any assistance or queries, please contact our school/hostel office.\n\nWarm regards,\nPrincipal\nSanthosha Vidhyalaya"
+    }
+  },
+  {
+    "module": "Hostel Admission - application by parent",
+    "purpose": "Hostel Admission Application Received",
+    "variables": [],
+    "emailTemplate": {
+      "subject": "Hostel Admission Application Received",
+      "body": "Dear Parent,\n\nThank you for submitting your child’s hostel admission application.\n\nWe confirm that we have received your application and our admissions team will review it shortly. You will be notified once the review process is complete or if any additional information is required.\n\nWarm regards,\nPrincipal\nSanthosha Vidhyalaya"
+    }
+  },
+  {
+    "module": "Hostel Admission - update Status of hostel application",
+    "purpose": "Hostel Admission Confirmed",
+    "variables": [],
+    "emailTemplate": {
+      "subject": "Hostel Admission Confirmed",
+      "body": "Dear Parent,\n\nWe are pleased to inform you that your child’s hostel admission has been successfully confirmed at Santhosha Vidhyalaya.\n\nFurther details regarding dormitory allocation, reporting date, and preceedings of reporting day will be communicated to you soon.\n\nWe look forward to welcoming your child to our hostel community.\n\nWarm regards,\nPrincipal\nSanthosha Vidhyalaya"
+    }
+  }
+]

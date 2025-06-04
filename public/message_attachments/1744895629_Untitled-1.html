@@ -1,0 +1,292 @@
+<!-- <link rel="stylesheet" href="styles.css" /> -->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap");
+      body {
+        font-family: "Times New Roman", serif;
+        margin: 0;
+        padding: 0;
+        background-color: white; /* Ensure proper rendering in PDF */
+      }
+
+      @page {
+        size: A4;
+        margin: 0; /* Removes default browser print margins */
+      }
+
+      .certificate-container {
+        width: 210mm; /* A4 width */
+        height: 297mm; /* A4 height */
+        background-color: white;
+        margin: auto;
+        box-shadow: none; /* No shadow needed for PDF */
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Background Image for PDF */
+      .certificate-container::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180mm; /* A4 width */
+        height: 250mm; /* A4 height */
+        background: url("https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg")
+          no-repeat center;
+        background-size: contain;
+        opacity: 0.03; /* Medium opacity */
+        transform: translate(-47%, -50%);
+        z-index: 0;
+      }
+
+      /* Ensure layout remains consistent */
+      .left-bar {
+        background-color: #b91c1c;
+        width: 50px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .content {
+        padding-left: 70px;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+      }
+      .content-div {
+        display: flex;
+        flex-direction: column;
+        width: 85%;
+        padding-bottom: 30px;
+      }
+
+      .header {
+        display: table;
+        align-items: center;
+        width: 100%;
+        padding-top: 10px;
+      }
+
+      .img-top,
+      .school-details,
+      .right-bar {
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      .logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .img-top {
+        width: 20%;
+        text-align: center;
+      }
+
+      .school-details {
+        width: 50%;
+        text-align: center;
+      }
+
+      .right-bar {
+        width: 30%;
+        z-index: 1;
+      }
+
+      .right-bar-sub {
+        height: 50px;
+        z-index: 1;
+        background-color: #b91c1c;
+      }
+
+      .sign-logo-div {
+        padding: 20px;
+        text-align: right; /* Ensures alignment works in PDF */
+        padding-right: 120px;
+        padding-top: 50px;
+      }
+
+      .sign-logo {
+        width: 180px;
+        height: 150px;
+      }
+
+      .school-details h1 {
+        font-family: "Tahoma", sans-serif;
+        color: #b91c1c;
+        font-size: 24px;
+        margin: 0;
+        font-weight: bold;
+        letter-spacing: 3px;
+      }
+
+      .school-details p {
+        font-family: "Tahoma", sans-serif;
+        font-size: 14px;
+        color: #b91c1c;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+
+      .date {
+        width: 100%;
+        text-align: right;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+
+      .certificate-title {
+        text-align: center;
+        font-size: 18px;
+        text-decoration: underline;
+        font-weight: bold;
+        margin-top: 10px;
+        width: 100%;
+      }
+
+      p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      td {
+        padding: 5px;
+      }
+
+      .footer-container {
+        width: 100%;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        right: 0;
+        padding-left: 50px;
+      }
+
+      .contact-info {
+        color: #b91c1c;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: "Tahoma", sans-serif;
+      }
+
+      .address-box {
+        background-color: #b91c1c;
+        color: white;
+        padding: 10px;
+        padding-right: 50px;
+        font-weight: 600;
+        text-align: center;
+        font-family: "Tahoma", sans-serif;
+      }
+    </style>
+  
+  
+    <div class="certificate-container">
+      <div class="left-bar"><br></div>
+      <div class="content">
+        <div class="header">
+          <div class="img-top">
+            <img src="https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg" alt="School Logo" class="logo">
+          </div>
+          <div class="school-details">
+            <h1>SANTHOSHA VIDHYALAYA</h1>
+            <p>MATRICULATION &amp; HIGHER SECONDARY SCHOOL</p>
+          </div>
+          <div class="right-bar"><div class="right-bar-sub"><br></div><br></div>
+        </div>
+        <div class="content-div">
+          <div class="date">
+            <div style="padding-right: 20px; font-size: 22px">Date: <strong class="hidden-field"> {{ st }}</strong></div>
+          </div>
+          <div class="certificate-title">
+            <h2>Attendance Certificate</h2>
+          </div>
+        </div>
+
+        <div style="padding-left: 40px;">
+        <table style="border-collapse: collapse;">
+           <tbody><tr>
+                <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+                  <strong>Name of the Student</strong>
+                </td>
+                <td style="font-size: 22px; text-align: left; padding-left: 0px;">
+                  <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ student_name }}</strong></strong>
+                </td>
+              </tr>
+          <tr>
+            <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+              <strong>Class</strong>
+            </td>
+            <td style="font-size: 22px; text-align: left; padding-left: 0px">
+              <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ class_name }}</strong></strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+              <strong>Academic Year</strong>
+            </td>
+            <td style="font-size: 22px; text-align: left; padding-left: 0px">
+              <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ academic_year }}</strong></strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+              <strong>No. of working days</strong>
+            </td>
+            <td style="font-size: 22px; text-align: left; padding-left: 0px">
+              <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ working_days }}</strong></strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+              <strong>No. of days attended</strong>
+            </td>
+            <td style="font-size: 22px; text-align: left; padding-left: 0px">
+              <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ days_attended }}</strong></strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 22px; white-space: nowrap; width: 50%; padding: 20px; padding-left: 60px">
+              <strong>Percentage of Attendance</strong>
+            </td>
+            <td style="font-size: 22px; text-align: left; padding-left: 0px">
+              <strong>: <strong class="hidden-field" style="padding-left:20px;"> {{ attendance_percent }}</strong></strong>
+            </td>
+          </tr>
+        </tbody></table>
+    </div>
+
+        <div class="sign-logo-div">
+          <img src="https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png" alt="signature Logo" class="sign-logo">
+        </div>
+      </div>
+      <div class="footer-container">
+        <table width="100%">
+            <tbody><tr>
+              <td style="display: flex; justify-content: center;">
+                <p class="contact-info">
+                  <strong>www.santhoshavidhyalaya.com</strong><br>
+                  +91 80125 12100, +91 80125 12143<br>
+                  info@santhoshavidhyalaya.com
+                </p>
+              </td>
+              <td style="width: 50%; text-align: center; padding-right: 20px">
+                <p class="address-box">
+                  Dohnavur Fellowship, Dohnavur - 627102<br>
+                  Tirunelveli District, Tamil Nadu, India
+                </p>
+              </td>
+            </tr>
+          </tbody></table>
+      </div>
+    </div>

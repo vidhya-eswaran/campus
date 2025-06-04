@@ -1,0 +1,12 @@
+import Sidebar from '../Sidebar';
+import Header from '../Header';
+import Footer from '../Footer';
+
+    <div>
+       
+       <Sidebar/>
+    <div style={{width:'82.5%',float:'right'}} >
+      <Header/>
+    
+    </div>
+    </div>
