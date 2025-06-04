@@ -31,14 +31,11 @@ class LeaveApplicationController extends Controller
             'rollNo' => 'nullable|string',
             'class' => 'nullable|string',
             'section' => 'nullable|string',
-            'group' => 'nullable|string',
-            'fromDate' => 'required|date',
-            'toDate' => 'nullable|date',
-            'reason' => 'nullable|string',
-            'leaveDays' => 'nullable|integer',
-            'contactNumber' => 'nullable|string',
             'fatherName' => 'nullable|string',
             'motherName' => 'nullable|string',
+            'fromDate' => 'required|date',
+            'toDate' => 'nullable|date',
+            'leaveDays' => 'nullable|integer'
         ]);
 
         $leaveApplication = LeaveApplication::create($validated);
@@ -52,8 +49,7 @@ class LeaveApplicationController extends Controller
             [
                 'student_name' => $validated['studentName'],
                 'from_date' => $validated['fromDate'],
-                'to_date' => $validated['toDate'],
-                'reason' => $validated['reason'],
+                'to_date' => $validated['toDate']
             ]
         );
 
@@ -73,7 +69,6 @@ class LeaveApplicationController extends Controller
             // 'group' => 'nullable|string',
             'fromDate' => 'required|date',
             'toDate' => 'required|date',
-            'reason' => 'required|string',
             // 'leaveDays' => 'required|integer',
             // 'contactNumber' => 'required|string',
             // 'fatherName' => 'required|string',
@@ -98,7 +93,7 @@ class LeaveApplicationController extends Controller
     {
         $id = (int) $id;
         $leaveApplication = LeaveApplication::findOrFail($id);
-        
+
         // Update delete_status instead of deleting
         $leaveApplication->update(['delete_status' => 1]);
 

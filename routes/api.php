@@ -520,11 +520,19 @@ Route::prefix('eventcategorymasters')->group(function () {
 });
 
 Route::prefix('leaveapplications')->group(function () {
-    Route::get('/', [LeaveApplicationController::class, 'index']);  
-    Route::post('/', [LeaveApplicationController::class, 'store']);       
-    Route::put('/{id}', [LeaveApplicationController::class, 'update']);    
-    Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);    
-    Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']); 
+    Route::get('/', [LeaveApplicationController::class, 'index']);
+    Route::post('/', [LeaveApplicationController::class, 'store']);
+    Route::put('/{id}', [LeaveApplicationController::class, 'update']);
+    Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);
+    Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']);
+});
+
+Route::prefix('webinars')->group(function () {
+    Route::get('/', [WebinarController::class, 'index']);
+    Route::post('/', [WebinarController::class, 'store']);
+    Route::get('/{id}', [WebinarController::class, 'show']);
+    Route::put('/{id}', [WebinarController::class, 'update']);
+    Route::delete('/{id}', [WebinarController::class, 'destroy']);
 });
 
 Route::prefix('noticeboard')->group(function () {
