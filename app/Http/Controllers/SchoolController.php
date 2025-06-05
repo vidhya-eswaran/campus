@@ -44,7 +44,7 @@ class SchoolController extends Controller
         }
 
         
-        $mysqlPath = 'C:\xampp\mysql\bin\mysql.exe'; // full path
+        $mysqlPath = '/usr/bin/mysql'; // full path
         $dbUser = 'root';
         $dbPass = ''; // leave blank if no password
 
