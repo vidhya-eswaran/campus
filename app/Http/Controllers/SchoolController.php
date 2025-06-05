@@ -22,10 +22,7 @@ class SchoolController extends Controller
             'admin_email' => 'required|email|unique:users,email',
             'admin_password' => 'required|string|min:6',
         ]);
-
-        \Log::info('Create school API was hit');
-
-        dd("DDD");
+        
         $schoolName = $request->name;
         $dbName = $request->db_name;
         $adminName = $request->admin_name;
