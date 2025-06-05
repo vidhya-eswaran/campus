@@ -94,6 +94,9 @@ Route::post('/central/login', [CentralAuthController::class, 'login']);
 
 
 
+Route::get('/test', function () {
+    return response()->json(['message' => 'API is working']);
+});
 
 
 //=========================================================================================
