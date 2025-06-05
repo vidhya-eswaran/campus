@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 
 class SchoolController extends Controller
 {
     public function createSchool(Request $request)
     {
+        try {
         $request->validate([
             'name' => 'required|unique:schools,name',
             'db_name' => 'required|unique:schools,db_name',
@@ -89,5 +91,12 @@ class SchoolController extends Controller
         ]);
 
         return response()->json(['message' => 'School created successfully and database initialized.']);
+        } catch (ValidationException $e) {
+        \Log::error('Validation failed', $e->errors());
+        return response()->json([
+            'status' => false,
+            'errors' => $e->errors()
+        ], 422);
+    }
     }
 }
