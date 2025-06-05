@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * @author     Sonali Dhepse.
  * @copyright  2018 STS
