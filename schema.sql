@@ -2114,32 +2114,16 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `slno` int(11) DEFAULT NULL,
-  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
-  `admission_no` varchar(200) DEFAULT NULL,
-  `roll_no` varchar(255) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `gender` varchar(20) DEFAULT NULL,
-  `standard` varchar(50) DEFAULT NULL,
-  `twe_group` varchar(50) DEFAULT NULL,
-  `sec` varchar(30) DEFAULT NULL,
-  `hostelOrDay` varchar(50) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `user_type` varchar(50) NOT NULL DEFAULT 'student',
-  `fee_by` varchar(100) DEFAULT 'parent',
-  `sponser_id` int(80) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `excess_amount` varchar(255) DEFAULT NULL,
-  `h_excess_amount` varchar(255) DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`slno`,`id`),
-  UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `slno` (`slno`)
-) ENGINE=InnoDB AUTO_INCREMENT=4659 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  ...
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
