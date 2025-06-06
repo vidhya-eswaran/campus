@@ -75,6 +75,8 @@ exec($command . ' 2>&1', $output, $resultCode);
             'updated_at' => now()
         ]);
 
+        dd($schoolId);
+
          // Step 4: Insert admin user into central users table
         DB::table('users')->insert([
             'name' => $adminName,
