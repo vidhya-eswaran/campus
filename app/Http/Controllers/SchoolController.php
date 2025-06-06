@@ -44,17 +44,17 @@ class SchoolController extends Controller
         }
 
         
-        $mysqlPath = '/usr/bin/mysql'; // full path
+        $mysqlPath = '/usr/bin/mysql';
         $dbUser = 'root';
         $dbPass = ''; // leave blank if no password
+        $schemaPath = '/var/www/html/schema.sql'; // or your actual path
+        
+        $command = "sudo $mysqlPath -u $dbUser " . ($dbPass ? "-p$dbPass " : "") . "$dbName < \"$schemaPath\"";
 
-        $command = "\"$mysqlPath\" -u $dbUser " . ($dbPass ? "-p$dbPass " : "") . "$dbName < \"$schemaPath\"";
-
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $command = "cmd /c \"$command\"";
-        }
-
-        exec($command, $output, $resultCode);
+        // Capture both stdout and stderr
+        $output = [];
+        $resultCode = 0;
+        exec($command . ' 2>&1', $output, $resultCode);
 
         if ($resultCode !== 0) {
             return response()->json([
@@ -62,8 +62,9 @@ class SchoolController extends Controller
                 'command' => $command,
                 'result_code' => $resultCode,
                 'output' => $output,
-            ], 500);
+            ]);
         }
+
 
         // Step 3: Save to central_db
         $schoolId = DB::table('schools')->insert([
