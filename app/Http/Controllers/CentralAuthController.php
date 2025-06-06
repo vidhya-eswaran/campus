@@ -21,7 +21,7 @@ class CentralAuthController extends Controller
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        $school = DB::table('schools')->where('email', $user->email)->first();
+        $school = DB::table('schools')->where('id', $user->school_id)->first();
 
         if (!$school) {
             return response()->json(['error' => 'School not found'], 404);

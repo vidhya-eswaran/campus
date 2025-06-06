@@ -62,7 +62,7 @@ exec($command . ' 2>&1', $output, $resultCode);
                 'output' => $output,
             ]);
         }
-        
+
 
         // Step 3: Save to central_db
         $schoolId = DB::table('schools')->insert([
@@ -80,7 +80,7 @@ exec($command . ' 2>&1', $output, $resultCode);
             'name' => $adminName,
             'email' => $adminEmail,
             'password' => $adminPassword,
-            'school_id' => $schoolId,
+            'school_id' => $schoolId->id,
             'role' => 'school_admin',
             'created_at' => now(),
             'updated_at' => now()
