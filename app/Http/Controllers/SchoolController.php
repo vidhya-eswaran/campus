@@ -64,8 +64,8 @@ exec($command . ' 2>&1', $output, $resultCode);
         }
 
 
-        // Step 3: Save to central_db
-        $schoolId = DB::table('schools')->insert([
+        // Insert into schools and get the inserted ID
+        $schoolId = DB::table('schools')->insertGetId([
             'name' => $schoolName,
             'db_name' => $dbName,
             'db_username' => 'root',
@@ -75,18 +75,17 @@ exec($command . ' 2>&1', $output, $resultCode);
             'updated_at' => now()
         ]);
 
-        dd($schoolId);
-
-         // Step 4: Insert admin user into central users table
+        // Insert admin user with the retrieved school_id
         DB::table('users')->insert([
             'name' => $adminName,
             'email' => $adminEmail,
             'password' => $adminPassword,
-            'school_id' => $schoolId->id,
+            'school_id' => $schoolId,  // use the ID here
             'role' => 'school_admin',
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
 
         return response()->json(['message' => 'School created successfully and database initialized.']);
         } catch (ValidationException $e) {
