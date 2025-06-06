@@ -2114,8 +2114,8 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `slno` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `id` int(255) NOT NULL,
+  `slno` int(11) DEFAULT NULL,
+  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
   `admission_no` varchar(200) DEFAULT NULL,
   `roll_no` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
