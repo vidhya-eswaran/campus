@@ -155,8 +155,8 @@ CREATE TABLE `admission_live` (
   `mother_organization` varchar(50) DEFAULT NULL,
   `guardian_organization` varchar(50) DEFAULT NULL,
   `pin_no` varchar(20) DEFAULT NULL,
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1086 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -252,8 +252,8 @@ CREATE TABLE `admission_live_demo` (
   `father_organization` varchar(50) DEFAULT NULL,
   `mother_organization` varchar(50) DEFAULT NULL,
   `guardian_organization` varchar(50) DEFAULT NULL,
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -309,8 +309,8 @@ CREATE TABLE `admission_process` (
   `brother_2` varchar(200) DEFAULT NULL,
   `gender_2` varchar(200) DEFAULT NULL,
   `class_2` varchar(200) DEFAULT NULL,
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -408,8 +408,8 @@ CREATE TABLE `admission_process_live` (
   `guardian_organization` varchar(50) DEFAULT NULL,
   `pin_no` varchar(20) DEFAULT NULL,
   `payment_mode` text DEFAULT NULL,
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=758 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -512,8 +512,8 @@ CREATE TABLE `admitted_students` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=711 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -616,8 +616,8 @@ CREATE TABLE `admitted_students_history` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6291 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -651,8 +651,8 @@ CREATE TABLE `by_pay_informations` (
   `transactionId` varchar(121) NOT NULL,
   `amount` varchar(255) DEFAULT NULL,
   `sponsor` varchar(121) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1554 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -690,8 +690,8 @@ CREATE TABLE `deletedreceipts` (
   `balance_amount` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `transaction_completed_status` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -730,8 +730,8 @@ CREATE TABLE `discount_lists` (
   `fees_cat` varchar(255) NOT NULL,
   `end_date` varchar(100) NOT NULL,
   `status` int(15) NOT NULL DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -759,8 +759,8 @@ CREATE TABLE `donar_list` (
   `country_2` varchar(100) DEFAULT NULL,
   `pincode_2` varchar(20) DEFAULT NULL,
   `pan_aadhar` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -792,8 +792,8 @@ CREATE TABLE `donation_donar_list` (
   `pincode` varchar(30) DEFAULT NULL,
   `pan_no` varchar(30) DEFAULT NULL,
   `invoice_pdf` varchar(30) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -815,8 +815,8 @@ CREATE TABLE `donation_list` (
   `btn_amt_1` decimal(10,2) NOT NULL,
   `btn_amt_2` decimal(10,2) NOT NULL,
   `btn_amt_3` decimal(10,2) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -837,8 +837,8 @@ CREATE TABLE `donation_statement` (
   `amount` decimal(10,2) NOT NULL,
   `transection_id` varchar(255) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -903,8 +903,8 @@ CREATE TABLE `fee_map_arrays` (
   `Acad_Year` varchar(255) DEFAULT NULL,
   `Priority` varchar(100) DEFAULT NULL,
   `created_by` varchar(250) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -974,8 +974,8 @@ CREATE TABLE `generate_invoice_views` (
   `additionalDetails` varchar(255) DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`slno`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3243 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1120,8 +1120,8 @@ CREATE TABLE `invoice_histories` (
   `payment_status` varchar(30) DEFAULT NULL,
   `invoice_status` varchar(70) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` datetime DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`slno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1405,8 +1405,8 @@ CREATE TABLE `payment_notification_datas` (
   `invoice_nos` varchar(255) NOT NULL,
   `status` varchar(100) DEFAULT NULL,
   `show_hide` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1524,8 +1524,8 @@ CREATE TABLE `payment_req_data` (
   `payment_req_accountNo` varchar(255) DEFAULT NULL,
   `payment_req_webServiceLocator_PHP_EOL` text DEFAULT NULL,
   `payment_req_date_time` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`payment_req_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=869 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1542,8 +1542,8 @@ CREATE TABLE `receipts` (
   `receipt_no` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_mode` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `receipt_no` (`receipt_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1601,8 +1601,8 @@ CREATE TABLE `school_fee_discounts` (
   `invoicefeescat` varchar(255) DEFAULT NULL,
   `year` varchar(100) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1677,8 +1677,8 @@ CREATE TABLE `seperate_fees_maps` (
   `status` varchar(50) DEFAULT '1',
   `invoice_generated` int(50) NOT NULL DEFAULT 0,
   `created_by` varchar(50) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1791,8 +1791,8 @@ CREATE TABLE `staff_fee_masters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(155) NOT NULL,
   `created_by` varchar(111) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1816,8 +1816,8 @@ CREATE TABLE `student_fee_map_arrays` (
   `date` varchar(50) DEFAULT NULL,
   `acad_year` varchar(50) DEFAULT NULL,
   `created_by` varchar(100) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7025 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1851,8 +1851,8 @@ CREATE TABLE `student_fees_maps` (
   `status` int(11) DEFAULT 1,
   `invoice_generated` int(11) DEFAULT 0,
   `created_by` varchar(111) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`slno`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22281 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2082,8 +2082,8 @@ CREATE TABLE `transactions_donation_worldline` (
   `customer_email` varchar(255) DEFAULT NULL,
   `payment_type` varchar(100) DEFAULT NULL,
   `response_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`response_data`)),
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2134,8 +2134,8 @@ CREATE TABLE `users` (
   `h_excess_amount` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`slno`,`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `slno` (`slno`)
