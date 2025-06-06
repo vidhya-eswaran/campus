@@ -43,18 +43,16 @@ class SchoolController extends Controller
             return response()->json(['error' => 'schema.sql file not found.'], 500);
         }
 
-        
-        $mysqlPath = '/usr/bin/mysql';
+$mysqlPath = '/usr/bin/mysql';
         $dbUser = 'root';
         $dbPass = ''; // leave blank if no password
-        $schemaPath = '/var/www/html/schema.sql'; // or your actual path
-        
+        $schemaPath = '/var/www/html/schema.sql';
+
         $command = "sudo $mysqlPath -u $dbUser " . ($dbPass ? "-p$dbPass " : "") . "$dbName < \"$schemaPath\"";
 
-        // Capture both stdout and stderr
+        // Capture stderr too
         $output = [];
-        $resultCode = 0;
-        exec($command . ' 2>&1', $output, $resultCode);
+exec($command . ' 2>&1', $output, $resultCode);
 
         if ($resultCode !== 0) {
             return response()->json([
