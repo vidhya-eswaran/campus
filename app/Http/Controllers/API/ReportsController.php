@@ -1609,7 +1609,9 @@ class ReportsController extends Controller
     }
     public function getPaymentReport(Request $request)
     {
+
         $class = $request->input("class");
+        // dd($class);
         $studentIds = $request->input("students"); // Array of student IDs
         $fromDate = $request->input("fromDate");
         $sponsor = $request->input("sponsor");
@@ -1688,7 +1690,7 @@ class ReportsController extends Controller
             ->skip(($page - 1) * $limit)
             ->take($limit)
             ->get();
-
+        // dd($results);
         // Calculate excess amounts for each result and add required keys
         $results = $results->map(function ($result) {
             $student = DB::table("users")
