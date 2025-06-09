@@ -9,7 +9,7 @@ class StudentMarkRecord extends Model
 {
 
     use HasFactory;
- 
+    protected $table = 'student_mark_records';
     protected $primaryKey = 'id';
     protected $guarded = [];
 }

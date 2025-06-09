@@ -18,9 +18,6 @@ class feesmapController extends Controller
 
     public function insert(Request $request)
     {
-        // if (!Auth::guard('api')->check()) {
-        //     return response()->json(['error' => 'Unauthorized'], 401);
-        // }        'standard', 'group', 'amount', 'fees_heading', 'fees_sub_heading', 'date', 'status', 'created_by', 'created_at'
 
         $validator = Validator::make(
             $request->all(),
@@ -93,22 +90,22 @@ class feesmapController extends Controller
 
     public function insertArray(Request $request)
     {
-        
+
                $std = $request->input('std');
                 $fees_heading = $request->input('Fee_Category_head');
                 $fees_sub_heading = $request->input('Fee_Category');
                 $acad_year = $request->input('newAcadYear');
                 $date = $request->input('Cdate');
-             
-             
+
+
                 $StudentFeeMapArray = new StudentFeeMapArray();
                 $StudentFeeMapArray->std = $std;
                 $StudentFeeMapArray->fees_heading = $fees_heading ;
                 $StudentFeeMapArray->fees_sub_heading = json_encode($fees_sub_heading) ;
                 $StudentFeeMapArray->acad_year = $acad_year ;
                 $StudentFeeMapArray->date = $date ;
-                  
-                $StudentFeeMapArray->save();  
+
+                $StudentFeeMapArray->save();
              //   return response()->json($fees_sub_heading, 200);
              $fee_id = $StudentFeeMapArray->id;
 
@@ -123,20 +120,20 @@ class feesmapController extends Controller
                     $fee->fees_heading = $fees_heading;
                     $fee->fees_sub_heading = $feeData['sub_heading'];
                     $fee->due_date = $date;
-                    $fee->Priority = $feeData['Priority']; 
+                    $fee->Priority = $feeData['Priority'];
                     $fee->acad_year = $acad_year;
                     $fee->created_by = '';
                     $fee->save();
-                
+
                  //   $fee_id =  $fee->id;
-                
+
                     // Append data to $dataFeeMap inside the loop
                     // Adjusted the code to use $feeData instead of $fee
                     $userDatas = User::where('status', '=', 1)
                                     ->where('standard', '=',  $std)
                                     ->where('user_type', '=', 'student')
                                     ->get();
-                
+
                     if ($userDatas->count() != 0) {
                         foreach ($userDatas as $userData) {
                             $dataFeeMap[] = [
@@ -161,21 +158,21 @@ class feesmapController extends Controller
                         }
                     }
                 }
-                
+
                 $chunkSize = 50; // Adjust the chunk size as per your needs
-                
+
                 // Chunk the data into smaller batches for faster inserts
                 $chunks = array_chunk($dataFeeMap, $chunkSize);
-                
+
                 // Perform bulk insert in batches
                 foreach ($chunks as $chunk) {
                     StudentFeesMap::insert($chunk);
                 }
-                
+
                 $responseData = ['message' => 'Data successfully inserted.'];
-                
+
                 //////////////////////////////////////////////////////////////////////////////
- 
+
         return response()->json($responseData, 200);
     }
 
@@ -189,12 +186,12 @@ class feesmapController extends Controller
         $acad_year = $request->input('newAcadYear');
         $date = $request->input('Cdate');
         $studentIds = $request->input('student_id');
-    
+
         $userDatas = User::whereIn('id', $studentIds)
             ->where('status', 1)
             ->where('user_type', 'student')
             ->get();
-    
+
         if ($userDatas->count() > 0) {
             foreach ($userDatas as $userData) {
                 $StudentFeeMapArray = new StudentFeeMapArray();
@@ -207,10 +204,10 @@ class feesmapController extends Controller
                 $StudentFeeMapArray->acad_year = $acad_year;
                 $StudentFeeMapArray->date = $date;
                 $StudentFeeMapArray->save();
-    
+
                 // Save related data using the ID of the main data
                 $fee_id = $StudentFeeMapArray->id;
-    
+
                 $dataFeeMap = [];
                 foreach ($fees_sub_heading as $feeData) {
                     $dataFeeMap[] = [
@@ -233,26 +230,26 @@ class feesmapController extends Controller
                         'created_by' => '',
                     ];
                 }
-    
+
                 $chunkSize = 50; // Adjust the chunk size as per your needs
-    
+
                 // Chunk the data into smaller batches for faster inserts
                 $chunks = array_chunk($dataFeeMap, $chunkSize);
-    
+
                 // Perform bulk insert in batches
                 foreach ($chunks as $chunk) {
                     StudentFeesMap::insert($chunk);
                 }
             }
-    
+
             $responseData = ['message' => 'Data successfully inserted.'];
         } else {
             $responseData = ['message' => 'User not found.'];
         }
-    
+
         return response()->json($responseData, 200);
     }
-    
+
 
 
 
@@ -429,7 +426,7 @@ public function insertByID(Request $request)
                 'fee_heading' => 'required',
                 'fee_sub_heading' => 'nullable',
                  'acad_year' => 'required',
-            
+
                             ]
         );
         $data = $request->all();
@@ -480,9 +477,9 @@ public function insertByID(Request $request)
         $skip = $request->start ?? 0;
         $take = $request->length ?? 5;
         $searchValue = $request->search['value'] ?? ''; // Get the search query
-    
+
         $query = StudentFeesMap::where('standard', $standard);
-    
+
         // Apply search filter if a search query is provided
         if (!empty($searchValue)) {
             $query->where(function ($query) use ($searchValue) {
@@ -495,25 +492,25 @@ public function insertByID(Request $request)
                       ->orWhere('date', 'like', '%' . $searchValue . '%');
             });
         }
-    
+
         $count = $query->count();
-    
+
         $students = $query
             ->orderBy('slno', 'desc')
             ->skip($skip)
             ->take($take)
             ->get();
-    
+
         foreach ($students as $key => $student) {
             $user = User::find($student->created_by);
             $students[$key]['created_by'] = $user->name ?? '';
             $textColor = $student['invoice_generated'] == 0 ? 'red' : 'green';
             $students[$key]['name'] = "<span style='color: {$textColor}'>{$student['name']}</span>";
         }
-    
+
         return response()->json(['data' => $students, 'recordsFiltered' => $count, 'recordsTotal' => $count]);
     }
-    
+
     public function fetchByhostel(Request $request)
     {
         // $standard = $request->standard;
@@ -529,7 +526,7 @@ public function insertByID(Request $request)
         ->skip($skip)
         ->take($take)
         ->get();
-    
+
 
         $count = StudentFeesMap::where(function ($query) {
             $query->where('fee_heading', 'Other hostel and Educational Expenditure')
@@ -537,7 +534,7 @@ public function insertByID(Request $request)
         })
         ->orderBy('slno', 'desc')
         ->count();
-    
+
 
         foreach ($students as $key => $student) {
             $user = User::find($student->created_by);

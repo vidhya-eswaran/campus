@@ -14,7 +14,7 @@ use App\Http\Controllers\API\listUserController;
 use App\Http\Controllers\API\sponserMapController;
 use App\Http\Controllers\API\dashboardController;
 //master
-//use App\Http\Controllers\API\sectionmasterController;
+use App\Http\Controllers\API\sectionmasterController;
 use App\Http\Controllers\API\classmasterController;
 use App\Http\Controllers\API\DiscountCategoryMasterController;
 use App\Http\Controllers\API\paymentmasterController;
@@ -294,10 +294,11 @@ Route::post('/feesmap-insertByID', [feesmapController::class, 'insertByID']);
 
 //master 
 //section
-// Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
-// Route::get('/section-master-read', [sectionmasterController::class, 'read']);
-// Route::post('/section-master-update', [sectionmasterController::class, 'update']);
-// Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
+Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
+Route::get('/section-master-read', [sectionmasterController::class, 'read']);
+Route::get('/section-master-view/{id}', [sectionmasterController::class, 'viewbyid']);
+Route::post('/section-master-update', [sectionmasterController::class, 'update']);
+Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
 //class
 Route::post('/class-master-insert', [classmasterController::class, 'insert']);
 Route::get('/class-master-read', [classmasterController::class, 'read']);
@@ -522,11 +523,19 @@ Route::prefix('eventcategorymasters')->group(function () {
 });
 
 Route::prefix('leaveapplications')->group(function () {
-    Route::get('/', [LeaveApplicationController::class, 'index']);  
-    Route::post('/', [LeaveApplicationController::class, 'store']);       
-    Route::put('/{id}', [LeaveApplicationController::class, 'update']);    
-    Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);    
-    Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']); 
+    Route::get('/', [LeaveApplicationController::class, 'index']);
+    Route::post('/', [LeaveApplicationController::class, 'store']);
+    Route::put('/{id}', [LeaveApplicationController::class, 'update']);
+    Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);
+    Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']);
+});
+
+Route::prefix('webinars')->group(function () {
+    Route::get('/', [WebinarController::class, 'index']);
+    Route::post('/', [WebinarController::class, 'store']);
+    Route::get('/{id}', [WebinarController::class, 'show']);
+    Route::put('/{id}', [WebinarController::class, 'update']);
+    Route::delete('/{id}', [WebinarController::class, 'destroy']);
 });
 
 Route::prefix('noticeboard')->group(function () {

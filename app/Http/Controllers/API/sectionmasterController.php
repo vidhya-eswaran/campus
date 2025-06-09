@@ -13,9 +13,6 @@ class sectionmasterController extends Controller
 {
     public function insert(Request $request)
     {
-        // if (!Auth::guard('api')->check()) {
-        //     return response()->json(['error' => 'Unauthorized'], 401);
-        // }
         $validator = Validator::make(
             $request->all(),
             [
@@ -74,6 +71,16 @@ class sectionmasterController extends Controller
         $section['id'] = $data['id'];
 
         return response()->json(['data' => $section, 'message' => 'updated  successfully']);
+    }
+     public function viewbyid($id)
+    {
+
+        $data = SectionMaster::where('id',$id)->first();
+
+        return response()->json([
+            'message' => 'Data retrieved successfully',
+            'data' => $data
+        ]);
     }
     public function delete(Request $request)
     {
