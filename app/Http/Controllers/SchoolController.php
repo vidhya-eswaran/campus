@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 
 class SchoolController extends Controller
 {
     public function createSchool(Request $request)
     {
+        try {
         $request->validate([
             'name' => 'required|unique:schools,name',
             'db_name' => 'required|unique:schools,db_name',
@@ -20,10 +22,7 @@ class SchoolController extends Controller
             'admin_email' => 'required|email|unique:users,email',
             'admin_password' => 'required|string|min:6',
         ]);
-
-        \Log::info('Create school API was hit');
-
-        dd("DDD");
+        
         $schoolName = $request->name;
         $dbName = $request->db_name;
         $adminName = $request->admin_name;
@@ -44,18 +43,16 @@ class SchoolController extends Controller
             return response()->json(['error' => 'schema.sql file not found.'], 500);
         }
 
-        
-        $mysqlPath = 'C:\xampp\mysql\bin\mysql.exe'; // full path
+$mysqlPath = '/usr/bin/mysql';
         $dbUser = 'root';
         $dbPass = ''; // leave blank if no password
+        $schemaPath = '/var/www/html/schema.sql';
 
-        $command = "\"$mysqlPath\" -u $dbUser " . ($dbPass ? "-p$dbPass " : "") . "$dbName < \"$schemaPath\"";
+        $command = "sudo $mysqlPath -u $dbUser " . ($dbPass ? "-p$dbPass " : "") . "$dbName < \"$schemaPath\"";
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $command = "cmd /c \"$command\"";
-        }
-
-        exec($command, $output, $resultCode);
+        // Capture stderr too
+        $output = [];
+exec($command . ' 2>&1', $output, $resultCode);
 
         if ($resultCode !== 0) {
             return response()->json([
@@ -63,11 +60,12 @@ class SchoolController extends Controller
                 'command' => $command,
                 'result_code' => $resultCode,
                 'output' => $output,
-            ], 500);
+            ]);
         }
 
-        // Step 3: Save to central_db
-        $schoolId = DB::table('schools')->insert([
+
+        // Insert into schools and get the inserted ID
+        $schoolId = DB::table('schools')->insertGetId([
             'name' => $schoolName,
             'db_name' => $dbName,
             'db_username' => 'root',
@@ -77,17 +75,25 @@ class SchoolController extends Controller
             'updated_at' => now()
         ]);
 
-         // Step 4: Insert admin user into central users table
+        // Insert admin user with the retrieved school_id
         DB::table('users')->insert([
             'name' => $adminName,
             'email' => $adminEmail,
             'password' => $adminPassword,
-            'school_id' => $schoolId,
+            'school_id' => $schoolId,  // use the ID here
             'role' => 'school_admin',
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
+
         return response()->json(['message' => 'School created successfully and database initialized.']);
+        } catch (ValidationException $e) {
+        \Log::error('Validation failed', $e->errors());
+        return response()->json([
+            'status' => false,
+            'errors' => $e->errors()
+        ], 422);
+    }
     }
 }

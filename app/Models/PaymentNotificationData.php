@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentNotificationData extends Model
 {
     use HasFactory;
-
-    protected $table = 'payment_notification_datas';
     protected $primaryKey = 'id';
     protected $guarded = [];
+    // protected $fillable = [
+    //     'sub_heading', 'created_by'
+    // ];
 }

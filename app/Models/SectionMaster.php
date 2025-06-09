@@ -9,7 +9,8 @@ class SectionMaster extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['section'];
+    protected $table = 'section_masters'; // Define your actual table name
     protected $primaryKey = 'id';
-
+    protected $guarded = [];
 }
+
