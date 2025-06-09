@@ -9,6 +9,6 @@ class TwelvethGroup extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'group', 'group_id'
+        'group','group_des'
     ];
 }

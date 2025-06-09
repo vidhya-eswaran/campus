@@ -450,7 +450,7 @@ Route::get('studentAttendanceView', [TemplateEditorController::class, 'studentAt
 Route::get('studenbonafideView', [TemplateEditorController::class, 'bonafideView']);  
 Route::get('courseCompletionView', [TemplateEditorController::class, 'courseCompletion']);  
 Route::get('noDueView', [TemplateEditorController::class, 'noDue']);
-Route::get('idcardView', [TemplateEditorController::class, 'idcard']);
+Route::post('idcardView', [TemplateEditorController::class, 'idcard']);
 
 Route::prefix('templateeditor')->group(function () {
     Route::get('/', [TemplateEditorController::class, 'index']);      
