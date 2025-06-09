@@ -31,10 +31,7 @@ class CentralAuthController extends Controller
             'message' => 'Login successful',
             'user' => $user,
             'school_db' => [
-                'db_name' => $school->db_name,
-                'db_username' => $school->db_username,
-                'db_password' => $school->db_password,
-                'db_host' => $school->db_host
+                'name' => $school->name
             ]
         ]);
     }
