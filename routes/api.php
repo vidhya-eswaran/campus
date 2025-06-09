@@ -103,24 +103,158 @@ Route::get('/test', function () {
 
 // School Database
 
+Route::post('/login', [ApiController::class, 'login']);
+
 Route::group(['prefix' => '{school}', 'middleware' => ['school.db']], function () {
+
     Route::post('/users', [SchoolUserController::class, 'store']);
+
+    Route::post('/healthcare/add', [StudentHealthcareController::class, 'addHealthcareRecord']);
+    Route::post('/healthcare/edit/{id}', [StudentHealthcareController::class, 'editHealthcareRecord']);
+    Route::get('/healthcare/view/{id}', [StudentHealthcareController::class, 'viewHealthcareRecord']);
+    Route::get('/healthcare/viewAll', [StudentHealthcareController::class, 'viewAllHealthcareRecords']);
+
+    Route::prefix('leaveapplications')->group(function () {
+        Route::get('/', [LeaveApplicationController::class, 'index']);
+        Route::post('/', [LeaveApplicationController::class, 'store']);
+        Route::put('/{id}', [LeaveApplicationController::class, 'update']);
+        Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);
+        Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']);
+    });
+
+    Route::post('/StudentMark-Upload', [StudentMarkController::class, 'store']);
+    Route::post('/StudentMark-view', [StudentMarkController::class, 'viewAll']);
+    Route::post('/StudentMark-update', [StudentMarkController::class, 'update']);
+    Route::post('/marks/save-temporary', [StudentMarkController::class, 'saveTemporary']);
+    Route::get('/marks/temporary', [StudentMarkController::class, 'getTemporary']);
+    Route::get('/reportCard', [StudentMarkController::class, 'viewReportCard']);
+
+    
+     Route::get('/viewProfile', [App\Http\Controllers\API\ApiController::class, 'viewProfile']);
+
+     Route::get('/detail', function (Request $request) {
+            return auth()->user();            
+        });
+    Route::get('/count', [dashboardController::class, 'count']);
+
+    Route::get('/lifecycle', [ApiController::class, 'lifecycle']);
+
+    Route::post('/docGenerate', [genrateInvoiceController::class, 'docGenerate']);
+
+    //Promotion student Routes
+    Route::post('/studentpromotion-update', [StudentPromotionController::class, 'update']);
+    Route::post('/move-to-detention', [StudentPromotionController::class, 'moveToDetention']);
+
+    //Reports
+    Route::post('/getExcessDuesReport', [ReportsController::class, 'getExcessDuesReport']);
+    Route::post('/getPaymentReport', [ReportsController::class, 'getPaymentReport']);
+    Route::post('/StudentLedger', [ReportsController::class, 'StudentLedger']);
+    Route::post('/LedgerSummary', [ReportsController::class, 'LedgerSummary']);
+    
+    //generate invoice
+    Route::post('/listgenrate', [genrateInvoiceController::class, 'listgenrate']);
+    Route::post('/listgenratefilter', [genrateInvoiceController::class, 'listgenratefilter']);
+    Route::post('/listgenrateById', [genrateInvoiceController::class, 'listgenrateById']);
+    Route::post('/genschoolInvoiceView', [genrateInvoiceController::class, 'getTotalAmount']);
+
+    Route::prefix('webinars')->group(function () {
+        Route::get('/', [WebinarController::class, 'index']);
+        Route::post('/', [WebinarController::class, 'store']);
+        Route::get('/{id}', [WebinarController::class, 'show']);
+        Route::put('/{id}', [WebinarController::class, 'update']);
+        Route::delete('/{id}', [WebinarController::class, 'destroy']);
+    });
+
+    Route::prefix('eventcalendars')->group(function () {
+        Route::get('/', [EventCalendarController::class, 'index']);  
+        Route::post('/', [EventCalendarController::class, 'store']);       
+        Route::put('/{id}', [EventCalendarController::class, 'update']);    
+        Route::get('/{id}', [EventCalendarController::class, 'viewbyid']);    
+        Route::delete('/{id}', [EventCalendarController::class, 'destroy']); 
+    });
+
+    //fessmap 
+    Route::post('/feesmap-insert', [feesmapController::class, 'insert']);
+    Route::post('/feesmap-insertArray', [feesmapController::class, 'insertArray']);
+    Route::post('/feesmap-insertbyIDArray', [feesmapController::class, 'insertbyIDArray']);
+    Route::post('/feesmap-update', [feesmapController::class, 'update']);
+
+    //VIEW MAPPING WITH STUDENTS  
+    Route::post('/studentsMaps/{standard}', [feesmapController::class, 'fetchByStandard']);
+    Route::post('/fetchByhostel', [feesmapController::class, 'fetchByhostel']);
+
+    Route::post('/view/studentsMaps/{id}', [feesmapController::class, 'fetchByid']);
+    Route::post('/del/studentsMaps/{id}', [feesmapController::class, 'delByid']);
+
+    //invoice API's
+    Route::get('/invoice-list', [InvoiceController::class, 'getInvoiceList']);
+    Route::get('/invoice-list-short', [InvoiceController::class, 'getInvoiceListshort']);
+    Route::get('/receipt-list-short', [InvoiceController::class, 'getReceiptListshort']);
+    Route::get('/payment-receipt-list', [InvoiceController::class, 'getPaymentReceiptList']);
+    Route::get('/payment-receipt', [InvoiceController::class, 'getPaymentReceipt']);
+    Route::post('/geteachsponserstudent', [InvoiceController::class, 'getsponserstudent']);
+    Route::get('/sponsor/{sponsorId}/students',[InvoiceController::class, 'getSponsorIDStudents']);
+    Route::get('/sponsortwo/{sponsorId}/students',[InvoiceController::class, 'getSponsorIDStudentstwo']);
+
+    //staff
+    Route::post('/staff/add', [StaffController::class, 'addStaff']); 
+    Route::post('/staff/edit/{id}', [StaffController::class, 'editStaff']);  
+    Route::get('/staff/view/{id}', [StaffController::class, 'viewStaff']); 
+    Route::get('/staff/viewAll', [StaffController::class, 'viewAllStaff']);   
+
+    Route::prefix('terms')->group(function () {
+        Route::get('/', [TermController::class, 'index']);      
+        Route::post('/', [TermController::class, 'store']);       
+        Route::put('/{id}', [TermController::class, 'update']);    
+        Route::get('/{id}', [TermController::class, 'viewbyid']);    
+        
+        Route::delete('/{id}', [TermController::class, 'destroy']); 
+    });
+
+    Route::prefix('standards')->group(function () {
+        Route::get('/', [StandardMasterController::class, 'index']);      
+        Route::post('/', [StandardMasterController::class, 'store']);       
+        Route::put('/{id}', [StandardMasterController::class, 'update']);    
+        Route::get('/{id}', [StandardMasterController::class, 'viewbyid']);    
+        Route::delete('/{id}', [StandardMasterController::class, 'destroy']); 
+    });
+
+    //section
+    Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
+    Route::get('/section-master-read', [sectionmasterController::class, 'read']);
+    Route::get('/section-master-view/{id}', [sectionmasterController::class, 'viewbyid']);
+    Route::post('/section-master-update', [sectionmasterController::class, 'update']);
+    Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
+
+    Route::get('/templates', [TemplateMasterController::class, 'index']);
+    Route::get('/templates/{id}', [TemplateMasterController::class, 'show']);
+    Route::post('/templates', [TemplateMasterController::class, 'store']);
+    Route::put('/templates/{id}', [TemplateMasterController::class, 'update']);
+    Route::delete('/templates/{id}', [TemplateMasterController::class, 'destroy']);
+
+    Route::prefix('eventcategorymasters')->group(function () {
+        Route::get('/', [EventCategoryMasterController::class, 'index']);  
+        Route::post('/', [EventCategoryMasterController::class, 'store']);       
+        Route::put('/{id}', [EventCategoryMasterController::class, 'update']);    
+        Route::get('/{id}', [EventCategoryMasterController::class, 'viewbyid']);    
+        Route::delete('/{id}', [EventCategoryMasterController::class, 'destroy']); 
+    });
+
+
 });
 
+Route::group(['middleware' => ['auth:api']], function () {
+        
+        Route::get('/dashboard', [App\Http\Controllers\API\ApiController::class, 'countstudent']);
+       
+
+        Route::get('/tiles', [TileController::class, 'getTiles']);
+        Route::post('/tiles', [TileController::class, 'insertTile']);
+        Route::put('/tiles/{id}', [TileController::class, 'updateTile']);
+    });
 
 
 
-//Reports
-Route::post('/getExcessDuesReport', [ReportsController::class, 'getExcessDuesReport']);
-Route::post('/getPaymentReport', [ReportsController::class, 'getPaymentReport']);
-Route::post('/StudentLedger', [ReportsController::class, 'StudentLedger']);
-Route::post('/LedgerSummary', [ReportsController::class, 'LedgerSummary']);
-Route::post('/StudentMark-Upload', [StudentMarkController::class, 'store']);
-Route::post('/StudentMark-view', [StudentMarkController::class, 'viewAll']);
-Route::post('/StudentMark-update', [StudentMarkController::class, 'update']);
-Route::post('/marks/save-temporary', [StudentMarkController::class, 'saveTemporary']);
-Route::get('/marks/temporary', [StudentMarkController::class, 'getTemporary']);
-Route::get('/reportCard', [StudentMarkController::class, 'viewReportCard']);
 Route::get('/excel', [excelsample::class, 'downloadExcel']);
 Route::get('/email/check', function (Request $request) {
     $modulesToCheck = [
@@ -178,8 +312,8 @@ Route::get('download/{fileName}', [MessageController::class, 'downloadFile'])->n
 Route::post('/hide-notification', [NotificationController::class, 'hidenoti']);
 
 Route::post('/register', [ApiController::class, 'register']); 
-Route::get('/lifecycle', [ApiController::class, 'lifecycle']);
-Route::post('/login', [ApiController::class, 'login']);
+
+
 Route::get('/getMatchingUsers', [ApiController::class, 'getMatchingUsersdd']);
 Route::get('/dashboard', [ApiController::class, 'countstudent']);
 Route::post('/logout', [ApiController::class, 'logout']);
@@ -224,7 +358,7 @@ Route::post('/Invoicesendsmsandmail', [InvoiceController::class, 'sendsms']);
 Route::post('/feesmaparray-insert', [FeeMapArrayController::class, 'insert']);
 Route::post('/feesmaparray-read', [FeeMapArrayController::class, 'read']);
 //count
-Route::get('/count', [dashboardController::class, 'count']);
+
 //sponser-add remove
 Route::post('/mapSponserStudent', [sponserMapController::class, 'mapstudents']);
 Route::post('/removemapstudents', [sponserMapController::class, 'removemapstudents']);
@@ -233,11 +367,9 @@ Route::get('/GetSponserall', [sponserMapController::class, 'getSponser']);
 
 Route::post('/EditSVSUser', [listUserController::class, 'changeUserDetails']);
 //genrate invoice 
-Route::post('/genschoolInvoiceView', [genrateInvoiceController::class, 'getTotalAmount']);
+
 Route::post('/geneachStdInvoiceView', [genrateInvoiceController::class, 'genrateForGrade']);
-Route::post('/listgenrate', [genrateInvoiceController::class, 'listgenrate']);
-Route::post('/listgenratefilter', [genrateInvoiceController::class, 'listgenratefilter']);
-Route::post('/listgenrateById', [genrateInvoiceController::class, 'listgenrateById']);
+
 Route::post('/paycashgenrate', [genrateInvoiceController::class, 'cashgenrate']);
 Route::post('/paycashgenratetwo', [genrateInvoiceController::class, 'cashgenratetwo']);
 Route::post('/discountTotalAmount', [genrateInvoiceController::class, 'discountTotalAmount']);
@@ -246,26 +378,16 @@ Route::post('/deleteDiscount', [genrateInvoiceController::class, 'deleteDiscount
 Route::get('/getDiscountCategories', [genrateInvoiceController::class, 'getDiscountCategories']);
 
 
-Route::post('/docGenerate', [genrateInvoiceController::class, 'docGenerate']);
-
-
-//VIEW MAPPING WITH STUDENTS  
-Route::post('/studentsMaps/{standard}', [feesmapController::class, 'fetchByStandard']);
-Route::post('/fetchByhostel', [feesmapController::class, 'fetchByhostel']);
-
 // Route::post('/studentsMaps', [feesmapController::class, 'fetchByStandard']);
 // Route::post('/studentsMaps/{standard}', [feesmapController::class, 'fetchByStandard']);
-Route::post('/view/studentsMaps/{id}', [feesmapController::class, 'fetchByid']);
-Route::post('/del/studentsMaps/{id}', [feesmapController::class, 'delByid']);
+
 Route::post('/student-master-readstudents/{grade}/{section}', [ApiController::class, 'readstudents']);
 //fetch StudentByStandard
 Route::post('/studentByGrades/{standard}', [ApiController::class, 'StudentByStandard']);
 Route::get('/studentByGradesSec/{standard}', [ApiController::class, 'SearchStandardSec']);
 Route::get('/ADstudentByGradesSec/{standard}', [ApiController::class, 'ADSearchStandardSec']);
 
-//Promotion student Routes
-Route::post('/studentpromotion-update', [StudentPromotionController::class, 'update']);
-Route::post('/move-to-detention', [StudentPromotionController::class, 'moveToDetention']);
+
 
 Route::post('/withoutSponsorGrades/{standard}', [ApiController::class, 'withoutSponsorStandard']);
 
@@ -279,26 +401,17 @@ Route::get('/reminder-read', [reminderController::class, 'read']);
 Route::post('/reminder-update', [reminderController::class, 'update']);
 Route::post('/reminder-delete', [reminderController::class, 'delete']);
 
-//fessmap 
-Route::post('/feesmap-insert', [feesmapController::class, 'insert']);
-Route::post('/feesmap-insertArray', [feesmapController::class, 'insertArray']);
-Route::post('/feesmap-insertbyIDArray', [feesmapController::class, 'insertbyIDArray']);
 
 
 Route::get('/feesmap-read', [feesmapController::class, 'read']);
-Route::post('/feesmap-update', [feesmapController::class, 'update']);
+
 Route::post('/feesmap-delete', [feesmapController::class, 'delete']);
 Route::post('/feesmap-deleteforStudent', [feesmapController::class, 'deleteforStudent']);
 Route::post('/feesmap-insertByID', [feesmapController::class, 'insertByID']);
 
 
 //master 
-//section
-Route::post('/section-master-insert', [sectionmasterController::class, 'insert']);
-Route::get('/section-master-read', [sectionmasterController::class, 'read']);
-Route::get('/section-master-view/{id}', [sectionmasterController::class, 'viewbyid']);
-Route::post('/section-master-update', [sectionmasterController::class, 'update']);
-Route::post('/section-master-delete', [sectionmasterController::class, 'delete']);
+
 //class
 Route::post('/class-master-insert', [classmasterController::class, 'insert']);
 Route::get('/class-master-read', [classmasterController::class, 'read']);
@@ -351,15 +464,7 @@ Route::get('/HostelDiscountCategory-read', [DiscountCategoryMasterController::cl
 Route::post('/DiscountCategory-update', [DiscountCategoryMasterController::class, 'update']);
 Route::post('/DiscountCategory-delete', [DiscountCategoryMasterController::class, 'delete']);
 
-//invoice API's
-Route::get('/invoice-list', [InvoiceController::class, 'getInvoiceList']);
-Route::get('/invoice-list-short', [InvoiceController::class, 'getInvoiceListshort']);
-Route::get('/receipt-list-short', [InvoiceController::class, 'getReceiptListshort']);
-Route::get('/payment-receipt-list', [InvoiceController::class, 'getPaymentReceiptList']);
-Route::get('/payment-receipt', [InvoiceController::class, 'getPaymentReceipt']);
-Route::post('/geteachsponserstudent', [InvoiceController::class, 'getsponserstudent']);
-Route::get('/sponsor/{sponsorId}/students',[InvoiceController::class, 'getSponsorIDStudents']);
-Route::get('/sponsortwo/{sponsorId}/students',[InvoiceController::class, 'getSponsorIDStudentstwo']);
+
 Route::post('/invoiceSearch', [genrateInvoiceController::class, 'invoiceSearch']);
 Route::post('/ReciptSearch', [genrateInvoiceController::class, 'ReciptSearch']);
 Route::post('/deleterecipt', [genrateInvoiceController::class, 'deleterecipt']);
@@ -404,23 +509,12 @@ Route::post('/Admission-update/{id}', [StudentController::class, 'updatefromAdmi
 Route::post('/upload-photos',[PhotoController::class, 'upload']);
 //bulk STATUS
 Route::post('/bulk-status/profile',[bulkstatusController::class, 'status']);
- 
-Route::post('/healthcare/add', [StudentHealthcareController::class, 'addHealthcareRecord']);
-Route::post('/healthcare/edit/{id}', [StudentHealthcareController::class, 'editHealthcareRecord']);
-Route::get('/healthcare/view/{id}', [StudentHealthcareController::class, 'viewHealthcareRecord']);
-Route::get('/healthcare/viewAll', [StudentHealthcareController::class, 'viewAllHealthcareRecords']);
 
 
-Route::post('/staff/add', [StaffController::class, 'addStaff']); 
-Route::post('/staff/edit/{id}', [StaffController::class, 'editStaff']);  
-Route::get('/staff/view/{id}', [StaffController::class, 'viewStaff']); 
-Route::get('/staff/viewAll', [StaffController::class, 'viewAllStaff']);   
 
-Route::get('/templates', [TemplateMasterController::class, 'index']);
-Route::get('/templates/{id}', [TemplateMasterController::class, 'show']);
-Route::post('/templates', [TemplateMasterController::class, 'store']);
-Route::put('/templates/{id}', [TemplateMasterController::class, 'update']);
-Route::delete('/templates/{id}', [TemplateMasterController::class, 'destroy']);
+
+
+
 
 // Route::prefix('templateeditor')->group(function () {
 //     Route::get('/editor', [TemplateEditorController::class, 'showEditor']);
@@ -471,14 +565,7 @@ Route::prefix('message-category')->name('message-category.')->group(function () 
     Route::get('/{id}', [MessageCategoryMasterController::class, 'viewbyid'])->name('view');
     Route::delete('/{id}', [MessageCategoryMasterController::class, 'destroy'])->name('delete');
 });
-Route::prefix('terms')->group(function () {
-    Route::get('/', [TermController::class, 'index']);      
-    Route::post('/', [TermController::class, 'store']);       
-    Route::put('/{id}', [TermController::class, 'update']);    
-    Route::get('/{id}', [TermController::class, 'viewbyid']);    
-    
-    Route::delete('/{id}', [TermController::class, 'destroy']); 
-});
+
 Route::prefix('subjects')->group(function () {
     Route::get('/', [subjectMasterController::class, 'index']);      
     Route::post('/', [subjectMasterController::class, 'store']);       
@@ -514,29 +601,11 @@ Route::prefix('notificationcategory')->group(function () {
     Route::delete('/{id}', [NotificationCategoryController::class, 'destroy']); 
 });
 
-Route::prefix('eventcategorymasters')->group(function () {
-    Route::get('/', [EventCategoryMasterController::class, 'index']);  
-    Route::post('/', [EventCategoryMasterController::class, 'store']);       
-    Route::put('/{id}', [EventCategoryMasterController::class, 'update']);    
-    Route::get('/{id}', [EventCategoryMasterController::class, 'viewbyid']);    
-    Route::delete('/{id}', [EventCategoryMasterController::class, 'destroy']); 
-});
 
-Route::prefix('leaveapplications')->group(function () {
-    Route::get('/', [LeaveApplicationController::class, 'index']);
-    Route::post('/', [LeaveApplicationController::class, 'store']);
-    Route::put('/{id}', [LeaveApplicationController::class, 'update']);
-    Route::get('/{id}', [LeaveApplicationController::class, 'viewbyid']);
-    Route::delete('/{id}', [LeaveApplicationController::class, 'destroy']);
-});
 
-Route::prefix('webinars')->group(function () {
-    Route::get('/', [WebinarController::class, 'index']);
-    Route::post('/', [WebinarController::class, 'store']);
-    Route::get('/{id}', [WebinarController::class, 'show']);
-    Route::put('/{id}', [WebinarController::class, 'update']);
-    Route::delete('/{id}', [WebinarController::class, 'destroy']);
-});
+
+
+
 
 Route::prefix('noticeboard')->group(function () {
     Route::get('/', [NoticeBoardController::class, 'index']);  
@@ -546,13 +615,7 @@ Route::prefix('noticeboard')->group(function () {
     Route::delete('/{id}', [NoticeBoardController::class, 'destroy']); 
 });
 
-Route::prefix('eventcalendars')->group(function () {
-    Route::get('/', [EventCalendarController::class, 'index']);  
-    Route::post('/', [EventCalendarController::class, 'store']);       
-    Route::put('/{id}', [EventCalendarController::class, 'update']);    
-    Route::get('/{id}', [EventCalendarController::class, 'viewbyid']);    
-    Route::delete('/{id}', [EventCalendarController::class, 'destroy']); 
-});
+
 
 Route::prefix('announcements')->group(function () {
     Route::get('/', [AnnouncementController::class, 'index']);  
@@ -562,13 +625,7 @@ Route::prefix('announcements')->group(function () {
     Route::delete('/{id}', [AnnouncementController::class, 'destroy']); 
 });
 
-Route::prefix('standards')->group(function () {
-    Route::get('/', [StandardMasterController::class, 'index']);      
-    Route::post('/', [StandardMasterController::class, 'store']);       
-    Route::put('/{id}', [StandardMasterController::class, 'update']);    
-    Route::get('/{id}', [StandardMasterController::class, 'viewbyid']);    
-    Route::delete('/{id}', [StandardMasterController::class, 'destroy']); 
-});
+
 
 Route::prefix('std_sec_group_mapping')->group(function () {
     Route::get('/', [StandardSectionMappingController::class, 'index']);      
@@ -664,22 +721,6 @@ Route::get('/attendance/{id}', [StudentAttendanceController::class, 'show']);
 Route::put('/attendance/{id}', [StudentAttendanceController::class, 'update']);
 Route::delete('/attendance/{id}', [StudentAttendanceController::class, 'destroy']);
 Route::post('/attendance/bulk', [StudentAttendanceController::class, 'storeBulk']);
-
-
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('/detail', function (Request $request) {
-        return auth()->user();
-        
-    });
-    Route::get('/dashboard', [App\Http\Controllers\API\ApiController::class, 'countstudent']);
-    Route::get('/viewProfile', [App\Http\Controllers\API\ApiController::class, 'viewProfile']);
-
-    Route::get('/tiles', [TileController::class, 'getTiles']);
-    Route::post('/tiles', [TileController::class, 'insertTile']);
-    Route::put('/tiles/{id}', [TileController::class, 'updateTile']);
-});
-
-
 Route::post('/add-student', [StudentController::class, 'store']);
 
 
