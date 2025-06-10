@@ -1,34 +1,29 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
+-- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 06:00 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: eucto_campus
+-- ------------------------------------------------------
+-- Server version	10.4.32-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `karthik`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `admission`
 --
 
+DROP TABLE IF EXISTS `admission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admission` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `date_of_birth` varchar(255) DEFAULT NULL,
@@ -63,17 +58,20 @@ CREATE TABLE `admission` (
   `medical_certificate_photo` varchar(200) DEFAULT NULL,
   `reference_letter_photo` varchar(200) DEFAULT NULL,
   `church_certificate_photo` varchar(200) DEFAULT NULL,
-  `transfer_certificate_photo` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `transfer_certificate_photo` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admission_live`
 --
 
+DROP TABLE IF EXISTS `admission_live`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admission_live` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `date_form` varchar(255) DEFAULT NULL,
   `language` varchar(100) DEFAULT NULL,
@@ -158,17 +156,20 @@ CREATE TABLE `admission_live` (
   `guardian_organization` varchar(50) DEFAULT NULL,
   `pin_no` varchar(20) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1086 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admission_live_demo`
 --
 
+DROP TABLE IF EXISTS `admission_live_demo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admission_live_demo` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `date_form` varchar(255) DEFAULT NULL,
   `language` varchar(100) DEFAULT NULL,
@@ -252,17 +253,20 @@ CREATE TABLE `admission_live_demo` (
   `mother_organization` varchar(50) DEFAULT NULL,
   `guardian_organization` varchar(50) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admission_process`
 --
 
+DROP TABLE IF EXISTS `admission_process`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admission_process` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `date_of_birth` varchar(255) DEFAULT NULL,
@@ -306,17 +310,20 @@ CREATE TABLE `admission_process` (
   `gender_2` varchar(200) DEFAULT NULL,
   `class_2` varchar(200) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admission_process_live`
 --
 
+DROP TABLE IF EXISTS `admission_process_live`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admission_process_live` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `date_form` varchar(255) DEFAULT NULL,
   `language` varchar(100) DEFAULT NULL,
@@ -402,30 +409,33 @@ CREATE TABLE `admission_process_live` (
   `pin_no` varchar(20) DEFAULT NULL,
   `payment_mode` text DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=758 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admitted_students`
 --
 
+DROP TABLE IF EXISTS `admitted_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admitted_students` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `roll_no` varchar(220) DEFAULT NULL,
   `admission_no` varchar(220) DEFAULT NULL,
   `STUDENT_NAME` varchar(220) DEFAULT NULL,
-  `date_form` varchar(100) DEFAULT NULL,
-  `MOTHERTONGUE` varchar(100) DEFAULT NULL,
-  `STATE` varchar(100) DEFAULT NULL,
-  `DOB_DD_MM_YYYY` varchar(100) DEFAULT NULL,
-  `SEX` varchar(50) DEFAULT NULL,
-  `BLOOD_GROUP` varchar(50) DEFAULT NULL,
+  `date_form` varchar(220) DEFAULT NULL,
+  `MOTHERTONGUE` varchar(220) DEFAULT NULL,
+  `STATE` varchar(220) DEFAULT NULL,
+  `DOB_DD_MM_YYYY` varchar(220) DEFAULT NULL,
+  `SEX` varchar(220) DEFAULT NULL,
+  `BLOOD_GROUP` varchar(220) DEFAULT NULL,
   `NATIONALITY` varchar(220) DEFAULT NULL,
   `RELIGION` varchar(220) DEFAULT NULL,
   `DENOMINATION` varchar(220) DEFAULT NULL,
-  `CASTE` varchar(100) DEFAULT NULL,
+  `CASTE` varchar(220) DEFAULT NULL,
   `CASTE_CLASSIFICATION` varchar(220) DEFAULT NULL,
   `AADHAAR_CARD_NO` varchar(220) DEFAULT NULL,
   `RATIONCARDNO` varchar(220) DEFAULT NULL,
@@ -454,7 +464,7 @@ CREATE TABLE `admitted_students` (
   `P_DISTRICT` varchar(220) DEFAULT NULL,
   `P_STATE` varchar(220) DEFAULT NULL,
   `P_PINCODE` varchar(220) DEFAULT NULL,
-  `COMMUNICATION_HOUSE_NO` varchar(100) DEFAULT NULL,
+  `COMMUNICATION_HOUSE_NO` varchar(220) DEFAULT NULL,
   `C_STREET_NAME` varchar(220) DEFAULT NULL,
   `C_VILLAGE_TOWN_NAME` varchar(220) DEFAULT NULL,
   `C_DISTRICT` varchar(220) DEFAULT NULL,
@@ -466,7 +476,7 @@ CREATE TABLE `admitted_students` (
   `sec` varchar(220) DEFAULT NULL,
   `syllabus` varchar(220) DEFAULT NULL,
   `GROUP_12` varchar(220) DEFAULT NULL,
-  `second_group_no` varchar(100) DEFAULT NULL,
+  `second_group_no` varchar(220) DEFAULT NULL,
   `LANG_PART_I` varchar(220) DEFAULT NULL,
   `profile_photo` varchar(220) DEFAULT NULL,
   `birth_certificate_photo` varchar(90) DEFAULT NULL,
@@ -480,8 +490,8 @@ CREATE TABLE `admitted_students` (
   `transfer_certificate_photo` varchar(90) DEFAULT NULL,
   `admission_photo` varchar(90) DEFAULT NULL,
   `payment_order_id` varchar(90) DEFAULT NULL,
-  `brother_1` varchar(100) DEFAULT NULL,
-  `brother_2` varchar(100) DEFAULT NULL,
+  `brother_1` varchar(220) DEFAULT NULL,
+  `brother_2` varchar(220) DEFAULT NULL,
   `gender_1` varchar(90) DEFAULT NULL,
   `gender_2` varchar(90) DEFAULT NULL,
   `class_1` varchar(90) DEFAULT NULL,
@@ -504,25 +514,19 @@ CREATE TABLE `admitted_students` (
   `documents` varchar(220) DEFAULT NULL,
   `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `academic_year` varchar(100) DEFAULT NULL,
-  `grade_status` varchar(100) DEFAULT NULL,
-  `group_no` int(11) DEFAULT NULL,
-  `siblings` varchar(10) DEFAULT NULL,
-  `second_language` varchar(10) NOT NULL,
-  `admission_id` int(11) NOT NULL,
-  `father_title` varchar(10) NOT NULL,
-  `mother_title` varchar(10) NOT NULL,
-  `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=711 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `admitted_students_history`
 --
 
+DROP TABLE IF EXISTS `admitted_students_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admitted_students_history` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `original_id` varchar(220) DEFAULT NULL,
   `roll_no` varchar(220) DEFAULT NULL,
   `admission_no` varchar(220) DEFAULT NULL,
@@ -613,29 +617,35 @@ CREATE TABLE `admitted_students_history` (
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
   `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6291 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `bulk_sponser_payments`
 --
 
+DROP TABLE IF EXISTS `bulk_sponser_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bulk_sponser_payments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `request_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`request_data`)),
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `by_pay_informations`
 --
 
+DROP TABLE IF EXISTS `by_pay_informations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `by_pay_informations` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_id` varchar(121) NOT NULL,
   `invoice_id` varchar(121) NOT NULL,
   `transactionId` varchar(121) NOT NULL,
@@ -643,38 +653,36 @@ CREATE TABLE `by_pay_informations` (
   `sponsor` varchar(121) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
   `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `inv_amt` int(11) DEFAULT NULL,
-  `type` varchar(100) DEFAULT NULL,
-  `due_amount` varchar(100) DEFAULT NULL,
-  `payment_status` varchar(100) NOT NULL,
-  `additional_details` varchar(100) NOT NULL,
-  `mode` varchar(100) NOT NULL,
-  `s_excess_amount` varchar(100) NOT NULL,
-  `h_excess_amount` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1554 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `class_masters`
 --
 
+DROP TABLE IF EXISTS `class_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `class_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `class` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `deletedreceipts`
 --
 
+DROP TABLE IF EXISTS `deletedreceipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `deletedreceipts` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_uuid` varchar(255) DEFAULT NULL,
   `invoice_id` varchar(255) DEFAULT NULL,
   `payment_transaction_id` varchar(255) DEFAULT NULL,
@@ -683,33 +691,39 @@ CREATE TABLE `deletedreceipts` (
   `status` varchar(255) DEFAULT NULL,
   `transaction_completed_status` varchar(255) DEFAULT NULL,
   `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `discount_category_masters`
 --
 
+DROP TABLE IF EXISTS `discount_category_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `discount_category_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `discount_name` varchar(255) NOT NULL,
   `feestype` varchar(200) DEFAULT NULL,
   `amount` varchar(200) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `discount_lists`
 --
 
+DROP TABLE IF EXISTS `discount_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `discount_lists` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `discount_heading` varchar(150) NOT NULL,
   `amount` varchar(255) NOT NULL,
   `student` varchar(255) NOT NULL,
@@ -717,17 +731,20 @@ CREATE TABLE `discount_lists` (
   `end_date` varchar(100) NOT NULL,
   `status` int(15) NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `donar_list`
 --
 
+DROP TABLE IF EXISTS `donar_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `donar_list` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
@@ -743,17 +760,21 @@ CREATE TABLE `donar_list` (
   `pincode_2` varchar(20) DEFAULT NULL,
   `pan_aadhar` varchar(50) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `donation_donar_list`
 --
 
+DROP TABLE IF EXISTS `donation_donar_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `donation_donar_list` (
-  `id` int(100) NOT NULL,
+  `id` int(100) NOT NULL AUTO_INCREMENT,
   `donor_name` varchar(50) DEFAULT NULL,
   `donor_id` varchar(20) DEFAULT NULL,
   `typeOfDonation` varchar(200) DEFAULT NULL,
@@ -772,17 +793,20 @@ CREATE TABLE `donation_donar_list` (
   `pan_no` varchar(30) DEFAULT NULL,
   `invoice_pdf` varchar(30) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `donation_list`
 --
 
+DROP TABLE IF EXISTS `donation_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `donation_list` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `heading` varchar(255) NOT NULL,
   `image` text NOT NULL,
   `main_description` text NOT NULL,
@@ -792,17 +816,20 @@ CREATE TABLE `donation_list` (
   `btn_amt_2` decimal(10,2) NOT NULL,
   `btn_amt_3` decimal(10,2) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `donation_statement`
 --
 
+DROP TABLE IF EXISTS `donation_statement`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `donation_statement` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `donation_id` int(11) NOT NULL,
   `donar_id` int(11) NOT NULL,
   `donar_name` varchar(255) NOT NULL,
@@ -811,17 +838,20 @@ CREATE TABLE `donation_statement` (
   `transection_id` varchar(255) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `donation_statement_trans`
 --
 
+DROP TABLE IF EXISTS `donation_statement_trans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `donation_statement_trans` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `donation_id` int(11) NOT NULL,
   `donar_id` int(11) NOT NULL,
   `donar_name` varchar(255) NOT NULL,
@@ -831,65 +861,63 @@ CREATE TABLE `donation_statement_trans` (
   `transection_id` varchar(255) DEFAULT NULL,
   `status` enum('pending','success','failed') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `event_calendars`
---
-
-CREATE TABLE `event_calendars` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `category` bigint(20) UNSIGNED NOT NULL,
-  `isStart` varchar(255) NOT NULL,
-  `isEnd` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `event_category_masters`
---
-
-CREATE TABLE `event_category_masters` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `eventCategory` varchar(255) NOT NULL,
-  `eventColor` varchar(7) NOT NULL,
-  `delete_status` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `failed_jobs`
 --
 
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) NOT NULL,
   `connection` text NOT NULL,
   `queue` text NOT NULL,
   `payload` longtext NOT NULL,
   `exception` longtext NOT NULL,
-  `failed_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Table structure for table `fee_map_arrays`
+--
+
+DROP TABLE IF EXISTS `fee_map_arrays`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fee_map_arrays` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `std` varchar(111) DEFAULT NULL,
+  `Checked` varchar(100) DEFAULT NULL,
+  `Fee_Category` varchar(255) DEFAULT NULL,
+  `Sub_Fees` longtext DEFAULT NULL,
+  `Amount` varchar(255) DEFAULT NULL,
+  `Acad_Year` varchar(255) DEFAULT NULL,
+  `Priority` varchar(100) DEFAULT NULL,
+  `created_by` varchar(250) DEFAULT NULL,
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `fees_maps`
 --
 
+DROP TABLE IF EXISTS `fees_maps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fees_maps` (
-  `id` bigint(255) UNSIGNED NOT NULL,
+  `id` bigint(255) unsigned NOT NULL AUTO_INCREMENT,
   `standard` varchar(255) NOT NULL,
   `group` varchar(255) DEFAULT NULL,
   `amount` varchar(255) NOT NULL,
@@ -903,37 +931,19 @@ CREATE TABLE `fees_maps` (
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `Fee_Category` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `fee_map_arrays`
---
-
-CREATE TABLE `fee_map_arrays` (
-  `id` int(11) NOT NULL,
-  `std` varchar(111) DEFAULT NULL,
-  `Checked` varchar(100) DEFAULT NULL,
-  `Fee_Category` varchar(255) DEFAULT NULL,
-  `Sub_Fees` longtext DEFAULT NULL,
-  `Amount` varchar(255) DEFAULT NULL,
-  `Acad_Year` varchar(255) DEFAULT NULL,
-  `Priority` varchar(100) DEFAULT NULL,
-  `created_by` varchar(250) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `generate_invoice_views`
 --
 
+DROP TABLE IF EXISTS `generate_invoice_views`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `generate_invoice_views` (
-  `slno` int(255) NOT NULL,
+  `slno` int(255) NOT NULL AUTO_INCREMENT,
   `invoice_no` varchar(255) DEFAULT NULL,
   `student_id` int(255) NOT NULL,
   `roll_no` varchar(50) DEFAULT NULL,
@@ -965,42 +975,20 @@ CREATE TABLE `generate_invoice_views` (
   `mode` varchar(255) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `healthcare_records`
---
-
-CREATE TABLE `healthcare_records` (
-  `id` int(11) NOT NULL,
-  `admission_no` varchar(100) NOT NULL,
-  `hostel_name` varchar(100) NOT NULL,
-  `father_name` varchar(100) NOT NULL,
-  `father_number` bigint(11) NOT NULL,
-  `mother_name` varchar(100) NOT NULL,
-  `mother_number` bigint(11) NOT NULL,
-  `nature_of_sickness` varchar(100) NOT NULL,
-  `treatment_type` varchar(100) NOT NULL,
-  `from_date` varchar(100) NOT NULL,
-  `to_date` varchar(100) NOT NULL,
-  `cost` int(11) NOT NULL,
-  `created_by` int(11) DEFAULT NULL,
-  `updated_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`slno`)
+) ENGINE=InnoDB AUTO_INCREMENT=3243 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `history_student_infos`
 --
 
+DROP TABLE IF EXISTS `history_student_infos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `history_student_infos` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `admission_no` varchar(255) DEFAULT NULL,
   `roll_no` varchar(255) DEFAULT NULL,
   `student_name` varchar(255) DEFAULT NULL,
@@ -1082,32 +1070,38 @@ CREATE TABLE `history_student_infos` (
   `permission_to_principal` text DEFAULT NULL,
   `administration_of_anaesthetic` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `hostel_fee_masters`
 --
 
+DROP TABLE IF EXISTS `hostel_fee_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostel_fee_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sub_heading` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `invoice_histories`
 --
 
+DROP TABLE IF EXISTS `invoice_histories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoice_histories` (
   `table_id` int(255) NOT NULL,
-  `slno` int(255) NOT NULL,
+  `slno` int(255) NOT NULL AUTO_INCREMENT,
   `student_id` int(255) NOT NULL,
   `roll_no` varchar(255) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
@@ -1127,123 +1121,118 @@ CREATE TABLE `invoice_histories` (
   `invoice_status` varchar(70) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL
+  `updated_at` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`slno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `invoice_lists`
 --
 
+DROP TABLE IF EXISTS `invoice_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoice_lists` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_uuid` bigint(20) UNSIGNED NOT NULL,
-  `invoice_id` bigint(20) UNSIGNED NOT NULL,
-  `payment_transaction_id` bigint(20) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_uuid` bigint(20) unsigned NOT NULL,
+  `invoice_id` bigint(20) unsigned NOT NULL,
+  `payment_transaction_id` bigint(20) unsigned NOT NULL,
   `transaction_amount` decimal(12,2) DEFAULT 0.00,
   `balance_amount` decimal(12,2) NOT NULL DEFAULT 0.00,
   `status` varchar(255) DEFAULT NULL,
   `transaction_completed_status` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `unique_payment_transaction_id` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1562 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `invoice_pendings`
 --
 
+DROP TABLE IF EXISTS `invoice_pendings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoice_pendings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_no` varchar(255) DEFAULT NULL,
   `student_id` int(11) NOT NULL,
   `fees_cat` varchar(255) NOT NULL,
   `pending_amount` decimal(12,2) NOT NULL,
   `closed_status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leave_applications`
---
-
-CREATE TABLE `leave_applications` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `studentName` varchar(255) NOT NULL,
-  `studentId` int(11) NOT NULL,
-  `rollNo` varchar(50) DEFAULT NULL,
-  `class` varchar(100) DEFAULT NULL,
-  `section` varchar(100) DEFAULT NULL,
-  `fatherName` varchar(255) DEFAULT NULL,
-  `motherName` varchar(255) DEFAULT NULL,
-  `fromDate` date NOT NULL,
-  `toDate` date DEFAULT NULL,
-  `leaveDays` int(11) DEFAULT NULL,
-  `delete_status` tinyint(1) DEFAULT 0,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=536 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `migrations`
 --
 
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `oauth_access_tokens`
 --
 
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_access_tokens` (
   `id` varchar(100) NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `scopes` text DEFAULT NULL,
   `revoked` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `expires_at` datetime DEFAULT NULL
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `oauth_auth_codes`
 --
 
+DROP TABLE IF EXISTS `oauth_auth_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_auth_codes` (
   `id` varchar(100) NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
   `scopes` text DEFAULT NULL,
   `revoked` tinyint(1) NOT NULL,
-  `expires_at` datetime DEFAULT NULL
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_auth_codes_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `oauth_clients`
 --
 
+DROP TABLE IF EXISTS `oauth_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_clients` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `secret` varchar(100) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
@@ -1252,69 +1241,86 @@ CREATE TABLE `oauth_clients` (
   `password_client` tinyint(1) NOT NULL,
   `revoked` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_clients_user_id_index` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `oauth_personal_access_clients`
 --
 
+DROP TABLE IF EXISTS `oauth_personal_access_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_personal_access_clients` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `oauth_refresh_tokens`
 --
 
+DROP TABLE IF EXISTS `oauth_refresh_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_refresh_tokens` (
   `id` varchar(100) NOT NULL,
   `access_token_id` varchar(100) NOT NULL,
   `revoked` tinyint(1) NOT NULL,
-  `expires_at` datetime DEFAULT NULL
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `other_expenditure_masters`
 --
 
+DROP TABLE IF EXISTS `other_expenditure_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `other_expenditure_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sub_heading` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `password_resets`
 --
 
+DROP TABLE IF EXISTS `password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `password_resets` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_gateway_admins`
 --
 
+DROP TABLE IF EXISTS `payment_gateway_admins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_gateway_admins` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `merchantSchemeCode` varchar(255) NOT NULL,
   `typeOfPayment` varchar(255) NOT NULL,
   `currency` varchar(255) NOT NULL,
@@ -1346,43 +1352,52 @@ CREATE TABLE `payment_gateway_admins` (
   `showAllModesWithSI` tinyint(1) NOT NULL,
   `enableSIDetailsAtMerchantEnd` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_info`
 --
 
+DROP TABLE IF EXISTS `payment_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_info` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_mode_masters`
 --
 
+DROP TABLE IF EXISTS `payment_mode_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_mode_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `paymenttype` varchar(255) NOT NULL,
   `created_by` int(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_notification_datas`
 --
 
+DROP TABLE IF EXISTS `payment_notification_datas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_notification_datas` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_id` varchar(100) NOT NULL,
   `email` varchar(255) NOT NULL,
   `txnId` varchar(255) NOT NULL,
@@ -1391,24 +1406,27 @@ CREATE TABLE `payment_notification_datas` (
   `status` varchar(100) DEFAULT NULL,
   `show_hide` int(11) NOT NULL DEFAULT 1,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_orders_details`
 --
 
+DROP TABLE IF EXISTS `payment_orders_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_orders_details` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `internal_txn_id` bigint(20) UNSIGNED NOT NULL COMMENT ' internal random id',
-  `user_id` bigint(20) UNSIGNED NOT NULL COMMENT 'user id / Sponser id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `internal_txn_id` bigint(20) unsigned NOT NULL COMMENT ' internal random id',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id / Sponser id',
   `amount` decimal(12,2) NOT NULL COMMENT 'invoice total amount',
   `paymentMode` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL COMMENT 'user name/ Card holder Name',
   `accNo` varchar(255) DEFAULT NULL COMMENT 'user account no',
-  `custID` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'user id / sponser id /card holder id',
+  `custID` bigint(20) unsigned DEFAULT NULL COMMENT 'user id / sponser id /card holder id',
   `mobNo` varchar(255) DEFAULT NULL COMMENT 'user Mobile id',
   `email` varchar(255) DEFAULT NULL COMMENT 'user email id',
   `debitStartDate` date DEFAULT NULL COMMENT 'debit Start Date',
@@ -1433,17 +1451,20 @@ CREATE TABLE `payment_orders_details` (
   `user_access_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'user access token can save here' CHECK (json_valid(`user_access_key`)),
   `updatedat` timestamp NULL DEFAULT NULL COMMENT 'update time stamp',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2488 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_orders_statuses`
 --
 
+DROP TABLE IF EXISTS `payment_orders_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_orders_statuses` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `txn_status` varchar(255) DEFAULT NULL,
   `txn_msg` varchar(255) DEFAULT NULL,
   `txn_err_msg` varchar(255) DEFAULT NULL,
@@ -1470,17 +1491,20 @@ CREATE TABLE `payment_orders_statuses` (
   `pay_res_updatedAt` timestamp NULL DEFAULT NULL,
   `dual_veri_updatedAt` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2678 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `payment_req_data`
 --
 
+DROP TABLE IF EXISTS `payment_req_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_req_data` (
-  `payment_req_id` int(11) NOT NULL,
+  `payment_req_id` int(11) NOT NULL AUTO_INCREMENT,
   `payment_req_customerName` varchar(255) DEFAULT NULL,
   `payment_req_merchantCode` varchar(255) DEFAULT NULL,
   `payment_req_ITC` varchar(255) DEFAULT NULL,
@@ -1499,34 +1523,41 @@ CREATE TABLE `payment_req_data` (
   `payment_req_iv` varchar(255) DEFAULT NULL,
   `payment_req_accountNo` varchar(255) DEFAULT NULL,
   `payment_req_webServiceLocator_PHP_EOL` text DEFAULT NULL,
-  `payment_req_date_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `payment_req_date_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` DATETIME NULL DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `created_at` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`payment_req_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=869 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `receipts`
 --
 
+DROP TABLE IF EXISTS `receipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `receipts` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `receipt_no` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_mode` varchar(255) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `receipt_no` (`receipt_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `reminders`
 --
 
+DROP TABLE IF EXISTS `reminders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reminders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -1534,30 +1565,36 @@ CREATE TABLE `reminders` (
   `color` varchar(255) NOT NULL,
   `send_to` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `roles`
 --
 
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `roles` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `role` varchar(255) NOT NULL,
   `role_id` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `school_fee_discounts`
 --
 
+DROP TABLE IF EXISTS `school_fee_discounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `school_fee_discounts` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_id` varchar(100) DEFAULT NULL,
   `discount_cat` longtext DEFAULT NULL,
   `dis_amount` varchar(255) DEFAULT NULL,
@@ -1565,59 +1602,71 @@ CREATE TABLE `school_fee_discounts` (
   `year` varchar(100) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `school_fee_masters`
 --
 
+DROP TABLE IF EXISTS `school_fee_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `school_fee_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sub_heading` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `school_miscellaneous_bill_masters`
 --
 
+DROP TABLE IF EXISTS `school_miscellaneous_bill_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `school_miscellaneous_bill_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sub_heading` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `section_masters`
 --
 
+DROP TABLE IF EXISTS `section_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `section_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `section` varchar(255) DEFAULT NULL,
-  `created_by` varchar(255) DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `section` varchar(255) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `seperate_fees_maps`
 --
 
+DROP TABLE IF EXISTS `seperate_fees_maps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `seperate_fees_maps` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_id` varchar(100) NOT NULL,
   `standard` varchar(100) DEFAULT NULL,
   `amount` varchar(255) DEFAULT NULL,
@@ -1628,18 +1677,21 @@ CREATE TABLE `seperate_fees_maps` (
   `status` varchar(50) DEFAULT '1',
   `invoice_generated` int(50) NOT NULL DEFAULT 0,
   `created_by` varchar(50) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `settlements`
 --
 
+DROP TABLE IF EXISTS `settlements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `settlements` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `transaction_id` varchar(255) NOT NULL,
   `order_id` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
@@ -1648,32 +1700,39 @@ CREATE TABLE `settlements` (
   `transaction_date` timestamp NULL DEFAULT NULL,
   `raw_response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`raw_response`)),
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `transaction_id` (`transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `sponser_maps`
 --
 
+DROP TABLE IF EXISTS `sponser_maps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sponser_maps` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `student_ids` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `sponser_masters`
 --
 
+DROP TABLE IF EXISTS `sponser_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sponser_masters` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(150) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `occupation` varchar(255) NOT NULL,
@@ -1691,17 +1750,20 @@ CREATE TABLE `sponser_masters` (
   `status` int(11) NOT NULL DEFAULT 1,
   `created_by` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `sponser_schoolfees`
 --
 
+DROP TABLE IF EXISTS `sponser_schoolfees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sponser_schoolfees` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `student_id` varchar(255) NOT NULL,
   `sponser_id` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
@@ -1713,83 +1775,62 @@ CREATE TABLE `sponser_schoolfees` (
   `payment_status` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `staff`
---
-
-CREATE TABLE `staff` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `staff_id` varchar(50) DEFAULT NULL,
-  `staffName` varchar(155) NOT NULL,
-  `designation` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `mobile_no` varchar(20) DEFAULT NULL,
-  `permanentAddress` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`permanentAddress`)),
-  `communicationAddress` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`communicationAddress`)),
-  `staff_photo` varchar(255) DEFAULT NULL,
-  `date_of_joining` date DEFAULT NULL,
-  `isdeleted` tinyint(1) DEFAULT 0,
-  `gender` varchar(10) DEFAULT NULL,
-  `dob` date DEFAULT NULL,
-  `qualification` varchar(255) DEFAULT NULL,
-  `teacher_type` varchar(255) DEFAULT NULL,
-  `previous_experience` text DEFAULT NULL,
-  `marital_status` varchar(20) DEFAULT NULL,
-  `no_of_children` int(11) DEFAULT NULL,
-  `father_name` varchar(255) DEFAULT NULL,
-  `mother_name` varchar(255) DEFAULT NULL,
-  `emergency_contact_no` varchar(20) DEFAULT NULL,
-  `epf_no` varchar(100) DEFAULT NULL,
-  `aadhaar_no` varchar(20) DEFAULT NULL,
-  `pan` varchar(20) DEFAULT NULL,
-  `staff_status` varchar(50) DEFAULT NULL,
-  `date_of_resignation` date DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `staff_fee_masters`
 --
 
+DROP TABLE IF EXISTS `staff_fee_masters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_fee_masters` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(155) NOT NULL,
   `created_by` varchar(111) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
+  `updated_at` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `standards`
+-- Table structure for table `student_fee_map_arrays`
 --
 
-CREATE TABLE `standards` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`options`)),
-  `delete_status` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `student_fee_map_arrays`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `student_fee_map_arrays` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` varchar(50) DEFAULT NULL,
+  `roll_no` varchar(50) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `std` varchar(111) DEFAULT NULL,
+  `amount` varchar(50) DEFAULT NULL,
+  `fees_heading` varchar(255) DEFAULT NULL,
+  `fees_sub_heading` longtext DEFAULT NULL,
+  `date` varchar(50) DEFAULT NULL,
+  `acad_year` varchar(50) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `created_at` DATETIME NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7025 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `student_fees_maps`
 --
 
+DROP TABLE IF EXISTS `student_fees_maps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `student_fees_maps` (
-  `slno` int(11) NOT NULL,
+  `slno` int(11) NOT NULL AUTO_INCREMENT,
   `student_id` varchar(60) NOT NULL,
   `roll_no` varchar(60) DEFAULT NULL,
   `name` varchar(120) NOT NULL,
@@ -1810,40 +1851,21 @@ CREATE TABLE `student_fees_maps` (
   `status` int(11) DEFAULT 1,
   `invoice_generated` int(11) DEFAULT 0,
   `created_by` varchar(111) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `student_fee_map_arrays`
---
-
-CREATE TABLE `student_fee_map_arrays` (
-  `id` int(11) NOT NULL,
-  `student_id` varchar(50) DEFAULT NULL,
-  `roll_no` varchar(50) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `std` varchar(111) DEFAULT NULL,
-  `amount` varchar(50) DEFAULT NULL,
-  `fees_heading` varchar(255) DEFAULT NULL,
-  `fees_sub_heading` longtext DEFAULT NULL,
-  `date` varchar(50) DEFAULT NULL,
-  `acad_year` varchar(50) DEFAULT NULL,
-  `created_by` varchar(100) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`slno`)
+) ENGINE=InnoDB AUTO_INCREMENT=22281 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `student_infos`
 --
 
+DROP TABLE IF EXISTS `student_infos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `student_infos` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `admission_no` varchar(255) DEFAULT NULL,
   `roll_no` varchar(255) DEFAULT NULL,
   `student_name` varchar(255) NOT NULL,
@@ -1925,17 +1947,20 @@ CREATE TABLE `student_infos` (
   `permission_to_principal` varchar(111) DEFAULT NULL,
   `administration_of_anaesthetic` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `student_infos_bk`
 --
 
+DROP TABLE IF EXISTS `student_infos_bk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `student_infos_bk` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `roll_no` varchar(255) DEFAULT NULL,
   `student_name` varchar(255) NOT NULL,
   `sex` varchar(50) NOT NULL,
@@ -2012,40 +2037,20 @@ CREATE TABLE `student_infos_bk` (
   `Typhoid` text NOT NULL,
   `Cholera` text NOT NULL,
   `permission_to_principal` text NOT NULL,
-  `administration_of_anaesthetic` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `student_mark_records`
---
-
-CREATE TABLE `student_mark_records` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `academic_year` varchar(255) NOT NULL,
-  `roll_no` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `standard` varchar(255) NOT NULL,
-  `section` varchar(255) DEFAULT NULL,
-  `term` varchar(255) NOT NULL,
-  `group_no` varchar(255) DEFAULT NULL,
-  `subjects` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`subjects`)),
-  `total` int(11) DEFAULT NULL,
-  `percentage` float(5,2) DEFAULT NULL,
-  `remarks` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `administration_of_anaesthetic` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `student_schoolfees`
 --
 
+DROP TABLE IF EXISTS `student_schoolfees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `student_schoolfees` (
-  `slno` bigint(20) UNSIGNED NOT NULL,
+  `slno` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `student_id` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
   `fee_heading` varchar(255) NOT NULL,
@@ -2056,71 +2061,20 @@ CREATE TABLE `student_schoolfees` (
   `payment_status` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `template_masters`
---
-
-CREATE TABLE `template_masters` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `template_name` varchar(255) NOT NULL,
-  `template_content` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `extra` varchar(255) DEFAULT NULL,
-  `comment` varchar(255) DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL
+  PRIMARY KEY (`slno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `temporary_student_marks`
---
-
-CREATE TABLE `temporary_student_marks` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `academic_year` varchar(255) DEFAULT NULL,
-  `roll_no` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `standard` varchar(255) DEFAULT NULL,
-  `section` varchar(255) DEFAULT NULL,
-  `term` varchar(255) DEFAULT NULL,
-  `group_no` varchar(255) DEFAULT NULL,
-  `subjects` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`subjects`)),
-  `total` int(11) DEFAULT NULL,
-  `percentage` float(5,2) DEFAULT NULL,
-  `remarks` varchar(255) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `terms`
---
-
-CREATE TABLE `terms` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
-  `updated_at` DATETIME NULL DEFAULT NULL,
-  `delete_status` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `transactions_donation_worldline`
 --
 
+DROP TABLE IF EXISTS `transactions_donation_worldline`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transactions_donation_worldline` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `transaction_id` varchar(100) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `status` varchar(50) NOT NULL,
@@ -2129,983 +2083,55 @@ CREATE TABLE `transactions_donation_worldline` (
   `payment_type` varchar(100) DEFAULT NULL,
   `response_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`response_data`)),
   `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `twelveth_groups`
 --
 
+DROP TABLE IF EXISTS `twelveth_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `twelveth_groups` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `group` varchar(50) NOT NULL,
   `group_des` varchar(150) DEFAULT NULL,
   `created_by` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `slno` bigint(20) UNSIGNED NOT NULL,
-  `id` int(255) NOT NULL,
-  `admission_no` varchar(200) DEFAULT NULL,
-  `roll_no` varchar(255) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `gender` varchar(20) DEFAULT NULL,
-  `standard` varchar(50) DEFAULT NULL,
-  `twe_group` varchar(50) DEFAULT NULL,
-  `sec` varchar(30) DEFAULT NULL,
-  `hostelOrDay` varchar(50) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `user_type` varchar(50) NOT NULL DEFAULT 'student',
-  `fee_by` varchar(100) DEFAULT 'parent',
-  `sponser_id` int(80) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `excess_amount` varchar(255) DEFAULT NULL,
-  `h_excess_amount` varchar(255) DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `academic_year` varchar(100) DEFAULT NULL,
-  `grade_status` varchar(100) DEFAULT NULL
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+`created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_grade_histories`
---
-
-CREATE TABLE `user_grade_histories` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `student_id` int(10) UNSIGNED NOT NULL,
-  `admission_no` varchar(50) NOT NULL,
-  `previous_standard` varchar(20) DEFAULT NULL,
-  `previous_sec` varchar(10) DEFAULT NULL,
-  `previous_grade_status` varchar(50) DEFAULT NULL,
-  `new_standard` varchar(20) DEFAULT NULL,
-  `new_sec` varchar(10) DEFAULT NULL,
-  `new_grade_status` varchar(50) DEFAULT NULL,
-  `previous_academic_year` varchar(20) DEFAULT NULL,
-  `current_academic_year` varchar(20) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `webinars`
---
-
-CREATE TABLE `webinars` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `staff_id` varchar(20) NOT NULL,
-  `class` varchar(10) NOT NULL,
-  `section` varchar(5) NOT NULL,
-  `teacher_name` varchar(100) NOT NULL,
-  `host_name` varchar(100) NOT NULL,
-  `date` date NOT NULL,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL,
-  `description` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admission`
---
-ALTER TABLE `admission`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admission_live`
---
-ALTER TABLE `admission_live`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admission_live_demo`
---
-ALTER TABLE `admission_live_demo`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admission_process`
---
-ALTER TABLE `admission_process`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admission_process_live`
---
-ALTER TABLE `admission_process_live`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admitted_students`
---
-ALTER TABLE `admitted_students`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `admitted_students_history`
---
-ALTER TABLE `admitted_students_history`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `bulk_sponser_payments`
---
-ALTER TABLE `bulk_sponser_payments`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `by_pay_informations`
---
-ALTER TABLE `by_pay_informations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `class_masters`
---
-ALTER TABLE `class_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `deletedreceipts`
---
-ALTER TABLE `deletedreceipts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `discount_category_masters`
---
-ALTER TABLE `discount_category_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `discount_lists`
---
-ALTER TABLE `discount_lists`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `donar_list`
---
-ALTER TABLE `donar_list`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `donation_donar_list`
---
-ALTER TABLE `donation_donar_list`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `donation_list`
---
-ALTER TABLE `donation_list`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `donation_statement`
---
-ALTER TABLE `donation_statement`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `donation_statement_trans`
---
-ALTER TABLE `donation_statement_trans`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `event_calendars`
---
-ALTER TABLE `event_calendars`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `event_category_masters`
---
-ALTER TABLE `event_category_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
-
---
--- Indexes for table `fees_maps`
---
-ALTER TABLE `fees_maps`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `fee_map_arrays`
---
-ALTER TABLE `fee_map_arrays`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `generate_invoice_views`
---
-ALTER TABLE `generate_invoice_views`
-  ADD PRIMARY KEY (`slno`);
-
---
--- Indexes for table `healthcare_records`
---
-ALTER TABLE `healthcare_records`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `history_student_infos`
---
-ALTER TABLE `history_student_infos`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `hostel_fee_masters`
---
-ALTER TABLE `hostel_fee_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `invoice_histories`
---
-ALTER TABLE `invoice_histories`
-  ADD PRIMARY KEY (`slno`);
-
---
--- Indexes for table `invoice_lists`
---
-ALTER TABLE `invoice_lists`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `invoice_pendings`
---
-ALTER TABLE `invoice_pendings`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `leave_applications`
---
-ALTER TABLE `leave_applications`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `oauth_access_tokens`
---
-ALTER TABLE `oauth_access_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_access_tokens_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_auth_codes`
---
-ALTER TABLE `oauth_auth_codes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_auth_codes_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_clients`
---
-ALTER TABLE `oauth_clients`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_clients_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_personal_access_clients`
---
-ALTER TABLE `oauth_personal_access_clients`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `oauth_refresh_tokens`
---
-ALTER TABLE `oauth_refresh_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
-
---
--- Indexes for table `other_expenditure_masters`
---
-ALTER TABLE `other_expenditure_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `password_resets`
---
-ALTER TABLE `password_resets`
-  ADD KEY `password_resets_email_index` (`email`);
-
---
--- Indexes for table `payment_gateway_admins`
---
-ALTER TABLE `payment_gateway_admins`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_info`
---
-ALTER TABLE `payment_info`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_mode_masters`
---
-ALTER TABLE `payment_mode_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_notification_datas`
---
-ALTER TABLE `payment_notification_datas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_orders_details`
---
-ALTER TABLE `payment_orders_details`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_orders_statuses`
---
-ALTER TABLE `payment_orders_statuses`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_req_data`
---
-ALTER TABLE `payment_req_data`
-  ADD PRIMARY KEY (`payment_req_id`);
-
---
--- Indexes for table `receipts`
---
-ALTER TABLE `receipts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `receipt_no` (`receipt_no`);
-
---
--- Indexes for table `reminders`
---
-ALTER TABLE `reminders`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `school_fee_discounts`
---
-ALTER TABLE `school_fee_discounts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `school_fee_masters`
---
-ALTER TABLE `school_fee_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `school_miscellaneous_bill_masters`
---
-ALTER TABLE `school_miscellaneous_bill_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `section_masters`
---
-ALTER TABLE `section_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `seperate_fees_maps`
---
-ALTER TABLE `seperate_fees_maps`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `settlements`
---
-ALTER TABLE `settlements`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `transaction_id` (`transaction_id`);
-
---
--- Indexes for table `sponser_maps`
---
-ALTER TABLE `sponser_maps`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `sponser_masters`
---
-ALTER TABLE `sponser_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `sponser_schoolfees`
---
-ALTER TABLE `sponser_schoolfees`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `staff`
---
-ALTER TABLE `staff`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `staff_fee_masters`
---
-ALTER TABLE `staff_fee_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `standards`
---
-ALTER TABLE `standards`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `student_fees_maps`
---
-ALTER TABLE `student_fees_maps`
-  ADD PRIMARY KEY (`slno`);
-
---
--- Indexes for table `student_fee_map_arrays`
---
-ALTER TABLE `student_fee_map_arrays`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `student_infos`
---
-ALTER TABLE `student_infos`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `student_infos_bk`
---
-ALTER TABLE `student_infos_bk`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `student_mark_records`
---
-ALTER TABLE `student_mark_records`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `student_schoolfees`
---
-ALTER TABLE `student_schoolfees`
-  ADD PRIMARY KEY (`slno`);
-
---
--- Indexes for table `template_masters`
---
-ALTER TABLE `template_masters`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `temporary_student_marks`
---
-ALTER TABLE `temporary_student_marks`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `terms`
---
-ALTER TABLE `terms`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `transactions_donation_worldline`
---
-ALTER TABLE `transactions_donation_worldline`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `twelveth_groups`
---
-ALTER TABLE `twelveth_groups`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`slno`,`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD UNIQUE KEY `slno` (`slno`);
-
---
--- Indexes for table `user_grade_histories`
---
-ALTER TABLE `user_grade_histories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `webinars`
---
-ALTER TABLE `webinars`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `admission`
---
-ALTER TABLE `admission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admission_live`
---
-ALTER TABLE `admission_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admission_live_demo`
---
-ALTER TABLE `admission_live_demo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admission_process`
---
-ALTER TABLE `admission_process`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admission_process_live`
---
-ALTER TABLE `admission_process_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admitted_students`
---
-ALTER TABLE `admitted_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admitted_students_history`
---
-ALTER TABLE `admitted_students_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `bulk_sponser_payments`
---
-ALTER TABLE `bulk_sponser_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `by_pay_informations`
---
-ALTER TABLE `by_pay_informations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `class_masters`
---
-ALTER TABLE `class_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `deletedreceipts`
---
-ALTER TABLE `deletedreceipts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `discount_category_masters`
---
-ALTER TABLE `discount_category_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `discount_lists`
---
-ALTER TABLE `discount_lists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `donar_list`
---
-ALTER TABLE `donar_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `donation_donar_list`
---
-ALTER TABLE `donation_donar_list`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `donation_list`
---
-ALTER TABLE `donation_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `donation_statement`
---
-ALTER TABLE `donation_statement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `donation_statement_trans`
---
-ALTER TABLE `donation_statement_trans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `event_calendars`
---
-ALTER TABLE `event_calendars`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `event_category_masters`
---
-ALTER TABLE `event_category_masters`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `fees_maps`
---
-ALTER TABLE `fees_maps`
-  MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `fee_map_arrays`
---
-ALTER TABLE `fee_map_arrays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `generate_invoice_views`
---
-ALTER TABLE `generate_invoice_views`
-  MODIFY `slno` int(255) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `healthcare_records`
---
-ALTER TABLE `healthcare_records`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `history_student_infos`
---
-ALTER TABLE `history_student_infos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `hostel_fee_masters`
---
-ALTER TABLE `hostel_fee_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `invoice_histories`
---
-ALTER TABLE `invoice_histories`
-  MODIFY `slno` int(255) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `invoice_lists`
---
-ALTER TABLE `invoice_lists`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `invoice_pendings`
---
-ALTER TABLE `invoice_pendings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `leave_applications`
---
-ALTER TABLE `leave_applications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `oauth_clients`
---
-ALTER TABLE `oauth_clients`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `oauth_personal_access_clients`
---
-ALTER TABLE `oauth_personal_access_clients`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `other_expenditure_masters`
---
-ALTER TABLE `other_expenditure_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_gateway_admins`
---
-ALTER TABLE `payment_gateway_admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_info`
---
-ALTER TABLE `payment_info`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_mode_masters`
---
-ALTER TABLE `payment_mode_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_notification_datas`
---
-ALTER TABLE `payment_notification_datas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_orders_details`
---
-ALTER TABLE `payment_orders_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_orders_statuses`
---
-ALTER TABLE `payment_orders_statuses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_req_data`
---
-ALTER TABLE `payment_req_data`
-  MODIFY `payment_req_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `receipts`
---
-ALTER TABLE `receipts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `reminders`
---
-ALTER TABLE `reminders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `roles`
---
-ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `school_fee_discounts`
---
-ALTER TABLE `school_fee_discounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `school_fee_masters`
---
-ALTER TABLE `school_fee_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `school_miscellaneous_bill_masters`
---
-ALTER TABLE `school_miscellaneous_bill_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `section_masters`
---
-ALTER TABLE `section_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `seperate_fees_maps`
---
-ALTER TABLE `seperate_fees_maps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `settlements`
---
-ALTER TABLE `settlements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sponser_maps`
---
-ALTER TABLE `sponser_maps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sponser_masters`
---
-ALTER TABLE `sponser_masters`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sponser_schoolfees`
---
-ALTER TABLE `sponser_schoolfees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `staff`
---
-ALTER TABLE `staff`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `staff_fee_masters`
---
-ALTER TABLE `staff_fee_masters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `standards`
---
-ALTER TABLE `standards`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_fees_maps`
---
-ALTER TABLE `student_fees_maps`
-  MODIFY `slno` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_fee_map_arrays`
---
-ALTER TABLE `student_fee_map_arrays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_infos`
---
-ALTER TABLE `student_infos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_infos_bk`
---
-ALTER TABLE `student_infos_bk`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_mark_records`
---
-ALTER TABLE `student_mark_records`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `student_schoolfees`
---
-ALTER TABLE `student_schoolfees`
-  MODIFY `slno` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `template_masters`
---
-ALTER TABLE `template_masters`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `temporary_student_marks`
---
-ALTER TABLE `temporary_student_marks`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `terms`
---
-ALTER TABLE `terms`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `transactions_donation_worldline`
---
-ALTER TABLE `transactions_donation_worldline`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `twelveth_groups`
---
-ALTER TABLE `twelveth_groups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `slno` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user_grade_histories`
---
-ALTER TABLE `user_grade_histories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `webinars`
---
-ALTER TABLE `webinars`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-05-21 13:05:04
