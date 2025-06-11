@@ -402,7 +402,10 @@ CREATE TABLE `admission_process_live` (
   `pin_no` varchar(20) DEFAULT NULL,
   `payment_mode` text DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(10) DEFAULT NULL,
+  `father_title` varchar(10) DEFAULT NULL,
+  `mother_title` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -508,11 +511,13 @@ CREATE TABLE `admitted_students` (
   `grade_status` varchar(100) DEFAULT NULL,
   `group_no` int(11) DEFAULT NULL,
   `siblings` varchar(10) DEFAULT NULL,
-  `second_language` varchar(10) NOT NULL,
+  `second_language` varchar(10) DEFAULT NULL,
   `admission_id` int(11) NOT NULL,
-  `father_title` varchar(10) NOT NULL,
-  `mother_title` varchar(10) NOT NULL,
-  `status` int(11) NOT NULL
+  `father_title` varchar(10) DEFAULT NULL,
+  `mother_title` varchar(10) DEFAULT NULL,
+  `status` varchar(10) DEFAULT NULL,
+  `guardian_title` varchar(20) DEFAULT NULL,
+  `pen_no` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -965,7 +970,11 @@ CREATE TABLE `generate_invoice_views` (
   `mode` varchar(255) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  `disable` int(11) DEFAULT NULL,
+  `due_amount` int(11) DEFAULT NULL,
+  `s_excess_amount` int(11) DEFAULT NULL,
+  `h_excess_amount` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1140,7 +1149,7 @@ CREATE TABLE `invoice_lists` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_uuid` bigint(20) UNSIGNED NOT NULL,
   `invoice_id` bigint(20) UNSIGNED NOT NULL,
-  `payment_transaction_id` bigint(20) UNSIGNED NOT NULL,
+  `payment_transaction_id` varchar(255) NOT NULL,
   `transaction_amount` decimal(12,2) DEFAULT 0.00,
   `balance_amount` decimal(12,2) NOT NULL DEFAULT 0.00,
   `status` varchar(255) DEFAULT NULL,
@@ -1189,6 +1198,22 @@ CREATE TABLE `leave_applications` (
   `created_at` DATETIME NULL DEFAULT current_timestamp(),
   `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lifecycle_logs`
+--
+
+CREATE TABLE `lifecycle_logs` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `student_id` int(10) UNSIGNED NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `logged_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1402,7 +1427,7 @@ CREATE TABLE `payment_notification_datas` (
 
 CREATE TABLE `payment_orders_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `internal_txn_id` bigint(20) UNSIGNED NOT NULL COMMENT ' internal random id',
+  `internal_txn_id` varchar(255) NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL COMMENT 'user id / Sponser id',
   `amount` decimal(12,2) NOT NULL COMMENT 'invoice total amount',
   `paymentMode` varchar(255) DEFAULT NULL,
@@ -2062,6 +2087,34 @@ CREATE TABLE `student_schoolfees` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `subjects`
+--
+
+CREATE TABLE `subjects` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `template_editors`
+--
+
+CREATE TABLE `template_editors` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `template_name` varchar(255) DEFAULT NULL,
+  `template` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `template_masters`
 --
 
@@ -2179,6 +2232,21 @@ CREATE TABLE `users` (
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_excess_histories`
+--
+
+CREATE TABLE `user_excess_histories` (
+  `id` int(11) NOT NULL,
+  `sponser_id` int(11) NOT NULL,
+  `excess_amount` decimal(10,2) DEFAULT 0.00,
+  `h_excess_amount` decimal(10,2) DEFAULT 0.00,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2416,6 +2484,12 @@ ALTER TABLE `leave_applications`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `lifecycle_logs`
+--
+ALTER TABLE `lifecycle_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `oauth_access_tokens`
 --
 ALTER TABLE `oauth_access_tokens`
@@ -2632,6 +2706,19 @@ ALTER TABLE `student_schoolfees`
   ADD PRIMARY KEY (`slno`);
 
 --
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `template_editors`
+--
+ALTER TABLE `template_editors`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `template_name` (`template_name`);
+
+--
 -- Indexes for table `template_masters`
 --
 ALTER TABLE `template_masters`
@@ -2668,6 +2755,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`slno`,`id`),
   ADD UNIQUE KEY `id` (`id`),
   ADD UNIQUE KEY `slno` (`slno`);
+
+--
+-- Indexes for table `user_excess_histories`
+--
+ALTER TABLE `user_excess_histories`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `user_grade_histories`
@@ -2872,6 +2965,12 @@ ALTER TABLE `leave_applications`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `lifecycle_logs`
+--
+ALTER TABLE `lifecycle_logs`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `oauth_clients`
 --
 ALTER TABLE `oauth_clients`
@@ -3058,6 +3157,18 @@ ALTER TABLE `student_schoolfees`
   MODIFY `slno` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `template_editors`
+--
+ALTER TABLE `template_editors`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `template_masters`
 --
 ALTER TABLE `template_masters`
@@ -3092,6 +3203,12 @@ ALTER TABLE `twelveth_groups`
 --
 ALTER TABLE `users`
   MODIFY `slno` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_excess_histories`
+--
+ALTER TABLE `user_excess_histories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_grade_histories`

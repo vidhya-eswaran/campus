@@ -98,9 +98,13 @@ Route::get("/test", function ()
 // School Database
 Route::post("/login", [ApiController::class , "login"]);
 
+
 Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
 {
     Route::post("/users", [SchoolUserController::class , "store"]);
+
+
+
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
     Route::post("/healthcare/edit/{id}", [StudentHealthcareController::class , "editHealthcareRecord", ]);
@@ -116,6 +120,19 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("/reportCard", [StudentMarkController::class , "viewReportCard", ]);
 
     Route::get("/viewProfile", [App\Http\Controllers\API\ApiController::class , "viewProfile", ]);
+
+    Route::post('/login', [ApiController::class, 'login']);
+
+    Route::post('/users', [SchoolUserController::class, 'store']);
+
+    Route::group(['middleware' => ['auth:api']], function () {
+
+        Route::post('/healthcare/add', [StudentHealthcareController::class, 'addHealthcareRecord']);
+        Route::post('/healthcare/edit/{id}', [StudentHealthcareController::class, 'editHealthcareRecord']);
+        Route::get('/healthcare/view/{id}', [StudentHealthcareController::class, 'viewHealthcareRecord']);
+        Route::get('/healthcare/viewAll', [StudentHealthcareController::class, 'viewAllHealthcareRecords']);
+
+    });
 
     Route::get("/detail", function (Request $request)
     {
