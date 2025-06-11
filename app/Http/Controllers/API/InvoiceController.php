@@ -729,10 +729,7 @@ class InvoiceController extends Controller
             "email",
             "excess_amount",
             "h_excess_amount"
-        )
-            ->where("user_type", "sponser")
-            ->where("status", 1)
-            ->get();
+        )->where("user_type", "sponser")->where("status", 1)->get();
 
         foreach ($sponsorOptions as $sponsorOption) {
             // Store the original name to use later
@@ -1024,9 +1021,10 @@ class InvoiceController extends Controller
                             ->where("type", $invoiceRecord->fees_cat)
                             ->latest("id")
                             ->first();
-                        $most_recent_dues = $paymentInformation->due_amount;
+                        // dd( $invoiceRecord->student_id,$invoiceRecord->fees_cat);
+                        // $most_recent_dues = $paymentInformation->due_amount;
 
-                        $invoiceRecord->pendingAmountwithconditon = $most_recent_dues;
+                        // $invoiceRecord->pendingAmountwithconditon = $most_recent_dues;
                     } else {
                         // Skip this $studentRecord as it doesn't contain 'slno'
                         continue;
@@ -1546,6 +1544,7 @@ class InvoiceController extends Controller
             $sponsor_prev_excess = $sponsorcheckexcess->h_excess_amount;
         }
         // return response()->json(['message' => $requestData, 'total' => $totalAmount]);
+        // dd($sponsor_prev_excess , $totalAmount);
         if ($sponsor_prev_excess < $totalAmount) {
             return response()->json([
                 "message" =>
@@ -1566,6 +1565,7 @@ class InvoiceController extends Controller
                 "h_excess_amount" => $sponsorremainexcess,
             ]);
         }
+
         // $amount = $request->amount;
         $sponsor = $request->input("sponsorId");
         $mode = "cash";
@@ -1586,7 +1586,6 @@ class InvoiceController extends Controller
                     404
                 );
             }
-
             // Generate a random transaction ID for each invoice
             $transactionId = FastInvoiceHelper::generateReceiptWithPrefix(
                 $invoiceDetails->fees_cat
@@ -1624,6 +1623,8 @@ class InvoiceController extends Controller
                 "invoice_id",
                 $invoiceDetails->slno
             )->sum("transaction_amount");
+
+
             $pending_amount =
                 $totalInvoiceAmountActual -
                 ($previousTransactions + $payed_amount);
@@ -1642,6 +1643,7 @@ class InvoiceController extends Controller
                 ->where("type", $invoiceDetails->fees_cat)
                 ->latest("id")
                 ->first();
+                //   dd( $invoiceDetails->student_id,$invoiceDetails->fees_cat,$totalInvoiceAmountActual,$previousTransactions,$paymentInformation);
             $most_recent_dues = $paymentInformation->due_amount;
             if ($payed_amount < $totalInvoiceAmountActual) {
                 $dues = $most_recent_dues - $payed_amount;
