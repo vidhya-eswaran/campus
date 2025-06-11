@@ -70,150 +70,85 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $res)
     {
-        $datas = $res->data;
-        $response = [
-            "uploaded" => [],
-            "duplicates" => [],
-        ];
-        foreach ($datas as $record) {
-            if (empty($record)) {
-                continue; // Skip empty arrays
-            }
-            // dd($record,(isset($record[1]) && $record[1] !== ""));
-
-            if (isset($record[1]) && $record[1] !== "") {
-                $admission_no = $record[1]; // Assuming the admission_no is stored in index 1
-                //return response()->json( $admission_no);
-
-                // $existingStudent = Student::where('admission_no', 'like', $admission_no)->first();
-                // $existingStudentuser = User::where('admission_no', 'like', $admission_no)->first();
-
-                $existingStudent = Student::where(
-                    "roll_no",
-                    "like",
-                    $record[0]
-                )->first();
-                $existingStudentuser = User::where(
-                    "roll_no",
-                    "like",
-                    $record[0]
-                )->first();
-                // dd($existingStudentuser);
+        $record = $res->data;
+       
+            if (isset($record->admission_no) && $record->admission_no !== "") {
+                $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
+                
+                $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
+                $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
                 if ($existingStudentuser) {
                     // Move the existing record to history table
                     $studentHistory = new StudentHistory();
 
                     $studentHistory->original_id = $existingStudent->id;
                     $studentHistory->roll_no = $existingStudent->roll_no;
-                    $studentHistory->admission_no =
-                        $existingStudent->admission_no;
-                    $studentHistory->STUDENT_NAME =
-                        $existingStudent->STUDENT_NAME;
+                    $studentHistory->admission_no = $existingStudent->admission_no;
+                    $studentHistory->STUDENT_NAME = $existingStudent->student_name;
                     $studentHistory->date_form = $existingStudent->date_form;
-                    $studentHistory->MOTHERTONGUE =
-                        $existingStudent->MOTHERTONGUE;
-                    $studentHistory->STATE = $existingStudent->STATE;
-                    $studentHistory->DOB_DD_MM_YYYY =
-                        $existingStudent->DOB_DD_MM_YYYY;
-                    $studentHistory->SEX = $existingStudent->SEX;
-                    $studentHistory->BLOOD_GROUP =
-                        $existingStudent->BLOOD_GROUP;
-                    $studentHistory->NATIONALITY =
-                        $existingStudent->NATIONALITY;
-                    $studentHistory->RELIGION = $existingStudent->RELIGION;
-                    $studentHistory->DENOMINATION =
-                        $existingStudent->DENOMINATION;
-                    $studentHistory->CASTE = $existingStudent->CASTE;
-                    $studentHistory->CASTE_CLASSIFICATION =
-                        $existingStudent->CASTE_CLASSIFICATION;
-                    $studentHistory->AADHAAR_CARD_NO =
-                        $existingStudent->AADHAAR_CARD_NO;
-                    $studentHistory->RATIONCARDNO =
-                        $existingStudent->RATIONCARDNO;
-                    $studentHistory->EMIS_NO = $existingStudent->EMIS_NO;
-                    $studentHistory->FOOD = $existingStudent->FOOD;
-                    $studentHistory->chronic_des =
-                        $existingStudent->chronic_des;
-                    $studentHistory->medicine_taken =
-                        $existingStudent->medicine_taken;
+                    $studentHistory->MOTHERTONGUE = $existingStudent->mother_tongue;
+                    $studentHistory->STATE = $existingStudent->state;
+                    $studentHistory->DOB_DD_MM_YYYY = $existingStudent->dob;
+                    $studentHistory->SEX = $existingStudent->gender;
+                    $studentHistory->BLOOD_GROUP = $existingStudent->blood_group;
+                    $studentHistory->NATIONALITY = $existingStudent->nationality;
+                    $studentHistory->RELIGION = $existingStudent->religion;
+                    $studentHistory->DENOMINATION = $existingStudent->denomination;
+                    $studentHistory->CASTE = $existingStudent->caste;
+                    $studentHistory->CASTE_CLASSIFICATION = $existingStudent->caste_classification;
+                    $studentHistory->AADHAAR_CARD_NO = $existingStudent->aadhar_card_no;
+                    $studentHistory->RATIONCARDNO = $existingStudent->ration_card_no;
+                    $studentHistory->EMIS_NO = $existingStudent->emis_no;
+                    $studentHistory->FOOD = $existingStudent->food_choice;
+                    $studentHistory->chronic_des = $existingStudent->chronic_des;
+                    $studentHistory->medicine_taken = $existingStudent->medicine_taken;
                     $studentHistory->FATHER = $existingStudent->FATHER;
                     $studentHistory->OCCUPATION = $existingStudent->OCCUPATION;
                     $studentHistory->MOTHER = $existingStudent->MOTHER;
-                    $studentHistory->mother_occupation =
-                        $existingStudent->mother_occupation;
+                    $studentHistory->mother_occupation = $existingStudent->mother_occupation;
                     $studentHistory->GUARDIAN = $existingStudent->GUARDIAN;
-                    $studentHistory->guardian_occupation =
-                        $existingStudent->guardian_occupation;
-                    $studentHistory->MOBILE_NUMBER =
-                        $existingStudent->MOBILE_NUMBER;
+                    $studentHistory->guardian_occupation = $existingStudent->guardian_occupation;
+                    $studentHistory->MOBILE_NUMBER = $existingStudent->MOBILE_NUMBER;
                     $studentHistory->EMAIL_ID = $existingStudent->EMAIL_ID;
-                    $studentHistory->WHATS_APP_NO =
-                        $existingStudent->WHATS_APP_NO;
-                    $studentHistory->mother_email_id =
-                        $existingStudent->mother_email_id;
-                    $studentHistory->guardian_contact_no =
-                        $existingStudent->guardian_contact_no;
-                    $studentHistory->guardian_email_id =
-                        $existingStudent->guardian_email_id;
-                    $studentHistory->MONTHLY_INCOME =
-                        $existingStudent->MONTHLY_INCOME;
-                    $studentHistory->mother_income =
-                        $existingStudent->mother_income;
-                    $studentHistory->guardian_income =
-                        $existingStudent->guardian_income;
-                    $studentHistory->PERMANENT_HOUSENUMBER =
-                        $existingStudent->PERMANENT_HOUSENUMBER;
-                    $studentHistory->P_STREETNAME =
-                        $existingStudent->P_STREETNAME;
-                    $studentHistory->P_VILLAGE_TOWN_NAME =
-                        $existingStudent->P_VILLAGE_TOWN_NAME;
+                    $studentHistory->WHATS_APP_NO = $existingStudent->WHATS_APP_NO;
+                    $studentHistory->mother_email_id = $existingStudent->mother_email_id;
+                    $studentHistory->guardian_contact_no = $existingStudent->guardian_contact_no;
+                    $studentHistory->guardian_email_id = $existingStudent->guardian_email_id;
+                    $studentHistory->MONTHLY_INCOME = $existingStudent->MONTHLY_INCOME;
+                    $studentHistory->mother_income = $existingStudent->mother_income;
+                    $studentHistory->guardian_income = $existingStudent->guardian_income;
+                    $studentHistory->PERMANENT_HOUSENUMBER = $existingStudent->PERMANENT_HOUSENUMBER;
+                    $studentHistory->P_STREETNAME = $existingStudent->P_STREETNAME;
+                    $studentHistory->P_VILLAGE_TOWN_NAME = $existingStudent->P_VILLAGE_TOWN_NAME;
                     $studentHistory->P_DISTRICT = $existingStudent->P_DISTRICT;
                     $studentHistory->P_STATE = $existingStudent->P_STATE;
                     $studentHistory->P_PINCODE = $existingStudent->P_PINCODE;
-                    $studentHistory->COMMUNICATION_HOUSE_NO =
-                        $existingStudent->COMMUNICATION_HOUSE_NO;
-                    $studentHistory->C_STREET_NAME =
-                        $existingStudent->C_STREET_NAME;
-                    $studentHistory->C_VILLAGE_TOWN_NAME =
-                        $existingStudent->C_VILLAGE_TOWN_NAME;
+                    $studentHistory->COMMUNICATION_HOUSE_NO = $existingStudent->COMMUNICATION_HOUSE_NO;
+                    $studentHistory->C_STREET_NAME = $existingStudent->C_STREET_NAME;
+                    $studentHistory->C_VILLAGE_TOWN_NAME = $existingStudent->C_VILLAGE_TOWN_NAME;
                     $studentHistory->C_DISTRICT = $existingStudent->C_DISTRICT;
                     $studentHistory->C_STATE = $existingStudent->C_STATE;
                     $studentHistory->C_PINCODE = $existingStudent->C_PINCODE;
-                    $studentHistory->CLASS_LAST_STUDIED =
-                        $existingStudent->CLASS_LAST_STUDIED;
-                    $studentHistory->NAME_OF_SCHOOL =
-                        $existingStudent->NAME_OF_SCHOOL;
+                    $studentHistory->CLASS_LAST_STUDIED = $existingStudent->CLASS_LAST_STUDIED;
+                    $studentHistory->NAME_OF_SCHOOL = $existingStudent->NAME_OF_SCHOOL;
                     $studentHistory->SOUGHT_STD = $existingStudent->SOUGHT_STD;
                     $studentHistory->sec = $existingStudent->sec;
                     $studentHistory->syllabus = $existingStudent->syllabus;
                     $studentHistory->GROUP_12 = $existingStudent->GROUP_12;
-                    $studentHistory->second_group_no =
-                        $existingStudent->second_group_no;
-                    $studentHistory->LANG_PART_I =
-                        $existingStudent->LANG_PART_I;
-                    $studentHistory->profile_photo =
-                        $existingStudent->profile_photo;
-                    $studentHistory->birth_certificate_photo =
-                        $existingStudent->birth_certificate_photo;
-                    $studentHistory->aadhar_card_photo =
-                        $existingStudent->aadhar_card_photo;
-                    $studentHistory->ration_card_photo =
-                        $existingStudent->ration_card_photo;
-                    $studentHistory->community_certificate =
-                        $existingStudent->community_certificate;
+                    $studentHistory->second_group_no = $existingStudent->second_group_no;
+                    $studentHistory->LANG_PART_I = $existingStudent->LANG_PART_I;
+                    $studentHistory->profile_photo = $existingStudent->profile_photo;
+                    $studentHistory->birth_certificate_photo = $existingStudent->birth_certificate_photo;
+                    $studentHistory->aadhar_card_photo = $existingStudent->aadhar_card_photo;
+                    $studentHistory->ration_card_photo = $existingStudent->ration_card_photo;
+                    $studentHistory->community_certificate = $existingStudent->community_certificate;
                     $studentHistory->slip_photo = $existingStudent->slip_photo;
-                    $studentHistory->medical_certificate_photo =
-                        $existingStudent->medical_certificate_photo;
-                    $studentHistory->reference_letter_photo =
-                        $existingStudent->reference_letter_photo;
-                    $studentHistory->church_certificate_photo =
-                        $existingStudent->church_certificate_photo;
-                    $studentHistory->transfer_certificate_photo =
-                        $existingStudent->transfer_certificate_photo;
-                    $studentHistory->admission_photo =
-                        $existingStudent->admission_photo;
-                    $studentHistory->payment_order_id =
-                        $existingStudent->payment_order_id;
+                    $studentHistory->medical_certificate_photo = $existingStudent->medical_certificate_photo;
+                    $studentHistory->reference_letter_photo = $existingStudent->reference_letter_photo;
+                    $studentHistory->church_certificate_photo = $existingStudent->church_certificate_photo;
+                    $studentHistory->transfer_certificate_photo = $existingStudent->transfer_certificate_photo;
+                    $studentHistory->admission_photo = $existingStudent->admission_photo;
+                    $studentHistory->payment_order_id = $existingStudent->payment_order_id;
                     $studentHistory->brother_1 = $existingStudent->brother_1;
                     $studentHistory->brother_2 = $existingStudent->brother_2;
                     $studentHistory->gender_1 = $existingStudent->gender_1;
@@ -223,24 +158,15 @@ class StudentController extends Controller
                     $studentHistory->brother_3 = $existingStudent->brother_3;
                     $studentHistory->gender_3 = $existingStudent->gender_3;
                     $studentHistory->class_3 = $existingStudent->class_3;
-                    $studentHistory->last_school_state =
-                        $existingStudent->last_school_state;
-                    $studentHistory->second_language_school =
-                        $existingStudent->second_language_school;
-                    $studentHistory->reference_name_1 =
-                        $existingStudent->reference_name_1;
-                    $studentHistory->reference_name_2 =
-                        $existingStudent->reference_name_2;
-                    $studentHistory->reference_phone_1 =
-                        $existingStudent->reference_phone_1;
-                    $studentHistory->reference_phone_2 =
-                        $existingStudent->reference_phone_2;
-                    $studentHistory->ORGANISATION =
-                        $existingStudent->ORGANISATION;
-                    $studentHistory->mother_organization =
-                        $existingStudent->mother_organization;
-                    $studentHistory->guardian_organization =
-                        $existingStudent->guardian_organization;
+                    $studentHistory->last_school_state = $existingStudent->last_school_state;
+                    $studentHistory->second_language_school = $existingStudent->second_language_school;
+                    $studentHistory->reference_name_1 = $existingStudent->reference_name_1;
+                    $studentHistory->reference_name_2 = $existingStudent->reference_name_2;
+                    $studentHistory->reference_phone_1 = $existingStudent->reference_phone_1;
+                    $studentHistory->reference_phone_2 = $existingStudent->reference_phone_2;
+                    $studentHistory->ORGANISATION = $existingStudent->ORGANISATION;
+                    $studentHistory->mother_organization = $existingStudent->mother_organization;
+                    $studentHistory->guardian_organization = $existingStudent->guardian_organization;
                     $studentHistory->created_at = $existingStudent->created_at;
                     $studentHistory->updated_at = $existingStudent->updated_at;
                     $studentHistory->documents = $existingStudent->documents;
@@ -248,116 +174,109 @@ class StudentController extends Controller
                     $studentHistory->save();
 
                     // update existing student
-                    //$existingStudent->admission_no  = $record[0] ?? null;
-                    $existingStudent->admission_no = $record[1] ?? null;
-                    $existingStudent->roll_no = $record[0] ?? null;
-                    $existingStudent->student_name = $record[2] ?? null;
-                    $existingStudent->date_form = isset($record[3])
-                        ? $this->convertExcelDate($record[3])
+                    $existingStudent->admission_no = $record->admission_no ?? null;
+                    $existingStudent->roll_no = $record->roll_no ?? null;
+                    $existingStudent->student_name = $record->student_name ?? null;
+                    $existingStudent->date_form = isset($record->date_form)
+                        ? $this->convertExcelDate($record->date_form)
                         : null;
-                    $existingStudent->MOTHERTONGUE = $record[4] ?? null;
-                    $existingStudent->STATE = $record[5] ?? null;
-                    $existingStudent->DOB_DD_MM_YYYY = isset($record[6])
-                        ? $this->convertExcelDate($record[6])
+                    $existingStudent->MOTHERTONGUE = $record->mother_tongue ?? null;
+                    $existingStudent->STATE = $record->state ?? null;
+                    $existingStudent->DOB_DD_MM_YYYY = isset($record->dob)
+                        ? $this->convertExcelDate($record->dob)
                         : null;
-                    $existingStudent->SEX = $record[7] ?? null;
-                    $existingStudent->BLOOD_GROUP = $record[8] ?? null;
-                    $existingStudent->NATIONALITY = $record[9] ?? null;
-                    $existingStudent->RELIGION = $record[10] ?? null;
-                    $existingStudent->DENOMINATION = $record[11] ?? null;
-                    $existingStudent->CASTE = $record[12] ?? null;
-                    $existingStudent->CASTE_CLASSIFICATION =
-                        $record[13] ?? null;
-                    $existingStudent->AADHAAR_CARD_NO = $record[14] ?? null;
-                    $existingStudent->RATIONCARDNO = $record[15] ?? null;
-                    $existingStudent->EMIS_NO = $record[16] ?? null;
-                    $existingStudent->FOOD = $record[17] ?? null;
-                    $existingStudent->chronic_des = $record[18] ?? null;
-                    $existingStudent->medicine_taken = $record[19] ?? null;
-                    $existingStudent->FATHER = $record[20] ?? null;
-                    $existingStudent->OCCUPATION = $record[21] ?? null;
-                    $existingStudent->MOTHER = $record[22] ?? null;
-                    $existingStudent->mother_occupation = $record[23] ?? null;
-                    $existingStudent->GUARDIAN = $record[24] ?? null;
-                    $existingStudent->guardian_occupation = $record[25] ?? null;
-                    $existingStudent->MOBILE_NUMBER = $record[26] ?? null;
-                    $existingStudent->EMAIL_ID = $record[27] ?? null;
-                    $existingStudent->WHATS_APP_NO = $record[28] ?? null;
-                    $existingStudent->mother_email_id = $record[29] ?? null;
-                    $existingStudent->guardian_contact_no = $record[30] ?? null;
-                    $existingStudent->guardian_email_id = $record[31] ?? null;
-                    $existingStudent->MONTHLY_INCOME = $record[32] ?? null;
-                    $existingStudent->mother_income = $record[33] ?? null;
-                    $existingStudent->guardian_income = $record[34] ?? null;
-                    $existingStudent->PERMANENT_HOUSENUMBER =
-                        $record[35] ?? null;
-                    $existingStudent->P_STREETNAME = $record[36] ?? null;
-                    $existingStudent->P_VILLAGE_TOWN_NAME = $record[37] ?? null;
-                    $existingStudent->P_DISTRICT = $record[38] ?? null;
-                    $existingStudent->P_STATE = $record[39] ?? null;
-                    $existingStudent->P_PINCODE = $record[40] ?? null;
+                    $existingStudent->SEX = $record->gender ?? null;
+                    $existingStudent->BLOOD_GROUP = $record->blood_group ?? null;
+                    $existingStudent->NATIONALITY = $record->nationality ?? null;
+                    $existingStudent->RELIGION = $record->religion ?? null;
+                    $existingStudent->DENOMINATION = $record->denomination ?? null;
+                    $existingStudent->CASTE = $record->caste ?? null;
+                    $existingStudent->CASTE_CLASSIFICATION = $record->caste_classification ?? null;
+                    $existingStudent->AADHAAR_CARD_NO = $record->aadhar_card_no ?? null;
+                    $existingStudent->RATIONCARDNO = $record->ration_card_no ?? null;
+                    $existingStudent->EMIS_NO = $record->emis_no ?? null;
+                    $existingStudent->FOOD = $record->food_choice ?? null;
+                    $existingStudent->chronic_des = $record->chronic_des ?? null;
+                    $existingStudent->medicine_taken = $record->medicine_taken ?? null;
+                    $existingStudent->FATHER = $record->father_name ?? null;
+                    $existingStudent->OCCUPATION = $record->father_occupation ?? null;
+                    $existingStudent->MOTHER = $record->mother_name ?? null;
+                    $existingStudent->mother_occupation = $record->mother_occupation ?? null;
+                    $existingStudent->GUARDIAN = $record->guardian_name ?? null;
+                    $existingStudent->guardian_occupation = $record->guardian_occupation ?? null;
+                    $existingStudent->MOBILE_NUMBER = $record->father_mobile_no ?? null;
+                    $existingStudent->EMAIL_ID = $record->father_email_id ?? null;
+                    $existingStudent->WHATS_APP_NO = $record->mother_mobile_no ?? null;
+                    $existingStudent->mother_email_id = $record->mother_email_id ?? null;
+                    $existingStudent->guardian_contact_no = $record->guardian_mobile_no ?? null;
+                    $existingStudent->guardian_email_id = $record->guardian_email_id ?? null;
+                    $existingStudent->MONTHLY_INCOME = $record->father_annual_income ?? null;
+                    $existingStudent->mother_income = $record->mother_annual_income ?? null;
+                    $existingStudent->guardian_income = $record->guardian_annual_income ?? null;
+                    $existingStudent->PERMANENT_HOUSENUMBER = $record->permanent_house_no ?? null;
+                    $existingStudent->P_STREETNAME = $record->permanent_street_name ?? null;
+                    $existingStudent->P_VILLAGE_TOWN_NAME = $record->permanent_city_town_village ?? null;
+                    $existingStudent->P_DISTRICT = $record->permanent_district ?? null;
+                    $existingStudent->P_STATE = $record->permanent_state ?? null;
+                    $existingStudent->P_PINCODE = $record->permanent_pincode ?? null;
                     $existingStudent->COMMUNICATION_HOUSE_NO =
-                        $record[41] ?? null;
-                    $existingStudent->C_STREET_NAME = $record[42] ?? null;
-                    $existingStudent->C_VILLAGE_TOWN_NAME = $record[43] ?? null;
-                    $existingStudent->C_DISTRICT = $record[44] ?? null;
-                    $existingStudent->C_STATE = $record[45] ?? null;
-                    $existingStudent->C_PINCODE = $record[46] ?? null;
-                    $existingStudent->CLASS_LAST_STUDIED = $record[47] ?? null;
-                    $existingStudent->NAME_OF_SCHOOL = $record[48] ?? null;
-                    $existingStudent->SOUGHT_STD = $record[49] ?? null;
-                    $existingStudent->sec = $record[50] ?? null;
-                    $existingStudent->syllabus = $record[51] ?? null;
-                    $existingStudent->GROUP_12 = $record[52] ?? null;
-                    $existingStudent->second_group_no = $record[53] ?? null;
-                    $existingStudent->LANG_PART_I = $record[54] ?? null;
-                    $existingStudent->profile_photo = $record[55] ?? null;
+                        $record->communication_house_no ?? null;
+                    $existingStudent->C_STREET_NAME = $record->communication_street_name ?? null;
+                    $existingStudent->C_VILLAGE_TOWN_NAME = $record->communication_city_town_village ?? null;
+                    $existingStudent->C_DISTRICT = $record->communication_district ?? null;
+                    $existingStudent->C_STATE = $record->communication_state ?? null;
+                    $existingStudent->C_PINCODE = $record->communication_pincode ?? null;
+                    $existingStudent->CLASS_LAST_STUDIED = $record->class_last_studied ?? null;
+                    $existingStudent->NAME_OF_SCHOOL = $record->last_school_name ?? null;
+                    $existingStudent->SOUGHT_STD = $record->std_sought ?? null;
+                    $existingStudent->sec = $record->sec ?? null;
+                    $existingStudent->syllabus = $record->syllabus ?? null;
+                    $existingStudent->GROUP_12 = $record->group_first_choice ?? null;
+                    $existingStudent->second_group_no = $record->group_second_choice ?? null;
+                    $existingStudent->LANG_PART_I = $record->language ?? null;
+                    $existingStudent->profile_photo = $record->profile_image ?? null;
                     $existingStudent->birth_certificate_photo =
-                        $record[56] ?? null;
-                    $existingStudent->aadhar_card_photo = $record[57] ?? null;
-                    $existingStudent->ration_card_photo = $record[58] ?? null;
+                        $record->birth_certificate_image ?? null;
+                    $existingStudent->aadhar_card_photo = $record->aadhar_image ?? null;
+                    $existingStudent->ration_card_photo = $record->ration_card_image ?? null;
                     $existingStudent->community_certificate =
-                        $record[59] ?? null;
-                    $existingStudent->slip_photo = $record[60] ?? null;
+                        $record->community_image ?? null;
+                    $existingStudent->slip_photo = $record->salary_image ?? null;
                     $existingStudent->medical_certificate_photo =
-                        $record[61] ?? null;
+                        $record->medical_certificate_image ?? null;
                     $existingStudent->reference_letter_photo =
-                        $record[62] ?? null;
-                    $existingStudent->church_certificate_photo =
-                        $record[63] ?? null;
+                        $record->reference_letter_image ?? null;
+                    //$existingStudent->church_certificate_photo = $record[63] ?? null;
                     $existingStudent->transfer_certificate_photo =
-                        $record[64] ?? null;
-                    $existingStudent->admission_photo = $record[65] ?? null;
-                    $existingStudent->payment_order_id = $record[66] ?? null;
-                    $existingStudent->brother_1 = $record[67] ?? null;
-                    $existingStudent->brother_2 = $record[68] ?? null;
-                    $existingStudent->gender_1 = $record[69] ?? null;
-                    $existingStudent->gender_2 = $record[70] ?? null;
-                    $existingStudent->class_1 = $record[71] ?? null;
-                    $existingStudent->class_2 = $record[72] ?? null;
-                    $existingStudent->brother_3 = $record[73] ?? null;
-                    $existingStudent->gender_3 = $record[74] ?? null;
-                    $existingStudent->class_3 = $record[75] ?? null;
-                    $existingStudent->last_school_state = $record[76] ?? null;
-                    $existingStudent->second_language_school =
-                        $record[77] ?? null;
-                    $existingStudent->reference_name_1 = $record[78] ?? null;
-                    $existingStudent->reference_name_2 = $record[79] ?? null;
-                    $existingStudent->reference_phone_1 = $record[80] ?? null;
-                    $existingStudent->reference_phone_2 = $record[81] ?? null;
-                    $existingStudent->ORGANISATION = $record[82] ?? null;
-                    $existingStudent->mother_organization = $record[83] ?? null;
-                    $existingStudent->guardian_organization =
-                        $record[84] ?? null;
-                    $existingStudent->created_at = $record[85] ?? null;
-                    $existingStudent->updated_at = $record[86] ?? null;
-                    $existingStudent->documents = $record[87] ?? null;
-
+                        $record->transfer_certificate_image ?? null;
+                   // $existingStudent->admission_photo = $record[65] ?? null;
+                    //$existingStudent->payment_order_id = $record[66] ?? null;
+                    $existingStudent->brother_1 = $record->sibling_1 ?? null;
+                    $existingStudent->brother_2 = $record->sibling_2 ?? null;
+                    $existingStudent->gender_1 = $record->gender_1 ?? null;
+                    $existingStudent->gender_2 = $record->gender_2 ?? null;
+                    $existingStudent->class_1 = $record->class_1 ?? null;
+                    $existingStudent->class_2 = $record->class_2 ?? null;
+                    $existingStudent->brother_3 = $record->sibling_3 ?? null;
+                    $existingStudent->gender_3 = $record->gender_3 ?? null;
+                    $existingStudent->class_3 = $record->class_3 ?? null;
+                    $existingStudent->last_school_state = $record->last_school_state ?? null;
+                    $existingStudent->second_language_school = $record->second_language ?? null;
+                    $existingStudent->reference_name_1 = $record->reference_name_1 ?? null;
+                    $existingStudent->reference_name_2 = $record->reference_name_2 ?? null;
+                    $existingStudent->reference_phone_1 = $record->reference_mobile_1 ?? null;
+                    $existingStudent->reference_phone_2 = $record->reference_mobile_2 ?? null;
+                    $existingStudent->ORGANISATION = $record->father_organization ?? null;
+                    $existingStudent->mother_organization = $record->mother_organization ?? null;
+                    $existingStudent->guardian_organization = $record->guardian_organization ?? null;
+                    //$existingStudent->documents = $record[87] ?? null;
                     $existingStudent->save();
 
-                    $existingStudentuser->name = $record[2] ?? null;
+
+                    //existing user update
+                    $existingStudentuser->name = $record->student_name ?? null;
                     $existingStudentuser->gender = $record[7] ?? null;
-                    $existingStudentuser->email = $record[27] ?? null;
+                    $existingStudentuser->email = $record->father_email_id ?? null;
                     $existingStudentuser->standard = $record[49] ?? null;
                     $existingStudentuser->sec = $record[50] ?? null;
                     $existingStudentuser->twe_group = $record[52] ?? null;
@@ -377,26 +296,15 @@ class StudentController extends Controller
                     );
 
                     $response["duplicates"][] = [
-                        "email" => $record[27],
-                        "admission_no" => $record[1],
+                        "email" => $record->father_email_id,
+                        "admission_no" => $record->admission_no,
                         "message" =>
                             "Data modified successfully as it is already exists.",
                     ];
                 } else {
-                    $recordEmail = $record[27];
-                    $recordAdmissionNo = $record[1];
+                    $recordEmail = $record->father_email_id;
+                    $recordAdmissionNo = $record->admission_no;
 
-                    // $existingUser = User::where('email', $record[40])->first();
-                    // if ($existingUser) {
-                    //     // User already exists, send a response or perform any necessary action
-                    //     $response['duplicates'][] = [
-                    //         'email' => $recordEmail,
-                    //         'admission_no' => $recordAdmissionNo,
-                    //         'message' => 'User already exists. Please change the email or the admission number.'
-                    //     ];
-                    //     // continue; // Skip processing the duplicate record
-
-                    // }
                     try {
                         $student = new Student();
 
@@ -517,7 +425,6 @@ class StudentController extends Controller
                             "message" => "Data uploaded successfully.",
                         ];
                     } catch (\Exception $e) {
-                        // Handle any exception that occurred during the saving process
                         Log::error(
                             "Error occurred while uploading data: " .
                                 $e->getMessage()
@@ -528,22 +435,9 @@ class StudentController extends Controller
                             "message" => "Error occurred while uploading data.",
                         ];
                     }
-                    //   return response()->json(['msg' => $e->getMessage()], 500)->header("Access-Control-Allow-Origin",  "*");
                 }
-            } elseif (!$record[1] && $record[2] && $record[49]) {
-                // $student->student_name  =    $record[2] ?? null;
-                // $student->Father  =    $record[16] ?? null;
-                // $student->Mobilenumber  =    $record[38] ?? null;
-                // $student->sought_Std  =   $record[44] ?? null;
-                // $student->sec  =    $record[45] ?? null;
-                // Find the last admission number starting with "SV" and remove the date part
-                // $lastAdmissionNo = User::where('admission_no', 'like', '%SV%')
-                //  ->orderBy('admission_no', 'desc')
-                // ->first();
-                //$lastAdmissionNo = User::where('admission_no', 'like', '%SV%')
-                //    ->whereRaw('LENGTH(admission_no) = 12')
-                //   ->orderBy('admission_no', 'desc')
-                //   ->first();
+            } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
+              
                 $lastAdmissionNo = User::where("admission_no", "like", "%SV%")
                     ->whereRaw("LENGTH(admission_no) = 12")
                     ->orderByRaw(
@@ -554,7 +448,6 @@ class StudentController extends Controller
                     )
                     ->first();
 
-                // Define the format for the new admission number
                 $format = "SV" . date("dmy");
 
                 if ($lastAdmissionNo) {
@@ -580,42 +473,20 @@ class StudentController extends Controller
 
                 // Combine the format and new number to create the new admission number
                 $newAdmissionNo = $format . $newNumberPadded;
-
-                // Assuming you have a function to generate a unique serial number
-                // $serialNo = generateSerialNumber(); // Replace this with your serial number generation logic
-
                 $admissionId = $newAdmissionNo;
-                // $student->student_name  =    $record[2] ?? null;
-                // $student->Father  =    $record[16] ?? null;
-                // $student->Mobilenumber  =    $record[38] ?? null;
-                // $student->sought_Std  =   $record[44] ?? null;
-                // $student->sec  =    $record[45] ?? null;
-                //  if ($admissionId && $record[2] && $record[20] && $record[38] && $record[26]) {
-                if ($admissionId && $record[2]) {
-                    $existingUser = User::where("name", $record[2])
+                
+                if ($admissionId && $record->father_email_id) {
+                    $existingUser = User::where("name", $record->student_name)
                         //->where('Father', $record[20])
                         //  ->where('Mobilenumber', $record[26])
-                        ->where("standard", $record[49])
+                        ->where("standard", $record->std_sought)
                         //    ->where('sec', $record[50])  ///////////
                         ->first();
 
-                    if ($existingUser) {
-                        continue; // Skip empty arrays
-                    } else {
-                        $recordEmail = $record[27] ?? "";
+                        $recordEmail = $record->father_email_id ?? "";
                         $recordAdmissionNo = $admissionId;
 
-                        // $existingUser = User::where('email', $record[40])->first();
-                        // if ($existingUser) {
-                        //     // User already exists, send a response or perform any necessary action
-                        //     $response['duplicates'][] = [
-                        //         'email' => $recordEmail,
-                        //         'admission_no' => $recordAdmissionNo,
-                        //         'message' => 'User already exists. Please change the email or the admission number.'
-                        //     ];
-                        //     // continue; // Skip processing the duplicate record
-
-                        // }
+                      
                         try {
                             $student = new Student();
                             $student->admission_no = $admissionId ?? null;
@@ -722,6 +593,8 @@ class StudentController extends Controller
                             $student->updated_at = $record[86] ?? null;
                             $student->documents = $record[87] ?? null;
                             $student->save();
+
+
                             $user = new User();
                             $lastid = User::latest("id")->value("id");
                             $lastid = $lastid + 1;
@@ -745,7 +618,6 @@ class StudentController extends Controller
                                 "message" => "Data uploaded successfully.",
                             ];
                         } catch (\Exception $e) {
-                            // Handle any exception that occurred during the saving process
                             Log::error(
                                 "Error occurred while uploading data: " .
                                     $e->getMessage()
@@ -757,17 +629,24 @@ class StudentController extends Controller
                                     "Error occurred while uploading data.",
                             ];
                         }
-                    }
+                    
                 }
             }
-        }
+        
 
         // DB::commit();
         return response()
             ->json($response, 200)
             ->header("Access-Control-Allow-Origin", "*");
 
-        //  return response()->json(['msg' => "uploaded successfully"], 200)->header("Access-Control-Allow-Origin",  "*");
+    }
+
+
+    public function insertStudentData(array $data)
+    {
+        // Insert into admitted_students table
+        $studentId = DB::table('admitted_students')->insertGetId($data);
+        return $studentId;
     }
 
     public function getadmissionStandards($standard)
