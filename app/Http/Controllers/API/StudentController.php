@@ -72,7 +72,7 @@ class StudentController extends Controller
     {
         $record = $res;
 
-        dd($record->admission_no);
+        dd($res);
        
             if (isset($record->admission_no) && $record->admission_no !== "") {
                 dd("1");
