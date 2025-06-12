@@ -70,7 +70,7 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        $record = $request->all();
+        $record = $request->json()->all();
 
         dd($record);
        
