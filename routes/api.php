@@ -103,7 +103,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 {
     Route::post("/users", [SchoolUserController::class , "store"]);
 
-
+    Route::post("/register", [ApiController::class , "register"]);
 
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
@@ -444,7 +444,7 @@ Route::prefix("messages")->group(function ()
 Route::get("download/{fileName}", [MessageController::class , "downloadFile", ])->name("download.file");
 
 //ApiController
-Route::post("/register", [ApiController::class , "register"]);
+//Route::post("/register", [ApiController::class , "register"]);
 Route::get("/getMatchingUsers", [ApiController::class , "getMatchingUsersdd"]);
 Route::get("/dashboard", [ApiController::class , "countstudent"]);
 Route::post("/logout", [ApiController::class , "logout"]);

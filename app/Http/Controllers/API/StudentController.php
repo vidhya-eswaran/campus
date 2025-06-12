@@ -151,6 +151,8 @@ class StudentController extends Controller
 
                         $mappedData = (array) $record;
 
+                        dd($mappedData);
+
                         // If date fields need to be converted, handle them separately
                         if (!empty($record->dob)) {
                             $mappedData['DOB_DD_MM_YYYY'] = $this->convertExcelDate($record->dob);
