@@ -71,8 +71,9 @@ class StudentController extends Controller
     public function uploadStudentData(Request $request)
     {
         $raw = file_get_contents('php://input');
-        \Log::info('Raw Input: ' . $raw);
-        dd($raw); // Check if JSON string is visible
+        $record = json_decode($raw, true); // true => associative array
+
+        dd($record);
 
         $record = $request->json()->all();
 
