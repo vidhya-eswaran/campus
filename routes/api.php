@@ -13,6 +13,7 @@ use App\Http\Controllers\API\listUserController;
 use App\Http\Controllers\API\sponserMapController;
 use App\Http\Controllers\API\dashboardController;
 //master
+use App\Http\Controllers\API\DonorController;
 use App\Http\Controllers\API\sectionmasterController;
 use App\Http\Controllers\API\classmasterController;
 use App\Http\Controllers\API\DiscountCategoryMasterController;
@@ -49,6 +50,7 @@ use App\Http\Controllers\API\TargetannouncementMasterController;
 use App\Http\Controllers\API\StandardMasterController;
 use App\Http\Controllers\API\StandardSectionMappingController;
 use App\Http\Controllers\API\GroupMasterController;
+use App\Http\Controllers\API\DonationController;
 use App\Http\Controllers\API\DropdowntypeMasterController;
 use App\Http\Controllers\API\StudentPromotionController;
 use App\Http\Controllers\API\NotificationCategoryController;
@@ -110,6 +112,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/healthcare/edit/{id}", [StudentHealthcareController::class , "editHealthcareRecord", ]);
     Route::get("/healthcare/view/{id}", [StudentHealthcareController::class , "viewHealthcareRecord", ]);
     Route::get("/healthcare/viewAll", [StudentHealthcareController::class , "viewAllHealthcareRecords", ]);
+    Route::delete("/healthcare/delete/{id}", [StudentHealthcareController::class , "destroy", ]);
 
     //StudentMark
     Route::post("/StudentMark-Upload", [StudentMarkController::class , "store", ]);
@@ -187,15 +190,8 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
         Route::delete("/{id}", [LeaveApplicationController::class , "destroy", ]);
     });
 
-    //subjects
-    Route::prefix("subjects")->group(function ()
-    {
-        Route::get("/", [subjectMasterController::class , "index"]);
-        Route::post("/", [subjectMasterController::class , "store"]);
-        Route::put("/{id}", [subjectMasterController::class , "update"]);
-        Route::get("/{id}", [subjectMasterController::class , "viewbyid"]);
-        Route::delete("/{id}", [subjectMasterController::class , "destroy"]);
-    });
+
+
 
 
     //fessmap
@@ -259,6 +255,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/staff/edit/{id}", [StaffController::class , "editStaff"]);
     Route::get("/staff/view/{id}", [StaffController::class , "viewStaff"]);
     Route::get("/staff/viewAll", [StaffController::class , "viewAllStaff"]);
+    Route::post("/staff/delete/{id}", [StaffController::class , "deleteStaff"]);
 
     //StudentController
     Route::post("/add-student", [StudentController::class , "store"]);
@@ -443,6 +440,17 @@ Route::prefix("messages")->group(function ()
 });
 Route::get("download/{fileName}", [MessageController::class , "downloadFile", ])->name("download.file");
 
+//subjects
+Route::prefix("subjects")->group(function ()
+{
+    Route::get("/", [subjectMasterController::class , "index"]);
+    Route::post("/", [subjectMasterController::class , "store"]);
+    Route::put("/{id}", [subjectMasterController::class , "update"]);
+    Route::get("/{id}", [subjectMasterController::class , "show"]);
+    Route::delete("/{id}", [subjectMasterController::class , "destroy"]);
+});
+
+
 //ApiController
 //Route::post("/register", [ApiController::class , "register"]);
 Route::get("/getMatchingUsers", [ApiController::class , "getMatchingUsersdd"]);
@@ -596,13 +604,31 @@ Route::prefix("dropdowntypes")->group(function ()
 
     Route::delete("/{id}", [DropdowntypeMasterController::class , "destroy"]);
 });
+Route::prefix("donor")->group(function ()
+{
+    Route::get("/", [DonorController::class , "index"]);
+    Route::post("/", [DonorController::class , "store"]);
+    Route::put("/{id}", [DonorController::class , "update"]);
+    Route::get("/{id}", [DonorController::class , "viewbyid"]);
+    Route::delete("/{id}", [DonorController::class , "destroy"]);
+});
+Route::prefix("donation")->group(function ()
+{
+    Route::get("/", [DonationController::class , "index"]);
+    Route::post("/", [DonationController::class , "store"]);
+    Route::post("/update", [DonationController::class , "update"]);
+    Route::get("/{id}", [DonationController::class , "viewbyid"]);
+    Route::delete("/{id}", [DonationController::class , "destroy"]);
+});
 
 Route::prefix("contact")->group(function ()
 {
+    Route::get("/all", [ContactController::class , "viewAllStaff"]);
+    Route::get("/view/{id}", [ContactController::class , "viewStaff"]);
     Route::post("/add", [ContactController::class , "addStaff"]);
     Route::post("/edit/{id}", [ContactController::class , "editStaff"]);
-    Route::get("/view/{id}", [ContactController::class , "viewStaff"]);
-    Route::get("/all", [ContactController::class , "viewAllStaff"]);
+    Route::delete("/{id}", [ContactController::class , "destroy"]);
+
 });
 Route::get("/get_all_Tiles", [TileController::class , "getallTiles"]);
 
