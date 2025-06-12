@@ -71,6 +71,8 @@ class StudentController extends Controller
     public function uploadStudentData(Request $res)
     {
         $record = $res->data;
+
+        dd($record);
        
             if (isset($record->admission_no) && $record->admission_no !== "") {
                 $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
