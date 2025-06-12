@@ -72,7 +72,7 @@ class StudentController extends Controller
     {
         $record = $request->json()->all();
 
-        dd($record);
+        dd($request->json());
        
             if (isset($record->admission_no) && $record->admission_no !== "") {
                 dd("1");
