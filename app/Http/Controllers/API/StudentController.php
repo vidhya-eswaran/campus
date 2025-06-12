@@ -68,11 +68,11 @@ class StudentController extends Controller
         ]);
     }
 
-    public function uploadStudentData(Request $res)
+    public function uploadStudentData(Request $request)
     {
-        $record = $res;
+        $record = $request->all();
 
-        dd($res);
+        dd($record);
        
             if (isset($record->admission_no) && $record->admission_no !== "") {
                 dd("1");
