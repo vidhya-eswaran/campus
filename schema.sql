@@ -843,7 +843,7 @@ CREATE TABLE `donation_list` (
   `btn_amt_2` decimal(10,2) NOT NULL,
   `btn_amt_3` decimal(10,2) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
