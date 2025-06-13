@@ -74,13 +74,13 @@ class StudentController extends Controller
 
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
-                dd("1");
+               // dd("1");
                 $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
                 
                 $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
                 $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
                 if ($existingStudentuser) {
-                     dd("2");
+                    // dd("2");
                     // Move the existing record to history table
                     //$studentHistory = new StudentHistory();
 
@@ -144,7 +144,7 @@ class StudentController extends Controller
                             "Data modified successfully as it is already exists.",
                     ];
                 } else {
-                     dd("3");
+                    // dd("3");
                     $recordEmail = $record->father_email_id;
                     $recordAdmissionNo = $record->admission_no;
 
@@ -201,7 +201,7 @@ class StudentController extends Controller
                     }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
-               dd("4");
+              // dd("4");
                 $lastAdmissionNo = User::where("admission_no", "like", "%SV%")
                     ->whereRaw("LENGTH(admission_no) = 12")
                     ->orderByRaw(
@@ -240,7 +240,7 @@ class StudentController extends Controller
                 $admissionId = $newAdmissionNo;
                 
                 if ($admissionId && $record->father_email_id) {
-                     dd("5");
+                     //dd("5");
                     $existingUser = User::where("name", $record->student_name)
                         //->where('Father', $record[20])
                         //  ->where('Mobilenumber', $record[26])
@@ -311,7 +311,7 @@ class StudentController extends Controller
                 }
             }
         
-             dd("6");
+            // dd("6");
         // DB::commit();
         return response()
             ->json($response, 200)
