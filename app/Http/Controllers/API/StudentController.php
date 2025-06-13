@@ -70,16 +70,9 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        $raw = file_get_contents('php://input');
-        $record = json_decode($raw, true);
-        
+        $record =  (object) $request->all();
 
-        dd($request->input('student_status'));
-
-        $record = $request->json()->all();
-
-        dd($request->json());
-       
+              
             if (isset($record->admission_no) && $record->admission_no !== "") {
                 dd("1");
                 $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
