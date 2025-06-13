@@ -1275,7 +1275,7 @@ CREATE TABLE `messages` (
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `about` int(11) DEFAULT NULL,
-  `replies` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT json_array() CHECK (json_valid(`replies`)),
+  `replies` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`replies`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL
