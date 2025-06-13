@@ -70,23 +70,15 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        $raw = file_get_contents('php://input');
-        $record = json_decode($raw, true); // true => associative array
+        $record =  (object) $request->all();
 
-        dd($record);
-
-        $record = $request->json()->all();
-
-        dd($request->json());
-       
+              
             if (isset($record->admission_no) && $record->admission_no !== "") {
-                dd("1");
-                $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
-                
+                               
                 $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
                 $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
                 if ($existingStudentuser) {
-                     dd("2");
+                    // dd("2");
                     // Move the existing record to history table
                     //$studentHistory = new StudentHistory();
 
@@ -150,7 +142,7 @@ class StudentController extends Controller
                             "Data modified successfully as it is already exists.",
                     ];
                 } else {
-                     dd("3");
+                    // dd("3");
                     $recordEmail = $record->father_email_id;
                     $recordAdmissionNo = $record->admission_no;
 
@@ -207,7 +199,7 @@ class StudentController extends Controller
                     }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
-               dd("4");
+              // dd("4");
                 $lastAdmissionNo = User::where("admission_no", "like", "%SV%")
                     ->whereRaw("LENGTH(admission_no) = 12")
                     ->orderByRaw(
@@ -246,7 +238,7 @@ class StudentController extends Controller
                 $admissionId = $newAdmissionNo;
                 
                 if ($admissionId && $record->father_email_id) {
-                     dd("5");
+                     //dd("5");
                     $existingUser = User::where("name", $record->student_name)
                         //->where('Father', $record[20])
                         //  ->where('Mobilenumber', $record[26])
@@ -317,7 +309,7 @@ class StudentController extends Controller
                 }
             }
         
-             dd("6");
+            // dd("6");
         // DB::commit();
         return response()
             ->json($response, 200)
@@ -515,111 +507,8 @@ class StudentController extends Controller
 
     public function read(Request $request)
     {
-        $fields = [
-            "id",
-            "roll_no",
-            "admission_no",
-            "STUDENT_NAME",
-            "date_form",
-            "MOTHERTONGUE",
-            "STATE",
-            "DOB_DD_MM_YYYY",
-            "SEX",
-            "BLOOD_GROUP",
-            "NATIONALITY",
-            "RELIGION",
-            "DENOMINATION",
-            "CASTE",
-            "CASTE_CLASSIFICATION",
-            "AADHAAR_CARD_NO",
-            "RATIONCARDNO",
-            "EMIS_NO",
-            "FOOD",
-            "chronic_des",
-            "medicine_taken",
-            "FATHER",
-            "OCCUPATION",
-            "MOTHER",
-            "mother_occupation",
-            "GUARDIAN",
-            "guardian_occupation",
-            "MOBILE_NUMBER",
-            "EMAIL_ID",
-            "WHATS_APP_NO",
-            "mother_email_id",
-            "guardian_contact_no",
-            "guardian_email_id",
-            "MONTHLY_INCOME",
-            "mother_income",
-            "guardian_income",
-            "PERMANENT_HOUSENUMBER",
-            "P_STREETNAME",
-            "P_VILLAGE_TOWN_NAME",
-            "P_DISTRICT",
-            "P_STATE",
-            "P_PINCODE",
-            "COMMUNICATION_HOUSE_NO",
-            "C_STREET_NAME",
-            "C_VILLAGE_TOWN_NAME",
-            "C_DISTRICT",
-            "C_STATE",
-            "C_PINCODE",
-            "CLASS_LAST_STUDIED",
-            "NAME_OF_SCHOOL",
-            "SOUGHT_STD",
-            "sec",
-            "syllabus",
-            "GROUP_12",
-            "group_no",
-            "second_group_no",
-            "LANG_PART_I",
-            "profile_photo",
-            "birth_certificate_photo",
-            "aadhar_card_photo",
-            "ration_card_photo",
-            "community_certificate",
-            "slip_photo",
-            "medical_certificate_photo",
-            "reference_letter_photo",
-            "church_certificate_photo",
-            "transfer_certificate_photo",
-            "admission_photo",
-            "payment_order_id",
-            "siblings",
-            "brother_1",
-            "brother_2",
-            "gender_1",
-            "gender_2",
-            "class_1",
-            "class_2",
-            "brother_3",
-            "gender_3",
-            "class_3",
-            "last_school_state",
-            "second_language_school",
-            "second_language",
-            "reference_name_1",
-            "reference_name_2",
-            "reference_phone_1",
-            "reference_phone_2",
-            "ORGANISATION",
-            "mother_organization",
-            "guardian_organization",
-            "academic_year",
-            "grade_status",
-            "created_at",
-            "updated_at",
-            "documents",
-            "admission_id",
-            "father_title",
-            "mother_title",
-            "guardian_title",
-            "status",
-            "upload_created_at",
-            "upload_updated_at",
-        ];
-
-        $query = Student::select($fields);
+        
+        $query = Student::all();
 
         // Common Search
         if ($search = $request->input("search")) {
