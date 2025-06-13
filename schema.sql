@@ -790,7 +790,7 @@ CREATE TABLE `donar_list` (
   `pincode_2` varchar(20) DEFAULT NULL,
   `pan_aadhar` varchar(50) DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `type_of_donation` varchar(100) DEFAULT NULL,
   `check_dd_trans_id` varchar(255) DEFAULT NULL,
   `delete_status` int(11) NOT NULL DEFAULT 0,
@@ -1046,7 +1046,7 @@ CREATE TABLE `healthcare_records` (
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` DATETIME DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp()
+  `updated_at` DATETIME NULL DEFAULT current_timestamp(),
   `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
