@@ -72,7 +72,9 @@ class StudentController extends Controller
     {
         $raw = file_get_contents('php://input');
         $record = json_decode($raw, true);
-        dd($record);
+        
+
+        dd($request->input('student_status'));
 
         $record = $request->json()->all();
 
