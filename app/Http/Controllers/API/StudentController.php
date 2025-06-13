@@ -70,9 +70,7 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        $raw = file_get_contents('php://input');
-        $record = json_decode($raw, true); // true => associative array
-
+        $record = $request->all(); // Laravel handles JSON decoding
         dd($record);
 
         $record = $request->json()->all();
