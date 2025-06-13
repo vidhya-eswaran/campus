@@ -278,7 +278,8 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("courseCompletionView", [TemplateEditorController::class , "courseCompletion", ]);
     Route::get("noDueView", [TemplateEditorController::class , "noDue"]);
     Route::post("idcardView", [TemplateEditorController::class , "idcard"]);
-
+    Route::get("/studentcertificatelist", [TemplateEditorController::class , "studentCertificatelist"]);
+    
     Route::prefix("templateeditor")->group(function ()
     {
         Route::get("/", [TemplateEditorController::class , "index"]);
@@ -474,6 +475,8 @@ Route::post("/resetsvsUser", [listUserController::class , "resetpassword"]);
 Route::post("/changesUserpsd", [listUserController::class , "changepassword"]);
 Route::get("/listSVSUser", [listUserController::class , "read"]);
 Route::post("/EditSVSUser", [listUserController::class , "changeUserDetails"]);
+Route::post("/addSVSUser", [listUserController::class , "addUser"]);
+Route::post("/deleteSVSUser", [listUserController::class , "deleteUser"]);
 Route::get("/listSVSsponser", [listUserController::class , "sponserUser"]);
 Route::post("/IdUserDetails", [listUserController::class , "IdUserDetails"]);
 Route::get("/listRoles", [listUserController::class , "listRoles"]);

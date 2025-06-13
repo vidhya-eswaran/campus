@@ -507,8 +507,9 @@ class StudentController extends Controller
 
     public function read(Request $request)
     {
-        
-        $query = Student::all();
+        $fields = ['STUDENT_NAME', 'roll_no', 'SOUGHT_STD', 'sec', 'admission_id']; // <-- Define this
+
+        $query = Student::query();
 
         // Common Search
         if ($search = $request->input("search")) {

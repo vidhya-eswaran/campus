@@ -116,54 +116,6 @@ class TemplateEditorController extends Controller
 
         return response()->json(["url" => $url], 200);
     }
-    // public function idcard(Request $request)
-    // {
-    //     $template = TemplateEditor::where('template_name', $request->template_name)->first();
-    //     if (!$template) {
-    //         return response()->json(['message' => 'Template not found'], 404);
-    //     }
-
-    //     $student = Student::find($request->student_id);
-    //     if (!$student) {
-    //         return response()->json(['message' => 'Student not found'], 404);
-    //     }
-    //     // In your Controller or Blade
-
-    // $profilePhoto = $student->profile_photo; // e.g. "profile740.png"
-    // $photoUrl = env('APP_URL') . '/storage/app/profile_photos/' . $profilePhoto;
-
-    //     $data = [
-    //         'student_name'            => $student->STUDENT_NAME,
-    //         'student_photo'            =>$photoUrl,
-    //         'DOB_DD_MM_YYYY'          => $student->DOB_DD_MM_YYYY,
-    //         'SOUGHT_STD'              => $student->SOUGHT_STD,
-    //         'MOBILE_NUMBER'           => $student->MOBILE_NUMBER,
-    //         'academic_year'           => $student->academic_year,
-
-    //         // Permanent address
-    //         'PERMANENT_HOUSENUMBER'   => $student->PERMANENT_HOUSENUMBER,
-    //         'P_STREETNAME'            => $student->P_STREETNAME,
-    //         'P_VILLAGE_TOWN_NAME'     => $student->P_VILLAGE_TOWN_NAME,
-    //         'P_DISTRICT'              => $student->P_DISTRICT,
-    //         'P_STATE'                 => $student->P_STATE,
-    //         'P_PINCODE'               => $student->P_PINCODE,
-
-    //         // Communication address
-    //         'COMMUNICATION_HOUSE_NO'  => $student->COMMUNICATION_HOUSE_NO,
-    //         'C_STREET_NAME'           => $student->C_STREET_NAME,
-    //         'C_VILLAGE_TOWN_NAME'     => $student->C_VILLAGE_TOWN_NAME,
-    //         'C_DISTRICT'              => $student->C_DISTRICT,
-    //         'C_STATE'                 => $student->C_STATE,
-    //         'C_PINCODE'               => $student->C_PINCODE,
-
-    //         // Add any other fields you want here
-    //     ];
-
-    //     // Generate the certificate (assuming this function handles PDF creation and returns URL)
-    //      $url = $this->generateCertificate($student, $template, $data, 'Identity Card', 'certificate');
-
-    //     return response()->json(['url' => $url], 200);
-    // }
 
     public function idcard(Request $request)
     {
@@ -349,33 +301,6 @@ class TemplateEditorController extends Controller
         return response()->json(["url" => $url], 200);
     }
 
-    // public function studentAttendanceView(Request $request)
-    // {
-    //     $template = TemplateEditor::where('template_name', $request->template_name)->first();
-    //     if (!$template) {
-    //         return response()->json(['message' => 'Template not found'], 404);
-    //     }
-
-    //     $student = Student::find($request->student_id);
-    //     if (!$student) {
-    //         return response()->json(['message' => 'Student not found'], 404);
-    //     }
-
-    //     $data = [
-    //         'student_name' => $student->STUDENT_NAME,
-    //         'class_name' => $student->SOUGHT_STD,
-    //         'academic_year' => $student->academic_year,
-    //         'working_days' => '',
-    //         'days_attended' => '',
-    //         'attendance_percent' => '',
-    //         'st' => Carbon::now()->format('d-m-Y'),
-    //     ];
-
-    //     $htmlContent = $this->replaceTemplateVariables($template->template, $data);
-
-    //     return response($htmlContent, 200)
-    //         ->header('Content-Type', 'text/html; charset=UTF-8');
-    // }
     public function studentAttendanceView(Request $request)
     {
         $template = TemplateEditor::where(
@@ -477,17 +402,17 @@ class TemplateEditorController extends Controller
         Log::info("$body {$body} ");
 
         $htmlContent = <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$title</title>
-</head>
-<body>
-$body
-</body>
-</html>
-HTML;
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <title>$title</title>
+            </head>
+            <body>
+            $body
+            </body>
+            </html>
+            HTML;
 
         $pdf = \PDF::loadHTML($htmlContent)->setPaper("a4", "portrait");
 
@@ -664,22 +589,6 @@ HTML;
         return $templateString;
     }
 
-    // public function viewById($id)
-    // {
-    //     // Find template by ID
-    //     $template = TemplateEditor::find($id);
-
-    //     // Check if template exists
-    //     if (!$template) {
-    //         // Return 404 if template not found
-    //         return response()->json(['message' => 'Template not found'], 404);
-    //     }
-
-    //     // Return clean HTML content as response
-    //     return response()->make($template->template, 200, [
-    //         'Content-Type' => 'text/html',
-    //     ]);
-    // }
 
     // Create a new template
     public function store(Request $request)
@@ -778,4 +687,69 @@ HTML;
             "pdf_link" => url("templates/templates_12345.pdf"),
         ]);
     }
+
+    public function studentCertificatelist(Request $request)
+    {
+        // Start query builder
+        $query = Student::query();
+
+        // Apply filters
+        if ($request->has("standard")) {
+            $query->where("SOUGHT_STD", $request->query("standard"));
+        }
+        if ($request->has("section")) {
+            $query->where("sec", $request->query("section"));
+        }
+        if ($request->has("academic_year")) {
+            $query->where("academic_year", $request->query("academic_year"));
+        }
+
+        // Get the filtered student list
+        $students = $query->get();
+
+        if ($students->isEmpty()) {
+            return response()->json(["message" => "No students found"], 404);
+        }
+
+        // Fetch template
+        $template = TemplateEditor::where("template_name", $request->query("template_name"))->first();
+        if (!$template) {
+            return response()->json(["message" => "Certificate template not found"], 404);
+        }
+
+        $data = [];
+
+        foreach ($students as $student) {
+            $template_data = [
+                "student_name" => $student->STUDENT_NAME,
+                "parent_name" => $student->FATHER,
+                "start_date" => $student->date_form,
+                "end_date" => \Carbon\Carbon::today()->toDateString(),
+                "class_name" => $student->SOUGHT_STD,
+                "completed_class" => $student->SOUGHT_STD,
+                "st" => now()->format("d-m-Y"),
+            ];
+
+            $url = $this->generateCertificate(
+                $student,
+                $template,
+                $template_data,
+                $template->template_name,
+                "certificate"
+            );
+
+            $data[] = [
+                "student_id" => $student->id,
+                "student_name" => $student->STUDENT_NAME,
+                "roll_no" => $student->roll_no,
+                "class_name" => $student->SOUGHT_STD,
+                "section" => $student->sec,
+                "academic_year" => $student->academic_year,
+                "url" => $url
+            ];
+        }
+
+        return response()->json($data, 200);
+    }
+
 }
