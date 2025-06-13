@@ -262,7 +262,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     //StudentController
     Route::post("/add-student", [StudentController::class , "store"]);
-    Route::post("/upload-student", [StudentController::class , "uploadStudentData", ])->middleware(["api", "throttle:10000,1"]);
+    Route::post("/upload-student", [StudentController::class , "uploadStudentData"]);
     Route::get("/read-student", [StudentController::class , "read"]);
     Route::get("/get-admissionddstudents/{standard}", [StudentController::class , "getadmissionStandards", ]);
     Route::get("/read-student-history", [StudentController::class , "readHistory"]);
