@@ -74,9 +74,7 @@ class StudentController extends Controller
 
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
-               // dd("1");
-                $admission_no = $record->admission_no; // Assuming the admission_no is stored in index 1
-                
+                               
                 $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
                 $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
                 if ($existingStudentuser) {
