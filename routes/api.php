@@ -209,45 +209,8 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/feesmap-deleteforStudent", [feesmapController::class , "deleteforStudent", ]);
     Route::post("/feesmap-insertByID", [feesmapController::class , "insertByID"]);
 
-    //invoice API's
-    Route::get("/invoice-list", [InvoiceController::class , "getInvoiceList", ]);
-    Route::get("/invoice-list-short", [InvoiceController::class , "getInvoiceListshort", ]);
-    Route::get("/receipt-list-short", [InvoiceController::class , "getReceiptListshort", ]);
-    Route::get("/payment-receipt-list", [InvoiceController::class , "getPaymentReceiptList", ]);
-    Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
-    Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
-    Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
-    Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
-    Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
-    Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
-    Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);
-    Route::post("/student/nodues", [InvoiceController::class , "getNoDuesCertificatesAndPendingDues", ]);
-    Route::get("/student/nodues/{id}/selectbyid", [InvoiceController::class , "getNoDuesCertificatesbyid", ]);
-    Route::get("/getUserDetailsWithExcessAmount", [InvoiceController::class , "getUserDetailsWithExcessAmount", ]);
-    Route::get("/viewExcessAmount/{id}", [InvoiceController::class , "viewExcessAmount", ]);
-    Route::get("/viewpreExcessAmount/{id}", [InvoiceController::class , "viewpreExcessAmount", ]);
-    Route::post("/updateExcessAmount", [InvoiceController::class , "updateExcessAmount", ]);
-    Route::get("/getsponinfo", [InvoiceController::class , "getsponinfo"]);
 
-    //genrate invoice
-    Route::post("/invoiceSearch", [genrateInvoiceController::class , "invoiceSearch", ]);
-    Route::post("/ReciptSearch", [genrateInvoiceController::class , "ReciptSearch"]);
-    Route::post("/deleterecipt", [genrateInvoiceController::class , "deleterecipt"]);
-    Route::post("/deletereciptview", [genrateInvoiceController::class , "deletereciptview", ]);
-    Route::post("/deleteinvoiceview", [genrateInvoiceController::class , "deleteinvoiceview", ]);
-    Route::post("/deleteinvoice", [genrateInvoiceController::class , "deleteinvoice", ]);
-    Route::post("/geneachStdInvoiceView", [genrateInvoiceController::class , "genrateForGrade", ]);
-    Route::post("/paycashgenrate", [genrateInvoiceController::class , "cashgenrate", ]);
-    Route::post("/paycashgenratetwo", [genrateInvoiceController::class , "cashgenratetwo", ]);
-    Route::post("/discountTotalAmount", [genrateInvoiceController::class , "discountTotalAmount", ]);
-    Route::get("/readDiscount", [genrateInvoiceController::class , "readDiscount"]);
-    Route::post("/deleteDiscount", [genrateInvoiceController::class , "deleteDiscount", ]);
-    Route::get("/getDiscountCategories", [genrateInvoiceController::class , "getDiscountCategories", ]);
-    Route::post("/listgenrate", [genrateInvoiceController::class , "listgenrate", ]);
-    Route::post("/listgenratefilter", [genrateInvoiceController::class , "listgenratefilter", ]);
-    Route::post("/listgenrateById", [genrateInvoiceController::class , "listgenrateById", ]);
-    Route::post("/genschoolInvoiceView", [genrateInvoiceController::class , "getTotalAmount", ]);
-    Route::post("/docGenerate", [genrateInvoiceController::class , "docGenerate", ]);
+
 
 
     //staff
@@ -382,7 +345,46 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/DiscountCategory-update", [DiscountCategoryMasterController::class , "update", ]);
     Route::post("/DiscountCategory-delete", [DiscountCategoryMasterController::class , "delete", ]);
 });
+ //invoice API's
+Route::get("/invoice-list", [InvoiceController::class , "getInvoiceList", ]);
+Route::get("/invoice-list-short", [InvoiceController::class , "getInvoiceListshort", ]);
+Route::get("/receipt-list-short", [InvoiceController::class , "getReceiptListshort", ]);
+Route::get("/payment-receipt-list", [InvoiceController::class , "getPaymentReceiptList", ]);
+Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
+Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
+Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
+Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
+Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
+Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
+Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);
+Route::post("/student/nodues", [InvoiceController::class , "getNoDuesCertificatesAndPendingDues", ]);
+Route::get("/student/nodues/{id}/selectbyid", [InvoiceController::class , "getNoDuesCertificatesbyid", ]);
+Route::get("/getUserDetailsWithExcessAmount", [InvoiceController::class , "getUserDetailsWithExcessAmount", ]);
+Route::get("/viewExcessAmount/{id}", [InvoiceController::class , "viewExcessAmount", ]);
+Route::get("/viewpreExcessAmount/{id}", [InvoiceController::class , "viewpreExcessAmount", ]);
+Route::post("/updateExcessAmount", [InvoiceController::class , "updateExcessAmount", ]);
+Route::post("/addExcessAmount", [InvoiceController::class , "addExcessAmountForSponsor", ]);
+Route::get("/getsponinfo", [InvoiceController::class , "getsponinfo"]);
 
+//genrate invoice
+Route::post("/invoiceSearch", [genrateInvoiceController::class , "invoiceSearch", ]);
+Route::post("/ReciptSearch", [genrateInvoiceController::class , "ReciptSearch"]);
+Route::post("/deleterecipt", [genrateInvoiceController::class , "deleterecipt"]);
+Route::post("/deletereciptview", [genrateInvoiceController::class , "deletereciptview", ]);
+Route::post("/deleteinvoiceview", [genrateInvoiceController::class , "deleteinvoiceview", ]);
+Route::post("/deleteinvoice", [genrateInvoiceController::class , "deleteinvoice", ]);
+Route::post("/geneachStdInvoiceView", [genrateInvoiceController::class , "genrateForGrade", ]);
+Route::post("/paycashgenrate", [genrateInvoiceController::class , "cashgenrate", ]);
+Route::post("/paycashgenratetwo", [genrateInvoiceController::class , "cashgenratetwo", ]);
+Route::post("/listgenrate", [genrateInvoiceController::class , "listgenrate", ]);
+Route::post("/listgenratefilter", [genrateInvoiceController::class , "listgenratefilter", ]);
+Route::post("/listgenrateById", [genrateInvoiceController::class , "listgenrateById", ]);
+Route::post("/genschoolInvoiceView", [genrateInvoiceController::class , "getTotalAmount", ]);
+Route::post("/docGenerate", [genrateInvoiceController::class , "docGenerate", ]);
+Route::post("/discountTotalAmount", [genrateInvoiceController::class , "discountTotalAmount", ]);
+Route::get("/readDiscount", [genrateInvoiceController::class , "readDiscount"]);
+Route::post("/deleteDiscount", [genrateInvoiceController::class , "deleteDiscount", ]);
+Route::get("/getDiscountCategories", [genrateInvoiceController::class , "getDiscountCategories", ]);
 Route::group(["middleware" => ["auth:api"]], function ()
 {
     Route::get("/dashboard", [App\Http\Controllers\API\ApiController::class , "countstudent", ]);
@@ -587,17 +589,33 @@ Route::prefix("std_sec_group_mapping")->group(function ()
     Route::post("/", [StandardSectionMappingController::class , "store"]);
     Route::put("/{id}", [StandardSectionMappingController::class , "update"]);
     Route::get("/{id}", [StandardSectionMappingController::class , "viewbyid"]);
-    Route::get("/sections", [StandardSectionMappingController::class , "getSectionsByStandardAndGroup", ]);
+    Route::post("/sections", [StandardSectionMappingController::class , "getSectionsByStandardAndGroup", ]);
     Route::delete("/{id}", [StandardSectionMappingController::class , "destroy", ]);
 });
 
-// Route::prefix('groups')->group(function () {
-//     Route::get('/', [GroupMasterController::class, 'index']);
-//     Route::post('/', [GroupMasterController::class, 'store']);
-//     Route::put('/{id}', [GroupMasterController::class, 'update']);
-//     Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
-//     Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
-// });
+Route::prefix('groups')->group(function () {
+    Route::get('/', [GroupMasterController::class, 'index']);
+    Route::post('/', [GroupMasterController::class, 'store']);
+    Route::put('/{id}', [GroupMasterController::class, 'update']);
+    Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
+    Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
+});
+Route::prefix('exam_master')->group(function () {
+    Route::get('/', [ExamMasterController::class, 'index']);
+    Route::get('/add-list/{id}', [ExamMasterController::class, 'addList']);
+    Route::post('/', [ExamMasterController::class, 'store']);
+    Route::put('/{id}', [ExamMasterController::class, 'update']);
+    Route::get('/{id}', [ExamMasterController::class, 'viewbyid']);
+    Route::delete('/{id}', [ExamMasterController::class, 'destroy']);
+});
+
+Route::prefix('groups')->group(function () {
+    Route::get('/', [GroupMasterController::class, 'index']);
+    Route::post('/', [GroupMasterController::class, 'store']);
+    Route::put('/{id}', [GroupMasterController::class, 'update']);
+    Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
+    Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
+});
 Route::prefix("dropdowntypes")->group(function ()
 {
     Route::get("/", [DropdowntypeMasterController::class , "index"]);
@@ -665,6 +683,7 @@ Route::put("/permissions/{id}", [PermissionController::class , "update"]); // Up
 Route::post("/mapStaffFees/create", [StaffInvoiceController::class , "mapStaffFees", ]);
 Route::get("/mapStaffFees", [StaffInvoiceController::class , "listAllStaffmapFees", ]);
 Route::get("/getAllStaffFees", [StaffInvoiceController::class , "getAllStaffFees", ]);
+Route::get("/mapStaffFees/{id}", [StaffInvoiceController::class , "mapStaffFeesbyid", ]);
 Route::put("/updatemapStaffFees/{id}", [StaffInvoiceController::class , "updateStaffFees", ]);
 Route::delete("/deletemapStaffFees/{id}", [StaffInvoiceController::class , "deletemapStaffFees", ]);
 Route::post("/staff-invoices/create", [StaffInvoiceController::class , "createInvoices", ]);

@@ -223,7 +223,8 @@ class genrateInvoiceController extends Controller
 
                 if ($user) {
                     // Add user details
-                    $student->student_id = $user->name;
+                    $student->student_id = $student->student_id;
+                    $student->name = $user->name;
                     $student->roll_no = $user->roll_no;
                     $student->standard = $user->standard;
                     $student->sec = $user->sec;
