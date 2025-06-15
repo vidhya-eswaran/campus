@@ -65,6 +65,7 @@ class ReportsController extends Controller
 
             $userId = $user->id;
         }
+
         if ($request->has("FromDate") && $request->has("ToDate")) {
             $fromDate = Carbon::parse(
                 $request->input("FromDate")
