@@ -16,32 +16,30 @@ class SchoolController extends Controller
     public function createSchool(Request $request)
     {
         try {
-            dd($request);
-        $request->validate([
-            'name' => 'required|unique:schools,name',
-            'admin_name' => 'required|string',
-            'admin_email' => 'required|email|unique:users,email',
+        
+            $request->validate([
+                'name' => 'required|unique:schools,name',
+                'admin_name' => 'required|string',
+                'admin_email' => 'required|email|unique:users,email',
 
-            'school_logo' => 'nullable|url',
-            'school_type' => 'nullable|in:Public,Private,International',
-            'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
-            'established_year' => 'nullable|date_format:Y',
-            'website_url' => 'nullable|url',
-            'country' => 'nullable|string',
-            'state' => 'nullable|string',
-            'city' => 'nullable|string',
-            'postal_code' => 'nullable|string',
-            'full_address' => 'nullable|string',
-            'phone_number' => 'nullable|string',
-            'alternate_phone_number' => 'nullable|string',
-            'support_email' => 'nullable|email',
-            'selected_plan' => 'nullable|in:Basic,Premium,Enterprise',
-            'subscription_start_date' => 'nullable|date',
-            'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
-            'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
-        ]);
-
-        dd("SSs");
+                'school_logo' => 'nullable|url',
+                'school_type' => 'nullable|in:Public,Private,International',
+                'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
+                'established_year' => 'nullable|date_format:Y',
+                'website_url' => 'nullable|url',
+                'country' => 'nullable|string',
+                'state' => 'nullable|string',
+                'city' => 'nullable|string',
+                'postal_code' => 'nullable|string',
+                'full_address' => 'nullable|string',
+                'phone_number' => 'nullable|string',
+                'alternate_phone_number' => 'nullable|string',
+                'support_email' => 'nullable|email',
+                'selected_plan' => 'nullable|in:Basic,Premium,Enterprise',
+                'subscription_start_date' => 'nullable|date',
+                'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
+                'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
+            ]);
         
         $schoolName = $request->name;
         $adminName = $request->admin_name;
