@@ -16,6 +16,7 @@ class SchoolController extends Controller
     public function createSchool(Request $request)
     {
         try {
+            dd($request);
         $request->validate([
             'name' => 'required|unique:schools,name',
             'admin_name' => 'required|string',
