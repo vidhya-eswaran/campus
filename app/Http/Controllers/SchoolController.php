@@ -47,6 +47,8 @@ class SchoolController extends Controller
         $adminEmail = $request->admin_email;
        // $adminPassword = bcrypt($request->admin_password);
 
+       dd("SSs");
+
         $today = now()->format('Ymd');
         $schoolName = Str::slug($request->name, '_'); // e.g. santhosh_vidhyalaya
         $dbName = $schoolName . '_' . $today;
