@@ -223,7 +223,8 @@ class genrateInvoiceController extends Controller
 
                 if ($user) {
                     // Add user details
-                    $student->student_id = $user->name;
+                    $student->student_id = $student->student_id;
+                    $student->name = $user->name;
                     $student->roll_no = $user->roll_no;
                     $student->standard = $user->standard;
                     $student->sec = $user->sec;
@@ -1796,7 +1797,7 @@ class genrateInvoiceController extends Controller
         $invoiceData = [];
 
         foreach ($userDatas as $userData) {
-            // dd($userData);
+            // dd($cata);
 
             unset($fees_items_details);
             $concatenatedHeadings = "";
@@ -2792,6 +2793,7 @@ class genrateInvoiceController extends Controller
         $id = $request->id;
 
         $invoiceDetails = GenerateInvoiceView::find($id);
+
         Log::info("1.invoiceDetails", ["invoiceDetails" => $invoiceDetails]);
         if (!$invoiceDetails) {
             return response()->json(
@@ -2817,11 +2819,13 @@ class genrateInvoiceController extends Controller
         if (!$student) {
             return response()->json(["message" => "Student not found."], 404);
         }
+
         $paymentInformation = DB::table("by_pay_informations")
             ->where("student_id", $invoiceDetails->student_id)
             ->where("type", $invoiceDetails->fees_cat)
             ->latest("id")
             ->first();
+
         Log::info("1.2.paymentInformation", [
             "paymentInformation" => $paymentInformation,
         ]);
@@ -2834,8 +2838,10 @@ class genrateInvoiceController extends Controller
         $h_excess = $paymentInformation->h_excess_amount;
         // Handle the excess amount for student or sponsor
         if (!$sponsor) {
-            //New Logic Start
 
+            //New Logic Start
+            $most_recent_s_excess = 0;
+            $most_recent_s_excess = 0;
             if ($paymentInformation->type === "school") {
                 $most_recent_s_excess = $s_excess;
                 $most_recent_h_excess = 0;
@@ -2846,8 +2852,8 @@ class genrateInvoiceController extends Controller
                 $most_recent_h_excess = 0;
                 $most_recent_s_excess = 0;
             }
-            $excessaddamount =
-                $amount + ($most_recent_s_excess + $most_recent_h_excess);
+
+            $excessaddamount = (float)$amount + (float)$most_recent_s_excess + (float)$most_recent_h_excess;
             if ($excessaddamount < $most_recent_dues) {
                 $dues = $most_recent_dues - $excessaddamount;
                 $school_excess = 0;
@@ -3154,42 +3160,7 @@ class genrateInvoiceController extends Controller
         $pending_amount =
             $totalInvoiceAmountActual - ($previousTransactions + $payed_amount);
 
-        // Payment status determination and handling excess/remaining amounts
-        // if ($pending_amount > 0) {
-        //     // Partial payment
-        //     $payment_status = "Partial Paid";
-        //     if (!$sponsor) {
-        //         if ($invoiceDetails->fees_cat == 'school') {
-        //             $student->excess_amount = $student_excess_amount - $excess_amount_used + $advance_amount;
-        //         } else {
-        //             $student->h_excess_amount = $student_excess_amount - $excess_amount_used + $advance_amount;
-        //         }
-        //         $student->save();
-        //     }
-        // } elseif ($pending_amount < 0) {
-        //     // Overpayment, update advance amount
-        //     $upexcess_amount = -$pending_amount;
-        //     $payment_status = "Paid";
-        //     if (!$sponsor) {
-        //         if ($invoiceDetails->fees_cat == 'school') {
-        //             $student->excess_amount = $upexcess_amount + $advance_amount;
-        //         } else {
-        //             $student->h_excess_amount = $upexcess_amount + $advance_amount;
-        //         }
-        //         $student->save();
-        //     }
-        // } else {
-        //     // Full payment
-        //     $payment_status = "Paid";
-        //     if (!$sponsor) {
-        //         if ($invoiceDetails->fees_cat == 'school') {
-        //             $student->excess_amount =  $advance_amount;
-        //         } else {
-        //             $student->h_excess_amount =  $advance_amount;
-        //         }
-        //         $student->save();
-        //     }
-        // }
+
         if ($dues > 0) {
             // Partial payment
             $payment_status = "Partial Paid";
@@ -3323,31 +3294,7 @@ class genrateInvoiceController extends Controller
         $PaymentOrdersStatus = PaymentOrdersStatuses::create(
             $save_payment_orders_status_data
         );
-        // DB::table('by_pay_informations')->insert([
-        //     'student_id' => $invoiceDetails->student_id,
-        //     'invoice_id' => $invoiceDetails->slno,
-        //     'transactionId' => $transactionId,
-        //     'amount' => $amount, // Actual paid amount
-        //     'pay_amount' => $payed_amount, // Actual paid amount
-        //     'sponsor_excess_amount' => $sponsor ? $student_excess_amount : 0, // Sponsor's excess amount used
-        //     'student_excess_amount' => !$sponsor ? $student_excess_amount : 0, // Student's excess amount used
-        //     'excess_used' => $excess_amount_used, // Total excess amount used
-        //     'pending_amount' => $pending_amount, // Amount still pending to be paid
-        //     // 'upexcess_amount' => $upexcess_amount, // Overpaid amount turned into excess
-        //     'due_excess' => $excess_amount_used, // Total due excess used for this payment
-        //     'remaining_payment' => $pending_amount, // Remaining payment to be made
-        //     'advance_payment' => $advance_amount, // Any advance payment (overpaid and carried forward)
-        //     'payment_status' => $payment_status, // Payment status
-        //     'additional_details' => $additionalDetails, // Additional payment details
-        //     'mode' => $mode, // Payment mode
-        //     'sponsor' => $sponsor ?? null, // Sponsor ID (if any)
-        //     'due_amount' => $dues ?? null,
-        //     's_excess_amount' => $school_excess ?? null,
-        //     'h_excess_amount' => $hostel_excess ?? null,
-        //     'type' => $invoiceDetails->fees_cat ?? null,
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
+
         DB::table("by_pay_informations")->insert([
             "student_id" => $invoiceDetails->student_id,
             "invoice_id" => $invoiceDetails->slno,
@@ -3376,10 +3323,7 @@ class genrateInvoiceController extends Controller
                 "h_excess_amount" => $student_excess_amount + $hostel_excess,
             ]);
         }
-        // $studentupdate = User::find($invoiceDetails->student_id);
-        // $remainingexcess = ($student_excess_amount ?? 0) + ($amount ?? 0) - ($most_recent_dues ?? 0);
-        // $studentupdate->h_excess_amount = $remainingexcess;
-        // $studentupdate->save();
+
 
         /////////////////////////////////////////////////////////////////
         $LOG = [

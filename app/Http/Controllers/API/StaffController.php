@@ -379,4 +379,28 @@ class StaffController extends Controller
             Log::error("Error updating {$fieldNameApi}: " . $e->getMessage());
         }
     }
+
+    public function deleteStaff($id)
+    {
+        // Find the staff by ID
+        $staff = Staff::find($id);
+
+        if (!$staff) {
+            return response()->json(['message' => 'Staff not found'], 404);
+        }
+
+        // Soft delete by setting isdeleted to true
+        $staff->isdeleted = true;
+        $staff->save();
+
+        // Optionally, also deactivate or delete the corresponding user
+        $user = User::where('roll_no', $staff->staff_id)->first();
+        if ($user) {
+            // Soft delete or flag the user as inactive, as needed
+            $user->delete(); // or set a status column if you prefer not to delete
+        }
+
+        return response()->json(['message' => 'Staff deleted successfully'], 200);
+    }
+
 }

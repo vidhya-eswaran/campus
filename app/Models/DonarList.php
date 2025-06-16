@@ -24,7 +24,10 @@ class DonarList extends Model
         'state_2',
         'country_2',
         'pincode_2',
-        'pan_aadhar'
+        'pan_aadhar',
+        'type_of_donation',
+        'mode_of_payment',
+        'check_dd_trans_id',
 
     ];
 }

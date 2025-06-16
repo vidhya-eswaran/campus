@@ -45,14 +45,57 @@ class listUserController extends Controller
         }
         return response()->json(['data' => $data]);
     }
-    
+
+    public function addUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'gender' => 'nullable|in:Male,Female,Other',
+            'email' => 'required|email|unique:users,email',
+            'user_type' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $lastid =User::latest("id")->value("id") ?? 0;
+        $lastid = $lastid + 1;
+        $user = new User();
+        $user->name = $request->name;
+        $user->id = $lastid;
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->user_type = $request->user_type;
+        $user->password = Hash::make("svs@123");
+        $user->status = 1; // default active
+        $user->save();
+
+        // If student, add to students table
+        if ($user->user_type === 'student') {
+            $student = new Student();
+            $student->admission_no = $user->admission_no ?? $user->id;
+            $student->STUDENT_NAME = $user->name;
+            $student->EMAIL_ID = $user->email;
+            $student->save();
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'User created successfully.',
+            'user' => $user
+        ], 201);
+    }
+
     public function listRoles(Request $request)
     {
 
        $userTypes = User::select('user_type')->distinct()->pluck('user_type');
         return response()->json(['data' => $userTypes]);
     }
-    
+
     public function roleBasedUsers(Request $request)
     {
         // Get filter inputs
@@ -60,10 +103,10 @@ class listUserController extends Controller
         $standard = $request->input('standard');
         $sec = $request->input('sec');
         $tweGroup = $request->input('twe_group');
-    
+
         // Start query
         $query = User::query();
-    
+
         // Apply filters only if the parameter is provided
         if (!empty($userType)) {
             $query->where('user_type', $userType);
@@ -77,10 +120,10 @@ class listUserController extends Controller
         if (!empty($tweGroup)) {
             $query->where('twe_group', $tweGroup);
         }
-    
+
         // Get filtered users
         $users = $query->get();
-    
+
         // Format user data
         $data = $users->map(function ($user) {
             $admission_no = $user->admission_no;
@@ -108,7 +151,7 @@ class listUserController extends Controller
                 'hostelOrDay' => $user->hostelOrDay
             ];
         });
-    
+
         return response()->json([
             'filters' => [
                 'user_type' => $userType ?? 'All',
@@ -149,141 +192,60 @@ class listUserController extends Controller
         }
         return response()->json(['data' => $data]);
     }
+
     public function changeUserDetails(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:users,id',
+            'name' => 'required|string',
+            'gender' => 'nullable|string',
+            'email' => 'required|email',
+            'standard' => 'nullable|string', // From "Grade"
+            'sec' => 'nullable|string',      // From "Section"
+            'twe_group' => 'nullable|string' // From "Group"
+        ]);
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'id' => 'required',
-                'roll_no' => 'required',
-                'name' => 'required',
-                'gender' => 'nullable',
-                'standard' => 'nullable',
-                'sec' => 'nullable',
-                'twe_group' => 'nullable',
-                'email' => 'required',
-                'user_type' => 'required',
-                // 'fee_by' => 'nullable',
-                // 'sponsor_id' => 'nullable',
-                // 'sponsor_name' => 'nullable',
-                'status' => 'nullable',
-                'hostelOrDay' => 'nullable'
-            ]
-        );
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
-        $data = $request->all();
+        $data = $request->only([
+            'id', 'name', 'gender', 'email', 'standard', 'sec', 'twe_group'
+        ]);
 
-        $user = User::find($data['id']); // retrieve the user by ID
+        $user = User::find($data['id']);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
 
+        // Update user table
+        $user->name = $data['name'];
+        $user->gender = $data['gender'] ?? $user->gender;
+        $user->email = $data['email'];
+        $user->standard = $data['standard'] ?? $user->standard;
+        $user->sec = $data['sec'] ?? $user->sec;
+        $user->twe_group = $data['twe_group'] ?? $user->twe_group;
+        $user->save();
 
-        // if ($user) {
-        //     $user->roll_no = $data['roll_no'];
-        //     $user->name = $data['name'];
-        //     $user->gender = $data['gender'];
-        //     $user->standard = $data['standard'];
-        //     $user->sec = $data['sec'];
-        //     $user->twe_group = $data['twe_group'];
-        //     $user->hostelOrDay = $data['hostelOrDay'];
-        //     $user->email = $data['email'];
-        //     $user->user_type = $data['user_type'];
-        //     // $user->fee_by = $data['fee_by'];
-        //     // $user->sponsor_id = $data['sponsor_id'];
-        //     $user->status = $data['status'];
-        //     $user->save(); // save the changes to the database
-        //     if ($data['user_type'] == 'student') {
-        //          $admission_no =  $user->admission_no ;
-        //          $existingStudent = Student::where('admission_no', 'like', $admission_no)->first();
-        //          $existingStudent->sec =  $data['sec'];
-        //          $existingStudent->sought_Std = $data['standard'];
-        //          $existingStudent->Group = $data['twe_group'];
-        //          $existingStudent->student_name = $data['name'];
-        //          $existingStudent->roll_no =  $data['roll_no'];
-        //          $existingStudent->EmailID = $data['email'];
-        //          $existingStudent->hostelOrDay = $data['hostelOrDay'];
-        //          $existingStudent->save();
-
-        //     }  
-        // }
-
-
-        if ($user) {
-            if (!empty($data['roll_no'])) {
-                $user->roll_no = $data['roll_no'];
-            }
-
-            if (!empty($data['name'])) {
-                $user->name = $data['name'];
-            }
-
-            if (!empty($data['gender'])) {
-                $user->gender = $data['gender'];
-            }
-
-            if (!empty($data['standard'])) {
-                $user->standard = $data['standard'];
-            }
-
-            if (!empty($data['sec'])) {
-                $user->sec = $data['sec'];
-            }
-            if (!empty($data['twe_group'])) {
-                $user->twe_group = $data['twe_group'];
-            }
-
-            if (!empty($data['hostelOrDay'])) {
-                $user->hostelOrDay = $data['hostelOrDay'];
-            }
-
-            if (!empty($data['email'])) {
-                $user->email = $data['email'];
-            }
-            // return response()->json(['message' => 'updated data successfully','user' =>$user ]);
-            $user->save(); 
-            if (!empty($data['user_type'])) {
-                $user->user_type = $data['user_type'];
-
-                // Update student-specific fields if the user is a student
-                if ($data['user_type'] == 'student') {
-                    $admission_no = $user->admission_no;
-                    $existingStudent = Student::where('admission_no',  'LIKE', $admission_no)->first();
-
-                    if ($existingStudent) {
-                        if (!empty($data['sec'])) {
-                            $existingStudent->sec = $data['sec'];
-                        }
-
-                        if (!empty($data['standard'])) {
-                            $existingStudent->SOUGHT_STD = $data['standard'];
-                        }
-
-                        if (!empty($data['twe_group'])) {
-                            $existingStudent->GROUP_12 = $data['twe_group'];
-                        }
-
-                        if (!empty($data['name'])) {
-                            $existingStudent->STUDENT_NAME = $data['name'];
-                        }
-
-                        if (!empty($data['roll_no'])) {
-                            $existingStudent->roll_no = $data['roll_no'];
-                        }
-
-                        if (!empty($data['email'])) {
-                            $existingStudent->EMAIL_ID = $data['email'];
-                        }
-
-                        // if (!empty($data['hostelOrDay'])) {
-                        //     $existingStudent->hostelOrDay = $data['hostelOrDay'];
-                        // }
-
-                        $existingStudent->save();
-                    }
-                }
+        // If user is a student, also update the `students` table
+        if ($user->user_type === 'student') {
+            $student = Student::where('admission_no', $user->admission_no)->first();
+            if ($student) {
+                $student->STUDENT_NAME = $data['name'];
+                $student->EMAIL_ID = $data['email'];
+                $student->SOUGHT_STD = $data['standard'] ?? $student->SOUGHT_STD;
+                $student->sec = $data['sec'] ?? $student->sec;
+                $student->GROUP_12 = $data['twe_group'] ?? $student->GROUP_12;
+                $student->save();
             }
         }
-        return response()->json(['message' => 'updated data successfully','existingStudent' =>$existingStudent ?? '','user' =>$user ]);
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user
+        ], 200);
     }
+
     public function IdUserDetails(Request $request)
     {
 
@@ -300,6 +262,7 @@ class listUserController extends Controller
 
         return response()->json(['data' => $user]);
     }
+
     public function changepassword(Request $request)
     {
 
@@ -331,8 +294,6 @@ class listUserController extends Controller
         }
     }
 
-
-
     public function resetpassword(Request $request)
     {
 
@@ -354,4 +315,34 @@ class listUserController extends Controller
         }
         return response()->json(['message' => 'Resetted password successfully', 'email' =>  $user->email, 'name' =>  $user->name]);
     }
+
+    public function deleteUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:users,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::find($request->id);
+
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        // If the user is a student, delete from students table
+        if ($user->user_type === 'student') {
+            Student::where('EMAIL_ID', $user->email)->orWhere('admission_no', $user->id)->delete();
+        }
+
+        $user->delete();
+
+        return response()->json(['status' => true, 'message' => 'User deleted successfully']);
+    }
+
 }

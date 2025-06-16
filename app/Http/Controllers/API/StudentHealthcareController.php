@@ -145,7 +145,7 @@ class StudentHealthcareController extends Controller
   public function viewAllHealthcareRecords()
     {
         // Fetch all healthcare records
-        $healthcareRecords = HealthcareRecord::all();
+        $healthcareRecords = HealthcareRecord::where('delete_status', 0)->get();
 
         // Add student details for each healthcare record
         $healthcareRecordsWithStudentDetails = $healthcareRecords->map(function ($record) {
@@ -184,6 +184,16 @@ class StudentHealthcareController extends Controller
 
         // Return healthcare records with student details
         return response()->json(['healthcare_records' => $healthcareRecordsWithStudentDetails], 200);
+    }
+
+     public function destroy($id)
+    {
+        $donor = HealthcareRecord::findOrFail($id);
+        $donor->delete_status = 1;
+        $donor->save();
+        return response()->json([
+            'message' => 'healthcare Record deleted successfully',
+        ]);
     }
 
 }

@@ -1087,6 +1087,48 @@ class InvoiceController extends Controller
         // Return a JSON response containing the user details with excess_amount, user_type, standard, and email
         return response()->json(["userDetails" => $users]);
     }
+    public function addExcessAmountForSponsor(Request $request)
+    {
+        $request->validate([
+            'sponser_id' => 'required|integer',
+            'school_excess_amount' => 'nullable|numeric',
+            'hostel_excess_amount' => 'nullable|numeric',
+        ]);
+
+        $sponserId = $request->input('sponser_id');
+        $schoolExcess = $request->input('school_excess_amount');
+        $hostelExcess = $request->input('hostel_excess_amount');
+
+        // Fetch all users with the given sponsor
+        $users = DB::table('users')->where('sponser_id', $sponserId)->get();
+
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'No users found for this sponsor.'], 404);
+        }
+
+        foreach ($users as $user) {
+            $updateData = [];
+            if (!is_null($schoolExcess)) {
+                $updateData['excess_amount'] = $schoolExcess;
+            }
+            if (!is_null($hostelExcess)) {
+                $updateData['h_excess_amount'] = $hostelExcess;
+            }
+
+            DB::table('users')->where('id', $user->id)->update($updateData);
+
+            // Insert history
+            DB::table('user_excess_histories')->insert([
+                'sponser_id' => $sponserId,
+                'excess_amount' => $schoolExcess,
+                'h_excess_amount' => $hostelExcess,
+                'created_at' => now()->setTimezone("Asia/Kolkata"),
+            ]);
+        }
+
+        return response()->json(['message' => 'Excess amount updated for all users under sponsor.']);
+    }
+
     public function updateExcessAmount(Request $request)
     {
         // Validate the request input (e.g., you can validate the 'id' and any of the excess amounts)

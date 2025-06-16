@@ -10,7 +10,7 @@ use App\Models\TemplateMaster;
 
 class TemplateMasterController extends Controller
 {
-      public function index()
+    public function index()
     {
         return response()->json(TemplateMaster::all());
     }
@@ -22,17 +22,17 @@ class TemplateMasterController extends Controller
         if ($template) {
             return response()->json($template);
         }
-        return response()->json(['message' => 'Template not found'], 404);
+        return response()->json(["message" => "Template not found"], 404);
     }
 
     // Create a new template
     public function store(Request $request)
     {
         $data = $request->validate([
-            'template_name' => 'required|max:255',
-            'extra' => 'nullable',
-            'comment' => 'nullable|max:255',
-            'template' => 'required',
+            "template_name" => "required|max:255",
+            "extra" => "nullable",
+            "comment" => "nullable|max:255",
+            "template" => "required",
         ]);
 
         $template = TemplateMaster::create($data);
@@ -45,16 +45,16 @@ class TemplateMasterController extends Controller
         $template = TemplateMaster::find($id);
         if ($template) {
             $data = $request->validate([
-                'template_name' => 'sometimes|required|string|max:255',
-                'extra' => 'nullable',
-                'comment' => 'nullable|string|max:255',
-                'template' => 'nullable',
+                "template_name" => "sometimes|required|string|max:255",
+                "extra" => "nullable",
+                "comment" => "nullable|string|max:255",
+                "template" => "nullable",
             ]);
 
             $template->update($data);
             return response()->json($template);
         }
-        return response()->json(['message' => 'Template not found'], 404);
+        return response()->json(["message" => "Template not found"], 404);
     }
 
     // Delete a template
@@ -63,8 +63,10 @@ class TemplateMasterController extends Controller
         $template = TemplateMaster::find($id);
         if ($template) {
             $template->delete();
-            return response()->json(['message' => 'Template deleted successfully']);
+            return response()->json([
+                "message" => "Template deleted successfully",
+            ]);
         }
-        return response()->json(['message' => 'Template not found'], 404);
+        return response()->json(["message" => "Template not found"], 404);
     }
 }

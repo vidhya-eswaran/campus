@@ -15,6 +15,8 @@ class MessageController extends Controller
     // Store new message with attachments
     public function store(Request $request)
     {
+        // dd($validated);
+
         // Validate the incoming request
         $validated = $request->validate([
             'user_id'     => 'required|exists:users,id',
@@ -23,7 +25,6 @@ class MessageController extends Controller
             'about'       => 'nullable|integer',
             'attachments.*' => 'nullable|file|max:5120'
         ]);
-
         // Create the message record
         $message = Message::create([
             'user_id' => $validated['user_id'],
@@ -31,6 +32,7 @@ class MessageController extends Controller
             'message' => $validated['message'],
             'about'   => $validated['about'] ?? null,
             'replies' => json_encode([]),
+            'status' => 'Pending',
         ]);
 
         // Handle the file uploads if they exist
@@ -38,22 +40,22 @@ class MessageController extends Controller
             foreach ($request->file('attachments') as $file) {
                 // Get original filename and extension
                 $originalName = $file->getClientOriginalName();
-                
+
                 // Create unique filename to prevent overwriting
                 $fileName = time() . '_' . $originalName;
-                
+
                 // Define upload path - use absolute path for your server structure
                 // This path should be directly accessible via web
                 $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/public/message_attachments';
-                
+
                 // Create directory if it doesn't exist
                 if (!File::exists($uploadPath)) {
                     File::makeDirectory($uploadPath, 0755, true);
                 }
-                
+
                 // Move the file to the destination
                 $file->move($uploadPath, $fileName);
-                
+
                 // Save attachment record with the correct URL path that works
                 $message->attachments()->create([
                     'file_name' => $fileName,
@@ -87,6 +89,7 @@ class MessageController extends Controller
             'message' => $validated['message'],
             'created_at' => now(),
             'updated_at' => now(),
+            'status' => 'Closed'
         ];
 
         // Handle attachments
@@ -96,21 +99,21 @@ class MessageController extends Controller
             foreach ($request->file('attachments') as $file) {
                 // Get original filename
                 $originalName = $file->getClientOriginalName();
-                
+
                 // Create unique filename
                 $fileName = time() . '_' . $originalName;
-                
+
                 // Define upload path - use absolute path
                 $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/public/message_attachments';
-                
+
                 // Create directory if it doesn't exist
                 if (!File::exists($uploadPath)) {
                     File::makeDirectory($uploadPath, 0755, true);
                 }
-                
+
                 // Move the file
                 $file->move($uploadPath, $fileName);
-                
+
                 // Store attachment info with the correct URL path
                 $attachments[] = [
                     'file_name' => $fileName,
@@ -212,6 +215,7 @@ class MessageController extends Controller
         $result[] = [
             'id' => $message->id,
             'about' => $message->about,
+            'status' => $message->status,
             'about_name' => $about,
             'user_id' => $message->user_id,
             'user' => $message->user,
@@ -255,6 +259,7 @@ class MessageController extends Controller
             'attachments' => $messageAttachments,
             'created_at' => $message->created_at,
             'type' => 'message',
+            'status' => $message->status,
         ];
 
         // Process replies
@@ -292,24 +297,24 @@ class MessageController extends Controller
     {
         // Use the correct absolute path that works with your server
         $path = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/public/message_attachments/' . $fileName;
-        
+
         if (!File::exists($path)) {
             return response()->json(['error' => 'File not found'], 404);
         }
-        
+
         // Get file content
         $file = File::get($path);
-        
+
         // Get MIME type
         $type = File::mimeType($path);
-        
+
         // Force download for all file types
         $response = Response::make($file, 200);
         $response->header("Content-Type", $type);
-        
+
         // This header forces download for all file types
         $response->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
-        
+
         return $response;
     }
 }
@@ -395,7 +400,7 @@ class MessageController extends Controller
 // private function getAttachmentsWithUrl($attachments, $baseUrl)
 // {
 //     $formattedAttachments = [];
-    
+
 //     foreach ($attachments as $attachment) {
 //         // Generate the download URL for each attachment
 //         $formattedAttachments[] = [
