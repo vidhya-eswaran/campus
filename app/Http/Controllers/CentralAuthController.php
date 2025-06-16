@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class CentralAuthController extends Controller
 {
@@ -15,11 +17,13 @@ class CentralAuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = DB::table('users')->where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
+
+        $token = $user->createToken('SchoolAdminToken')->accessToken;
 
         $school = DB::table('schools')->where('id', $user->school_id)->first();
 
@@ -30,6 +34,8 @@ class CentralAuthController extends Controller
         return response()->json([
             'message' => 'Login successful',
             'user' => $user,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
             'school_db' => [
                 'name' => $school->name
             ]
