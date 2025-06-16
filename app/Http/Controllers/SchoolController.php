@@ -44,12 +44,8 @@ class SchoolController extends Controller
         dd("SSs");
         
         $schoolName = $request->name;
-        //$dbName = $request->db_name;
         $adminName = $request->admin_name;
         $adminEmail = $request->admin_email;
-       // $adminPassword = bcrypt($request->admin_password);
-
-       dd("SSs");
 
         $today = now()->format('Ymd');
         $schoolName = Str::slug($request->name, '_'); // e.g. santhosh_vidhyalaya
@@ -145,12 +141,12 @@ class SchoolController extends Controller
 
         return response()->json(['message' => 'School created successfully and database initialized.']);
         } catch (ValidationException $e) {
-        \Log::error('Validation failed', $e->errors());
-        return response()->json([
-            'status' => false,
-            'errors' => $e->errors()
-        ], 422);
-    }
+            \Log::error('Validation failed', $e->errors());
+            return response()->json([
+                'status' => false,
+                'errors' => $e->errors()
+            ], 422);
+        }
     }
 
 
