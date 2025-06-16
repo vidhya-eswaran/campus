@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 
 class SchoolController extends Controller
@@ -17,17 +18,48 @@ class SchoolController extends Controller
         try {
         $request->validate([
             'name' => 'required|unique:schools,name',
-            'db_name' => 'required|unique:schools,db_name',
+            //'db_name' => 'required|unique:schools,db_name',
             'admin_name' => 'required|string',
             'admin_email' => 'required|email|unique:users,email',
-            'admin_password' => 'required|string|min:6',
+
+            'school_logo' => 'nullable|url',
+            'school_type' => 'nullable|in:Public,Private,International',
+            'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
+            'established_year' => 'nullable|date_format:Y',
+            'website_url' => 'nullable|url',
+            'country' => 'nullable|string',
+            'state' => 'nullable|string',
+            'city' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'full_address' => 'nullable|string',
+            'phone_number' => 'nullable|string',
+            'alternate_phone_number' => 'nullable|string',
+            'support_email' => 'nullable|email',
+            'selected_plan' => 'nullable|in:Basic,Premium,Enterprise',
+            'subscription_start_date' => 'nullable|date',
+            'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
+            'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
         ]);
         
         $schoolName = $request->name;
-        $dbName = $request->db_name;
+        //$dbName = $request->db_name;
         $adminName = $request->admin_name;
         $adminEmail = $request->admin_email;
-        $adminPassword = bcrypt($request->admin_password);
+       // $adminPassword = bcrypt($request->admin_password);
+
+        $today = now()->format('Ymd');
+        $schoolName = Str::slug($request->name, '_'); // e.g. santhosh_vidhyalaya
+        $dbName = $schoolName . '_' . $today;
+        $adminPasswordRaw = $schoolName . '_' . $today;
+        $adminPassword = bcrypt($adminPasswordRaw);
+
+        // Check if db_name already exists
+        if (DB::table('schools')->where('db_name', $dbName)->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => "Database name already exists for today."
+            ]);
+        }
 
         //Step 1: Create new database
         try {
@@ -43,7 +75,7 @@ class SchoolController extends Controller
             return response()->json(['error' => 'schema.sql file not found.'], 500);
         }
 
-$mysqlPath = '/usr/bin/mysql';
+        $mysqlPath = '/usr/bin/mysql';
         $dbUser = 'root';
         $dbPass = ''; // leave blank if no password
         $schemaPath = '/var/www/html/schema.sql';
@@ -52,7 +84,7 @@ $mysqlPath = '/usr/bin/mysql';
 
         // Capture stderr too
         $output = [];
-exec($command . ' 2>&1', $output, $resultCode);
+        exec($command . ' 2>&1', $output, $resultCode);
 
         if ($resultCode !== 0) {
             return response()->json([
@@ -71,6 +103,26 @@ exec($command . ' 2>&1', $output, $resultCode);
             'db_username' => 'root',
             'db_password' => env('DB_PASSWORD', ''),
             'db_host' => '127.0.0.1',
+            
+            'school_logo' => $request->school_logo,
+            'school_type' => $request->school_type,
+            'school_category' => $request->school_category,
+            'established_year' => $request->established_year,
+            'website_url' => $request->website_url,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'full_address' => $request->full_address,
+            'phone_number' => $request->phone_number,
+            'alternate_phone_number' => $request->alternate_phone_number,
+            'email_address' => $request->email_address,
+            'support_email' => $request->support_email,
+            'selected_plan' => $request->selected_plan,
+            'subscription_start_date' => $request->subscription_start_date,
+            'subscription_end_date' => $request->subscription_end_date,
+            'payment_method' => $request->payment_method,
+
             'created_at' => now(),
             'updated_at' => now()
         ]);
