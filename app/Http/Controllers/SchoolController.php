@@ -148,4 +148,74 @@ class SchoolController extends Controller
         ], 422);
     }
     }
+
+
+    public function updateSchool(Request $request, $id)
+    {
+        $school = DB::table('schools')->where('id', $id)->first();
+
+        if (!$school) {
+            return response()->json(['message' => 'School not found'], 404);
+        }
+
+        $request->validate([
+            'admin_name' => 'nullable|string',
+            'school_logo' => 'nullable|string',
+            'school_type' => 'nullable|in:Public,Private,International',
+            'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
+            'established_year' => 'nullable|digits:4',
+            'website_url' => 'nullable|url',
+            'country' => 'nullable|string',
+            'state' => 'nullable|string',
+            'city' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'full_address' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'alternate_phone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'support_email' => 'nullable|email',
+            'selected_plan' => 'nullable|in:Basic,Premium,Enterprise',
+            'subscription_start_date' => 'nullable|date',
+            'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
+            'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
+        ]);
+
+        DB::table('schools')->where('id', $id)->update([
+            'admin_name' => $request->admin_name ?? $school->admin_name,
+            'school_logo' => $request->school_logo ?? $school->school_logo,
+            'school_type' => $request->school_type ?? $school->school_type,
+            'school_category' => $request->school_category ?? $school->school_category,
+            'established_year' => $request->established_year ?? $school->established_year,
+            'website_url' => $request->website_url ?? $school->website_url,
+            'country' => $request->country ?? $school->country,
+            'state' => $request->state ?? $school->state,
+            'city' => $request->city ?? $school->city,
+            'postal_code' => $request->postal_code ?? $school->postal_code,
+            'full_address' => $request->full_address ?? $school->full_address,
+            'phone' => $request->phone ?? $school->phone,
+            'alternate_phone' => $request->alternate_phone ?? $school->alternate_phone,
+            'email' => $request->email ?? $school->email,
+            'support_email' => $request->support_email ?? $school->support_email,
+            'selected_plan' => $request->selected_plan ?? $school->selected_plan,
+            'subscription_start_date' => $request->subscription_start_date ?? $school->subscription_start_date,
+            'subscription_end_date' => $request->subscription_end_date ?? $school->subscription_end_date,
+            'payment_method' => $request->payment_method ?? $school->payment_method,
+            'updated_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'School updated successfully']);
+    }
+
+    public function viewSchool($id)
+    {
+        $school = DB::table('schools')->where('id', $id)->first();
+
+        if (!$school) {
+            return response()->json(['message' => 'School not found'], 404);
+        }
+
+        return response()->json(['school' => $school]);
+    }
+
+
 }

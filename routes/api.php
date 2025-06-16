@@ -89,6 +89,11 @@ Route::post("/create-school", [SchoolController::class , "createSchool"]);
 
 Route::post("/central/login", [CentralAuthController::class , "login"]);
 
+Route::get('/school/{id}', [SchoolController::class, 'viewSchool']);
+
+Route::put('/school/{id}', [SchoolController::class, 'updateSchool']);
+
+
 Route::get("/test", function ()
 {
     return response()->json(["message" => "API is working"]);

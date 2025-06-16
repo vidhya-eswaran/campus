@@ -624,6 +624,25 @@ CREATE TABLE `admitted_students_history` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `announcements`
+--
+
+CREATE TABLE `announcements` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `target_type` enum('target','role','class') NOT NULL,
+  `target` bigint(20) UNSIGNED DEFAULT NULL,
+  `category` bigint(20) UNSIGNED NOT NULL,
+  `announcementDescription` text NOT NULL,
+  `announcementType` tinyint(1) NOT NULL DEFAULT 0,
+  `announcementDate` date NOT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bulk_sponser_payments`
 --
 
@@ -668,6 +687,22 @@ CREATE TABLE `class_masters` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `class` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `class_subject_mappings`
+--
+
+CREATE TABLE `class_subject_mappings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `group_no` varchar(255) DEFAULT NULL,
+  `subjects` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`subjects`)),
+  `delete_status` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -889,6 +924,21 @@ CREATE TABLE `donation_statement_trans` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dropdown_types`
+--
+
+CREATE TABLE `dropdown_types` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`options`)),
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `event_calendars`
 --
 
@@ -917,6 +967,23 @@ CREATE TABLE `event_category_masters` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exam_masters`
+--
+
+CREATE TABLE `exam_masters` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `term` varchar(255) NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `subjects_mark` varchar(255) NOT NULL,
+  `total` varchar(255) NOT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1022,6 +1089,20 @@ CREATE TABLE `generate_invoice_views` (
   `due_amount` int(11) DEFAULT NULL,
   `s_excess_amount` int(11) DEFAULT NULL,
   `h_excess_amount` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `group_masters`
+--
+
+CREATE TABLE `group_masters` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `group` varchar(255) NOT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1138,6 +1219,47 @@ CREATE TABLE `history_student_infos` (
   `Cholera` text DEFAULT NULL,
   `permission_to_principal` text DEFAULT NULL,
   `administration_of_anaesthetic` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hostel_admissions`
+--
+
+CREATE TABLE `hostel_admissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_name` varchar(255) NOT NULL,
+  `student_id` varchar(255) NOT NULL,
+  `student_class` varchar(100) DEFAULT NULL,
+  `student_section` varchar(100) DEFAULT NULL,
+  `father_name` varchar(255) DEFAULT NULL,
+  `mother_name` varchar(255) DEFAULT NULL,
+  `father_mobileNo` varchar(20) DEFAULT NULL,
+  `mother_mobileNo` varchar(20) DEFAULT NULL,
+  `pa_address_line1` varchar(255) DEFAULT NULL,
+  `pa_address_line2` varchar(255) DEFAULT NULL,
+  `pa_city` varchar(100) DEFAULT NULL,
+  `pa_state` varchar(100) DEFAULT NULL,
+  `pa_country` varchar(100) DEFAULT NULL,
+  `pa_pincode` varchar(20) DEFAULT NULL,
+  `co_address_line1` varchar(255) DEFAULT NULL,
+  `co_address_line2` varchar(255) DEFAULT NULL,
+  `co_city` varchar(100) DEFAULT NULL,
+  `co_state` varchar(100) DEFAULT NULL,
+  `co_country` varchar(100) DEFAULT NULL,
+  `co_pincode` varchar(20) DEFAULT NULL,
+  `gaurdian_name` varchar(255) DEFAULT NULL,
+  `gaurdian_email_id` varchar(255) DEFAULT NULL,
+  `father_email_id` varchar(255) DEFAULT NULL,
+  `mother_email_id` varchar(255) DEFAULT NULL,
+  `declaration` tinyint(1) DEFAULT NULL,
+  `terms_condition` tinyint(1) DEFAULT NULL,
+  `acad_year` varchar(100) DEFAULT NULL,
+  `status` enum('pending','approved','rejected','Approved','Rejected','Pending') DEFAULT 'pending',
+  `arr_dep_status` tinyint(1) DEFAULT NULL COMMENT '1=Arrival, 2=Departure',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1321,6 +1443,36 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notice_boards`
+--
+
+CREATE TABLE `notice_boards` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `category` int(11) NOT NULL,
+  `notice_message` text NOT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification_categories`
+--
+
+CREATE TABLE `notification_categories` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `notification_category` varchar(255) NOT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1871,6 +2023,22 @@ CREATE TABLE `staff` (
   `date_of_resignation` date DEFAULT NULL,
   `created_at` DATETIME NULL DEFAULT current_timestamp(),
   `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+  -- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_fees_mapping`
+--
+
+CREATE TABLE `staff_fees_mapping` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `staff_id` bigint(20) UNSIGNED NOT NULL,
+  `fees_type` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `status` enum('pending','generated','invoice_generated','paid') DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1890,6 +2058,77 @@ CREATE TABLE `staff_fee_masters` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `staff_invoices`
+--
+
+CREATE TABLE `staff_invoices` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_no` varchar(100) NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL,
+  `status` enum('pending','paid','partial','disabled') DEFAULT 'pending',
+  `created_by` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `due_amount` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_invoice_details`
+--
+
+CREATE TABLE `staff_invoice_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_id` bigint(20) UNSIGNED NOT NULL,
+  `fees_type` varchar(100) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_payments`
+--
+
+CREATE TABLE `staff_payments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_id` bigint(20) UNSIGNED NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `transaction_no` varchar(100) NOT NULL,
+  `payment_mode` varchar(50) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `paid_by` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_transactions`
+--
+
+CREATE TABLE `staff_transactions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `staff_id` bigint(20) UNSIGNED NOT NULL,
+  `due_amount` decimal(10,2) DEFAULT 0.00,
+  `remarks` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `transaction_date` datetime DEFAULT NULL,
+  `transaction_no` varchar(255) DEFAULT NULL,
+  `transaction_type` varchar(255) DEFAULT NULL,
+  `invoice_amount` decimal(10,2) DEFAULT NULL,
+  `receipt_amount` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `standards`
 --
 
@@ -1898,6 +2137,22 @@ CREATE TABLE `standards` (
   `title` varchar(50) NOT NULL,
   `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`options`)),
   `delete_status` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `standard_section_mappings`
+--
+
+CREATE TABLE `standard_section_mappings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `standard` int(11) NOT NULL,
+  `sections` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`sections`)),
+  `group` varchar(255) DEFAULT NULL,
+  `delete_status` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2219,6 +2474,22 @@ CREATE TABLE `subjects` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `target_announcements`
+--
+
+CREATE TABLE `target_announcements` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `target_audience` varchar(255) NOT NULL,
+  `target_group` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`target_group`)),
+  `user_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`user_details`)),
+  `delete_status` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `teacher_types`
 --
 
@@ -2405,6 +2676,25 @@ CREATE TABLE `user_grade_histories` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_notifications`
+--
+
+CREATE TABLE `user_notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `notification_type` varchar(255) NOT NULL,
+  `notification_category` int(11) NOT NULL,
+  `notification_text` text NOT NULL,
+  `schedule_time` datetime DEFAULT NULL,
+  `send_status` enum('sent','pending','failed') DEFAULT 'pending',
+  `status` enum('unread','read') DEFAULT 'unread',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `webinars`
 --
 
@@ -2470,6 +2760,12 @@ ALTER TABLE `admitted_students_history`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `announcements`
+--
+ALTER TABLE `announcements`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `bulk_sponser_payments`
 --
 ALTER TABLE `bulk_sponser_payments`
@@ -2485,6 +2781,12 @@ ALTER TABLE `by_pay_informations`
 -- Indexes for table `class_masters`
 --
 ALTER TABLE `class_masters`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `class_subject_mappings`
+--
+ALTER TABLE `class_subject_mappings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2549,6 +2851,12 @@ ALTER TABLE `donation_statement_trans`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `dropdown_types`
+--
+ALTER TABLE `dropdown_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `event_calendars`
 --
 ALTER TABLE `event_calendars`
@@ -2558,6 +2866,12 @@ ALTER TABLE `event_calendars`
 -- Indexes for table `event_category_masters`
 --
 ALTER TABLE `event_category_masters`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `exam_masters`
+--
+ALTER TABLE `exam_masters`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2586,6 +2900,12 @@ ALTER TABLE `generate_invoice_views`
   ADD PRIMARY KEY (`slno`);
 
 --
+-- Indexes for table `group_masters`
+--
+ALTER TABLE `group_masters`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `healthcare_records`
 --
 ALTER TABLE `healthcare_records`
@@ -2596,6 +2916,16 @@ ALTER TABLE `healthcare_records`
 --
 ALTER TABLE `history_student_infos`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hostel_admissions`
+--
+ALTER TABLE `hostel_admissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_student_id` (`student_id`),
+  ADD KEY `idx_acad_year` (`acad_year`),
+  ADD KEY `idx_status` (`status`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `hostel_fee_masters`
@@ -2649,6 +2979,18 @@ ALTER TABLE `message_attachments`
 -- Indexes for table `message_category_master`
 --
 ALTER TABLE `message_category_master`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notice_boards`
+--
+ALTER TABLE `notice_boards`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notification_categories`
+--
+ALTER TABLE `notification_categories`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2820,15 +3162,52 @@ ALTER TABLE `staff`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `staff_fees_mapping`
+--
+ALTER TABLE `staff_fees_mapping`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `staff_fee_masters`
 --
 ALTER TABLE `staff_fee_masters`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `staff_invoices`
+--
+ALTER TABLE `staff_invoices`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `invoice_no` (`invoice_no`);
+
+--
+-- Indexes for table `staff_invoice_details`
+--
+ALTER TABLE `staff_invoice_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `staff_payments`
+--
+ALTER TABLE `staff_payments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `staff_transactions`
+--
+ALTER TABLE `staff_transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `standards`
 --
 ALTER TABLE `standards`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `standard_section_mappings`
+--
+ALTER TABLE `standard_section_mappings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2877,6 +3256,12 @@ ALTER TABLE `student_schoolfees`
 -- Indexes for table `subjects`
 --
 ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `target_announcements`
+--
+ALTER TABLE `target_announcements`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2943,6 +3328,12 @@ ALTER TABLE `user_grade_histories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user_notifications`
+--
+ALTER TABLE `user_notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `webinars`
 --
 ALTER TABLE `webinars`
@@ -2995,6 +3386,12 @@ ALTER TABLE `admitted_students_history`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `announcements`
+--
+ALTER TABLE `announcements`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `bulk_sponser_payments`
 --
 ALTER TABLE `bulk_sponser_payments`
@@ -3010,6 +3407,12 @@ ALTER TABLE `by_pay_informations`
 -- AUTO_INCREMENT for table `class_masters`
 --
 ALTER TABLE `class_masters`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `class_subject_mappings`
+--
+ALTER TABLE `class_subject_mappings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -3073,6 +3476,12 @@ ALTER TABLE `donation_statement_trans`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `dropdown_types`
+--
+ALTER TABLE `dropdown_types`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `event_calendars`
 --
 ALTER TABLE `event_calendars`
@@ -3082,6 +3491,12 @@ ALTER TABLE `event_calendars`
 -- AUTO_INCREMENT for table `event_category_masters`
 --
 ALTER TABLE `event_category_masters`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `exam_masters`
+--
+ALTER TABLE `exam_masters`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -3109,6 +3524,12 @@ ALTER TABLE `generate_invoice_views`
   MODIFY `slno` int(255) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `group_masters`
+--
+ALTER TABLE `group_masters`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `healthcare_records`
 --
 ALTER TABLE `healthcare_records`
@@ -3118,6 +3539,12 @@ ALTER TABLE `healthcare_records`
 -- AUTO_INCREMENT for table `history_student_infos`
 --
 ALTER TABLE `history_student_infos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `hostel_admissions`
+--
+ALTER TABLE `hostel_admissions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -3173,6 +3600,18 @@ ALTER TABLE `message_attachments`
 --
 ALTER TABLE `message_category_master`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notice_boards`
+--
+ALTER TABLE `notice_boards`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notification_categories`
+--
+ALTER TABLE `notification_categories`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -3313,16 +3752,52 @@ ALTER TABLE `staff`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `staff_fees_mapping`
+--
+ALTER TABLE `staff_fees_mapping`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `staff_fee_masters`
 --
 ALTER TABLE `staff_fee_masters`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `staff_invoices`
+--
+ALTER TABLE `staff_invoices`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff_invoice_details`
+--
+ALTER TABLE `staff_invoice_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff_payments`
+--
+ALTER TABLE `staff_payments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff_transactions`
+--
+ALTER TABLE `staff_transactions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `standards`
 --
 ALTER TABLE `standards`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `standard_section_mappings`
+--
+ALTER TABLE `standard_section_mappings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `student_attendances`
@@ -3370,6 +3845,12 @@ ALTER TABLE `student_schoolfees`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `target_announcements`
+--
+ALTER TABLE `target_announcements`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -3431,6 +3912,12 @@ ALTER TABLE `user_excess_histories`
 --
 ALTER TABLE `user_grade_histories`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_notifications`
+--
+ALTER TABLE `user_notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `webinars`
