@@ -89,11 +89,7 @@ use Illuminate\Support\Facades\Route;
 //Central DB API
 Route::post("/create-school", [SchoolController::class , "createSchool"]);
 
-Route::middleware(['auth:api', 'check.device.token'])->group(function () {
-
-    Route::post("/central/login", [CentralAuthController::class , "login"]);
-
-});
+Route::post("/central/login", [CentralAuthController::class , "login"]);
 
 Route::get('/school/{id}', [SchoolController::class, 'viewSchool']);
 
