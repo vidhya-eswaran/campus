@@ -18,7 +18,6 @@ class SchoolController extends Controller
         try {
         $request->validate([
             'name' => 'required|unique:schools,name',
-            //'db_name' => 'required|unique:schools,db_name',
             'admin_name' => 'required|string',
             'admin_email' => 'required|email|unique:users,email',
 
@@ -40,6 +39,8 @@ class SchoolController extends Controller
             'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
             'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
         ]);
+
+        dd("SSs");
         
         $schoolName = $request->name;
         //$dbName = $request->db_name;
