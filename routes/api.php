@@ -25,7 +25,7 @@ use App\Http\Controllers\API\hostelfeesmasterController;
 use App\Http\Controllers\API\TwelvethGroupController;
 use App\Http\Controllers\API\SponserMasterController;
 use App\Http\Controllers\API\genrateInvoiceController;
-use App\Http\Controllers\API\listStudentUser;
+
 use App\Http\Controllers\API\reminderController;
 use App\Http\Controllers\API\feesmapController;
 use App\Http\Controllers\API\InvoiceController;
@@ -492,11 +492,6 @@ Route::get("/listSVSsponser", [listUserController::class , "sponserUser"]);
 Route::post("/IdUserDetails", [listUserController::class , "IdUserDetails"]);
 Route::get("/listRoles", [listUserController::class , "listRoles"]);
 Route::get("/roleBasedUsers", [listUserController::class , "roleBasedUsers"]);
-
-//listStudentUser
-Route::get("/listSVSStudent", [listStudentUser::class , "read"]);
-Route::post("/viewStudentinfo", [listStudentUser::class , "viewstuInfo"]);
-Route::post("/editSVSStudent", [listStudentUser::class , "changeUserDetails"]);
 
 
 //User Announcement Notification send
