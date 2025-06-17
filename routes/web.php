@@ -22,4 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/check-passport-key', function () {
+    return config('passport.private_key');
+});
+
+
 Auth::routes();
