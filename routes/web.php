@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 // Enable authentication routes, including password reset routes
-Auth::routes();
-
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +19,3 @@ Auth::routes();
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/check-passport-key', function () {
-    return config('passport.private_key');
-});
-
-
-Auth::routes();
