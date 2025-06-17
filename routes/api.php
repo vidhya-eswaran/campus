@@ -101,6 +101,10 @@ Route::get("/test", function ()
     return response()->json(["message" => "API is working"]);
 });
 
+Route::get('/check-passport-key', function () {
+    return config('passport.private_key');
+});
+
 //=========================================================================================
 // School Database
 Route::post("/login", [ApiController::class , "login"]);
