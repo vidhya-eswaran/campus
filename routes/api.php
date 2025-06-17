@@ -25,7 +25,7 @@ use App\Http\Controllers\API\hostelfeesmasterController;
 use App\Http\Controllers\API\TwelvethGroupController;
 use App\Http\Controllers\API\SponserMasterController;
 use App\Http\Controllers\API\genrateInvoiceController;
-
+use App\Http\Controllers\API\ExamMasterController;
 use App\Http\Controllers\API\reminderController;
 use App\Http\Controllers\API\feesmapController;
 use App\Http\Controllers\API\InvoiceController;
