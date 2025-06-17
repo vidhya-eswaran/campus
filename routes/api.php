@@ -195,8 +195,8 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
         Route::get("/", [LeaveApplicationController::class , "index"]);
         Route::post("/", [LeaveApplicationController::class , "store"]);
         Route::put("/{id}", [LeaveApplicationController::class , "update"]);
-        Route::get("/{id}", [LeaveApplicationController::class , "viewbyid", ]);
-        Route::delete("/{id}", [LeaveApplicationController::class , "destroy", ]);
+        Route::get("/{id}", [LeaveApplicationController::class , "viewbyid"]);
+        Route::delete("/{id}", [LeaveApplicationController::class , "destroy"]);
     });
 
 
