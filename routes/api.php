@@ -107,7 +107,7 @@ Route::get('/check-passport-key', function () {
 
 //=========================================================================================
 // School Database
-Route::post("/login", [ApiController::class , "login"]);
+
 
 
 Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
@@ -115,6 +115,10 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/users", [SchoolUserController::class , "store"]);
 
     Route::post("/register", [ApiController::class , "register"]);
+
+    Route::post("/login", [ApiController::class , "login"]);
+
+    Route::post("/addSVSUser", [listUserController::class , "addUser"]);
 
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
@@ -275,11 +279,13 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     Route::prefix("standards")->group(function ()
     {
-        Route::get("/", [StandardMasterController::class , "index"]);
+        
         Route::post("/", [StandardMasterController::class , "store"]);
         Route::put("/{id}", [StandardMasterController::class , "update"]);
         Route::get("/{id}", [StandardMasterController::class , "viewbyid"]);
         Route::delete("/{id}", [StandardMasterController::class , "destroy", ]);
+
+        Route::get("/", [StandardMasterController::class , "index"]);
     });
 
     //section
@@ -353,47 +359,328 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("/HostelDiscountCategory-read", [DiscountCategoryMasterController::class , "hostelread", ]);
     Route::post("/DiscountCategory-update", [DiscountCategoryMasterController::class , "update", ]);
     Route::post("/DiscountCategory-delete", [DiscountCategoryMasterController::class , "delete", ]);
-});
- //invoice API's
-Route::get("/invoice-list", [InvoiceController::class , "getInvoiceList", ]);
-Route::get("/invoice-list-short", [InvoiceController::class , "getInvoiceListshort", ]);
-Route::get("/receipt-list-short", [InvoiceController::class , "getReceiptListshort", ]);
-Route::get("/payment-receipt-list", [InvoiceController::class , "getPaymentReceiptList", ]);
-Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
-Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
-Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
-Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
-Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
-Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
-Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);
-Route::post("/student/nodues", [InvoiceController::class , "getNoDuesCertificatesAndPendingDues", ]);
-Route::get("/student/nodues/{id}/selectbyid", [InvoiceController::class , "getNoDuesCertificatesbyid", ]);
-Route::get("/getUserDetailsWithExcessAmount", [InvoiceController::class , "getUserDetailsWithExcessAmount", ]);
-Route::get("/viewExcessAmount/{id}", [InvoiceController::class , "viewExcessAmount", ]);
-Route::get("/viewpreExcessAmount/{id}", [InvoiceController::class , "viewpreExcessAmount", ]);
-Route::post("/updateExcessAmount", [InvoiceController::class , "updateExcessAmount", ]);
-Route::post("/addExcessAmount", [InvoiceController::class , "addExcessAmountForSponsor", ]);
-Route::get("/getsponinfo", [InvoiceController::class , "getsponinfo"]);
 
-//genrate invoice
-Route::post("/invoiceSearch", [genrateInvoiceController::class , "invoiceSearch", ]);
-Route::post("/ReciptSearch", [genrateInvoiceController::class , "ReciptSearch"]);
-Route::post("/deleterecipt", [genrateInvoiceController::class , "deleterecipt"]);
-Route::post("/deletereciptview", [genrateInvoiceController::class , "deletereciptview", ]);
-Route::post("/deleteinvoiceview", [genrateInvoiceController::class , "deleteinvoiceview", ]);
-Route::post("/deleteinvoice", [genrateInvoiceController::class , "deleteinvoice", ]);
-Route::post("/geneachStdInvoiceView", [genrateInvoiceController::class , "genrateForGrade", ]);
-Route::post("/paycashgenrate", [genrateInvoiceController::class , "cashgenrate", ]);
-Route::post("/paycashgenratetwo", [genrateInvoiceController::class , "cashgenratetwo", ]);
-Route::post("/listgenrate", [genrateInvoiceController::class , "listgenrate", ]);
-Route::post("/listgenratefilter", [genrateInvoiceController::class , "listgenratefilter", ]);
-Route::post("/listgenrateById", [genrateInvoiceController::class , "listgenrateById", ]);
-Route::post("/genschoolInvoiceView", [genrateInvoiceController::class , "getTotalAmount", ]);
-Route::post("/docGenerate", [genrateInvoiceController::class , "docGenerate", ]);
-Route::post("/discountTotalAmount", [genrateInvoiceController::class , "discountTotalAmount", ]);
-Route::get("/readDiscount", [genrateInvoiceController::class , "readDiscount"]);
-Route::post("/deleteDiscount", [genrateInvoiceController::class , "deleteDiscount", ]);
-Route::get("/getDiscountCategories", [genrateInvoiceController::class , "getDiscountCategories", ]);
+
+
+    //23/06/2025
+     //invoice API's
+    Route::get("/invoice-list", [InvoiceController::class , "getInvoiceList", ]);
+    Route::get("/invoice-list-short", [InvoiceController::class , "getInvoiceListshort", ]);
+    Route::get("/receipt-list-short", [InvoiceController::class , "getReceiptListshort", ]);
+    Route::get("/payment-receipt-list", [InvoiceController::class , "getPaymentReceiptList", ]);
+    Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
+    Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
+    Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
+    Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
+    Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
+    Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
+    Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);
+    Route::post("/student/nodues", [InvoiceController::class , "getNoDuesCertificatesAndPendingDues", ]);
+    Route::get("/student/nodues/{id}/selectbyid", [InvoiceController::class , "getNoDuesCertificatesbyid", ]);
+    Route::get("/getUserDetailsWithExcessAmount", [InvoiceController::class , "getUserDetailsWithExcessAmount", ]);
+    Route::get("/viewExcessAmount/{id}", [InvoiceController::class , "viewExcessAmount", ]);
+    Route::get("/viewpreExcessAmount/{id}", [InvoiceController::class , "viewpreExcessAmount", ]);
+    Route::post("/updateExcessAmount", [InvoiceController::class , "updateExcessAmount", ]);
+    Route::post("/addExcessAmount", [InvoiceController::class , "addExcessAmountForSponsor", ]);
+    Route::get("/getsponinfo", [InvoiceController::class , "getsponinfo"]);
+
+    //genrate invoice
+    Route::post("/invoiceSearch", [genrateInvoiceController::class , "invoiceSearch", ]);
+    Route::post("/ReciptSearch", [genrateInvoiceController::class , "ReciptSearch"]);
+    Route::post("/deleterecipt", [genrateInvoiceController::class , "deleterecipt"]);
+    Route::post("/deletereciptview", [genrateInvoiceController::class , "deletereciptview", ]);
+    Route::post("/deleteinvoiceview", [genrateInvoiceController::class , "deleteinvoiceview", ]);
+    Route::post("/deleteinvoice", [genrateInvoiceController::class , "deleteinvoice", ]);
+    Route::post("/geneachStdInvoiceView", [genrateInvoiceController::class , "genrateForGrade", ]);
+    Route::post("/paycashgenrate", [genrateInvoiceController::class , "cashgenrate", ]);
+    Route::post("/paycashgenratetwo", [genrateInvoiceController::class , "cashgenratetwo", ]);
+    Route::post("/listgenrate", [genrateInvoiceController::class , "listgenrate", ]);
+    Route::post("/listgenratefilter", [genrateInvoiceController::class , "listgenratefilter", ]);
+    Route::post("/listgenrateById", [genrateInvoiceController::class , "listgenrateById", ]);
+    Route::post("/genschoolInvoiceView", [genrateInvoiceController::class , "getTotalAmount", ]);
+    Route::post("/docGenerate", [genrateInvoiceController::class , "docGenerate", ]);
+    Route::post("/discountTotalAmount", [genrateInvoiceController::class , "discountTotalAmount", ]);
+    Route::get("/readDiscount", [genrateInvoiceController::class , "readDiscount"]);
+    Route::post("/deleteDiscount", [genrateInvoiceController::class , "deleteDiscount", ]);
+    Route::get("/getDiscountCategories", [genrateInvoiceController::class , "getDiscountCategories", ]);
+
+
+    Route::get("/graph", [NotificationController::class , "graph"]);
+    Route::post("/notification", [NotificationController::class , "notification"]);
+    Route::get("/getNotifications", [NotificationController::class , "getNotifications", ]);
+    Route::post("/allnotification", [NotificationController::class , "allnotification", ]);
+    Route::post("/hide-notification", [NotificationController::class , "hidenoti"]);
+    Route::post("/announcementNotificationSend", [NotificationController::class , "userNotificationSend", ]);
+    Route::put("/announcementnotifications/{id}/read", [NotificationController::class , "announcementmarkAsRead", ]);
+    Route::get("/announcementnotifications/unread/{user_id}", [NotificationController::class , "getannouncementUnreadNotifications", ]);
+    Route::get("/announcementnotificationsall", [NotificationController::class , "getannouncementallNotifications", ]);
+
+
+    Route::prefix("messages")->group(function ()
+    {
+        Route::get("/", [MessageController::class , "allMessages"]);
+        Route::get("/{id}", [MessageController::class , "viewSingleMessage"]);
+        Route::post("/store", [MessageController::class , "store"]);
+        Route::post("/{id}/reply", [MessageController::class , "reply"]);
+    });
+    Route::get("download/{fileName}", [MessageController::class , "downloadFile", ])->name("download.file");
+
+    //subjects
+    Route::prefix("subjects")->group(function ()
+    {
+        Route::get("/", [subjectMasterController::class , "index"]);
+        Route::post("/", [subjectMasterController::class , "store"]);
+        Route::put("/{id}", [subjectMasterController::class , "update"]);
+        Route::get("/{id}", [subjectMasterController::class , "show"]);
+        Route::delete("/{id}", [subjectMasterController::class , "destroy"]);
+    });
+
+
+    //ApiController
+    //Route::post("/register", [ApiController::class , "register"]);
+    Route::get("/getMatchingUsers", [ApiController::class , "getMatchingUsersdd"]);
+    Route::get("/dashboard", [ApiController::class , "countstudent"]);
+    Route::post("/logout", [ApiController::class , "logout"]);
+    Route::post("/userdelByid", [ApiController::class , "delByid"]);
+    Route::post("/sendotp", [ApiController::class , "sendOtp"]);
+    Route::post("/verifyotp", [ApiController::class , "verifyotp"]);
+    Route::get("/searchStudents", [ApiController::class , "searchStudents"]);
+    Route::post("/student-master-readstudents/{grade}/{section}", [ApiController::class , "readstudents", ]);
+    Route::post("/studentByGrades/{standard}", [ApiController::class , "StudentByStandard", ]);
+    Route::get("/studentByGradesSec/{standard}", [ApiController::class , "SearchStandardSec", ]);
+    Route::get("/ADstudentByGradesSec/{standard}", [ApiController::class , "ADSearchStandardSec", ]);
+    Route::post("/withoutSponsorGrades/{standard}", [ApiController::class , "withoutSponsorStandard", ]);
+    Route::post("/student-fees", [ApiController::class , "studentfees"]);
+    Route::post("/sponser-fees", [ApiController::class , "sponserfees"]);
+    Route::post("/admissionSearch", [ApiController::class , "admissionSearch"]);
+
+    //listUserController
+    Route::post("/resetsvsUser", [listUserController::class , "resetpassword"]);
+    Route::post("/changesUserpsd", [listUserController::class , "changepassword"]);
+    Route::get("/listSVSUser", [listUserController::class , "read"]);
+    Route::post("/EditSVSUser", [listUserController::class , "changeUserDetails"]);
+
+    Route::post("/deleteSVSUser", [listUserController::class , "deleteUser"]);
+    Route::get("/listSVSsponser", [listUserController::class , "sponserUser"]);
+    Route::post("/IdUserDetails", [listUserController::class , "IdUserDetails"]);
+    Route::get("/listRoles", [listUserController::class , "listRoles"]);
+    Route::get("/roleBasedUsers", [listUserController::class , "roleBasedUsers"]);
+
+
+    Route::get("/sendsms", [SmsController::class , "sendTestSms"]);
+    Route::post("/Invoicesendsmsandmail", [InvoiceController::class , "sendsms"]);
+
+    //count
+    //sponser-add remove
+    Route::post("/mapSponserStudent", [sponserMapController::class , "mapstudents"]);
+    Route::post("/removemapstudents", [sponserMapController::class , "removemapstudents", ]);
+    Route::get("/readmapstudents", [sponserMapController::class , "readmapstudents", ]);
+    Route::get("/GetSponserall", [sponserMapController::class , "getSponser"]);
+
+    //reminder
+    Route::post("/reminder-insert", [reminderController::class , "insert"]);
+    Route::get("/reminder-read", [reminderController::class , "read"]);
+    Route::post("/reminder-update", [reminderController::class , "update"]);
+    Route::post("/reminder-delete", [reminderController::class , "delete"]);
+
+
+    Route::prefix("message-category")->name("message-category.")->group(function ()
+    {
+        Route::get("/", [MessageCategoryMasterController::class , "index", ])
+            ->name("index");
+        Route::post("/", [MessageCategoryMasterController::class , "store", ])
+            ->name("store");
+        Route::put("/{id}", [MessageCategoryMasterController::class , "update", ])
+            ->name("update");
+        Route::get("/{id}", [MessageCategoryMasterController::class , "viewbyid", ])
+            ->name("view");
+        Route::delete("/{id}", [MessageCategoryMasterController::class , "destroy", ])
+            ->name("delete");
+    });
+
+
+    Route::prefix("teachertypes")->group(function ()
+    {
+        Route::get("/", [TeachertypeMasterController::class , "index"]);
+        Route::post("/", [TeachertypeMasterController::class , "store"]);
+        Route::put("/{id}", [TeachertypeMasterController::class , "update"]);
+        Route::get("/{id}", [TeachertypeMasterController::class , "viewbyid"]);
+
+        Route::delete("/{id}", [TeachertypeMasterController::class , "destroy"]);
+    });
+
+    Route::prefix("targetannouncement")->group(function ()
+    {
+        Route::get("/", [TargetannouncementMasterController::class , "index"]);
+        Route::post("/", [TargetannouncementMasterController::class , "store"]);
+        Route::put("/{id}", [TargetannouncementMasterController::class , "update"]);
+        Route::get("/{id}", [TargetannouncementMasterController::class , "viewbyid", ]);
+
+        Route::delete("/{id}", [TargetannouncementMasterController::class , "destroy", ]);
+    });
+
+    Route::prefix("notificationcategory")->group(function ()
+    {
+        Route::get("/", [NotificationCategoryController::class , "index"]);
+        Route::post("/", [NotificationCategoryController::class , "store"]);
+        Route::put("/{id}", [NotificationCategoryController::class , "update"]);
+        Route::get("/{id}", [NotificationCategoryController::class , "viewbyid"]);
+        Route::delete("/{id}", [NotificationCategoryController::class , "destroy"]);
+    });
+
+    Route::prefix("noticeboard")->group(function ()
+    {
+        Route::get("/", [NoticeBoardController::class , "index"]);
+        Route::post("/", [NoticeBoardController::class , "store"]);
+        Route::put("/{id}", [NoticeBoardController::class , "update"]);
+        Route::get("/{id}", [NoticeBoardController::class , "viewbyid"]);
+        Route::delete("/{id}", [NoticeBoardController::class , "destroy"]);
+    });
+
+    Route::prefix("announcements")->group(function ()
+    {
+        Route::get("/", [AnnouncementController::class , "index"]);
+        Route::post("/", [AnnouncementController::class , "store"]);
+        Route::put("/{id}", [AnnouncementController::class , "update"]);
+        Route::get("/{id}", [AnnouncementController::class , "viewbyid"]);
+        Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
+    });
+
+    Route::prefix("std_sec_group_mapping")->group(function ()
+    {
+        Route::get("/", [StandardSectionMappingController::class , "index"]);
+        Route::post("/", [StandardSectionMappingController::class , "store"]);
+        Route::put("/{id}", [StandardSectionMappingController::class , "update"]);
+        Route::get("/{id}", [StandardSectionMappingController::class , "viewbyid"]);
+        Route::post("/sections", [StandardSectionMappingController::class , "getSectionsByStandardAndGroup", ]);
+        Route::delete("/{id}", [StandardSectionMappingController::class , "destroy", ]);
+    });
+
+    Route::prefix('groups')->group(function () {
+        Route::get('/', [GroupMasterController::class, 'index']);
+        Route::post('/', [GroupMasterController::class, 'store']);
+        Route::put('/{id}', [GroupMasterController::class, 'update']);
+        Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
+        Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
+    });
+    Route::prefix('exam_master')->group(function () {
+        Route::get('/', [ExamMasterController::class, 'index']);
+        Route::get('/add-list/{id}', [ExamMasterController::class, 'addList']);
+        Route::post('/', [ExamMasterController::class, 'store']);
+        Route::put('/{id}', [ExamMasterController::class, 'update']);
+        Route::get('/{id}', [ExamMasterController::class, 'viewbyid']);
+        Route::delete('/{id}', [ExamMasterController::class, 'destroy']);
+    });
+
+    Route::prefix('groups')->group(function () {
+        Route::get('/', [GroupMasterController::class, 'index']);
+        Route::post('/', [GroupMasterController::class, 'store']);
+        Route::put('/{id}', [GroupMasterController::class, 'update']);
+        Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
+        Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
+    });
+    Route::prefix("dropdowntypes")->group(function ()
+    {
+        Route::get("/", [DropdowntypeMasterController::class , "index"]);
+        Route::post("/", [DropdowntypeMasterController::class , "store"]);
+        Route::put("/{id}", [DropdowntypeMasterController::class , "update"]);
+        Route::get("/{id}", [DropdowntypeMasterController::class , "viewbyid"]);
+
+        Route::delete("/{id}", [DropdowntypeMasterController::class , "destroy"]);
+    });
+    Route::prefix("donor")->group(function ()
+    {
+        Route::get("/", [DonorController::class , "index"]);
+        Route::post("/", [DonorController::class , "store"]);
+        Route::put("/{id}", [DonorController::class , "update"]);
+        Route::get("/{id}", [DonorController::class , "viewbyid"]);
+        Route::delete("/{id}", [DonorController::class , "destroy"]);
+    });
+    Route::prefix("donation")->group(function ()
+    {
+        Route::get("/", [DonationController::class , "index"]);
+        Route::post("/", [DonationController::class , "store"]);
+        Route::post("/update", [DonationController::class , "update"]);
+        Route::get("/{id}", [DonationController::class , "viewbyid"]);
+        Route::delete("/{id}", [DonationController::class , "destroy"]);
+    });
+
+    Route::prefix("contact")->group(function ()
+    {
+        Route::get("/all", [ContactController::class , "viewAllStaff"]);
+        Route::get("/view/{id}", [ContactController::class , "viewStaff"]);
+        Route::post("/add", [ContactController::class , "addStaff"]);
+        Route::post("/edit/{id}", [ContactController::class , "editStaff"]);
+        Route::delete("/{id}", [ContactController::class , "destroy"]);
+
+    });
+    Route::get("/get_all_Tiles", [TileController::class , "getallTiles"]);
+
+    Route::get("/class-subjects-mark", [ClassSubjectController::class , "viewAll"]); // View all
+    Route::get("/class-subjects/{class}", [ClassSubjectController::class , "viewByClass", ]); // View by class
+    Route::post("/class-subjects-mark", [ClassSubjectController::class , "bulkInsert", ]); // Insert
+    Route::delete("/class-subjects-delete", [ClassSubjectController::class , "delete", ]); // Delete
+    Route::put("/class-subjects-update", [ClassSubjectController::class , "updateBulk", ]); // Bulk Update
+    Route::get("/class-teachers", [ClassTeacherController::class , "index"]); // View all
+    Route::post("/class-teachers", [ClassTeacherController::class , "store"]); // Store teacher details
+    Route::get("/class-teachers/{id}", [ClassTeacherController::class , "show"]); // Fetch teacher details
+    Route::put("/class-teachers/{id}", [ClassTeacherController::class , "update"]); // Update teacher details
+    Route::delete("/class-teachers/{id}", [ClassTeacherController::class , "destroy", ]); // Delete teacher
+    Route::post("/class-subjects", [ClassSubjectMappingController::class , "bulkInsert", ]); // Bulk Insert
+    Route::get("/class-subjects", [ClassSubjectMappingController::class , "getAll"]); // Get All Mappings
+    Route::get("/class-subjects-map/{class}", [ClassSubjectMappingController::class , "getByClass", ]); // Get Subjects by Class
+    Route::put("/class-subjects", [ClassSubjectMappingController::class , "updateSubjects", ]); // Update Subjects for a Class
+    Route::delete("/class-subjects-delete/{class}", [ClassSubjectMappingController::class , "deleteSubjects", ]); // Delete Subjects for a Class
+    Route::prefix("staff-fees-masters")->group(function ()
+    {
+        Route::get("/", [StaffFeesMasterController::class , "index"]); // List all records
+        Route::post("/", [StaffFeesMasterController::class , "store"]); // Create a new record
+        Route::get("{id}", [StaffFeesMasterController::class , "viewbyid"]); // View a single record by ID
+        Route::put("{id}", [StaffFeesMasterController::class , "update"]); // Update a record by ID
+        Route::delete("{id}", [StaffFeesMasterController::class , "destroy"]); // Delete a record by ID
+
+    });
+    Route::post("/permissions/add", [PermissionController::class , "store"]); // Insert or Update All
+    Route::get("/permissions", [PermissionController::class , "index"]); // Get All in Given Format
+    Route::put("/permissions/{id}", [PermissionController::class , "update"]); // Update Single
+    Route::post("/mapStaffFees/create", [StaffInvoiceController::class , "mapStaffFees", ]);
+    Route::get("/mapStaffFees", [StaffInvoiceController::class , "listAllStaffmapFees", ]);
+    Route::get("/getAllStaffFees", [StaffInvoiceController::class , "getAllStaffFees", ]);
+    Route::get("/mapStaffFees/{id}", [StaffInvoiceController::class , "mapStaffFeesbyid", ]);
+    Route::put("/updatemapStaffFees/{id}", [StaffInvoiceController::class , "updateStaffFees", ]);
+    Route::delete("/deletemapStaffFees/{id}", [StaffInvoiceController::class , "deletemapStaffFees", ]);
+    Route::post("/staff-invoices/create", [StaffInvoiceController::class , "createInvoices", ]);
+    Route::post("/staff-invoices/pay", [StaffInvoiceController::class , "storePayment", ]);
+    Route::get("/staff-invoices/{id}", [StaffInvoiceController::class , "getInvoice", ]);
+    Route::get("/staff-receiptNo/{receiptNo}", [StaffInvoiceController::class , "getReceiptDetails", ]);
+    Route::get("/staff-invoiceNo/{invoiceNo}", [StaffInvoiceController::class , "getInvoiceDetails", ]);
+    Route::delete("/staff-invoice/delete/{invoice_no}", [StaffInvoiceController::class , "deleteStaffInvoiceByInvoiceNo", ]);
+
+    Route::apiResource("hostel-admissions", HostelAdmissionController::class);
+    Route::post("hostel-admissions/bulk-update-status", [HostelAdmissionController::class , "bulkUpdateStatus", ])
+        ->name("hostel-admissions.bulk-update-status");
+    Route::post("hostel-admissions/bulkArrialDepature", [HostelAdmissionController::class , "bulkArrialDepature", ]);
+    Route::get("send-mails-bg/{filename}", [HostelAdmissionController::class , "sendMailsBackground", ])
+        ->name("hostel.sendMails.bg");
+
+    Route::post("storeSendForm", [HostelAdmissionController::class , "storeSendForm", ])
+        ->middleware("throttle:1000,1");
+    Route::post("/hostel-admissions/verify-otp", [HostelAdmissionController::class , "verifyOtpAndStore", ]);
+    Route::post("/hostel-admissions/sendOtp", [HostelAdmissionController::class , "sendOtp", ]);
+
+    Route::get("/attendance", [StudentAttendanceController::class , "index"]);
+    Route::post("/attendance", [StudentAttendanceController::class , "store"]);
+    Route::get("/attendance/{id}", [StudentAttendanceController::class , "show"]);
+    Route::put("/attendance/{id}", [StudentAttendanceController::class , "update"]);
+    Route::delete("/attendance/{id}", [StudentAttendanceController::class , "destroy", ]);
+    Route::post("/attendance/bulk", [StudentAttendanceController::class , "storeBulk", ]);
+
+
+
+});
+
+
+
 Route::group(["middleware" => ["auth:api"]], function ()
 {
     Route::get("/dashboard", [App\Http\Controllers\API\ApiController::class , "countstudent", ]);
@@ -432,66 +719,6 @@ Route::any("/source", function (Request $request)
         ->get("referer") , "host" => $request->getHost() , "source" => strpos($request->header("User-Agent") , "PostmanRuntime") !== false ? "Postman" : "Browser/Other", ]);
 });
 
-Route::get("/graph", [NotificationController::class , "graph"]);
-Route::post("/notification", [NotificationController::class , "notification"]);
-Route::get("/getNotifications", [NotificationController::class , "getNotifications", ]);
-Route::post("/allnotification", [NotificationController::class , "allnotification", ]);
-Route::post("/hide-notification", [NotificationController::class , "hidenoti"]);
-Route::post("/announcementNotificationSend", [NotificationController::class , "userNotificationSend", ]);
-Route::put("/announcementnotifications/{id}/read", [NotificationController::class , "announcementmarkAsRead", ]);
-Route::get("/announcementnotifications/unread/{user_id}", [NotificationController::class , "getannouncementUnreadNotifications", ]);
-Route::get("/announcementnotificationsall", [NotificationController::class , "getannouncementallNotifications", ]);
-
-
-Route::prefix("messages")->group(function ()
-{
-    Route::get("/", [MessageController::class , "allMessages"]);
-    Route::get("/{id}", [MessageController::class , "viewSingleMessage"]);
-    Route::post("/store", [MessageController::class , "store"]);
-    Route::post("/{id}/reply", [MessageController::class , "reply"]);
-});
-Route::get("download/{fileName}", [MessageController::class , "downloadFile", ])->name("download.file");
-
-//subjects
-Route::prefix("subjects")->group(function ()
-{
-    Route::get("/", [subjectMasterController::class , "index"]);
-    Route::post("/", [subjectMasterController::class , "store"]);
-    Route::put("/{id}", [subjectMasterController::class , "update"]);
-    Route::get("/{id}", [subjectMasterController::class , "show"]);
-    Route::delete("/{id}", [subjectMasterController::class , "destroy"]);
-});
-
-
-//ApiController
-//Route::post("/register", [ApiController::class , "register"]);
-Route::get("/getMatchingUsers", [ApiController::class , "getMatchingUsersdd"]);
-Route::get("/dashboard", [ApiController::class , "countstudent"]);
-Route::post("/logout", [ApiController::class , "logout"]);
-Route::post("/userdelByid", [ApiController::class , "delByid"]);
-Route::post("/sendotp", [ApiController::class , "sendOtp"]);
-Route::post("/verifyotp", [ApiController::class , "verifyotp"]);
-Route::get("/searchStudents", [ApiController::class , "searchStudents"]);
-Route::post("/student-master-readstudents/{grade}/{section}", [ApiController::class , "readstudents", ]);
-Route::post("/studentByGrades/{standard}", [ApiController::class , "StudentByStandard", ]);
-Route::get("/studentByGradesSec/{standard}", [ApiController::class , "SearchStandardSec", ]);
-Route::get("/ADstudentByGradesSec/{standard}", [ApiController::class , "ADSearchStandardSec", ]);
-Route::post("/withoutSponsorGrades/{standard}", [ApiController::class , "withoutSponsorStandard", ]);
-Route::post("/student-fees", [ApiController::class , "studentfees"]);
-Route::post("/sponser-fees", [ApiController::class , "sponserfees"]);
-Route::post("/admissionSearch", [ApiController::class , "admissionSearch"]);
-
-//listUserController
-Route::post("/resetsvsUser", [listUserController::class , "resetpassword"]);
-Route::post("/changesUserpsd", [listUserController::class , "changepassword"]);
-Route::get("/listSVSUser", [listUserController::class , "read"]);
-Route::post("/EditSVSUser", [listUserController::class , "changeUserDetails"]);
-Route::post("/addSVSUser", [listUserController::class , "addUser"]);
-Route::post("/deleteSVSUser", [listUserController::class , "deleteUser"]);
-Route::get("/listSVSsponser", [listUserController::class , "sponserUser"]);
-Route::post("/IdUserDetails", [listUserController::class , "IdUserDetails"]);
-Route::get("/listRoles", [listUserController::class , "listRoles"]);
-Route::get("/roleBasedUsers", [listUserController::class , "roleBasedUsers"]);
 
 
 //User Announcement Notification send
@@ -508,211 +735,5 @@ Route::get("/testemail", function ()
 
     return "Test email sent to $email";
 });
-Route::get("/sendsms", [SmsController::class , "sendTestSms"]);
-Route::post("/Invoicesendsmsandmail", [InvoiceController::class , "sendsms"]);
 
-//count
-//sponser-add remove
-Route::post("/mapSponserStudent", [sponserMapController::class , "mapstudents"]);
-Route::post("/removemapstudents", [sponserMapController::class , "removemapstudents", ]);
-Route::get("/readmapstudents", [sponserMapController::class , "readmapstudents", ]);
-Route::get("/GetSponserall", [sponserMapController::class , "getSponser"]);
-
-//reminder
-Route::post("/reminder-insert", [reminderController::class , "insert"]);
-Route::get("/reminder-read", [reminderController::class , "read"]);
-Route::post("/reminder-update", [reminderController::class , "update"]);
-Route::post("/reminder-delete", [reminderController::class , "delete"]);
-
-
-Route::prefix("message-category")->name("message-category.")->group(function ()
-{
-    Route::get("/", [MessageCategoryMasterController::class , "index", ])
-        ->name("index");
-    Route::post("/", [MessageCategoryMasterController::class , "store", ])
-        ->name("store");
-    Route::put("/{id}", [MessageCategoryMasterController::class , "update", ])
-        ->name("update");
-    Route::get("/{id}", [MessageCategoryMasterController::class , "viewbyid", ])
-        ->name("view");
-    Route::delete("/{id}", [MessageCategoryMasterController::class , "destroy", ])
-        ->name("delete");
-});
-
-
-Route::prefix("teachertypes")->group(function ()
-{
-    Route::get("/", [TeachertypeMasterController::class , "index"]);
-    Route::post("/", [TeachertypeMasterController::class , "store"]);
-    Route::put("/{id}", [TeachertypeMasterController::class , "update"]);
-    Route::get("/{id}", [TeachertypeMasterController::class , "viewbyid"]);
-
-    Route::delete("/{id}", [TeachertypeMasterController::class , "destroy"]);
-});
-
-Route::prefix("targetannouncement")->group(function ()
-{
-    Route::get("/", [TargetannouncementMasterController::class , "index"]);
-    Route::post("/", [TargetannouncementMasterController::class , "store"]);
-    Route::put("/{id}", [TargetannouncementMasterController::class , "update"]);
-    Route::get("/{id}", [TargetannouncementMasterController::class , "viewbyid", ]);
-
-    Route::delete("/{id}", [TargetannouncementMasterController::class , "destroy", ]);
-});
-
-Route::prefix("notificationcategory")->group(function ()
-{
-    Route::get("/", [NotificationCategoryController::class , "index"]);
-    Route::post("/", [NotificationCategoryController::class , "store"]);
-    Route::put("/{id}", [NotificationCategoryController::class , "update"]);
-    Route::get("/{id}", [NotificationCategoryController::class , "viewbyid"]);
-    Route::delete("/{id}", [NotificationCategoryController::class , "destroy"]);
-});
-
-Route::prefix("noticeboard")->group(function ()
-{
-    Route::get("/", [NoticeBoardController::class , "index"]);
-    Route::post("/", [NoticeBoardController::class , "store"]);
-    Route::put("/{id}", [NoticeBoardController::class , "update"]);
-    Route::get("/{id}", [NoticeBoardController::class , "viewbyid"]);
-    Route::delete("/{id}", [NoticeBoardController::class , "destroy"]);
-});
-
-Route::prefix("announcements")->group(function ()
-{
-    Route::get("/", [AnnouncementController::class , "index"]);
-    Route::post("/", [AnnouncementController::class , "store"]);
-    Route::put("/{id}", [AnnouncementController::class , "update"]);
-    Route::get("/{id}", [AnnouncementController::class , "viewbyid"]);
-    Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
-});
-
-Route::prefix("std_sec_group_mapping")->group(function ()
-{
-    Route::get("/", [StandardSectionMappingController::class , "index"]);
-    Route::post("/", [StandardSectionMappingController::class , "store"]);
-    Route::put("/{id}", [StandardSectionMappingController::class , "update"]);
-    Route::get("/{id}", [StandardSectionMappingController::class , "viewbyid"]);
-    Route::post("/sections", [StandardSectionMappingController::class , "getSectionsByStandardAndGroup", ]);
-    Route::delete("/{id}", [StandardSectionMappingController::class , "destroy", ]);
-});
-
-Route::prefix('groups')->group(function () {
-    Route::get('/', [GroupMasterController::class, 'index']);
-    Route::post('/', [GroupMasterController::class, 'store']);
-    Route::put('/{id}', [GroupMasterController::class, 'update']);
-    Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
-    Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
-});
-Route::prefix('exam_master')->group(function () {
-    Route::get('/', [ExamMasterController::class, 'index']);
-    Route::get('/add-list/{id}', [ExamMasterController::class, 'addList']);
-    Route::post('/', [ExamMasterController::class, 'store']);
-    Route::put('/{id}', [ExamMasterController::class, 'update']);
-    Route::get('/{id}', [ExamMasterController::class, 'viewbyid']);
-    Route::delete('/{id}', [ExamMasterController::class, 'destroy']);
-});
-
-Route::prefix('groups')->group(function () {
-    Route::get('/', [GroupMasterController::class, 'index']);
-    Route::post('/', [GroupMasterController::class, 'store']);
-    Route::put('/{id}', [GroupMasterController::class, 'update']);
-    Route::get('/{id}', [GroupMasterController::class, 'viewbyid']);
-    Route::delete('/{id}', [GroupMasterController::class, 'destroy']);
-});
-Route::prefix("dropdowntypes")->group(function ()
-{
-    Route::get("/", [DropdowntypeMasterController::class , "index"]);
-    Route::post("/", [DropdowntypeMasterController::class , "store"]);
-    Route::put("/{id}", [DropdowntypeMasterController::class , "update"]);
-    Route::get("/{id}", [DropdowntypeMasterController::class , "viewbyid"]);
-
-    Route::delete("/{id}", [DropdowntypeMasterController::class , "destroy"]);
-});
-Route::prefix("donor")->group(function ()
-{
-    Route::get("/", [DonorController::class , "index"]);
-    Route::post("/", [DonorController::class , "store"]);
-    Route::put("/{id}", [DonorController::class , "update"]);
-    Route::get("/{id}", [DonorController::class , "viewbyid"]);
-    Route::delete("/{id}", [DonorController::class , "destroy"]);
-});
-Route::prefix("donation")->group(function ()
-{
-    Route::get("/", [DonationController::class , "index"]);
-    Route::post("/", [DonationController::class , "store"]);
-    Route::post("/update", [DonationController::class , "update"]);
-    Route::get("/{id}", [DonationController::class , "viewbyid"]);
-    Route::delete("/{id}", [DonationController::class , "destroy"]);
-});
-
-Route::prefix("contact")->group(function ()
-{
-    Route::get("/all", [ContactController::class , "viewAllStaff"]);
-    Route::get("/view/{id}", [ContactController::class , "viewStaff"]);
-    Route::post("/add", [ContactController::class , "addStaff"]);
-    Route::post("/edit/{id}", [ContactController::class , "editStaff"]);
-    Route::delete("/{id}", [ContactController::class , "destroy"]);
-
-});
-Route::get("/get_all_Tiles", [TileController::class , "getallTiles"]);
-
-Route::get("/class-subjects-mark", [ClassSubjectController::class , "viewAll"]); // View all
-Route::get("/class-subjects/{class}", [ClassSubjectController::class , "viewByClass", ]); // View by class
-Route::post("/class-subjects-mark", [ClassSubjectController::class , "bulkInsert", ]); // Insert
-Route::delete("/class-subjects-delete", [ClassSubjectController::class , "delete", ]); // Delete
-Route::put("/class-subjects-update", [ClassSubjectController::class , "updateBulk", ]); // Bulk Update
-Route::get("/class-teachers", [ClassTeacherController::class , "index"]); // View all
-Route::post("/class-teachers", [ClassTeacherController::class , "store"]); // Store teacher details
-Route::get("/class-teachers/{id}", [ClassTeacherController::class , "show"]); // Fetch teacher details
-Route::put("/class-teachers/{id}", [ClassTeacherController::class , "update"]); // Update teacher details
-Route::delete("/class-teachers/{id}", [ClassTeacherController::class , "destroy", ]); // Delete teacher
-Route::post("/class-subjects", [ClassSubjectMappingController::class , "bulkInsert", ]); // Bulk Insert
-Route::get("/class-subjects", [ClassSubjectMappingController::class , "getAll"]); // Get All Mappings
-Route::get("/class-subjects-map/{class}", [ClassSubjectMappingController::class , "getByClass", ]); // Get Subjects by Class
-Route::put("/class-subjects", [ClassSubjectMappingController::class , "updateSubjects", ]); // Update Subjects for a Class
-Route::delete("/class-subjects-delete/{class}", [ClassSubjectMappingController::class , "deleteSubjects", ]); // Delete Subjects for a Class
-Route::prefix("staff-fees-masters")->group(function ()
-{
-    Route::get("/", [StaffFeesMasterController::class , "index"]); // List all records
-    Route::post("/", [StaffFeesMasterController::class , "store"]); // Create a new record
-    Route::get("{id}", [StaffFeesMasterController::class , "viewbyid"]); // View a single record by ID
-    Route::put("{id}", [StaffFeesMasterController::class , "update"]); // Update a record by ID
-    Route::delete("{id}", [StaffFeesMasterController::class , "destroy"]); // Delete a record by ID
-
-});
-Route::post("/permissions/add", [PermissionController::class , "store"]); // Insert or Update All
-Route::get("/permissions", [PermissionController::class , "index"]); // Get All in Given Format
-Route::put("/permissions/{id}", [PermissionController::class , "update"]); // Update Single
-Route::post("/mapStaffFees/create", [StaffInvoiceController::class , "mapStaffFees", ]);
-Route::get("/mapStaffFees", [StaffInvoiceController::class , "listAllStaffmapFees", ]);
-Route::get("/getAllStaffFees", [StaffInvoiceController::class , "getAllStaffFees", ]);
-Route::get("/mapStaffFees/{id}", [StaffInvoiceController::class , "mapStaffFeesbyid", ]);
-Route::put("/updatemapStaffFees/{id}", [StaffInvoiceController::class , "updateStaffFees", ]);
-Route::delete("/deletemapStaffFees/{id}", [StaffInvoiceController::class , "deletemapStaffFees", ]);
-Route::post("/staff-invoices/create", [StaffInvoiceController::class , "createInvoices", ]);
-Route::post("/staff-invoices/pay", [StaffInvoiceController::class , "storePayment", ]);
-Route::get("/staff-invoices/{id}", [StaffInvoiceController::class , "getInvoice", ]);
-Route::get("/staff-receiptNo/{receiptNo}", [StaffInvoiceController::class , "getReceiptDetails", ]);
-Route::get("/staff-invoiceNo/{invoiceNo}", [StaffInvoiceController::class , "getInvoiceDetails", ]);
-Route::delete("/staff-invoice/delete/{invoice_no}", [StaffInvoiceController::class , "deleteStaffInvoiceByInvoiceNo", ]);
-
-Route::apiResource("hostel-admissions", HostelAdmissionController::class);
-Route::post("hostel-admissions/bulk-update-status", [HostelAdmissionController::class , "bulkUpdateStatus", ])
-    ->name("hostel-admissions.bulk-update-status");
-Route::post("hostel-admissions/bulkArrialDepature", [HostelAdmissionController::class , "bulkArrialDepature", ]);
-Route::get("send-mails-bg/{filename}", [HostelAdmissionController::class , "sendMailsBackground", ])
-    ->name("hostel.sendMails.bg");
-
-Route::post("storeSendForm", [HostelAdmissionController::class , "storeSendForm", ])
-    ->middleware("throttle:1000,1");
-Route::post("/hostel-admissions/verify-otp", [HostelAdmissionController::class , "verifyOtpAndStore", ]);
-Route::post("/hostel-admissions/sendOtp", [HostelAdmissionController::class , "sendOtp", ]);
-
-Route::get("/attendance", [StudentAttendanceController::class , "index"]);
-Route::post("/attendance", [StudentAttendanceController::class , "store"]);
-Route::get("/attendance/{id}", [StudentAttendanceController::class , "show"]);
-Route::put("/attendance/{id}", [StudentAttendanceController::class , "update"]);
-Route::delete("/attendance/{id}", [StudentAttendanceController::class , "destroy", ]);
-Route::post("/attendance/bulk", [StudentAttendanceController::class , "storeBulk", ]);
 
