@@ -49,6 +49,7 @@ class TargetannouncementMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+         $id = $request->id;
         $validated = $request->validate([
             'target_audience' => 'required|string',
             'target_group' => 'required|array',
@@ -70,8 +71,9 @@ class TargetannouncementMasterController extends Controller
         }
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+         $id = $request->id;
         $announcement = Targetannouncement::findOrFail($id);
     
         // Decode `target_group` and `user_details` JSON fields to return as arrays
@@ -85,8 +87,9 @@ class TargetannouncementMasterController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+         $id = $request->id;
         $announcement = Targetannouncement::findOrFail($id);
         $announcement->update(['delete_status' => 1]);
 

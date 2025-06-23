@@ -79,6 +79,7 @@ class ContactController extends Controller
     public function editStaff(Request $request, $id)
     {
         // Find staff by ID
+        $id = $request->id;
         $staff = Contact::find($id);
         if (!$staff) {
             return response()->json(["message" => "Contact not found"], 404);
@@ -134,8 +135,9 @@ class ContactController extends Controller
         );
     }
 
-    public function viewStaff($id)
+    public function viewStaff(Request $request,$id)
     {
+        $id = $request->id;
         $staff = Contact::find($id);
 
         if (!$staff) {
@@ -153,8 +155,9 @@ class ContactController extends Controller
         return response()->json(["contact" => $staff], 200);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $dropdownType = Contact::findOrFail($id);
 
         // Soft delete by updating delete_status

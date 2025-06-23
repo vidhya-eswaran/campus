@@ -72,9 +72,9 @@ class sectionmasterController extends Controller
 
         return response()->json(['data' => $section, 'message' => 'updated  successfully']);
     }
-     public function viewbyid($id)
+     public function viewbyid(Request $request, $id)
     {
-
+        $id = $request->id;
         $data = SectionMaster::where('id',$id)->first();
 
         return response()->json([

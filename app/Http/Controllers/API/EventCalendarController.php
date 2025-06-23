@@ -38,6 +38,7 @@ class EventCalendarController extends Controller
     // Update an existing event calendar
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -56,8 +57,9 @@ class EventCalendarController extends Controller
     }
 
     // Get a single event by ID
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $event = EventCalendar::with('categoryDetails')->findOrFail($id);
 
         return response()->json([
@@ -67,8 +69,9 @@ class EventCalendarController extends Controller
     }
 
     // Delete event calendar (soft delete optional)
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $event = EventCalendar::findOrFail($id);
         $event->delete();
 

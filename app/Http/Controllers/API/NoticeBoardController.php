@@ -77,6 +77,7 @@ class NoticeBoardController extends Controller
     // Update an existing notice with file upload
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $notice = NoticeBoard::findOrFail($id);
 
         $validated = $request->validate([
@@ -105,8 +106,9 @@ class NoticeBoardController extends Controller
     }
 
     // Get a single notice by ID
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $notice = NoticeBoard::with('categoryDetails')->findOrFail($id);
         return response()->json([
             'message' => 'Notice retrieved successfully',
@@ -115,8 +117,9 @@ class NoticeBoardController extends Controller
     }
 
     // Soft delete: update delete_status instead of deleting
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $notice = NoticeBoard::findOrFail($id);
 
         // Delete file if exists

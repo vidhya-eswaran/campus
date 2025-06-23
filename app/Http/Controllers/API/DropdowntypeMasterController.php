@@ -46,6 +46,7 @@ class DropdowntypeMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validatedData = $request->validate([
             "title" => "required",
             "options" => "required|array", // Ensure it's an array
@@ -68,8 +69,9 @@ class DropdowntypeMasterController extends Controller
         );
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $dropdownType = Dropdowntype::findOrFail($id);
 
         // Decode options JSON
@@ -84,8 +86,9 @@ class DropdowntypeMasterController extends Controller
         );
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $dropdownType = Dropdowntype::findOrFail($id);
 
         // Soft delete by updating delete_status

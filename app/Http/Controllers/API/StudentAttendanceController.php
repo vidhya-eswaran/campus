@@ -94,9 +94,10 @@ class StudentAttendanceController extends Controller
     }
 
     // Show a single record
-    public function show($id)
+    public function show(Request $request, $id)
     {
         try {
+            $id = $request->id;
             $attendance = StudentAttendance::find($id);
 
             if (!$attendance) {
@@ -120,6 +121,7 @@ class StudentAttendanceController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $id = $request->id;
             $attendance = StudentAttendance::find($id);
 
             if (!$attendance) {
@@ -147,9 +149,10 @@ class StudentAttendanceController extends Controller
     }
 
     // Delete a record
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         try {
+            $id = $request->id;
             $attendance = StudentAttendance::find($id);
 
             if (!$attendance) {

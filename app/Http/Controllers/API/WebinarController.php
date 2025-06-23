@@ -31,8 +31,9 @@ class WebinarController extends Controller
         return response()->json(['message' => 'Webinar created', 'data' => $webinar], 201);
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
+        $id = $request->id;
         $webinar = Webinar::find($id);
         if (!$webinar) return response()->json(['message' => 'Not Found'], 404);
         return response()->json($webinar);
@@ -40,6 +41,7 @@ class WebinarController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $webinar = Webinar::find($id);
         if (!$webinar) return response()->json(['message' => 'Not Found'], 404);
 
@@ -59,8 +61,9 @@ class WebinarController extends Controller
         return response()->json(['message' => 'Webinar updated', 'data' => $webinar]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $webinar = Webinar::find($id);
         if (!$webinar) return response()->json(['message' => 'Not Found'], 404);
         $webinar->delete();

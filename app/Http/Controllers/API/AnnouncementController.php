@@ -72,8 +72,9 @@ class AnnouncementController extends Controller
     }
 
     // Fetch a single announcement
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $announcement = Announcement::with("categoryDetails")->findOrFail($id);
 
         // Convert file path to full URL
@@ -91,6 +92,7 @@ class AnnouncementController extends Controller
     // Update an announcement with file upload
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $announcement = Announcement::findOrFail($id);
         $validated = $request->validate([
             "target_type" => "required|in:target,role,class",
@@ -149,8 +151,9 @@ class AnnouncementController extends Controller
     }
 
     // Delete an announcement
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $announcement = Announcement::findOrFail($id);
 
         // Delete file if exists

@@ -38,6 +38,7 @@ class StandardSectionMappingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'standard' => 'required',
             'sections' => 'required|array', // ✅ Ensure sections is an array
@@ -55,8 +56,9 @@ class StandardSectionMappingController extends Controller
         ]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $mapping = StandardSectionMapping::findOrFail($id);
 
         return response()->json([
@@ -113,8 +115,9 @@ class StandardSectionMappingController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $id = $request->id;
         $mapping = StandardSectionMapping::findOrFail($id);
         $mapping->update(['delete_status' => 1]);
 

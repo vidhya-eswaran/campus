@@ -61,6 +61,7 @@ class DonorController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         // Find the donor by ID or fail
         $donor = DonarList::findOrFail($id);
 
@@ -107,8 +108,9 @@ class DonorController extends Controller
     }
 
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $donor = DonarList::findOrFail($id);
         return response()->json([
             'message' => 'Donor retrieved successfully',
@@ -116,8 +118,9 @@ class DonorController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $donor = DonarList::findOrFail($id);
         $donor->delete_status = 1;
         $donor->save();

@@ -58,6 +58,7 @@ class LeaveApplicationController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $id = (int) $id;
 
         $validated = $request->validate([
@@ -81,16 +82,18 @@ class LeaveApplicationController extends Controller
         return response()->json(['message' => 'Leave application updated successfully', 'data' => $leaveApplication]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request, $id)
     {
+        $id = $request->id;
         $id = (int) $id;
         $leaveApplication = LeaveApplication::findOrFail($id);
 
         return response()->json(['message' => 'Leave application retrieved successfully', 'data' => $leaveApplication]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $id = $request->id;
         $id = (int) $id;
         $leaveApplication = LeaveApplication::findOrFail($id);
 

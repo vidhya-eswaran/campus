@@ -112,6 +112,7 @@ class StaffController extends Controller
     public function editStaff(Request $request, $id)
     {
         // Find staff by ID
+        $id = $request->id;
         $staff = Staff::find($id);
         if (!$staff) {
             return response()->json(["message" => "Staff not found"], 404);
@@ -201,8 +202,9 @@ class StaffController extends Controller
     }
 
     // View staff details
-    public function viewStaff($id)
+    public function viewStaff(Request $request, $id)
     {
+        $id = $request->id;
         $staff = Staff::find($id);
 
         if (!$staff) {
@@ -380,8 +382,9 @@ class StaffController extends Controller
         }
     }
 
-    public function deleteStaff($id)
+    public function deleteStaff(Request $request,$id)
     {
+        $id = $request->id;
         // Find the staff by ID
         $staff = Staff::find($id);
 

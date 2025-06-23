@@ -30,6 +30,7 @@ class MessageCategoryMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'messageCategory' => 'required|string|max:255',
             'created_by' => 'nullable'
@@ -41,8 +42,9 @@ class MessageCategoryMasterController extends Controller
         return response()->json(['message' => 'Updated successfully', 'result' => $record]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request, $id)
     {
+        $id = $request->id;
         $record = MessageCategoryMaster::leftJoin('users', 'users.id', '=', 'message_category_master.created_by')
             ->select('message_category_master.*', 'users.name as created_by_name')
             ->where('message_category_master.id', $id)
@@ -51,8 +53,9 @@ class MessageCategoryMasterController extends Controller
         return response()->json(['message' => 'Retrieved successfully', 'result' => $record]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $id = $request->id;
         MessageCategoryMaster::findOrFail($id)->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }

@@ -66,8 +66,9 @@ class ClassTeacherController extends Controller
     }
 
     // Fetch teacher details by ID
-    public function show($id)
+    public function show(Request $request,$id)
     {
+        $id = $request->id;
         $teacher = ClassTeacher::where("teacher_id", $id)->first();
 
         if (!$teacher) {
@@ -113,8 +114,9 @@ class ClassTeacherController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $teacher = ClassTeacher::where("teacher_id", $id)->first();
 
         if (!$teacher) {

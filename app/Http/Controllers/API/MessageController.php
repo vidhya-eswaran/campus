@@ -74,6 +74,7 @@ class MessageController extends Controller
     // Reply to an existing message with attachments
     public function reply(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'message' => 'required|string',
@@ -233,8 +234,9 @@ class MessageController extends Controller
 
 
     // View single message with proper file URLs
-    public function viewSingleMessage($id)
+    public function viewSingleMessage(Request $request,$id)
     {
+        $id = $request->id;
         $message = Message::with(['attachments', 'user'])->findOrFail($id);
         $flattened = [];
         $baseUrl = 'https://www.santhoshavidhyalaya.com'; // Your domain

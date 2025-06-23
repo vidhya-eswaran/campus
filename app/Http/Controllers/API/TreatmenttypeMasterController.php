@@ -34,6 +34,7 @@ class TeachertypeMasterController extends Controller
  
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'teacher_type' => 'required',
         ]);
@@ -43,9 +44,9 @@ class TeachertypeMasterController extends Controller
 
         return response()->json(['message' => 'Teacher type updated successfully', 'Subject' => $term]);
     }
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
-        
+       $id = $request->id; 
 
         $term = Teachertype::findOrFail($id);
  
@@ -59,8 +60,9 @@ class TeachertypeMasterController extends Controller
 
     //     return response()->json(['message' => 'Subject deleted successfully']);
     // }
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $subject = Teachertype::findOrFail($id);
     
         // Update delete_status to 1 instead of deleting

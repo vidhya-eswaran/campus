@@ -124,8 +124,9 @@ class DonationController extends Controller
         ]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $donor = DonationList::findOrFail($id);
         return response()->json([
             "message" => "Donation retrieved successfully",
@@ -133,8 +134,9 @@ class DonationController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $donor = DonationList::findOrFail($id);
         $donor->delete_status = 1;
         $donor->save();

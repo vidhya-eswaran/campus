@@ -21,8 +21,9 @@ class TemplateEditorController extends Controller
         return response()->json(TemplateEditor::all());
     }
 
-    public function viewById($id)
+    public function viewById(Request $request, $id)
     {
+        $id = $request->id;
         // Find the template by ID
         $template = TemplateEditor::find($id);
 

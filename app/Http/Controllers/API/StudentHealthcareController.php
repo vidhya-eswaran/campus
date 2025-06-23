@@ -59,6 +59,7 @@ class StudentHealthcareController extends Controller
     // Edit healthcare record
     public function editHealthcareRecord(Request $request, $id)
     {
+         $id = $request->id;
         $healthcareRecord = HealthcareRecord::find($id);
 
         if (!$healthcareRecord) {
@@ -97,8 +98,9 @@ class StudentHealthcareController extends Controller
     }
 
     // View healthcare record by ID
-  public function viewHealthcareRecord($id)
+  public function viewHealthcareRecord(Request $request,$id)
     {
+         $id = $request->id;
         // Fetch the healthcare record by ID
         $healthcareRecord = HealthcareRecord::find($id);
 
@@ -186,8 +188,9 @@ class StudentHealthcareController extends Controller
         return response()->json(['healthcare_records' => $healthcareRecordsWithStudentDetails], 200);
     }
 
-     public function destroy($id)
+     public function destroy(Request $request, $id)
     {
+         $id = $request->id;
         $donor = HealthcareRecord::findOrFail($id);
         $donor->delete_status = 1;
         $donor->save();

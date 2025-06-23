@@ -32,6 +32,7 @@ class NotificationCategoryController extends Controller
     // Update an existing notification category
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'notification_category' => 'required|string|max:255',
         ]);
@@ -46,8 +47,9 @@ class NotificationCategoryController extends Controller
     }
 
     // Get a single notification category by ID
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $category = NotificationCategory::findOrFail($id);
 
         return response()->json([
@@ -57,8 +59,9 @@ class NotificationCategoryController extends Controller
     }
 
     // Soft delete: update delete_status instead of deleting
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $category = NotificationCategory::findOrFail($id);
         $category->update(['delete_status' => 1]);
 

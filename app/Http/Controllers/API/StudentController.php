@@ -623,6 +623,7 @@ class StudentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $admission = Student::findOrFail($id);
         //   $admitted_student = Student::findOrFail($admission->admitt);
 
@@ -975,6 +976,7 @@ class StudentController extends Controller
     }
     public function updatefromAdmission(Request $request, $id)
     {
+        $id = $request->id;
         // Find the student admission record by ID
         $admission = AdmissionForm::findOrFail($id);
         Log::info("Request payload:", $request->all());
@@ -1228,9 +1230,10 @@ class StudentController extends Controller
             ],
         ]);
     }
-    public function show($id)
+    public function show(Request $request,$id)
     {
         try {
+            $id = $request->id;
             // Find the student admission record by ID
             $admission = Student::findOrFail($id);
 
@@ -1400,9 +1403,10 @@ class StudentController extends Controller
             );
         }
     }
-    public function showfromAdmission($id)
+    public function showfromAdmission(Request $request,$id)
     {
         try {
+            $id = $request->id;
             $admission = AdmissionForm::findOrFail($id);
 
             // Return the student details with the same key names but updated values

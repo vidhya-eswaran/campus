@@ -33,6 +33,7 @@ class EventCategoryMasterController extends Controller
     // Update an existing event category
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'eventCategory' => 'required|string|max:255',
             'eventColor' => 'required|string|max:7',
@@ -48,8 +49,9 @@ class EventCategoryMasterController extends Controller
     }
 
     // Get a single event category by ID
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $category = EventCategoryMaster::findOrFail($id);
 
         return response()->json([
@@ -59,8 +61,9 @@ class EventCategoryMasterController extends Controller
     }
 
     // Soft delete: update delete_status instead of deleting
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $category = EventCategoryMaster::findOrFail($id);
         $category->update(['delete_status' => 1]);
 

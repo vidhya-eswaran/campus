@@ -31,6 +31,7 @@ class subjectMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+         $id = $request->id;
         // dd($id);
         $subject = Subject::find($id);
         if (!$subject) {
@@ -47,8 +48,9 @@ class subjectMasterController extends Controller
             "data" => $subject,
         ]);
     }
-    public function show($id)
+    public function show(Request $request,$id)
     {
+         $id = $request->id;
         // dd($id);
         $subject = Subject::findOrFail($id);
         if (!$subject) {
@@ -57,8 +59,9 @@ class subjectMasterController extends Controller
         return response()->json($subject);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+         $id = $request->id;
         $subject = Subject::findOrFail($id);
 
         // Update delete_status to 1 instead of deleting

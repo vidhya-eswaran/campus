@@ -27,6 +27,7 @@ class ExamMasterController extends Controller
 
     public function addList(Request $request,$id)
     {
+        $id = $request->id;
         $exams =  ClassSubjectMapping::where("class", $id)->first();
         return response()->json(['message' => 'Exam records fetched successfully', 'data' => $exams]);
     }
@@ -55,6 +56,7 @@ class ExamMasterController extends Controller
     // Update an existing exam record
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $exam = ExamMaster::findOrFail($id);
 
         $validated = $request->validate([
@@ -75,15 +77,17 @@ class ExamMasterController extends Controller
     }
 
     // Get exam record by ID
-    public function viewbyid($id)
+    public function viewbyid(Request $request, $id)
     {
+        $id = $request->id;
         $exam = ExamMaster::findOrFail($id);
         return response()->json(['message' => 'Exam record fetched successfully', 'data' => $exam]);
     }
 
     // Soft delete (set delete_status = 1)
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $id = $request->id;
         $exam = ExamMaster::findOrFail($id);
         $exam->delete_status = 1;
         $exam->save();

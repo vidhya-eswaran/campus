@@ -16,8 +16,9 @@ class TemplateMasterController extends Controller
     }
 
     // Fetch a single template by ID
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $id = $request->id;
         $template = TemplateMaster::find($id);
         if ($template) {
             return response()->json($template);
@@ -42,6 +43,7 @@ class TemplateMasterController extends Controller
     // Update an existing template
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $template = TemplateMaster::find($id);
         if ($template) {
             $data = $request->validate([
@@ -58,8 +60,9 @@ class TemplateMasterController extends Controller
     }
 
     // Delete a template
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $template = TemplateMaster::find($id);
         if ($template) {
             $template->delete();

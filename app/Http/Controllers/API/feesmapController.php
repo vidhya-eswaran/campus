@@ -546,13 +546,15 @@ public function insertByID(Request $request)
 
         return response()->json(['data' => $students, 'recordsFiltered' => $count, 'recordsTotal' => $count]);
     }
-    public function fetchByid($id)
+    public function fetchByid(Request $request, $id)
     {
+        $id = $request->id;
         $students = StudentFeesMap::where('slno', $id)->get();
         return response()->json($students);
     }
-    public function delByid($id)
+    public function delByid(Request $request, $id)
     {
+        $id = $request->id;
         StudentFeesMap::destroy($id); // delete
         return response()->json('delete done');
     }

@@ -36,6 +36,7 @@ class StandardMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'title' => 'required|string|in:standard,section,group',
             'options' => 'required|array',
@@ -51,10 +52,11 @@ class StandardMasterController extends Controller
         ]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request, $id)
     {
+       
+        $id = $request->id;       
         $data = Standard::findOrFail($id);
-
         return response()->json([
             'message' => 'Data retrieved successfully',
             'data' => $data

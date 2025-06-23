@@ -199,8 +199,9 @@ class HostelAdmissionController extends Controller
      * @param  \App\Models\HostelAdmission  $hostelAdmission
      * @return \Illuminate\Http\JsonResponse
      */
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $donor = HostelAdmission::findOrFail($id);
         return response()->json([
             'message' => 'HostelAdmission retrieved successfully',
@@ -249,6 +250,7 @@ class HostelAdmissionController extends Controller
 
    public function update(Request $request, $id)
     {
+        $id = $request->id;
         $hostelAdmission = HostelAdmission::findOrFail($id);
 
         $validated = $request->validate([
@@ -295,8 +297,9 @@ class HostelAdmissionController extends Controller
      * @param  \App\Models\HostelAdmission  $hostelAdmission
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $hostelAdmission = HostelAdmission::findOrFail($id);
         $hostelAdmission->delete();
 

@@ -78,8 +78,8 @@ class listUserController extends Controller
         if ($user->user_type === 'student') {
             $student = new Student();
             $student->admission_no = $user->admission_no ?? $user->id;
-            $student->STUDENT_NAME = $user->name;
-            $student->EMAIL_ID = $user->email;
+            $student->student_name = $user->name;
+            $student->father_email_id = $user->email;
             $student->save();
         }
         return response()->json([

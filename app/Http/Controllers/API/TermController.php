@@ -29,6 +29,7 @@ class TermController extends Controller
  
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
@@ -38,25 +39,27 @@ class TermController extends Controller
 
         return response()->json(['message' => 'Term updated successfully', 'term' => $term]);
     }
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
-        
+       $id = $request->id; 
 
         $term = Term::findOrFail($id);
  
         return response()->json(['message' => 'Term got successfully', 'term' => $term]);
     }
  
-    public function destroy_old($id)
+    public function destroy_old(Request $request,$id)
     {
+        $id = $request->id;
         $term = Term::findOrFail($id);
         $term->delete();
 
         return response()->json(['message' => 'Term deleted successfully']);
     }
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         try {
+            $id = $request->id;
         // Find the term
         $term = Term::findOrFail($id);
 

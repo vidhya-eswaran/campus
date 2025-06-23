@@ -27,6 +27,7 @@ class GroupMasterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $id = (int) $id; // Ensure ID is an integer
 
         $validated = $request->validate([
@@ -39,8 +40,9 @@ class GroupMasterController extends Controller
         return response()->json(['message' => 'Group updated successfully', 'Standard' => $standard]);
     }
 
-    public function viewbyid($id)
+    public function viewbyid(Request $request,$id)
     {
+        $id = $request->id;
         $id = (int) $id; // Ensure ID is an integer
 
         $standard = GroupMaster::findOrFail($id);
@@ -48,8 +50,9 @@ class GroupMasterController extends Controller
         return response()->json(['message' => 'Group retrieved successfully', 'Standard' => $standard]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
+        $id = $request->id;
         $id = (int) $id; // Ensure ID is an integer
         $standard = GroupMaster::findOrFail($id);
 
