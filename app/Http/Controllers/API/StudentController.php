@@ -72,6 +72,16 @@ class StudentController extends Controller
     {
         $record =  (object) $request->all();
 
+        $imageFields = [
+            'profile_image',
+            'birth_certificate_image',
+            'aadhar_image',
+            'ration_card_image',
+            'community_image',
+            'salary_image',
+            'reference_letter_image',
+            'transfer_certificate_image',
+        ];
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
                                
@@ -98,10 +108,25 @@ class StudentController extends Controller
                     $studentHistory->save();
                    
                     $mappedData = (array) $record;
+                    foreach ($imageFields as $field) {
+                        if ($request->hasFile($field)) {
+                            $file = $request->file($field);
+
+                            $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                            // Store the file in storage/app/public/student_images/
+                            $path = $file->storeAs('public/student_images', $filename);
+
+                            // Save the relative path in the mapped data (without "public/")
+                            $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                        } else {
+                            $mappedData[$field] = null; // or handle as needed
+                        }
+                    }
 
                     // If date fields need to be converted, handle them separately
                     if (!empty($record->dob)) {
-                        $mappedData['DOB_DD_MM_YYYY'] = $this->convertExcelDate($record->dob);
+                        $mappedData['dob'] = $this->convertExcelDate($record->dob);
                     }
 
                     if (!empty($record->date_form)) {
@@ -151,11 +176,24 @@ class StudentController extends Controller
 
                         $mappedData = (array) $record;
 
-                        dd($mappedData);
+                        foreach ($imageFields as $field) {
+                            if ($request->hasFile($field)) {
+                                $file = $request->file($field);
 
-                        // If date fields need to be converted, handle them separately
+                                // Generate unique filename with date and time
+                                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                                // Store the file in storage/app/public/student_images/
+                                $path = $file->storeAs('public/student_images', $filename);
+
+                                // Save the relative path in the mapped data (without "public/")
+                                $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                            } else {
+                                $mappedData[$field] = null; // or handle as needed
+                            }
+                        }
                         if (!empty($record->dob)) {
-                            $mappedData['DOB_DD_MM_YYYY'] = $this->convertExcelDate($record->dob);
+                            $mappedData['dob'] = $this->convertExcelDate($record->dob);
                         }
 
                         if (!empty($record->date_form)) {
@@ -256,11 +294,28 @@ class StudentController extends Controller
 
                             $mappedData = (array) $record;
 
+                            foreach ($imageFields as $field) {
+                                if ($request->hasFile($field)) {
+                                    $file = $request->file($field);
+
+                                    // Generate unique filename with date and time
+                                    $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                                    // Store the file in storage/app/public/student_images/
+                                    $path = $file->storeAs('public/student_images', $filename);
+
+                                    // Save the relative path in the mapped data (without "public/")
+                                    $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                                } else {
+                                    $mappedData[$field] = null; // or handle as needed
+                                }
+                            }
+
                             $mappedData['admission_no'] = $admissionId ?? null;
 
                             // If date fields need to be converted, handle them separately
                             if (!empty($record->dob)) {
-                                $mappedData['DOB_DD_MM_YYYY'] = $this->convertExcelDate($record->dob);
+                                $mappedData['dob'] = $this->convertExcelDate($record->dob);
                             }
 
                             if (!empty($record->date_form)) {
@@ -294,6 +349,7 @@ class StudentController extends Controller
                                 "message" => "Data uploaded successfully.",
                             ];
                         } catch (\Exception $e) {
+                            dd($e->getMessage());
                             Log::error(
                                 "Error occurred while uploading data: " .
                                     $e->getMessage()
@@ -308,9 +364,6 @@ class StudentController extends Controller
                     
                 }
             }
-        
-            // dd("6");
-        // DB::commit();
         return response()
             ->json($response, 200)
             ->header("Access-Control-Allow-Origin", "*");
