@@ -378,9 +378,10 @@ class StudentController extends Controller
         return $studentId;
     }
 
-    public function getadmissionStandards($standard)
+    public function getadmissionStandards(Request $request, $standard)
     {
-        $standards = Student::where("SOUGHT_STD", $standard)
+        $standard = $request->standard;
+        $standards = Student::where("std_sought", $standard)
             //->distinct() // Ensure no duplicates
             ->orderBy("id") // Sort the options
             ->get();
@@ -678,180 +679,32 @@ class StudentController extends Controller
     {
         $id = $request->id;
         $admission = Student::findOrFail($id);
-        //   $admitted_student = Student::findOrFail($admission->admitt);
+        $imageFields = [
+            'profile_image',
+            'birth_certificate_image',
+            'aadhar_image',
+            'ration_card_image',
+            'community_image',
+            'salary_image',
+            'reference_letter_image',
+            'transfer_certificate_image',
+        ];
 
-        // Update non-file fields
-        $admission->update([
-            "roll_no" => $request->roll_no,
-            "admission_no" => $request->admission_no,
-            "STUDENT_NAME" => $request->STUDENT_NAME,
-            "date_form" => $request->date_form,
-            "MOTHERTONGUE" => $request->MOTHERTONGUE,
-            "STATE" => $request->STATE,
-            "DOB_DD_MM_YYYY" => $request->DOB_DD_MM_YYYY,
-            "SEX" => $request->SEX,
-            "BLOOD_GROUP" => $request->BLOOD_GROUP,
-            "NATIONALITY" => $request->NATIONALITY,
-            "RELIGION" => $request->RELIGION,
-            "DENOMINATION" => $request->DENOMINATION,
-            "CASTE" => $request->CASTE,
-            "CASTE_CLASSIFICATION" => $request->CASTE_CLASSIFICATION,
-            "AADHAAR_CARD_NO" => $request->AADHAAR_CARD_NO,
-            "RATIONCARDNO" => $request->RATIONCARDNO,
-            "EMIS_NO" => $request->EMIS_NO,
-            "pen_no" => $request->pen_no,
-            "academic_year" => $request->academic_year,
-            "FOOD" => $request->FOOD,
-            "chronic_des" => $request->chronic_des,
-            "medicine_taken" => $request->medicine_taken,
-            "FATHER" => $request->FATHER,
-            "OCCUPATION" => $request->OCCUPATION,
-            "MOTHER" => $request->MOTHER,
-            "mother_occupation" => $request->mother_occupation,
-            "GUARDIAN" => $request->GUARDIAN,
-            "guardian_occupation" => $request->guardian_occupation,
-            "MOBILE_NUMBER" => $request->MOBILE_NUMBER,
-            "EMAIL_ID" => $request->EMAIL_ID,
-            "WHATS_APP_NO" => $request->WHATS_APP_NO,
-            "mother_email_id" => $request->mother_email_id,
-            "guardian_contact_no" => $request->guardian_contact_no,
-            "guardian_email_id" => $request->guardian_email_id,
-            "MONTHLY_INCOME" => $request->MONTHLY_INCOME,
-            "mother_income" => $request->mother_income,
-            "guardian_income" => $request->guardian_income,
-            "PERMANENT_HOUSENUMBER" => $request->PERMANENT_HOUSENUMBER,
-            "P_STREETNAME" => $request->P_STREETNAME,
-            "P_VILLAGE_TOWN_NAME" => $request->P_VILLAGE_TOWN_NAME,
-            "P_DISTRICT" => $request->P_DISTRICT,
-            "P_STATE" => $request->P_STATE,
-            "P_PINCODE" => $request->P_PINCODE,
-            "COMMUNICATION_HOUSE_NO" => $request->COMMUNICATION_HOUSE_NO,
-            "C_STREET_NAME" => $request->C_STREET_NAME,
-            "C_VILLAGE_TOWN_NAME" => $request->C_VILLAGE_TOWN_NAME,
-            "C_DISTRICT" => $request->C_DISTRICT,
-            "C_STATE" => $request->C_STATE,
-            "C_PINCODE" => $request->C_PINCODE,
-            "CLASS_LAST_STUDIED" => $request->CLASS_LAST_STUDIED,
-            "NAME_OF_SCHOOL" => $request->NAME_OF_SCHOOL,
-            "SOUGHT_STD" => $request->SOUGHT_STD,
-            "sec" => $request->sec,
-            "syllabus" => $request->syllabus,
-            "GROUP_12" => $request->GROUP_12,
-            "group_no" => $request->group_no,
-            "father_title" => $request->father_title,
-            "mother_title" => $request->mother_title,
-            "second_group_no" => $request->second_group_no,
-            "LANG_PART_I" => $request->LANG_PART_I,
-            "brother_1" => $request->brother_1,
-            "brother_2" => $request->brother_2,
-            "gender_1" => $request->gender_1,
-            "gender_2" => $request->gender_2,
-            "class_1" => $request->class_1,
-            "class_2" => $request->class_2,
-            "brother_3" => $request->brother_3,
-            "gender_3" => $request->gender_3,
-            "class_3" => $request->class_3,
-            "last_school_state" => $request->last_school_state,
-            "second_language_school" => $request->second_language_school,
-            "second_language" => $request->second_language,
-            "ORGANISATION" => $request->ORGANISATION,
-            "mother_organization" => $request->mother_organization,
-            "guardian_organization" => $request->guardian_organization,
+        // Bulk update non-file fields
+        $nonFileData = $request->except($imageFields);
+        $admission->update($nonFileData);
 
-            "reference_name_1" => $request->reference_name_1,
-            "reference_name_2" => $request->reference_name_2,
-            "reference_phone_1" => $request->reference_phone_1,
-            "status" => $request->status,
-            "reference_phone_2" => $request->reference_phone_2,
-        ]);
+        // Handle image uploads
+        foreach ($imageFields as $field) {
+            if ($request->hasFile($field)) {
+                $filename = $field . '_' . time() . '.' . $request->file($field)->getClientOriginalExtension();
+                $path = $request->file($field)->storeAs('public/student_images', $filename);
+                $admission->$field = 'student_images/' . $filename;
+            }
+        }
 
-        //  request,$dmission, feildname on api,filepath,dbname
+        $admission->save();
 
-        // Handle file uploads for image fields
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "migration_certificate",
-            "admission_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "profile_photo",
-            "profile_photos",
-            "profile_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "admission_photo",
-            "admission_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "birth_certificate",
-            "birth_certificate_photos",
-            "birth_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "aadhar_copy",
-            "aadhar_card_photos",
-            "aadhar_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "ration_card",
-            "ration_card_photos",
-            "ration_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "community_certificate",
-            "community_certificate_photos",
-            "community_certificate"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "salary_certificate",
-            "slip_photos",
-            "slip_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "medical_certificate",
-            "medical_certificate_photos",
-            "medical_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "reference_letter",
-            "reference_letter_photos",
-            "reference_letter_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "church_certificate",
-            "church_certificate_photos",
-            "church_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "transfer_certificate",
-            "transfer_certificate_photos",
-            "transfer_certificate_photo"
-        );
         if (strtolower((string) $request->status) === "active") {
             // Check if admission_no already exists
             $userCreated = false;
@@ -862,7 +715,7 @@ class StudentController extends Controller
                 $yearCode = substr($currentYear, -2); // Last 2 digits of the year
 
                 // Determine class code
-                $classOfJoining = strtolower($admission->SOUGHT_STD);
+                $classOfJoining = strtolower($admission->std_sought);
                 if ($classOfJoining === "lkg") {
                     $classCode = "13";
                 } elseif ($classOfJoining === "ukg") {
@@ -944,7 +797,7 @@ class StudentController extends Controller
             }
             if (
                 !User::where("roll_no", $admission->roll_no)
-                    ->where("name", $admission->STUDENT_NAME)
+                    ->where("name", $admission->student_name)
                     ->exists()
             ) {
                 $user = new User();
@@ -954,10 +807,10 @@ class StudentController extends Controller
                 $lastid = $lastid + 1;
 
                 $user->id = $lastid;
-                $user->name = $admission->STUDENT_NAME ?? null;
-                $user->gender = $admission->SEX ?? null;
-                $user->email = $admission->EMAIL_ID ?? null;
-                $user->standard = $admission->SOUGHT_STD ?? null;
+                $user->name = $admission->student_name ?? null;
+                $user->gender = $admission->gender ?? null;
+                $user->email = $admission->father_email_id ?? null;
+                $user->standard = $admission->std_sought ?? null;
                 $user->sec = $admission->sec ?? null;
                 $user->hostelOrDay = "hostel";
                 $user->password = Hash::make("svs@123");
@@ -980,7 +833,7 @@ class StudentController extends Controller
                     $userId,
                     "application_status_activation",
                     [
-                        "student_name" => $admission->STUDENT_NAME,
+                        "student_name" => $admission->student_name,
                         "admission_no" => $admission->admission_no,
                         "roll_no" => $admission->roll_no,
                         "user_created" => $userCreated,
@@ -1006,7 +859,7 @@ class StudentController extends Controller
                     $userId,
                     "application_status_Updated",
                     [
-                        "student_name" => $admission->STUDENT_NAME,
+                        "student_name" => $admission->student_name,
                         "admission_no" => $admission->admission_no,
                         "roll_no" => $admission->roll_no,
                     ]
@@ -1290,151 +1143,28 @@ class StudentController extends Controller
             // Find the student admission record by ID
             $admission = Student::findOrFail($id);
 
-            // Return the student details with image URLs
+            $imageFields = [
+                'profile_image',
+                'birth_certificate_image',
+                'aadhar_image',
+                'ration_card_image',
+                'community_image',
+                'salary_image',
+                'reference_letter_image',
+                'transfer_certificate_image',
+            ];
+
+            foreach ($imageFields as $field) {
+                if (!empty($admission->$field)) {
+                    $admission->$field = asset('storage/student_images/' . $admission->$field);
+                }
+            }
+
             return response()->json([
                 "message" => "Student admission details fetched successfully!",
-                "data" => [
-                    "roll_no" => $admission->roll_no,
-                    "admission_no" => $admission->admission_no,
-                    "STUDENT_NAME" => $admission->STUDENT_NAME,
-                    "date_form" => $admission->date_form,
-                    "MOTHERTONGUE" => $admission->MOTHERTONGUE,
-                    "STATE" => $admission->STATE,
-                    "DOB_DD_MM_YYYY" => $admission->DOB_DD_MM_YYYY,
-                    "SEX" => $admission->SEX,
-                    "BLOOD_GROUP" => $admission->BLOOD_GROUP,
-                    "NATIONALITY" => $admission->NATIONALITY,
-                    "RELIGION" => $admission->RELIGION,
-                    "DENOMINATION" => $admission->DENOMINATION,
-                    "CASTE" => $admission->CASTE,
-                    "CASTE_CLASSIFICATION" => $admission->CASTE_CLASSIFICATION,
-                    "AADHAAR_CARD_NO" => $admission->AADHAAR_CARD_NO,
-                    "RATIONCARDNO" => $admission->RATIONCARDNO,
-                    "EMIS_NO" => $admission->EMIS_NO,
-                    "pen_no" => $admission->pen_no,
-                    "FOOD" => $admission->FOOD,
-                    "chronic_des" => $admission->chronic_des,
-                    "medicine_taken" => $admission->medicine_taken,
-                    "FATHER" => $admission->FATHER,
-                    "OCCUPATION" => $admission->OCCUPATION,
-                    "MOTHER" => $admission->MOTHER,
-                    "mother_occupation" => $admission->mother_occupation,
-                    "GUARDIAN" => $admission->GUARDIAN,
-                    "guardian_occupation" => $admission->guardian_occupation,
-                    "MOBILE_NUMBER" => $admission->MOBILE_NUMBER,
-                    "EMAIL_ID" => $admission->EMAIL_ID,
-                    "WHATS_APP_NO" => $admission->WHATS_APP_NO,
-                    "mother_email_id" => $admission->mother_email_id,
-                    "guardian_contact_no" => $admission->guardian_contact_no,
-                    "guardian_email_id" => $admission->guardian_email_id,
-                    "MONTHLY_INCOME" => $admission->MONTHLY_INCOME,
-                    "mother_income" => $admission->mother_income,
-                    "guardian_income" => $admission->guardian_income,
-                    "PERMANENT_HOUSENUMBER" =>
-                        $admission->PERMANENT_HOUSENUMBER,
-                    "P_STREETNAME" => $admission->P_STREETNAME,
-                    "P_VILLAGE_TOWN_NAME" => $admission->P_VILLAGE_TOWN_NAME,
-                    "P_DISTRICT" => $admission->P_DISTRICT,
-                    "P_STATE" => $admission->P_STATE,
-                    "P_PINCODE" => $admission->P_PINCODE,
-                    "COMMUNICATION_HOUSE_NO" =>
-                        $admission->COMMUNICATION_HOUSE_NO,
-                    "C_STREET_NAME" => $admission->C_STREET_NAME,
-                    "C_VILLAGE_TOWN_NAME" => $admission->C_VILLAGE_TOWN_NAME,
-                    "C_DISTRICT" => $admission->C_DISTRICT,
-                    "C_STATE" => $admission->C_STATE,
-                    "C_PINCODE" => $admission->C_PINCODE,
-                    "CLASS_LAST_STUDIED" => $admission->CLASS_LAST_STUDIED,
-                    "NAME_OF_SCHOOL" => $admission->NAME_OF_SCHOOL,
-                    "SOUGHT_STD" => $admission->SOUGHT_STD,
-                    "sec" => $admission->sec,
-                    "syllabus" => $admission->syllabus,
-                    "GROUP_12" => $admission->GROUP_12,
-                    // 'group_no' => $admission->group_no,
-                    "second_group_no" => $admission->second_group_no,
-                    "LANG_PART_I" => $admission->LANG_PART_I,
-                    "guardian_organization" =>
-                        $admission->guardian_organization,
-                    "sibling" => isset($admission->brother_1) ? "Yes" : "No",
-                    "brother_1" => $admission->brother_1,
-                    "brother_2" => $admission->brother_2,
-                    "gender_1" => $admission->gender_1,
-                    "gender_2" => $admission->gender_2,
-                    "class_1" => $admission->class_1,
-                    "class_2" => $admission->class_2,
-                    "brother_3" => $admission->brother_3,
-                    "gender_3" => $admission->gender_3,
-                    "class_3" => $admission->class_3,
-                    "last_school_state" => $admission->last_school_state,
-                    "second_language_school" =>
-                        $admission->second_language_school,
-                    "second_group_no" => $admission->second_group_no,
-                    "second_language" => $admission->second_language,
-                    "reference_name_1" => $admission->reference_name_1,
-                    "reference_name_2" => $admission->reference_name_2,
-                    "reference_phone_1" => $admission->reference_phone_1,
-                    "reference_phone_2" => $admission->reference_phone_1,
-                    "ORGANISATION" => $admission->ORGANISATION,
-                    "mother_organization" => $admission->mother_organization,
-                    "last_school_state" => $admission->last_school_state,
-                    "GROUP_12" => $admission->GROUP_12,
-                    "second_group_no" => $admission->second_group_no,
-                    "reference_name_1" => $admission->reference_name_1,
-                    "reference_phone_1" => $admission->reference_phone_1,
-                    "reference_name_2" => $admission->reference_name_2,
-                    "reference_phone_2" => $admission->reference_phone_2,
-                    "status" => $admission->status,
-                    "father_title" => $admission->father_title,
-                    "mother_title" => $admission->mother_title,
-                    "academic_year" => $admission->academic_year,
-                    "grade_status" => $admission->grade_status,
-
-                    // Image URLs
-                    "profile_picture" => asset(
-                        "storage/app/profile_photos/" .
-                            $admission->profile_photo
-                    ),
-                    "birth_certificate" => asset(
-                        "storage/app/birth_certificate_photos/" .
-                            $admission->birth_certificate_photo
-                    ),
-                    "aadhar_copy" => asset(
-                        "storage/app/aadhar_card_photos/" .
-                            $admission->aadhar_card_photo
-                    ),
-                    "ration_card" => asset(
-                        "storage/app/ration_card_photos/" .
-                            $admission->ration_card_photo
-                    ),
-                    "community_certificate" => asset(
-                        "storage/app/community_certificate_photos/" .
-                            $admission->community_certificate
-                    ),
-                    "salary_certificate" => asset(
-                        "storage/app/slip_photos/" . $admission->slip_photo
-                    ),
-                    "medical_certificate" => asset(
-                        "storage/app/medical_certificate_photos/" .
-                            $admission->medical_certificate_photo
-                    ),
-                    "reference_letter" => asset(
-                        "storage/app/reference_letter_photos/" .
-                            $admission->reference_letter_photo
-                    ),
-                    "church_certificate" => asset(
-                        "storage/app/church_certificate_photos/" .
-                            $admission->church_certificate_photo
-                    ),
-                    "transfer_certificate" => asset(
-                        "storage/app/transfer_certificate_photos/" .
-                            $admission->transfer_certificate_photo
-                    ),
-                    "migration_certificate" => asset(
-                        "storage/app/admission_photos/" .
-                            $admission->admission_photo
-                    ),
-                ],
+                "data" => $admission,
             ]);
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // Return an error response if the record is not found
             return response()->json(

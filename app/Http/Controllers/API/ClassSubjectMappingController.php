@@ -114,8 +114,9 @@ class ClassSubjectMappingController extends Controller
         ]);
     }
 
-    public function deleteSubjects($class)
+    public function deleteSubjects(Request $request, $class)
     {
+        $class = $request->class;
         // Update delete_status to 1 instead of deleting the record
         $updatedRows = ClassSubjectMapping::where("class", $class)->update([
             "delete_status" => 1,
