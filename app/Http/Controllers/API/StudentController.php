@@ -1101,7 +1101,7 @@ class StudentController extends Controller
 
             foreach ($imageFields as $field) {
                 if (!empty($admission->$field)) {
-                    $admission->$field = asset('storage/student_images/' . $admission->$field);
+                    $admission->$field = asset($admission->$field);
                 }
             }
 
