@@ -1108,8 +1108,9 @@ public function getMatchingUsers($input)
         //     return response()->json($response);
         // }
         
-        public function SearchStandardSec($standard, Request $request)
+        public function SearchStandardSec(Request $request, $standard)
         { 
+            $standard = $request->query('standard');
             // Retrieve 'sec' and 'academic_year' from query parameters (optional)
             $sec = $request->query('sec');
             $group = $request->query('group');
@@ -1134,6 +1135,8 @@ public function getMatchingUsers($input)
         
             // Fetch the students
             $students = $query->get();
+
+           // dd($students);
         
             // Prepare the response
             $response = $students->map(function ($student) {
@@ -1147,7 +1150,7 @@ public function getMatchingUsers($input)
                     $student->academic_year = $calculatedAcademicYear;
                     $student->save(); // Save the updated academic year
                 }
-        
+                
                 return [
                     'id' => $student->id,
                     'roll_no' => $student->roll_no,
@@ -1166,41 +1169,23 @@ public function getMatchingUsers($input)
 
 
 
-public function ADSearchStandardSec($standard, Request $request)
+public function ADSearchStandardSec(Request $request, $standard)
 {
+    $standard = $request->query('standard');
     $sec = $request->query('sec');
     $group = $request->query('group');
     $academicYear = $request->query('academic_year');
 
     // Use chunking only if huge dataset — else get() is okay
     $students = DB::table('admitted_students')
-        ->select(
-            'id', 'roll_no', 'admission_no', 'STUDENT_NAME', 'date_form', 'MOTHERTONGUE', 'STATE',
-            'DOB_DD_MM_YYYY', 'SEX', 'BLOOD_GROUP', 'NATIONALITY', 'RELIGION', 'DENOMINATION',
-            'CASTE', 'CASTE_CLASSIFICATION', 'AADHAAR_CARD_NO', 'RATIONCARDNO', 'EMIS_NO', 'pen_no',
-            'FOOD', 'chronic_des', 'medicine_taken', 'FATHER', 'OCCUPATION', 'MOTHER', 'mother_occupation',
-            'GUARDIAN', 'guardian_occupation', 'MOBILE_NUMBER', 'EMAIL_ID', 'WHATS_APP_NO', 'mother_email_id',
-            'guardian_contact_no', 'guardian_email_id', 'MONTHLY_INCOME', 'mother_income', 'guardian_income',
-            'PERMANENT_HOUSENUMBER', 'P_STREETNAME', 'P_VILLAGE_TOWN_NAME', 'P_DISTRICT', 'P_STATE',
-            'P_PINCODE', 'COMMUNICATION_HOUSE_NO', 'C_STREET_NAME', 'C_VILLAGE_TOWN_NAME', 'C_DISTRICT',
-            'C_STATE', 'C_PINCODE', 'CLASS_LAST_STUDIED', 'NAME_OF_SCHOOL', 'SOUGHT_STD', 'sec', 'syllabus',
-            'GROUP_12', 'group_no', 'second_group_no', 'LANG_PART_I', 'profile_photo', 'birth_certificate_photo',
-            'aadhar_card_photo', 'ration_card_photo', 'community_certificate', 'slip_photo',
-            'medical_certificate_photo', 'reference_letter_photo', 'church_certificate_photo',
-            'transfer_certificate_photo', 'admission_photo', 'payment_order_id', 'siblings', 'brother_1',
-            'brother_2', 'gender_1', 'gender_2', 'class_1', 'class_2', 'brother_3', 'gender_3', 'class_3',
-            'last_school_state', 'second_language_school', 'second_language', 'reference_name_1',
-            'reference_name_2', 'reference_phone_1', 'reference_phone_2', 'ORGANISATION', 'mother_organization',
-            'guardian_organization', 'created_at', 'updated_at', 'documents', 'admission_id', 'father_title',
-            'mother_title', 'guardian_title', 'academic_year', 'status', 'grade_status', 'upload_created_at',
-            'upload_updated_at'
-        )
-        ->where('SOUGHT_STD', $standard)
+        ->where('std_sought',(int)  $standard)
         // ->where('status', 1)
         ->when($sec && $sec !== "null", fn($q) => $q->where('sec', $sec))
-        ->when($group && $group !== "null", fn($q) => $q->where('GROUP_12', $group))
+        ->when($group && $group !== "null", fn($q) => $q->where('group_first_choice', $group))
         ->when($academicYear && $academicYear !== "null", fn($q) => $q->where('academic_year', $academicYear))
         ->get();
+
+    //dd($students);
 
     // If many records missing academic year, batch update instead of per-record
     $missing = $students->filter(fn($s) => !$s->academic_year);
