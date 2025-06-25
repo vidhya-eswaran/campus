@@ -13,43 +13,47 @@ class StudentHealthcareController extends Controller
     public function addHealthcareRecord(Request $request)
     {
         $requestData = $request->validate([
-            'admissionNo' => 'required',
+            'admission_no' => 'required',
             'hostel_name'=> 'nullable',
-            'treatmentType' => 'nullable',
-            'fromDate' => 'nullable',
-            'toDate' => 'nullable',
-            'natureOfSkiness' => 'nullable',
+            'treatment_type' => 'nullable',
+            'from_date' => 'nullable',
+            'to_date' => 'nullable',
+            'nature_of_sickness' => 'nullable',
             'cost' => 'nullable',
-            'fatherName' => 'nullable',
-            'fatherNumber' => 'nullable',
-            'motherName' => 'nullable',
-            'motherNumber' => 'nullable',
+            'father_name' => 'nullable',
+            'father_number' => 'nullable',
+            'mother_name' => 'nullable',
+            'mother_number' => 'nullable',
+            'remarks' => 'nullable',
+            'student_id' => 'required',
         ]);
 
         // Create healthcare record
         $healthcareRecord = HealthcareRecord::create([
-            'admission_no' => $requestData['admissionNo'],
-            'treatment_type' => $requestData['treatmentType'],
-            'from_date' => $requestData['fromDate'],
-            'to_date' => $requestData['toDate'],
+            'admission_no' => $requestData['admission_no'],
+            'treatment_type' => $requestData['treatment_type'],
+            'from_date' => $requestData['from_date'],
+            'to_date' => $requestData['to_date'],
             'cost' => $requestData['cost'],
-            'nature_of_sickness' => $requestData['natureOfSkiness'],
+            'nature_of_sickness' => $requestData['nature_of_sickness'],
             'hostel_name' => $requestData['hostel_name'],
-            'father_name' => $requestData['fatherName'],
-            'father_number' => $requestData['fatherNumber'],
-            'mother_name' => $requestData['motherName'],
-            'mother_number' => $requestData['motherNumber'],
+            'father_name' => $requestData['father_name'],
+            'father_number' => $requestData['father_number'],
+            'mother_name' => $requestData['mother_name'],
+            'mother_number' => $requestData['mother_number'],
+            'remarks' => $requestData['remarks'],
+            'student_id' => $requestData['student_id'],
         ]);
         LifecycleLogger::log(
             "Healthcare Record Created",
-            $requestData['admissionNo'], // assuming this is same as User ID
+            $requestData['admission_no'], // assuming this is same as User ID
             'healthcare_record_created',
             [
-                'treatment_type' => $requestData['treatmentType'],
-                'from_date' => $requestData['fromDate'],
-                'to_date' => $requestData['toDate'],
+                'treatment_type' => $requestData['treatment_type'],
+                'from_date' => $requestData['from_date'],
+                'to_date' => $requestData['to_date'],
                 'cost' => $requestData['cost'],
-                'nature_of_sickness' => $requestData['natureOfSkiness'],
+                'nature_of_sickness' => $requestData['nature_of_sickness'],
                 'hostel_name' => $requestData['hostel_name'],
             ]
         );
