@@ -1113,23 +1113,23 @@ CREATE TABLE `group_masters` (
 
 CREATE TABLE `healthcare_records` (
   `id` int(11) NOT NULL,
-  `student_id` int(255) NOT NULL,
+ `student_id` int(255) NOT NULL,
   `admission_no` varchar(100) NOT NULL,
-  `hostel_name` varchar(100) NOT NULL,
+  `hostel_name` varchar(100) DEFAULT NULL,
   `father_name` varchar(100) NOT NULL,
-  `father_number` bigint(11) NOT NULL,
+  `father_number` bigint(11) DEFAULT NULL,
   `mother_name` varchar(100) NOT NULL,
-  `mother_number` bigint(11) NOT NULL,
-  `nature_of_sickness` varchar(100) NOT NULL,
+  `mother_number` bigint(11) DEFAULT NULL,
+  `nature_of_sickness` varchar(100) DEFAULT NULL,
   `treatment_type` varchar(100) NOT NULL,
   `from_date` varchar(100) NOT NULL,
   `to_date` varchar(100) NOT NULL,
-  `cost` int(11) NOT NULL,
+  `cost` int(11) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp(),
   `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
