@@ -141,14 +141,14 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     Route::post('/users', [SchoolUserController::class, 'store']);
 
-    Route::group(['middleware' => ['auth:api']], function () {
+    // Route::group(['middleware' => ['auth:api']], function () {
 
-        Route::post('/healthcare/add', [StudentHealthcareController::class, 'addHealthcareRecord']);
-        Route::post('/healthcare/edit/{id}', [StudentHealthcareController::class, 'editHealthcareRecord']);
-        Route::get('/healthcare/view/{id}', [StudentHealthcareController::class, 'viewHealthcareRecord']);
-        Route::get('/healthcare/viewAll', [StudentHealthcareController::class, 'viewAllHealthcareRecords']);
+    //     Route::post('/healthcare/add', [StudentHealthcareController::class, 'addHealthcareRecord']);
+    //     Route::post('/healthcare/edit/{id}', [StudentHealthcareController::class, 'editHealthcareRecord']);
+    //     Route::get('/healthcare/view/{id}', [StudentHealthcareController::class, 'viewHealthcareRecord']);
+    //     Route::get('/healthcare/viewAll', [StudentHealthcareController::class, 'viewAllHealthcareRecords']);
 
-    });
+    // });
 
     Route::get("/detail", function (Request $request)
     {
