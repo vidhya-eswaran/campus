@@ -71,31 +71,35 @@ class StudentHealthcareController extends Controller
         }
 
         $requestData = $request->validate([
-            'admissionNo' => 'required',
+            'admission_no' => 'required',
             'hostel_name'=> 'nullable',
-            'treatmentType' => 'nullable',
-            'fromDate' => 'nullable',
-            'toDate' => 'nullable',
-            'natureOfSkiness' => 'nullable',
+            'treatment_type' => 'nullable',
+            'from_date' => 'nullable',
+            'to_date' => 'nullable',
+            'nature_of_sickness' => 'nullable',
             'cost' => 'nullable',
-            'fatherName' => 'nullable',
-            'fatherNumber' => 'nullable',
-            'motherName' => 'nullable',
-            'motherNumber' => 'nullable',
+            'father_name' => 'nullable',
+            'father_number' => 'nullable',
+            'mother_name' => 'nullable',
+            'mother_number' => 'nullable',
+            'remarks' => 'nullable',
+            'student_id' => 'required',
         ]);
 
         $healthcareRecord->update([
-           'admission_no' => $requestData['admissionNo'],
-            'treatment_type' => $requestData['treatmentType'],
-            'from_date' => $requestData['fromDate'],
-            'to_date' => $requestData['toDate'],
+           'admission_no' => $requestData['admission_no'],
+            'treatment_type' => $requestData['treatment_type'],
+            'from_date' => $requestData['from_date'],
+            'to_date' => $requestData['to_date'],
             'cost' => $requestData['cost'],
-            'nature_of_sickness' => $requestData['natureOfSkiness'],
+            'nature_of_sickness' => $requestData['nature_of_sickness'],
             'hostel_name' => $requestData['hostel_name'],
-            'father_name' => $requestData['fatherName'],
-            'father_number' => $requestData['fatherNumber'],
-            'mother_name' => $requestData['motherName'],
-            'mother_number' => $requestData['motherNumber'],
+            'father_name' => $requestData['father_name'],
+            'father_number' => $requestData['father_number'],
+            'mother_name' => $requestData['mother_name'],
+            'mother_number' => $requestData['mother_number'],
+            'remarks' => $requestData['remarks'],
+            'student_id' => $requestData['student_id'],
         ]);
 
         return response()->json(['message' => 'Healthcare record updated successfully!', 'healthcare_record' => $healthcareRecord], 200);
@@ -118,14 +122,14 @@ class StudentHealthcareController extends Controller
         // dd($roll_no);
         // If student is found, add student details to healthcare record
         if ($student) {
-            $healthcareRecord->studentName = $student->STUDENT_NAME;
-            $healthcareRecord->admissionNo = $student->admission_no;
-            $healthcareRecord->class = $student->SOUGHT_STD;
+            $healthcareRecord->student_name = $student->student_name;
+            $healthcareRecord->admission_no = $student->admission_no;
+            $healthcareRecord->class = $student->std_sought;
             $healthcareRecord->section = User::where('id', $healthcareRecord->admission_no)->value('sec') ?? '';
-            $healthcareRecord->father_mobile_no = $student->MOBILE_NUMBER;
-            $healthcareRecord->father_name = $student->FATHER;
-            $healthcareRecord->mother_name = $student->MOTHER;
-            $healthcareRecord->mother_mobile_no = $student->WHATS_APP_NO;
+            $healthcareRecord->father_mobile_no = $student->father_mobile_no;
+            $healthcareRecord->father_name = $student->father_name;
+            $healthcareRecord->mother_name = $student->mother_name;
+            $healthcareRecord->mother_mobile_no = $student->mother_mobile_no;
             $healthcareRecord->roll_no = $student->roll_no;
 
 
@@ -162,14 +166,14 @@ class StudentHealthcareController extends Controller
         // Fetch the student details related to this healthcare record
             // If student is found, merge the student details into the record
             if ($student) {
-                $record->studentName = $student->STUDENT_NAME;
-                $record->admissionNo = $student->admission_no;
-                $record->class = $student->SOUGHT_STD;
+                $record->student_name = $student->student_name;
+                $record->admission_no = $student->admission_no;
+                $record->class = $student->std_sought;
                 $record->section =  User::where('id', $record->admission_no)->value('sec');
-                $record->father_mobile_no = $student->MOBILE_NUMBER;
-                $record->father_name = $student->FATHER;
-                $record->mother_name = $student->MOTHER;
-                $record->mother_mobile_no = $student->WHATS_APP_NO;
+                $record->father_mobile_no = $student->father_mobile_no;
+                $record->father_name = $student->father_name;
+                $record->mother_name = $student->mother_name;
+                $record->mother_mobile_no = $student->mother_mobile_no;
                 $record->roll_no = $student->roll_no;
             } else {
                 // If no student found, add empty or default values
