@@ -11,6 +11,7 @@ class DonarList extends Model
     protected $table = 'donar_list';
 
     protected $fillable = [
+        'donor_id',
         'donor_name',
         'email',
         'mobile_no',
@@ -29,6 +30,7 @@ class DonarList extends Model
         'mode_of_payment',
         'payment_type',
         'check_dd_trans_id',
+        'amount'
 
     ];
 }

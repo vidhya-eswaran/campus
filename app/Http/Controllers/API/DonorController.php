@@ -19,6 +19,7 @@ class DonorController extends Controller
    {
    // dd($request);
         $validator = Validator::make($request->all(), [
+            'donor_id' => 'nullable',
             'donor_name' => 'nullable|string',
             'email' => 'nullable|email',
             'mobile_no' => 'nullable|string',
@@ -51,6 +52,7 @@ class DonorController extends Controller
        // dd($validatedData['donor_name']);
 
         $donor = DonarList::create([
+            'donor_id' => $validatedData['donor_id'] ?? null,
             'donor_name' => $validatedData['donor_name'] ?? null,
             'email' => $validatedData['email'] ?? null,
             'mobile_no' => $validatedData['mobile_no'] ?? null,
@@ -88,6 +90,7 @@ class DonorController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
+            'donor_id' => 'nullable',
             'donor_name' => 'nullable|string',
             'email' => 'nullable|email',
             'mobile_no' => 'nullable|string',
@@ -111,6 +114,7 @@ class DonorController extends Controller
 
         // Update the record using validated data
         $donor->update([
+            'donor_id' => $validatedData['donor_id'] ?? null,
             'donor_name' => $validatedData['donor_name'] ?? null,
             'email' => $validatedData['email'] ?? null,
             'mobile_no' => $validatedData['mobile_no'] ?? null,
