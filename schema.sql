@@ -810,26 +810,27 @@ CREATE TABLE `discount_lists` (
 
 CREATE TABLE `donar_list` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `donor_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
-  `address_1` text DEFAULT NULL,
-  `city_1` varchar(100) DEFAULT NULL,
-  `state_1` varchar(100) DEFAULT NULL,
-  `country_1` varchar(100) DEFAULT NULL,
-  `pincode_1` varchar(20) DEFAULT NULL,
-  `address_2` text DEFAULT NULL,
+  `mobile_no` varchar(20) DEFAULT NULL,
+  `address_line_1` text DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `pincode` varchar(20) DEFAULT NULL,
+  `address_line_2` text DEFAULT NULL,
   `city_2` varchar(100) DEFAULT NULL,
   `state_2` varchar(100) DEFAULT NULL,
   `country_2` varchar(100) DEFAULT NULL,
   `pincode_2` varchar(20) DEFAULT NULL,
-  `pan_aadhar` varchar(50) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `type_of_donation` varchar(100) DEFAULT NULL,
+  `pan_no` varchar(50) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `typeOfDonation` varchar(100) DEFAULT NULL,
   `check_dd_trans_id` varchar(255) DEFAULT NULL,
   `delete_status` int(11) NOT NULL DEFAULT 0,
-  `mode_of_payment` varchar(50) DEFAULT NULL
+  `mode_of_payment` varchar(50) DEFAULT NULL,
+  `payment_type` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
