@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DonarList;
+use Illuminate\Support\Facades\Validator;
 
 class DonorController extends Controller
 {
@@ -15,41 +16,60 @@ class DonorController extends Controller
     }
 
    public function store(Request $request)
-    {
-        // Validate the request data directly
-        $validatedData = $request->validate([
-            'name' => 'nullable',
-            'email' => 'nullable',
-            'phoneNumber' => 'nullable',
-            'addressline1' => 'nullable',
-            'addressline2' => 'nullable',
-            'city' => 'nullable',
-            'state' => 'nullable',
-            'country' => 'nullable',
-            'pincode' => 'nullable',
-            'panNo' => 'nullable',
-            'typeofDonation' => 'nullable',
-            'modeofPayment' => 'nullable',
+   {
+   // dd($request);
+        $validator = Validator::make($request->all(), [
+            'donor_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'mobile_no' => 'nullable|string',
+            'address_line_1' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string',
+            'pincode' => 'nullable|string',
+            'address_line_2' => 'nullable|string',
+            'city_2' => 'nullable|string',
+            'state_2' => 'nullable|string',
+            'country_2' => 'nullable|string',
+            'pincode_2' => 'nullable|string',
+            'pan_no' => 'nullable|string',
+            'typeOfDonation' => 'nullable|string',
+            'mode_of_payment' => 'nullable|string',
+            'payment_type' => 'nullable|string',
+            'check_dd_trans_id' => 'nullable|string',
             'amount' => 'nullable',
-            'checkddTransid' => 'nullable',
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
-        // Create the record using validated data
+        $validatedData = $validator->validated();
+
+       // dd($validatedData['donor_name']);
+
         $donor = DonarList::create([
-            'name' => $validatedData['name'],
+            'donor_name' => $validatedData['donor_name'] ?? null,
             'email' => $validatedData['email'] ?? null,
-            'phone_number' => $validatedData['phoneNumber'] ?? null,
-            'address_1' => $validatedData['addressline1'] ?? null,
-            'address_2' => $validatedData['addressline2'] ?? null,
-            'city_1' => $validatedData['city'] ?? null,
-            'state_1' => $validatedData['state'] ?? null,
-            'country_1' => $validatedData['country'] ?? null,
-            'pincode_1' => $validatedData['pincode'] ?? null,
-            'pan_aadhar' => $validatedData['panNo'] ?? null,
-            'type_of_donation' => $validatedData['typeofDonation'] ?? null,
-            'mode_of_payment' => $validatedData['modeofPayment'],
-            'amount' => $validatedData['amount'],
-            'check_dd_trans_id' => $validatedData['checkddTransid'] ?? null,
+            'mobile_no' => $validatedData['mobile_no'] ?? null,
+            'address_line_1' => $validatedData['address_line_1'] ?? null,
+            'city' => $validatedData['city'] ?? null,
+            'state' => $validatedData['state'] ?? null,
+            'country' => $validatedData['country'] ?? null,
+            'pincode' => $validatedData['pincode'] ?? null,
+            'address_line_2' => $validatedData['address_line_2'] ?? null,
+            'city_2' => $validatedData['city_2'] ?? null,
+            'state_2' => $validatedData['state_2'] ?? null,
+            'country_2' => $validatedData['country_2'] ?? null,
+            'pincode_2' => $validatedData['pincode_2'] ?? null,
+            'pan_no' => $validatedData['pan_no'] ?? null,
+            'typeOfDonation' => $validatedData['typeOfDonation'] ?? null,
+            'mode_of_payment' => $validatedData['mode_of_payment'] ?? null,
+            'payment_type' => $validatedData['payment_type'] ?? null,
+            'check_dd_trans_id' => $validatedData['check_dd_trans_id'] ?? null,
+            'amount' => $validatedData['amount'] ?? null,
         ]);
 
         return response()->json([
@@ -57,6 +77,7 @@ class DonorController extends Controller
             'data' => $donor,
         ], 201);
     }
+
 
 
     public function update(Request $request, $id)
@@ -67,38 +88,48 @@ class DonorController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phoneNumber' => 'nullable|string|max:20',
-            'addressline1' => 'nullable|string|max:255',
-            'addressline2' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-            'country' => 'nullable|string|max:100',
-            'pincode' => 'nullable|string|max:20',
-            'panNo' => 'nullable|string|max:50',
-            'typeofDonation' => 'nullable|string|max:100',
-            'modeofPayment' => 'required|string|max:100',
-            'amount' => 'required|numeric|min:0',
-            'checkddTransid' => 'nullable|string|max:100',
+            'donor_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'mobile_no' => 'nullable|string',
+            'address_line_1' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string',
+            'pincode' => 'nullable|string',
+            'address_line_2' => 'nullable|string',
+            'city_2' => 'nullable|string',
+            'state_2' => 'nullable|string',
+            'country_2' => 'nullable|string',
+            'pincode_2' => 'nullable|string',
+            'pan_no' => 'nullable|string',
+            'typeOfDonation' => 'nullable|string',
+            'mode_of_payment' => 'nullable|string',
+            'payment_type' => 'nullable|string',
+            'check_dd_trans_id' => 'nullable|string',
+            'amount' => 'nullable',
         ]);
 
         // Update the record using validated data
         $donor->update([
-            'name' => $validatedData['name'],
+            'donor_name' => $validatedData['donor_name'] ?? null,
             'email' => $validatedData['email'] ?? null,
-            'phone_number' => $validatedData['phoneNumber'] ?? null,
-            'address_1' => $validatedData['addressline1'] ?? null,
-            'address_2' => $validatedData['addressline2'] ?? null,
-            'city_1' => $validatedData['city'] ?? null,
-            'state_1' => $validatedData['state'] ?? null,
-            'country_1' => $validatedData['country'] ?? null,
-            'pincode_1' => $validatedData['pincode'] ?? null,
-            'pan_aadhar' => $validatedData['panNo'] ?? null,
-            'type_of_donation' => $validatedData['typeofDonation'] ?? null,
-            'mode_of_payment' => $validatedData['modeofPayment'],
-            'amount' => $validatedData['amount'],
-            'check_dd_trans_id' => $validatedData['checkddTransid'] ?? null,
+            'mobile_no' => $validatedData['mobile_no'] ?? null,
+            'address_line_1' => $validatedData['address_line_1'] ?? null,
+            'city' => $validatedData['city'] ?? null,
+            'state' => $validatedData['state'] ?? null,
+            'country' => $validatedData['country'] ?? null,
+            'pincode' => $validatedData['pincode'] ?? null,
+            'address_line_2' => $validatedData['address_line_2'] ?? null,
+            'city_2' => $validatedData['city_2'] ?? null,
+            'state_2' => $validatedData['state_2'] ?? null,
+            'country_2' => $validatedData['country_2'] ?? null,
+            'pincode_2' => $validatedData['pincode_2'] ?? null,
+            'pan_no' => $validatedData['pan_no'] ?? null,
+            'typeOfDonation' => $validatedData['typeOfDonation'] ?? null,
+            'mode_of_payment' => $validatedData['mode_of_payment'] ?? null,
+            'payment_type' => $validatedData['payment_type'] ?? null,
+            'check_dd_trans_id' => $validatedData['check_dd_trans_id'] ?? null,
+            'amount' => $validatedData['amount'] ?? null,
         ]);
 
         return response()->json([

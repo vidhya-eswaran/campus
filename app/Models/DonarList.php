@@ -11,22 +11,23 @@ class DonarList extends Model
     protected $table = 'donar_list';
 
     protected $fillable = [
-        'name',
+        'donor_name',
         'email',
-        'phone_number',
-        'address_1',
-        'city_1',
-        'state_1',
-        'country_1',
-        'pincode_1',
-        'address_2',
+        'mobile_no',
+        'address_line_1',
+        'city',
+        'state',
+        'country',
+        'pincode',
+        'address_line_2',
         'city_2',
         'state_2',
         'country_2',
         'pincode_2',
-        'pan_aadhar',
-        'type_of_donation',
+        'pan_no',
+        'typeOfDonation',
         'mode_of_payment',
+        'payment_type',
         'check_dd_trans_id',
 
     ];
