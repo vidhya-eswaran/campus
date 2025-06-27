@@ -563,7 +563,7 @@ class StudentController extends Controller
 
     public function read(Request $request)
     {
-        $fields = ['STUDENT_NAME', 'roll_no', 'SOUGHT_STD', 'sec', 'admission_id']; // <-- Define this
+        $fields = ['student_name', 'roll_no', 'std_sought', 'sec', 'admission_id']; // <-- Define this
 
         $query = Student::query();
 
@@ -607,7 +607,7 @@ class StudentController extends Controller
             ->groupBy(fn($row) => $row->roll_no);
 
         foreach ($students as $student) {
-            $student->standard = $student->SOUGHT_STD;
+            $student->standard = $student->std_sought;
             $student->sec = $student->sec;
             $student->admission_id = $student->admission_id;
             $student->profile_id = $student->id;

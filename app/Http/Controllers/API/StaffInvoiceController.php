@@ -846,6 +846,7 @@ class StaffInvoiceController extends Controller
     public function updateStaffFees(Request $request, $id)
     {
         try {
+            $id = $request->id;
             $data = $request->only(["feesType", "amount"]);
 
             if (empty($data["feesType"]) || empty($data["amount"])) {
