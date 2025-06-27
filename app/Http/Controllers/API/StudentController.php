@@ -116,8 +116,17 @@ class StudentController extends Controller
 
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
 
+                             // Compress and encode the image
+                            $compressedImage = Image::make($file)
+                                ->resize(1024, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                    $constraint->upsize();
+                                })
+                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+
+
                             // Store the file in storage/app/public/student_images/
-                            $path = $file->storeAs('public/student_images', $filename);
+                            $path = $file->storeAs('public/student_images', $compressedImage);
 
                             // Save the relative path in the mapped data (without "public/")
                             $mappedData[$field] = str_replace('public/', 'storage/', $path);
@@ -185,8 +194,17 @@ class StudentController extends Controller
                                 // Generate unique filename with date and time
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
 
-                                // Store the file in storage/app/public/student_images/
-                                $path = $file->storeAs('public/student_images', $filename);
+                                 // Compress and encode the image
+                            $compressedImage = Image::make($file)
+                                ->resize(1024, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                    $constraint->upsize();
+                                })
+                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+
+
+                            // Store the file in storage/app/public/student_images/
+                            $path = $file->storeAs('public/student_images', $compressedImage);
 
                                 // Save the relative path in the mapped data (without "public/")
                                 $mappedData[$field] = str_replace('public/', 'storage/', $path);
@@ -714,8 +732,17 @@ class StudentController extends Controller
                                     // Generate unique filename with date and time
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
 
-                                    // Store the file in storage/app/public/student_images/
-                                    $path = $file->storeAs('public/student_images', $filename);
+                                     // Compress and encode the image
+                            $compressedImage = Image::make($file)
+                                ->resize(1024, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                    $constraint->upsize();
+                                })
+                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+
+
+                            // Store the file in storage/app/public/student_images/
+                            $path = $file->storeAs('public/student_images', $compressedImage);
 
                                     // Save the relative path in the mapped data (without "public/")
                                     $admission->$field = str_replace('public/', 'storage/', $path);
