@@ -698,14 +698,31 @@ class StudentController extends Controller
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
 
-        // Handle image uploads
+        // // Handle image uploads
+        // foreach ($imageFields as $field) {
+        //     if ($request->hasFile($field)) {
+        //         $filename = $field . '_' . time() . '.' . $request->file($field)->getClientOriginalExtension();
+        //         $path = $request->file($field)->storeAs('public/student_images', $filename);
+        //         $admission->$field = 'storage/student_images/' . $filename;
+        //     }
+        // }
+
         foreach ($imageFields as $field) {
-            if ($request->hasFile($field)) {
-                $filename = $field . '_' . time() . '.' . $request->file($field)->getClientOriginalExtension();
-                $path = $request->file($field)->storeAs('public/student_images', $filename);
-                $admission->$field = 'student_images/' . $filename;
-            }
-        }
+                                if ($request->hasFile($field)) {
+                                    $file = $request->file($field);
+
+                                    // Generate unique filename with date and time
+                                    $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                                    // Store the file in storage/app/public/student_images/
+                                    $path = $file->storeAs('public/student_images', $filename);
+
+                                    // Save the relative path in the mapped data (without "public/")
+                                    $admission->$field = str_replace('public/', 'storage/', $path);
+                                } else {
+                                    $admission->$field = null; // or handle as needed
+                                }
+                            }
 
         $admission->save();
 
