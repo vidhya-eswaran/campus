@@ -1108,35 +1108,29 @@ public function getMatchingUsers($input)
         //     return response()->json($response);
         // }
         
-        public function SearchStandardSec(Request $request, $standard)
+        public function SearchStandardSec(Request $request)
         { 
             $standard = $request->query('standard');
-            // Retrieve 'sec' and 'academic_year' from query parameters (optional)
-            $sec = $request->query('sec');
+            $sec = $request->query('sec');           
             $group = $request->query('group');
             $academicYear = $request->query('academic_year');
-            // Build the query
             $query = User::where('standard', '=', $standard)
                          ->where('status', '=', 1);
-        
-            // Add condition for 'sec' if provided
+
             if ($sec && $sec !== "null") {
                 $query->where('sec', '=', $sec);
             }
-            // Add condition for 'group' if provided
             if ($group && $group !== "null") {
                 $query->where('twe_group', '=', $group);
             }
         
-            // Add condition for 'academic_year' if provided
             if ($academicYear && $academicYear !== "null") {
                 $query->where('academic_year', '=', $academicYear);
             }
-        
-            // Fetch the students
+           
             $students = $query->get();
 
-           // dd($students);
+            //dd($students);
         
             // Prepare the response
             $response = $students->map(function ($student) {

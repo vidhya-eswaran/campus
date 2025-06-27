@@ -447,7 +447,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("/searchStudents", [ApiController::class , "searchStudents"]);
     Route::post("/student-master-readstudents/{grade}/{section}", [ApiController::class , "readstudents", ]);
     Route::post("/studentByGrades/{standard}", [ApiController::class , "StudentByStandard", ]);
-    Route::get("/studentByGradesSec/{standard}", [ApiController::class , "SearchStandardSec", ]);
+    Route::get("/studentByGradesSec", [ApiController::class , "SearchStandardSec"]);
     Route::get("/ADstudentByGradesSec/{standard}", [ApiController::class , "ADSearchStandardSec", ]);
     Route::post("/withoutSponsorGrades/{standard}", [ApiController::class , "withoutSponsorStandard", ]);
     Route::post("/student-fees", [ApiController::class , "studentfees"]);
