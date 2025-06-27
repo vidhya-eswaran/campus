@@ -118,7 +118,7 @@ class ClassSubjectMappingController extends Controller
     {
         $class = $request->class;
         // Update delete_status to 1 instead of deleting the record
-        $updatedRows = ClassSubjectMapping::where("class", $class)->update([
+        $updatedRows = ClassSubjectMapping::where('id', $class)->update([
             "delete_status" => 1,
         ]);
 
