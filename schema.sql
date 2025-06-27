@@ -481,6 +481,8 @@ CREATE TABLE `admitted_students` (
   `reference_letter_image` varchar(90) DEFAULT NULL,
   `church_certificate_photo` varchar(90) DEFAULT NULL,
   `transfer_certificate_image` varchar(90) DEFAULT NULL,
+  `migration_image` varchar(255) DEFAULT NULL,
+  `church_endorsement_image` varchar(255) DEFAULT NULL,
   `admission_photo` varchar(90) DEFAULT NULL,
   `payment_order_id` varchar(90) DEFAULT NULL,
   `sibling_1` varchar(100) DEFAULT NULL,

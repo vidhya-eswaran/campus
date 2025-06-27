@@ -81,6 +81,8 @@ class StudentController extends Controller
             'salary_image',
             'reference_letter_image',
             'transfer_certificate_image',
+            'migration_image',
+            'church_endorsement_image',
         ];
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
@@ -688,6 +690,8 @@ class StudentController extends Controller
             'salary_image',
             'reference_letter_image',
             'transfer_certificate_image',
+            'migration_image',
+            'church_endorsement_image',
         ];
 
         // Bulk update non-file fields
@@ -1097,6 +1101,8 @@ class StudentController extends Controller
                 'salary_image',
                 'reference_letter_image',
                 'transfer_certificate_image',
+                'migration_image',
+                'church_endorsement_image',
             ];
 
             foreach ($imageFields as $field) {
@@ -1146,6 +1152,8 @@ class StudentController extends Controller
                 'salary_image',
                 'reference_letter_image',
                 'transfer_certificate_image',
+                'migration_image',
+                'church_endorsement_image',
             ];
 
             foreach ($imageFields as $field) {
