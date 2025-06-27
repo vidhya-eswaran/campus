@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentsExport;
+use Intervention\Image\Facades\Image;
 use App\Helpers\LifecycleLogger;
 
 class StudentController extends Controller
