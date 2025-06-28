@@ -77,7 +77,7 @@ class StudentPromotionController extends Controller
                     // Update Student table
                     $existingStudent = Student::where('admission_no', $existingUser->admission_no)->first();
                     if ($existingStudent) {
-                        $existingStudent->SOUGHT_STD  = $student['std'];
+                        $existingStudent->std_sought  = $student['std'];
                         $existingStudent->sec  = $student['sec'];
                         $existingStudent->academic_year  = $student['current_academic_year'];
                         $existingStudent->grade_status = $student['grade_status'];
