@@ -38,15 +38,20 @@ class ExamMasterController extends Controller
         $validated = $request->validate([
             'term' => 'required|string',
             'class' => 'required|string',
-            'subjects_mark' => 'required|array',
-            'total' => 'required|string',
+            'subject' => 'required|array',
+            'mark' => 'required|string',
+            'group_no' => 'nullable',
+            'acad_year' => 'nullable',
+
         ]);
 
         $exam = ExamMaster::create([
             'term' => $validated['term'],
             'class' => $validated['class'],
-            'subjects_mark' => json_encode($validated['subjects_mark']),
-            'total' => $validated['total'],
+            'subject' => json_encode($validated['subject']),
+            'mark' => $validated['mark'],
+            'group_no' => $validated['group_no'],
+            'acad_year' => $validated['acad_year'],
             'delete_status' => 0,
         ]);
 
@@ -60,17 +65,21 @@ class ExamMasterController extends Controller
         $exam = ExamMaster::findOrFail($id);
 
         $validated = $request->validate([
-            'term' => 'required|string',
+             'term' => 'required|string',
             'class' => 'required|string',
-            'subjects_mark' => 'required|array',
-            'total' => 'required|string',
+            'subject' => 'required|array',
+            'mark' => 'required|string',
+            'group_no' => 'nullable',
+            'acad_year' => 'nullable',
         ]);
 
         $exam->update([
-            'term' => $validated['term'],
+           'term' => $validated['term'],
             'class' => $validated['class'],
-            'subjects_mark' => json_encode($validated['subjects_mark']),
-            'total' => $validated['total'],
+            'subject' => json_encode($validated['subject']),
+            'mark' => $validated['mark'],
+            'group_no' => $validated['group_no'],
+            'acad_year' => $validated['acad_year'],
         ]);
 
         return response()->json(['message' => 'Exam record updated successfully', 'data' => $exam]);
