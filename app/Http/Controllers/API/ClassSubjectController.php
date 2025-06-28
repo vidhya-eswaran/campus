@@ -52,12 +52,14 @@ class ClassSubjectController extends Controller
             return response()->json($subjects);
         }
         
-        public function viewByClass($standard, Request $request)
+        public function viewByClass(Request $request)
         {
             // Retrieve query parameters
             $sec = $request->query('sec'); // Section filter
             $group_no = $request->query('group_no'); // Group filter
             $term = $request->query('term'); // Term filter
+            $standard = $request->query('class'); 
+
         
             // Fetch subjects with marks
             $subjectQuery = ClassSubject::where('class', '=', $standard);

@@ -617,7 +617,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("/get_all_Tiles", [TileController::class , "getallTiles"]);
 
     Route::get("/class-subjects-mark", [ClassSubjectController::class , "viewAll"]); // View all
-    Route::get("/class-subjects/{class}", [ClassSubjectController::class , "viewByClass", ]); // View by class
+    Route::get("/class-subjects-class", [ClassSubjectController::class , "viewByClass", ]); // View by class
     Route::post("/class-subjects-mark", [ClassSubjectController::class , "bulkInsert", ]); // Insert
     Route::delete("/class-subjects-delete", [ClassSubjectController::class , "delete", ]); // Delete
     Route::put("/class-subjects-update", [ClassSubjectController::class , "updateBulk", ]); // Bulk Update
