@@ -696,6 +696,25 @@ CREATE TABLE `class_masters` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `class_subjects`
+--
+
+CREATE TABLE `class_subjects` (
+  `id` int(11) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `group_no` varchar(50) DEFAULT NULL,
+  `term` varchar(50) DEFAULT NULL,
+  `acad_year` year(4) DEFAULT NULL,
+  `mark` int(11) DEFAULT NULL,
+  `sec` varchar(10) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `class_subject_mappings`
 --
 
@@ -821,6 +840,8 @@ CREATE TABLE `donar_list` (
   `country` varchar(100) DEFAULT NULL,
   `pincode` varchar(20) DEFAULT NULL,
   `address_line_2` text DEFAULT NULL,
+  `amount` varchar(255) DEFAULT NULL,
+  `donor_id` varchar(255) DEFAULT NULL,
   `city_2` varchar(100) DEFAULT NULL,
   `state_2` varchar(100) DEFAULT NULL,
   `country_2` varchar(100) DEFAULT NULL,
@@ -2791,6 +2812,12 @@ ALTER TABLE `class_masters`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `class_subjects`
+--
+ALTER TABLE `class_subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `class_subject_mappings`
 --
 ALTER TABLE `class_subject_mappings`
@@ -3415,6 +3442,12 @@ ALTER TABLE `by_pay_informations`
 --
 ALTER TABLE `class_masters`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `class_subjects`
+--
+ALTER TABLE `class_subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `class_subject_mappings`
