@@ -423,7 +423,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
         Route::post("/store", [MessageController::class , "store"]);
         Route::post("/{id}/reply", [MessageController::class , "reply"]);
     });
-    Route::get("download/{fileName}", [MessageController::class , "downloadFile", ])->name("download.file");
+    Route::post("download", [MessageController::class , "downloadFile"])->name("download.file");
 
     //subjects
     Route::prefix("subjects")->group(function ()
