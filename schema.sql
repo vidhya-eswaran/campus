@@ -979,10 +979,12 @@ CREATE TABLE `event_category_masters` (
 
 CREATE TABLE `exam_masters` (
   `id` int(10) UNSIGNED NOT NULL,
-  `term` varchar(255) NOT NULL,
+   `term` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
-  `subjects_mark` varchar(255) NOT NULL,
-  `total` varchar(255) NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `mark` varchar(255) DEFAULT NULL,
+  `group_no` varchar(255) DEFAULT NULL,
+  `acad_year` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
