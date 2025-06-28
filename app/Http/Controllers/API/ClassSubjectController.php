@@ -110,188 +110,98 @@ class ClassSubjectController extends Controller
         
             // Insert a new class and subject SELECT `id`, `class`, `group_no`, `subject`, `term`, `acad_year`, `mark`, `sec`, `created_at`, `updated_at` FROM `class_subjects` WHERE 1
          
-          public function bulkInsert(Request $request)
-            {
-                
-                
-                        $request->validate([
-                            'data' => 'required|array|min:1', // Ensures at least one record is provided
-                            'data.*.class' => 'required',
-                            'data.*.subject' => 'required',
-                            'data.*.group_no' => 'nullable',
-                            'data.*.term' => 'nullable',
-                            'data.*.mark' => 'nullable', // Ensures 'mark' is numeric if provided
-                            'data.*.sec' => 'nullable',
-                            'data.*.acad_year' => 'nullable',
-                        ]);
-                    
-                        $insertData = collect($request->input('data'))
-                            ->map(function ($item) {
-                                return [
-                                    'class' => $item['class'],
-                                    'subject' => $item['subject'],
-                                    'group_no' => $item['group_no'] ?? null,
-                                    'term' => $item['term'] ?? null,
-                                    'acad_year' => $item['acad_year'] ?? null,
-                                    'mark' => $item['mark'] ?? null,
-                                    'sec' => $item['sec'] ?? null,
-                                    'created_at' => now(),
-                                    'updated_at' => now(),
-                                ];
-                            })
-                            ->toArray();
-                    
-                        if (!empty($insertData)) {
-                            ClassSubject::insert($insertData);
-                        }
-                    
-                        return response()->json([
-                            'message' => 'Classes and subjects added successfully',
-                            'data' => $insertData,
-                        ], 201);
-            }
-        
-    public function updateBulk_old(Request $request)
+    public function bulkInsert(Request $request)
     {
-        $request->validate([
-            'data' => 'required|array|min:1',
-            'data.*.id' => 'required|exists:class_subjects,id',
-            'data.*.class' => 'nullable|string|max:255',
-            'data.*.subject' => 'nullable|string|max:255',
-            'data.*.group_no' => 'nullable|string|max:255',
-            'data.*.term' => 'nullable|string|max:255',
-            'data.*.mark' => 'nullable|numeric',
-            'data.*.sec' => 'nullable|string|max:255',
-            'data.*.acad_year' => 'nullable|string|max:255',
+        $validated = $request->validate([
+            '*.class' => 'required',
+            '*.subject' => 'required',
+            '*.group_no' => 'nullable',
+            '*.term' => 'nullable',
+            '*.mark' => 'nullable',
+            '*.sec' => 'nullable',
+            '*.acad_year' => 'nullable',
         ]);
-    
-        $data = $request->input('data');
-    
-        // Fetch all records in one query
-        $ids = array_column($data, 'id');
-        $classSubjects = ClassSubject::whereIn('id', $ids)->get()->keyBy('id');
-    
-        $updatedData = [];
-    
-        foreach ($data as $item) {
-            if (isset($classSubjects[$item['id']])) {
-                $classSubject = $classSubjects[$item['id']];
-                $classSubject->update([
-                    'class' => $item['class'] ?? $classSubject->class,
-                    'subject' => $item['subject'] ?? $classSubject->subject,
-                    'group_no' => $item['group_no'] ?? $classSubject->group_no,
-                    'term' => $item['term'] ?? $classSubject->term,
-                    'acad_year' => $item['acad_year'] ?? $classSubject->acad_year,
-                    'mark' => $item['mark'] ?? $classSubject->mark,
-                    'sec' => $item['sec'] ?? $classSubject->sec,
-                    'updated_at' => now(),
-                ]);
-                $updatedData[] = $classSubject;
-            }
-        }
-    
-        return response()->json([
-            'message' => 'Classes and subjects updated successfully',
-            'data' => $updatedData,
-        ]);
-    }
-    
-    public function updateBulk_OLLD(Request $request)
-    {
-        // Convert request data to expected format
-        $convertedData = ['data' => $request->all()];
-    
-        // Validate the converted data
-        $validatedData = Validator::make($convertedData, [
-            'data' => 'required|array|min:1',
-            'data.*.id' => 'required|exists:class_subjects,id',
-            'data.*.subject' => 'required|string|max:255',
-            'data.*.mark' => 'required|numeric|min:0|max:100', // Ensure mark is numeric and within range
-        ])->validate();
-    
-        // Process and update records
-        $updatedData = [];
-        foreach ($validatedData['data'] as $subjectData) {
-            $classSubject = ClassSubject::find($subjectData['id']);
-    
-            if ($classSubject) {
-                $classSubject->update([
-                    'subject' => $subjectData['subject'],
-                    'mark' => $subjectData['mark']
-                ]);
-                $updatedData[] = $classSubject->toArray(); // Convert to array for JSON response
-            }
-        }
-    
-        return response()->json([
-            'message' => 'Classes and subjects updated successfully',
-            'data' => $updatedData, // Return updated records
-        ]);
-    }
-public function updateBulk(Request $request)
-{
- 
-    try {
-        // Validate input request
-        $validatedData = $request->validate([
-            'data' => 'required', // Ensures at least one record is provided
-            'data.*.class' => 'required',
-            'data.*.subject' => 'required',
-            'data.*.group_no' => 'nullable',
-            'data.*.term' => 'required',
-            'data.*.mark' => 'nullable',
-            'data.*.acad_year' => 'required',
-        ]);
-         // Extract filter criteria from the first item in the payload
-        $firstItem = $validatedData['data'][0];
 
-        // Delete existing records matching the criteria
-        $deleteQuery = ClassSubject::where('class', $firstItem['class'])
-            ->where('term', $firstItem['term'])
-            ->where('acad_year', $firstItem['acad_year']);
-
-        // If group_no is empty or null, handle both cases
-        if (empty($firstItem['group_no'])) {
-            $deleteQuery->whereNull('group_no');
-        } else {
-            $deleteQuery->where('group_no', $firstItem['group_no']);
-        }
-
-        $deletedRows = $deleteQuery->delete();
-
-        // Log deleted rows for debugging
-        \Log::info("Deleted $deletedRows records matching criteria.");
- 
-        // Prepare new data for insertion
-        $insertData = collect($validatedData['data'])->map(function ($item) {
+        $insertData = collect($validated)->map(function ($item) {
             return [
                 'class' => $item['class'],
                 'subject' => $item['subject'],
                 'group_no' => $item['group_no'] ?? null,
-                'term' => $item['term'],
+                'term' => $item['term'] ?? null,
+                'acad_year' => $item['acad_year'] ?? null,
                 'mark' => $item['mark'] ?? null,
-                'acad_year' => $item['acad_year'],
+                'sec' => $item['sec'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         })->toArray();
 
-        // Insert new records
         ClassSubject::insert($insertData);
 
         return response()->json([
-            'message' => "Records updated successfully.",
+            'message' => 'Classes and subjects added successfully',
             'data' => $insertData,
         ], 201);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'An error occurred while updating records.',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
 
+        
+    public function updateBulk(Request $request)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'data' => 'required|array|min:1',
+                'data.*.class' => 'required|string',
+                'data.*.subject' => 'required|string',
+                'data.*.group_no' => 'nullable|string',
+                'data.*.term' => 'required|string',
+                'data.*.mark' => 'nullable|numeric',
+                'data.*.acad_year' => 'required|digits:4',
+            ]);
 
+            $firstItem = $validated['data'][0];
+
+            // Delete existing records
+            $deleteQuery = ClassSubject::where('class', $firstItem['class'])
+                ->where('term', $firstItem['term'])
+                ->where('acad_year', $firstItem['acad_year']);
+
+            if (empty($firstItem['group_no'])) {
+                $deleteQuery->whereNull('group_no');
+            } else {
+                $deleteQuery->where('group_no', $firstItem['group_no']);
+            }
+
+            $deleted = $deleteQuery->delete();
+            \Log::info("Deleted $deleted records for updateBulk.");
+
+            // Prepare and insert new records
+            $insertData = collect($validated['data'])->map(function ($item) {
+                return [
+                    'class' => $item['class'],
+                    'subject' => $item['subject'],
+                    'group_no' => $item['group_no'] ?? null,
+                    'term' => $item['term'],
+                    'mark' => $item['mark'] ?? null,
+                    'acad_year' => $item['acad_year'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            })->toArray();
+
+            ClassSubject::insert($insertData);
+
+            return response()->json([
+                'message' => 'Records updated successfully.',
+                'data' => $insertData,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while updating records.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
         
             // Delete a class-subject entry by ID
@@ -335,51 +245,7 @@ public function updateBulk(Request $request)
                 ]);
             }
             
-            // public function delete(Request $request)
-            // {
-            //     try {
-            //         // Validate input request
-            //         $validatedData = $request->validate([
-            //             'data' => 'required|array', // Ensures an array of data is provided
-            //             'data.*.id' => 'required|integer' // Ensure ID is provided and valid
-            //         ]);
-            
-            //         // Extract all IDs to delete
-            //         $idsToDelete = collect($validatedData['data'])->pluck('id')->toArray();
-            
-            //         // Log IDs before deletion for debugging
-            //         \Log::info("Attempting to delete records with IDs: " . implode(',', $idsToDelete));
-            
-            //         // Ensure records exist before deletion
-            //         $existingRecords = ClassSubject::whereIn('id', $idsToDelete)->pluck('id')->toArray();
-            
-            //         if (empty($existingRecords)) {
-            //             return response()->json([
-            //                 'message' => "No matching records found for deletion.",
-            //                 'deleted_count' => 0
-            //             ], 404);
-            //         }
-            
-            //         // Delete records based on ID
-            //         $deletedRows = ClassSubject::whereIn('id', $existingRecords)->delete();
-            
-            //         // Log deleted IDs for debugging
-            //         \Log::info("Deleted $deletedRows records with IDs: " . implode(',', $existingRecords));
-            
-            //         return response()->json([
-            //             'message' => "Records deleted successfully.",
-            //             'deleted_count' => $deletedRows,
-            //         ], 200);
-            //     } catch (\Exception $e) {
-            //         // Log error for debugging
-            //         \Log::error("Error deleting records: " . $e->getMessage());
-            
-            //         return response()->json([
-            //             'message' => 'An error occurred while deleting records.',
-            //             'error' => $e->getMessage(),
-            //         ], 500);
-            //     }
-            // }
+   
             public function delete(Request $request)
             {
                 try {
