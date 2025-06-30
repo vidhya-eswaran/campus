@@ -25,9 +25,11 @@ class ClassSubjectController extends Controller
             return response()->json($data);
         }
             // View subjects by class
-           public function viewByClasstwo($class, Request $request)
+        public function viewByClasstwo($class, Request $request)
         {
             $query = ClassSubject::query();
+
+            $query->where('delete_status', 0);
         
             // Add filters based on query parameters
             if ($class) {
