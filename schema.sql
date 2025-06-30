@@ -708,6 +708,7 @@ CREATE TABLE `class_subjects` (
   `acad_year` year(4) DEFAULT NULL,
   `mark` int(11) DEFAULT NULL,
   `sec` varchar(10) DEFAULT NULL,
+  `delete_status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
