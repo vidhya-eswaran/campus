@@ -150,20 +150,20 @@ class ClassSubjectController extends Controller
     public function updateBulk(Request $request)
     {
         try {
-            // Validate input
+            // Validate the top-level array like insert function
             $validated = $request->validate([
-                'data' => 'required|array|min:1',
-                'data.*.class' => 'required|string',
-                'data.*.subject' => 'required|string',
-                'data.*.group_no' => 'nullable|string',
-                'data.*.term' => 'required|string',
-                'data.*.mark' => 'nullable|numeric',
-                'data.*.acad_year' => 'required|digits:4',
+                '*.class' => 'required',
+                '*.subject' => 'required',
+                '*.group_no' => 'nullable',
+                '*.term' => 'nullable',
+                '*.mark' => 'nullable',
+                '*.sec' => 'nullable',
+                '*.acad_year' => 'nullable',
             ]);
 
-            $firstItem = $validated['data'][0];
+            // Use first item to determine delete condition
+            $firstItem = $validated[0];
 
-            // Delete existing records
             $deleteQuery = ClassSubject::where('class', $firstItem['class'])
                 ->where('term', $firstItem['term'])
                 ->where('acad_year', $firstItem['acad_year']);
@@ -177,20 +177,22 @@ class ClassSubjectController extends Controller
             $deleted = $deleteQuery->delete();
             \Log::info("Deleted $deleted records for updateBulk.");
 
-            // Prepare and insert new records
-            $insertData = collect($validated['data'])->map(function ($item) {
+            // Prepare new records
+            $insertData = collect($validated)->map(function ($item) {
                 return [
                     'class' => $item['class'],
                     'subject' => $item['subject'],
                     'group_no' => $item['group_no'] ?? null,
-                    'term' => $item['term'],
+                    'term' => $item['term'] ?? null,
                     'mark' => $item['mark'] ?? null,
-                    'acad_year' => $item['acad_year'],
+                    'sec' => $item['sec'] ?? null,
+                    'acad_year' => $item['acad_year'] ?? null,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             })->toArray();
 
+            // Insert new records
             ClassSubject::insert($insertData);
 
             return response()->json([
@@ -205,50 +207,8 @@ class ClassSubjectController extends Controller
         }
     }
 
-        
-            // Delete a class-subject entry by ID
-            public function delete_old($id)
-            {
-                $classSubject = ClassSubject::find($id);
-        
-                if (!$classSubject) {
-                    return response()->json(['message' => 'Class-Subject not found'], 404);
-                }
-        
-                $classSubject->delete();
-        
-                return response()->json(['message' => 'Class-Subject deleted successfully']);
-            }
-            public function deleteoldtwo(Request $request)
-            {
-                // Convert request data to expected format
-                $convertedData = ['data' => $request->all()];
-            
-                // Validate the request
-                $validatedData = Validator::make($convertedData, [
-                    'data' => 'required|array|min:1',
-                    'data.*.id' => 'required|exists:class_subjects,id',
-                ])->validate();
-            
-                // Process and delete records
-                $deletedIds = [];
-                foreach ($validatedData['data'] as $subjectData) {
-                    $classSubject = ClassSubject::find($subjectData['id']);
-            
-                    if ($classSubject) {
-                        $classSubject->delete();
-                        $deletedIds[] = $subjectData['id']; // Store deleted IDs
-                    }
-                }
-            
-                return response()->json([
-                    'message' => 'Classes and subjects deleted successfully',
-                    'deleted_ids' => $deletedIds, // Return deleted IDs
-                ]);
-            }
-            
-   
-            public function delete(Request $request)
+    
+        public function delete(Request $request)
             {
                 try {
                     // Validate input request
