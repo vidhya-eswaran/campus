@@ -208,51 +208,49 @@ class ClassSubjectController extends Controller
     }
 
     
-        public function delete(Request $request)
-            {
-                try {
-                    // Validate input request
-                    $validatedData = $request->validate([
-                        'data' => 'required|array', // Ensures an array of data is provided
-                        'data.*.id' => 'required|integer' // Ensure ID is provided and valid
-                    ]);
-            
-                    // Extract all IDs to update
-                    $idsToUpdate = collect($validatedData['data'])->pluck('id')->toArray();
-            
-                    // Log IDs before update for debugging
-                    \Log::info("Attempting to update delete_status for IDs: " . implode(',', $idsToUpdate));
-            
-                    // Ensure records exist before updating
-                    $existingRecords = ClassSubject::whereIn('id', $idsToUpdate)->pluck('id')->toArray();
-            
-                    if (empty($existingRecords)) {
-                        return response()->json([
-                            'message' => "No matching records found for deletion.",
-                            'updated_count' => 0
-                        ], 404);
-                    }
-            
-                    // Update delete_status to 1 instead of deleting records
-                    $updatedRows = ClassSubject::whereIn('id', $existingRecords)->update(['delete_status' => 1]);
-            
-                    // Log updated IDs for debugging
-                    \Log::info("Updated delete_status for $updatedRows records with IDs: " . implode(',', $existingRecords));
-            
-                    return response()->json([
-                        'message' => "Records soft deleted successfully.",
-                        'updated_count' => $updatedRows,
-                    ], 200);
-                } catch (\Exception $e) {
-                    // Log error for debugging
-                    \Log::error("Error updating delete_status: " . $e->getMessage());
-            
-                    return response()->json([
-                        'message' => 'An error occurred while updating records.',
-                        'error' => $e->getMessage(),
-                    ], 500);
-                }
+    public function delete(Request $request)
+    {
+        try {
+            // Validate top-level array format
+            $validated = $request->validate([
+                '*.id' => 'required|integer'
+            ]);
+
+            // Collect all IDs to be soft-deleted
+            $idsToUpdate = collect($validated)->pluck('id')->toArray();
+
+            \Log::info("Attempting to soft delete records with IDs: " . implode(',', $idsToUpdate));
+
+            // Check if records exist
+            $existingRecords = ClassSubject::whereIn('id', $idsToUpdate)->pluck('id')->toArray();
+
+            if (empty($existingRecords)) {
+                return response()->json([
+                    'message' => "No matching records found to delete.",
+                    'updated_count' => 0
+                ], 404);
             }
+
+            // Perform soft delete by updating `delete_status`
+            $updatedRows = ClassSubject::whereIn('id', $existingRecords)->update(['delete_status' => 1]);
+
+            \Log::info("Soft deleted $updatedRows records with IDs: " . implode(',', $existingRecords));
+
+            return response()->json([
+                'message' => "Records soft deleted successfully.",
+                'updated_count' => $updatedRows,
+            ], 200);
+
+        } catch (\Exception $e) {
+            \Log::error("Soft delete error: " . $e->getMessage());
+
+            return response()->json([
+                'message' => 'An error occurred while soft deleting records.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
            
 }
