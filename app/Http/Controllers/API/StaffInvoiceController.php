@@ -873,9 +873,10 @@ class StaffInvoiceController extends Controller
             return response()->json(["error" => $e->getMessage()], 500);
         }
     }
-    public function deletemapStaffFees($id)
+    public function deletemapStaffFees(Request $request, $id)
     {
         try {
+            $id = $request->id;
             $deleted = DB::table("staff_fees_mapping")
                 ->where("id", $id)
                 ->delete();
@@ -893,22 +894,5 @@ class StaffInvoiceController extends Controller
         }
     }
 
-    // public function getAllStaffFees()
-    // {
-    //     $staffFees = DB::table('staff_fees_mapping')
-    //         ->join('users', 'staff_fees_mapping.staff_id', '=', 'users.id')
-    //         ->select(
-    //             'staff_fees_mapping.id',
-    //             'staff_fees_mapping.staff_id',
-    //             'users.name as staff_name',
-    //             'staff_fees_mapping.fees_type as feesType',
-    //             'staff_fees_mapping.amount',
-    //             'staff_fees_mapping.status',
-    //             'staff_fees_mapping.created_at',
-    //             'staff_fees_mapping.updated_at'
-    //         )
-    //         ->get();
-
-    //     return response()->json(['data' => $staffFees]);
-    // }
+    
 }
