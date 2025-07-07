@@ -236,7 +236,7 @@ class StudentController extends Controller
                         $user->sec = $record->sec ?? null;
                         $user->twe_group = $record->group_first_choice ?? null;
                         $user->hostelOrDay = "hostel";
-                        $user->password = Hash::make("svs@123");
+                        $user->password = Hash::make("Student@123");
                         $user->admission_no = $record->admission_no ?? null;
                         $user->roll_no = $record->roll_no ?? null;
                         $user->save();
@@ -359,7 +359,7 @@ class StudentController extends Controller
                             $user->sec = $record->sec ?? null;
                             $user->twe_group = $record->group_first_choice ?? null;
                             $user->hostelOrDay = "hostel";
-                            $user->password = Hash::make("svs@123");
+                            $user->password = Hash::make("Student@123");
                             $user->admission_no = $admissionId ?? null;
                             $user->roll_no = $record->roll_no ?? null;
 
@@ -862,7 +862,7 @@ class StudentController extends Controller
                 $user->standard = $admission->std_sought ?? null;
                 $user->sec = $admission->sec ?? null;
                 $user->hostelOrDay = "hostel";
-                $user->password = Hash::make("svs@123");
+                $user->password = Hash::make("Student@123");
                 $user->admission_no = $admission->admission_no ?? null;
                 $user->roll_no = $admission->roll_no ?? null;
 

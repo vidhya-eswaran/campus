@@ -59,7 +59,7 @@ $user = SponserMaster::create($request->all());
     //  $user = SponserMaster::create($request->all());
 
 
-        $password = 'svs@123';
+        $password = 'Sponsor@123';
 
         $sponserData = [
             'name' => $data['name'],

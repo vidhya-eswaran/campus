@@ -96,7 +96,7 @@ class StaffController extends Controller
                 "user_type" => "staff",
                 "id" => $lastid,
                 "roll_no" => $requestData["staff_id"],
-                "password" => Hash::make("svs@123"),
+                "password" => Hash::make("Staff@123"),
             ];
 
             User::create($userData);

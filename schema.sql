@@ -1482,7 +1482,7 @@ CREATE TABLE `migrations` (
 CREATE TABLE `module_permissions` (
   `id` int(255) NOT NULL,
   `label` varchar(255) DEFAULT NULL,
-  `parent_id` int(255) NOT NULL,
+  `parent_id` int(255) DEFAULT NULL,
   `selected` varchar(255) DEFAULT NULL,
   `select_all` varchar(255) DEFAULT NULL,
   `view_permission` varchar(255) DEFAULT NULL,
