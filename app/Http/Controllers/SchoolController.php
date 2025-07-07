@@ -22,7 +22,7 @@ class SchoolController extends Controller
                 'admin_name' => 'required|string',
                 'admin_email' => 'required|email|unique:users,email',
 
-                'school_logo' => 'nullable|url',
+                'school_logo' => 'nullable',
                 'school_type' => 'nullable|in:Public,Private,International',
                 'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
                 'established_year' => 'nullable|date_format:Y',
@@ -40,6 +40,28 @@ class SchoolController extends Controller
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
             ]);
+
+            if ($request->hasFile('school_logo')) {
+                $file = $request->file('school_logo');
+
+                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                             // Compress and encode the image
+                $compressedImage = Image::make($file)
+                                ->resize(1024, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                    $constraint->upsize();
+                                })
+                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+
+
+                    // Store the file in storage/app/public/student_images/
+                $path = $file->storeAs('public/school_logo', $compressedImage);
+
+                    // Save the relative path in the mapped data (without "public/")
+                $school_logo = str_replace('public/', 'storage/', $path);
+            }
+        
         
         $schoolName = $request->name;
         $adminName = $request->admin_name;
@@ -102,7 +124,7 @@ class SchoolController extends Controller
             'db_password' => env('DB_PASSWORD', ''),
             'db_host' => '127.0.0.1',
             
-            'school_logo' => $request->school_logo,
+            'school_logo' => $school_logo,
             'school_type' => $request->school_type,
             'school_category' => $request->school_category,
             'established_year' => $request->established_year,
