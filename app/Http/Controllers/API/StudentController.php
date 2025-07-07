@@ -72,9 +72,8 @@ class StudentController extends Controller
     public function uploadStudentData(Request $request)
     {
         try {
-            dd('Function hit'); 
             $record =  (object) $request->all();
-            dd($record);
+
             $imageFields = [
                 'profile_image',
                 'birth_certificate_image',
@@ -87,7 +86,7 @@ class StudentController extends Controller
                 'migration_image',
                 'church_endorsement_image',
             ];
-            
+            dd($record);
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
                                
