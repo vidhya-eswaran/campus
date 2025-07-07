@@ -1517,6 +1517,32 @@ class StudentController extends Controller
             "message" => "Student admission deleted successfully.",
         ]);
     }
+
+    public function getGenderCountByStandard(Request $request)
+    {
+        $request->validate([
+        'standard' => 'required|string'
+        ]);
+
+        $standard = $request->standard;
+
+        $maleCount = User::where('user_type', 'student')
+            ->where('standard', $standard)
+            ->where('gender', 'Male')
+            ->count();
+
+        $femaleCount = User::where('user_type', 'student')
+            ->where('standard', $standard)
+            ->where('gender', 'Female')
+            ->count();
+
+        return response()->json([
+            'standard' => $standard,
+            'male' => $maleCount,
+            'female' => $femaleCount
+        ]);
+
+    }
 }
 
 // function convertValue($value) {
