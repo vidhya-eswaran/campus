@@ -64,7 +64,7 @@ class SchoolController extends Controller
                 // Convert path for public access
                 $school_logo = str_replace('public/', 'storage/', $relativePath);
 
-                dd($school_logo);
+              //  dd($school_logo);
             }
 
        
