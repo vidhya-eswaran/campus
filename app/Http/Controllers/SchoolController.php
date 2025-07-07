@@ -42,30 +42,32 @@ class SchoolController extends Controller
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
             ]);
-           // dd($request);
-
+           
             if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-                $filename = now()->format('Ymd_His') . '_' . $file . '.' . $file->getClientOriginalExtension();
-
-                             // Compress and encode the image
+                // Compress and encode the image
                 $compressedImage = Image::make($file)
-                                ->resize(1024, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })
-                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+                    ->resize(1024, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    })
+                    ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality
 
+                // Define the path to store
+                $relativePath = 'public/school_logo/' . $filename;
 
-                    // Store the file in storage/app/public/student_images/
-                $path = $file->storeAs('public/school_logo', $compressedImage);
+                // Store the image manually using Storage::put
+                Storage::put($relativePath, $compressedImage);
 
-                    // Save the relative path in the mapped data (without "public/")
-                $school_logo = str_replace('public/', 'storage/', $path);
+                // Convert path for public access
+                $school_logo = str_replace('public/', 'storage/', $relativePath);
+
+                dd($school_logo);
             }
-        dd($school_logo);
-        
+
+       
         $schoolName = $request->name;
         $adminName = $request->admin_name;
         $adminEmail = $request->admin_email;
