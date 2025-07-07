@@ -73,7 +73,7 @@ class StudentController extends Controller
     {
         try {
             $record =  (object) $request->all();
-
+            dd($record);
             $imageFields = [
                 'profile_image',
                 'birth_certificate_image',
@@ -86,7 +86,7 @@ class StudentController extends Controller
                 'migration_image',
                 'church_endorsement_image',
             ];
-            dd($imageFields);
+            
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
                                
