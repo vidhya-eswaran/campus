@@ -25,7 +25,7 @@ class CentralAuthController extends Controller
 
         $token = $user->createToken('SchoolAdminToken')->accessToken;
 
-        if ($user->user_type !== 'super_admin') {
+        if ($user->role !== 'super_admin') {
 
             $school = DB::table('schools')->where('id', $user->school_id)->first();
 
