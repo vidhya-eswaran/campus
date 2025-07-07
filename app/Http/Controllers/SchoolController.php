@@ -44,7 +44,7 @@ class SchoolController extends Controller
             if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
 
-                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                $filename = now()->format('Ymd_His') . '_' . $file . '.' . $file->getClientOriginalExtension();
 
                              // Compress and encode the image
                 $compressedImage = Image::make($file)
