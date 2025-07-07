@@ -86,7 +86,7 @@ class StudentController extends Controller
                 'migration_image',
                 'church_endorsement_image',
             ];
-            dd($record);
+            //dd($record);
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
                                
