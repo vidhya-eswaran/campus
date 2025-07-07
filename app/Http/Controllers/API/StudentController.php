@@ -71,20 +71,21 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        $record =  (object) $request->all();
+        try {
+            $record =  (object) $request->all();
 
-        $imageFields = [
-            'profile_image',
-            'birth_certificate_image',
-            'aadhar_image',
-            'ration_card_image',
-            'community_image',
-            'salary_image',
-            'reference_letter_image',
-            'transfer_certificate_image',
-            'migration_image',
-            'church_endorsement_image',
-        ];
+            $imageFields = [
+                'profile_image',
+                'birth_certificate_image',
+                'aadhar_image',
+                'ration_card_image',
+                'community_image',
+                'salary_image',
+                'reference_letter_image',
+                'transfer_certificate_image',
+                'migration_image',
+                'church_endorsement_image',
+            ];
               
             if (isset($record->admission_no) && $record->admission_no !== "") {
                                
@@ -370,7 +371,7 @@ class StudentController extends Controller
                                 "message" => "Data uploaded successfully.",
                             ];
                         } catch (\Exception $e) {
-                            dd($e->getMessage());
+                           // dd($e->getMessage());
                             Log::error(
                                 "Error occurred while uploading data: " .
                                     $e->getMessage()
@@ -385,9 +386,17 @@ class StudentController extends Controller
                     
                 }
             }
-        return response()
+        
+            return response()
             ->json($response, 200)
             ->header("Access-Control-Allow-Origin", "*");
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching gender counts',
+                'message' => $e->getMessage()
+            ], 500);
+        }
 
     }
 
