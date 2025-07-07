@@ -41,7 +41,7 @@ class SchoolController extends Controller
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
             ]);
-            dd($request);
+           // dd($request);
 
             if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
@@ -63,7 +63,7 @@ class SchoolController extends Controller
                     // Save the relative path in the mapped data (without "public/")
                 $school_logo = str_replace('public/', 'storage/', $path);
             }
-        
+        dd($school_logo);
         
         $schoolName = $request->name;
         $adminName = $request->admin_name;
