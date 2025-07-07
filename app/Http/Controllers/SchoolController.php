@@ -41,6 +41,7 @@ class SchoolController extends Controller
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
             ]);
+            dd($request);
 
             if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
