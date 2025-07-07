@@ -72,6 +72,7 @@ class StudentController extends Controller
     public function uploadStudentData(Request $request)
     {
         try {
+            dd('Function hit'); 
             $record =  (object) $request->all();
             dd($record);
             $imageFields = [
