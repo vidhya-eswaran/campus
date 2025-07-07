@@ -25,10 +25,23 @@ class CentralAuthController extends Controller
 
         $token = $user->createToken('SchoolAdminToken')->accessToken;
 
-        $school = DB::table('schools')->where('id', $user->school_id)->first();
+        if ($user->user_type !== 'super_admin') {
 
-        if (!$school) {
-            return response()->json(['error' => 'School not found'], 404);
+            $school = DB::table('schools')->where('id', $user->school_id)->first();
+
+            if (!$school) {
+                return response()->json(['error' => 'School not found'], 404);
+            }
+
+            return response()->json([
+                'message' => 'Login successful',
+                'user' => $user,
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'school_db' => [
+                    'name' => $school->name
+                ]
+            ]);
         }
 
         return response()->json([
@@ -36,9 +49,7 @@ class CentralAuthController extends Controller
             'user' => $user,
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'school_db' => [
-                'name' => $school->name
-            ]
+            'school_db' => null
         ]);
     }
 
