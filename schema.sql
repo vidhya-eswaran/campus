@@ -1476,6 +1476,28 @@ CREATE TABLE `migrations` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `module_permissions`
+--
+
+CREATE TABLE `module_permissions` (
+  `id` int(255) NOT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `parent_id` int(255) NOT NULL,
+  `selected` varchar(255) DEFAULT NULL,
+  `select_all` varchar(255) DEFAULT NULL,
+  `view_permission` varchar(255) DEFAULT NULL,
+  `create_permission` varchar(255) DEFAULT NULL,
+  `edit_permission` varchar(255) DEFAULT NULL,
+  `delete_permission` varchar(255) DEFAULT NULL,
+  `menu_key` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notice_boards`
 --
 
@@ -3017,6 +3039,12 @@ ALTER TABLE `message_category_master`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `module_permissions`
+--
+ALTER TABLE `module_permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `notice_boards`
 --
 ALTER TABLE `notice_boards`
@@ -3641,6 +3669,12 @@ ALTER TABLE `message_attachments`
 --
 ALTER TABLE `message_category_master`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `module_permissions`
+--
+ALTER TABLE `module_permissions`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notice_boards`
