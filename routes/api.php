@@ -95,6 +95,8 @@ Route::get('/school/{id}', [SchoolController::class, 'viewSchool']);
 
 Route::put('/school/{id}', [SchoolController::class, 'updateSchool']);
 
+Route::get('/get-school', [SchoolController::class, 'getSchool']);
+
 
 Route::get("/test", function ()
 {

@@ -242,5 +242,16 @@ class SchoolController extends Controller
         return response()->json(['school' => $school]);
     }
 
+    public function getSchool()
+    {
+        $school = DB::table('schools')->get();
+
+        if (!$school) {
+            return response()->json(['message' => 'School not found'], 404);
+        }
+
+        return response()->json(['school' => $school]);
+    }
+
 
 }
