@@ -243,7 +243,7 @@ class SchoolController extends Controller
         $schoolData = (array) $school;
 
         // Fetch users related to the school
-        $users = DB::table('users')->where('school_id', $id)->get();
+        $users = DB::table('users')->where('school_id', $id)->select('name', 'email')->get();
 
         // Add users as a nested property
         $schoolData['users'] = $users;
@@ -262,7 +262,7 @@ class SchoolController extends Controller
         $schoolData = (array) $school;
 
         // Fetch users related to the school
-        $users = DB::table('users')->where('school_id', $id)->get();
+        $users = DB::table('users')->where('school_id', $id)->select('name', 'email')->get();
 
         // Add users as a nested property
         $schoolData['users'] = $users;
