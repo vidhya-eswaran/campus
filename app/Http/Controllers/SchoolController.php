@@ -253,22 +253,26 @@ class SchoolController extends Controller
 
     public function getSchool()
     {
-        $school = DB::table('schools')->get();
+        $schools = DB::table('schools')->get();
 
-        if (!$school) {
-            return response()->json(['message' => 'School not found'], 404);
+        if ($schools->isEmpty()) {
+            return response()->json(['message' => 'No schools found'], 404);
         }
 
-        $schoolData = (array) $school;
+        // Convert to array and map users to each school
+        $schoolData = $schools->map(function ($school) {
+            $users = DB::table('users')
+                ->where('school_id', $school->id)
+                ->select('name', 'email')
+                ->get();
 
-        // Fetch users related to the school
-        $users = DB::table('users')->where('school_id', $id)->select('name', 'email')->get();
+            $school->users = $users;
+            return $school;
+        });
 
-        // Add users as a nested property
-        $schoolData['users'] = $users;
-
-        return response()->json(['school' => $schoolData]);
+        return response()->json(['schools' => $schoolData]);
     }
+
 
 
 }
