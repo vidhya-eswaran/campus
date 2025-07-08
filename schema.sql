@@ -1393,6 +1393,7 @@ CREATE TABLE `leave_applications` (
   `fromDate` date NOT NULL,
   `toDate` date DEFAULT NULL,
   `leaveDays` int(11) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
   `created_at` DATETIME NULL DEFAULT current_timestamp(),
   `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()

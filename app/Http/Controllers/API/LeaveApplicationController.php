@@ -35,7 +35,8 @@ class LeaveApplicationController extends Controller
             'motherName' => 'nullable|string',
             'fromDate' => 'required|date',
             'toDate' => 'nullable|date',
-            'leaveDays' => 'nullable|integer'
+            'leaveDays' => 'nullable|integer',
+            'reason' => 'nullable|string',
         ]);
 
         $leaveApplication = LeaveApplication::create($validated);
@@ -70,6 +71,7 @@ class LeaveApplicationController extends Controller
             // 'group' => 'nullable|string',
             'fromDate' => 'required|date',
             'toDate' => 'required|date',
+            'reason' => 'nullable|string',
             // 'leaveDays' => 'required|integer',
             // 'contactNumber' => 'required|string',
             // 'fatherName' => 'required|string',
