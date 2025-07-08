@@ -231,8 +231,9 @@ class SchoolController extends Controller
         return response()->json(['message' => 'School updated successfully']);
     }
 
-    public function viewSchool($id)
+    public function viewSchool(Request $request, $id)
     {
+        $id = $request->id;
         $school = DB::table('schools')->where('id', $id)->first();
 
         if (!$school) {
