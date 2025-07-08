@@ -240,7 +240,15 @@ class SchoolController extends Controller
             return response()->json(['message' => 'School not found'], 404);
         }
 
-        return response()->json(['school' => $school]);
+        $schoolData = (array) $school;
+
+        // Fetch users related to the school
+        $users = DB::table('users')->where('school_id', $id)->get();
+
+        // Add users as a nested property
+        $schoolData['users'] = $users;
+
+        return response()->json(['school' => $schoolData]);
     }
 
     public function getSchool()
@@ -251,7 +259,15 @@ class SchoolController extends Controller
             return response()->json(['message' => 'School not found'], 404);
         }
 
-        return response()->json(['school' => $school]);
+        $schoolData = (array) $school;
+
+        // Fetch users related to the school
+        $users = DB::table('users')->where('school_id', $id)->get();
+
+        // Add users as a nested property
+        $schoolData['users'] = $users;
+
+        return response()->json(['school' => $schoolData]);
     }
 
 
