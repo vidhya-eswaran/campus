@@ -673,8 +673,8 @@ CREATE TABLE `by_pay_informations` (
   `type` varchar(100) DEFAULT NULL,
   `due_amount` varchar(100) DEFAULT NULL,
   `payment_status` varchar(100) NOT NULL,
-  `additional_details` varchar(100) NOT NULL,
-  `mode` varchar(100) NOT NULL,
+  `additional_details` varchar(100) DEFAULT NULL,
+  `mode` varchar(100) DEFAULT NULL,
   `s_excess_amount` varchar(100) NOT NULL,
   `h_excess_amount` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
