@@ -209,7 +209,7 @@ class SchoolController extends Controller
 
         DB::table('schools')->where('id', $id)->update([
            // 'admin_name' => $request->admin_name ?? $school->admin_name,
-            'school_logo' => $request->school_logo ?? $school->school_logo,
+            'school_logo' => $request->filled('school_logo') ? $request->school_logo : $school->school_logo,
             'school_type' => $request->school_type ?? $school->school_type,
             'school_category' => $request->school_category ?? $school->school_category,
             'established_year' => $request->established_year ?? $school->established_year,
@@ -219,8 +219,8 @@ class SchoolController extends Controller
             'city' => $request->city ?? $school->city,
             'postal_code' => $request->postal_code ?? $school->postal_code,
             'full_address' => $request->full_address ?? $school->full_address,
-            'phone_number' => $request->phone_number ?? $school->phone_number,
-            'alternate_phone_number' => $request->alternate_phone_number ?? $school->alternate_phone_number,
+            'phone_number' => $request->filled('phone_number') ? $request->phone_number : $school->phone_number,
+            'alternate_phone_number' => $request->filled('alternate_phone_number') ? $request->alternate_phone_number : $school->alternate_phone_number,
            // 'email' => $request->email ?? $school->email,
             'support_email' => $request->support_email ?? $school->support_email,
             'selected_plan' => $request->selected_plan ?? $school->selected_plan,
