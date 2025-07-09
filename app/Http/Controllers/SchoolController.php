@@ -183,10 +183,10 @@ class SchoolController extends Controller
             return response()->json(['message' => 'School not found'], 404);
         }
 
-        dd($id);
+        //dd($request->admin_name);
 
         $request->validate([
-            'admin_name' => 'nullable|string',
+            //'admin_name' => 'nullable|string',
             'school_logo' => 'nullable|string',
             'school_type' => 'nullable|in:Public,Private,International',
             'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
@@ -197,9 +197,9 @@ class SchoolController extends Controller
             'city' => 'nullable|string',
             'postal_code' => 'nullable|string',
             'full_address' => 'nullable|string',
-            'phone' => 'nullable|string',
-            'alternate_phone' => 'nullable|string',
-            'email' => 'nullable|email',
+            'phone_number' => 'nullable|string',
+            'alternate_phone_number' => 'nullable|string',
+           // 'email' => 'nullable|email',
             'support_email' => 'nullable|email',
             'selected_plan' => 'nullable|in:Basic,Premium,Enterprise',
             'subscription_start_date' => 'nullable|date',
@@ -208,7 +208,7 @@ class SchoolController extends Controller
         ]);
 
         DB::table('schools')->where('id', $id)->update([
-            'admin_name' => $request->admin_name ?? $school->admin_name,
+           // 'admin_name' => $request->admin_name ?? $school->admin_name,
             'school_logo' => $request->school_logo ?? $school->school_logo,
             'school_type' => $request->school_type ?? $school->school_type,
             'school_category' => $request->school_category ?? $school->school_category,
@@ -219,9 +219,9 @@ class SchoolController extends Controller
             'city' => $request->city ?? $school->city,
             'postal_code' => $request->postal_code ?? $school->postal_code,
             'full_address' => $request->full_address ?? $school->full_address,
-            'phone' => $request->phone ?? $school->phone,
-            'alternate_phone' => $request->alternate_phone ?? $school->alternate_phone,
-            'email' => $request->email ?? $school->email,
+            'phone_number' => $request->phone_number ?? $school->phone_number,
+            'alternate_phone_number' => $request->alternate_phone_number ?? $school->alternate_phone_number,
+           // 'email' => $request->email ?? $school->email,
             'support_email' => $request->support_email ?? $school->support_email,
             'selected_plan' => $request->selected_plan ?? $school->selected_plan,
             'subscription_start_date' => $request->subscription_start_date ?? $school->subscription_start_date,
