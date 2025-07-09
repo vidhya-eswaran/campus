@@ -593,6 +593,7 @@ class genrateInvoiceController extends Controller
                     "h_excess_amount" =>
                         $data->fees_cat !== "school" ? $newExcess : 0,
                     "type" => $data->fees_cat, // Set accordingly
+                    "payment_status" => $data->payment_status,
                     "created_at" => now(),
                     "updated_at" => now(),
                 ]);
