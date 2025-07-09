@@ -183,6 +183,8 @@ class SchoolController extends Controller
             return response()->json(['message' => 'School not found'], 404);
         }
 
+        dd($id);
+
         $request->validate([
             'admin_name' => 'nullable|string',
             'school_logo' => 'nullable|string',
