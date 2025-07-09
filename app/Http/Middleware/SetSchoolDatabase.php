@@ -30,8 +30,8 @@ class SetSchoolDatabase
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => $schoolRecord->db_name,
-            'username' => $schoolRecord->db_username,
-            'password' => $schoolRecord->db_password,
+            'username' => 'root', // use root for now
+            'password' => '',     // blank password
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
