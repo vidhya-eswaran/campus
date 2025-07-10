@@ -727,7 +727,7 @@ class StudentController extends Controller
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
 
-       
+       dd($imageFields);
         foreach ($imageFields as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
