@@ -84,6 +84,30 @@ use App\Mail\TestEmail;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('/test-s3', function () {
+    try {
+        // Upload a test file to S3
+        $fileName = 'test-laravel-s3.txt';
+        $content = 'S3 test file created at ' . now();
+
+        Storage::disk('s3')->put($fileName, $content);
+
+        // Generate a URL (optional)
+        $url = Storage::disk('s3')->url($fileName);
+
+        return response()->json([
+            'message' => 'File uploaded successfully!',
+            'url' => $url
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Failed to upload file to S3',
+            'details' => $e->getMessage()
+        ], 500);
+    }
+});
 
 //========================================================================================
 //Central DB API
