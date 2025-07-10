@@ -727,7 +727,7 @@ class StudentController extends Controller
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
 
-       dd($imageFields);
+       //dd($imageFields);
         foreach ($imageFields as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
@@ -743,6 +743,7 @@ class StudentController extends Controller
                         $constraint->upsize();
                     })
                     ->encode($file->getClientOriginalExtension(), 75);
+                dd($compressedImage);
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
