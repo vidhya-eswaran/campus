@@ -746,7 +746,7 @@ class StudentController extends Controller
             }
         }
 
-        dd($admission);
+        //dd($admission);
 
         $admission->save();
 
