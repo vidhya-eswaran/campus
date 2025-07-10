@@ -89,7 +89,7 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/test-s3', function () {
     try {
         // Upload a test file to S3
-        $fileName = 'test-laravel-s3.txt';
+        $fileName = 'vidhya.txt';
         $content = 'S3 test file created at ' . now();
 
         Storage::disk('s3')->put($fileName, $content);
