@@ -139,8 +139,6 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     Route::get("/viewProfile", [App\Http\Controllers\API\ApiController::class , "viewProfile", ]);
 
-    Route::post('/login', [ApiController::class, 'login']);
-
     Route::post('/users', [SchoolUserController::class, 'store']);
 
     Route::get('/student-gender-count', [StudentController::class, 'getGenderCountByStandard']);
