@@ -734,19 +734,10 @@ class StudentController extends Controller
 
                 // Generate unique filename
                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                $path = 'student_images/' . $filename;
-dd($file);
-                // Compress and encode the image using Intervention
-                $compressedImage = Image::make($file)
-                    ->resize(1024, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->encode($file->getClientOriginalExtension(), 75);
-                
+                $path = 'student_images/' . $filename;             
 
                 // Upload to S3
-                Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
+                Storage::disk('s3')->put($path, (string) $file, 'public');
 
                 // Get public URL
                 $admission->$field = Storage::disk('s3')->url($path);
