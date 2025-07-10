@@ -737,7 +737,7 @@ class StudentController extends Controller
                 $path = 'student_images/' . $filename;             
 
                 // Upload to S3
-                Storage::disk('s3')->put($path, (string) $file, 'public');
+                Storage::disk('s3')->put($path, (string) $file);
 
                 // Get public URL
                 $admission->$field = Storage::disk('s3')->url($path);
