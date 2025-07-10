@@ -754,6 +754,8 @@ class StudentController extends Controller
             }
         }
 
+        dd($admission);
+
         $admission->save();
 
         if (strtolower((string) $request->status) === "active") {
