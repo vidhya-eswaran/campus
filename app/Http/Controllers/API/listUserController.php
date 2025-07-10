@@ -70,7 +70,7 @@ class listUserController extends Controller
         $user->gender = $request->gender;
         $user->email = $request->email;
         $user->user_type = $request->user_type;
-        $user->password = Hash::make("svs@123");
+        $user->password = Hash::make("User@123");
         $user->status = 1; // default active
         $user->save();
 
