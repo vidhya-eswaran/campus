@@ -118,23 +118,23 @@ class StudentController extends Controller
                             $file = $request->file($field);
 
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                            $path = 'student_images/' . $filename;
 
-                             // Compress and encode the image
+                            // Compress and encode the image
                             $compressedImage = Image::make($file)
                                 ->resize(1024, null, function ($constraint) {
                                     $constraint->aspectRatio();
                                     $constraint->upsize();
                                 })
-                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+                                ->encode($file->getClientOriginalExtension(), 75); // compression quality
 
+                            // Store the compressed image on S3
+                            Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
 
-                            // Store the file in storage/app/public/student_images/
-                            $path = $file->storeAs('public/student_images', $compressedImage);
-
-                            // Save the relative path in the mapped data (without "public/")
-                            $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                            // Set the full URL for accessing the image
+                            $mappedData[$field] = Storage::disk('s3')->url($path);
                         } else {
-                            $mappedData[$field] = null; // or handle as needed
+                            $mappedData[$field] = null;
                         }
                     }
 
@@ -194,27 +194,27 @@ class StudentController extends Controller
                             if ($request->hasFile($field)) {
                                 $file = $request->file($field);
 
-                                // Generate unique filename with date and time
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                                $path = 'student_images/' . $filename;
 
-                                 // Compress and encode the image
-                            $compressedImage = Image::make($file)
-                                ->resize(1024, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })
-                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+                                // Compress and encode the image
+                                $compressedImage = Image::make($file)
+                                    ->resize(1024, null, function ($constraint) {
+                                        $constraint->aspectRatio();
+                                        $constraint->upsize();
+                                    })
+                                    ->encode($file->getClientOriginalExtension(), 75); // compression quality
 
+                                // Store the compressed image on S3
+                                Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
 
-                            // Store the file in storage/app/public/student_images/
-                            $path = $file->storeAs('public/student_images', $compressedImage);
-
-                                // Save the relative path in the mapped data (without "public/")
-                                $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                                // Set the full URL for accessing the image
+                                $mappedData[$field] = Storage::disk('s3')->url($path);
                             } else {
-                                $mappedData[$field] = null; // or handle as needed
+                                $mappedData[$field] = null;
                             }
                         }
+
                         if (!empty($record->dob)) {
                             $mappedData['dob'] = $this->convertExcelDate($record->dob);
                         }
@@ -727,40 +727,32 @@ class StudentController extends Controller
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
 
-        // // Handle image uploads
-        // foreach ($imageFields as $field) {
-        //     if ($request->hasFile($field)) {
-        //         $filename = $field . '_' . time() . '.' . $request->file($field)->getClientOriginalExtension();
-        //         $path = $request->file($field)->storeAs('public/student_images', $filename);
-        //         $admission->$field = 'storage/student_images/' . $filename;
-        //     }
-        // }
-
+       
         foreach ($imageFields as $field) {
-                                if ($request->hasFile($field)) {
-                                    $file = $request->file($field);
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
 
-                                    // Generate unique filename with date and time
-                                    $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                // Generate unique filename
+                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                $path = 'student_images/' . $filename;
 
-                                     // Compress and encode the image
-                            $compressedImage = Image::make($file)
-                                ->resize(1024, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })
-                                ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality (adjust as needed)
+                // Compress and encode the image using Intervention
+                $compressedImage = Image::make($file)
+                    ->resize(1024, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    })
+                    ->encode($file->getClientOriginalExtension(), 75);
 
+                // Upload to S3
+                Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
 
-                            // Store the file in storage/app/public/student_images/
-                            $path = $file->storeAs('public/student_images', $compressedImage);
-
-                                    // Save the relative path in the mapped data (without "public/")
-                                    $admission->$field = str_replace('public/', 'storage/', $path);
-                                } else {
-                                    $admission->$field = null; // or handle as needed
-                                }
-                            }
+                // Get public URL
+                $admission->$field = Storage::disk('s3')->url($path);
+            } else {
+                $admission->$field = null;
+            }
+        }
 
         $admission->save();
 
