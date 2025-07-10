@@ -2662,8 +2662,8 @@ CREATE TABLE `twelveth_groups` (
 --
 
 CREATE TABLE `users` (
-  `slno` int(11) DEFAULT NULL,
-  `id` int(10) UNSIGNED NOT NULL,
+  `slno` bigint(20) UNSIGNED NOT NULL,
+  `id` int(255) NOT NULL,
   `admission_no` varchar(200) DEFAULT NULL,
   `roll_no` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
@@ -3375,7 +3375,7 @@ ALTER TABLE `twelveth_groups`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`slno`,`id`),
   ADD UNIQUE KEY `id` (`id`),
   ADD UNIQUE KEY `slno` (`slno`);
 
@@ -3975,7 +3975,7 @@ ALTER TABLE `twelveth_groups`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `slno` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_excess_histories`
