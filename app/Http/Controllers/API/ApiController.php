@@ -414,11 +414,12 @@ public function login(Request $request)
 
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response['user'] = [
-            'token' => [
+        $response = [
+            'access_token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
+            'user' => [
             'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
@@ -432,6 +433,7 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
+            ]
         ];
 
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
@@ -456,11 +458,12 @@ public function login(Request $request)
         $oldestUser = $matchingUsers->sortBy('id')->first();
         $tokenResult = $oldestUser->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response['user'] = [
-            'token' => [
+        $response = [
+            'access_token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
+            'user' => [
             'role' => $oldestUser->user_type ?? '',
             'name' => $oldestUser->name ?? '',
             'email' => $oldestUser->email ?? '',
@@ -473,6 +476,7 @@ public function login(Request $request)
             'admission_no' => $oldestUser->admission_no ?? '',
             'status' => $oldestUser->status ?? '',
             'message' => 'Login successful',
+            ]      
         ];
         if ($oldestUser->user_type === 'admin' || $oldestUser->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $oldestUser->email)->first();
@@ -484,11 +488,12 @@ public function login(Request $request)
         $user = $matchingUsers->first();
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response['user'] = [
-            'token' => [
+        $response = [
+            'access_token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
+            'user' => [
             'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
@@ -502,6 +507,7 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
+            ]
         ];
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $user->email)->first();
