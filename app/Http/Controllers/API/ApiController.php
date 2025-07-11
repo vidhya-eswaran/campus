@@ -387,7 +387,6 @@ public function getMatchingUsersdd(Request $request)
 }
 public function login(Request $request)
 {
-    dd($request->school);
     $input = trim($request->input('email'));
     $password = $request->input('password');
     $selectedUserId = $request->input('selected_user_id');
@@ -432,7 +431,10 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
-            ]
+            ],
+            'school_db' => [
+                    'name' => $request->school
+                ]
         ];
 
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
@@ -475,6 +477,9 @@ public function login(Request $request)
             'status' => $oldestUser->status ?? '',
             'message' => 'Login successful',
             ] ,
+            'school_db' => [
+                    'name' => $request->school
+                ]
                 
         ];
         if ($oldestUser->user_type === 'admin' || $oldestUser->user_type === 'staff') {
@@ -504,7 +509,10 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
-            ]
+            ],
+            'school_db' => [
+                    'name' => $request->school
+                ]
         ];
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $user->email)->first();
