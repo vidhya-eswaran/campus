@@ -414,12 +414,12 @@ public function login(Request $request)
 
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response = [
+        $response['user'] = [
             'token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
-            'user_type' => $user->user_type ?? '',
+            'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
             'id' => $user->id ?? '',
@@ -456,12 +456,12 @@ public function login(Request $request)
         $oldestUser = $matchingUsers->sortBy('id')->first();
         $tokenResult = $oldestUser->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response = [
+        $response['user'] = [
             'token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
-            'user_type' => $oldestUser->user_type ?? '',
+            'role' => $oldestUser->user_type ?? '',
             'name' => $oldestUser->name ?? '',
             'email' => $oldestUser->email ?? '',
             'id' => $oldestUser->id ?? '',
@@ -484,12 +484,12 @@ public function login(Request $request)
         $user = $matchingUsers->first();
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
-        $response = [
+        $response['user'] = [
             'token' => [
                 'accessToken' => $token,
                 'token' => $tokenResult->token,
             ],
-            'user_type' => $user->user_type ?? '',
+            'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
             'id' => $user->id ?? '',
