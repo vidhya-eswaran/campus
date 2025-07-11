@@ -128,6 +128,7 @@ class StudentController extends Controller
                             $mappedData[$field] = null;
                         }
                     }
+                   // dd("s3", $mappedData);
 
                     // If date fields need to be converted, handle them separately
                     if (!empty($record->dob)) {
@@ -196,6 +197,7 @@ class StudentController extends Controller
                                 $mappedData[$field] = null;
                             }
                         }
+                      //  dd("s31", $mappedData);
 
                         if (!empty($record->dob)) {
                             $mappedData['dob'] = $this->convertExcelDate($record->dob);
@@ -303,16 +305,15 @@ class StudentController extends Controller
                                 if ($request->hasFile($field)) {
                                     $file = $request->file($field);
 
-                                    // Generate unique filename with date and time
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                                    $path = 'student_images/' . $filename;
 
-                                    // Store the file in storage/app/public/student_images/
-                                    $path = $file->storeAs('public/student_images', $filename);
+                                    Storage::disk('s3')->put($path, (string) $file);
 
-                                    // Save the relative path in the mapped data (without "public/")
-                                    $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                                    // Set the full URL for accessing the image
+                                    $mappedData[$field] = Storage::disk('s3')->url($path);
                                 } else {
-                                    $mappedData[$field] = null; // or handle as needed
+                                    $mappedData[$field] = null;
                                 }
                             }
 
@@ -728,7 +729,7 @@ class StudentController extends Controller
             }
         }
 
-        dd($admission);
+        //dd($admission);
 
         $admission->save();
 
