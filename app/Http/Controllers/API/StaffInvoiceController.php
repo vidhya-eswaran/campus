@@ -311,19 +311,20 @@ class StaffInvoiceController extends Controller
             foreach ($pendingFees->groupBy("staff_id") as $staffId => $fees) {
                 $totalAmount = $fees->sum("amount");
 
-                // Disable all previous invoices except the most recent one
-                DB::table("staff_invoices as si")
-                    ->where("si.created_by", $staffId)
-                    ->whereNotIn("si.id", function ($subQuery) use ($staffId) {
-                        $subQuery
-                            ->selectRaw("MAX(id)")
-                            ->from("staff_invoices")
-                            ->where("created_by", $staffId);
-                    })
-                    ->update(["status" => "disabled"]);
+            // ✅ FIXED: Disable previous invoices except latest one
+            $latestInvoiceId = DB::table("staff_invoices")
+                ->where("created_by", $staffId)
+                ->max("id");
 
-                // 🔹 Generate Invoice Number (STFDDMMYYSSXXXX)
-                $datePart = now()->format("dmYs"); // ddmmyy + seconds
+            if ($latestInvoiceId) {
+                DB::table("staff_invoices")
+                    ->where("created_by", $staffId)
+                    ->where("id", "!=", $latestInvoiceId)
+                    ->update(["status" => "disabled"]);
+            }
+
+            // 🔹 Generate invoice number
+            $datePart = now()->format("dmYs");
                 $lastInvoice = DB::table("staff_invoices")
                     ->where("invoice_no", "LIKE", "STF{$datePart}%")
                     ->orderBy("invoice_no", "desc")
@@ -333,15 +334,13 @@ class StaffInvoiceController extends Controller
                 $nextSequence = $lastInvoice
                     ? intval(substr($lastInvoice, -4)) + 1
                     : 1;
-                $invoiceNo =
-                    "STF{$datePart}" .
-                    str_pad($nextSequence, 4, "0", STR_PAD_LEFT);
 
-                // 🔹 Calculate Dues
+            $invoiceNo = "STF{$datePart}" . str_pad($nextSequence, 4, "0", STR_PAD_LEFT);
+
+            // 🔹 Calculate dues
                 $totalPaid = DB::table("staff_payments")
                     ->whereIn("invoice_id", function ($query) use ($staffId) {
-                        $query
-                            ->select("id")
+                    $query->select("id")
                             ->from("staff_invoices")
                             ->where("created_by", $staffId);
                     })
