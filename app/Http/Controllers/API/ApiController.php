@@ -387,6 +387,7 @@ public function getMatchingUsersdd(Request $request)
 }
 public function login(Request $request)
 {
+    dd($request->school);
     $input = trim($request->input('email'));
     $password = $request->input('password');
     $selectedUserId = $request->input('selected_user_id');
@@ -415,10 +416,8 @@ public function login(Request $request)
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'access_token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
             'user' => [
             'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
@@ -459,10 +458,9 @@ public function login(Request $request)
         $tokenResult = $oldestUser->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'access_token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
+                            
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
             'user' => [
             'role' => $oldestUser->user_type ?? '',
             'name' => $oldestUser->name ?? '',
@@ -476,7 +474,8 @@ public function login(Request $request)
             'admission_no' => $oldestUser->admission_no ?? '',
             'status' => $oldestUser->status ?? '',
             'message' => 'Login successful',
-            ]      
+            ] ,
+                
         ];
         if ($oldestUser->user_type === 'admin' || $oldestUser->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $oldestUser->email)->first();
@@ -489,10 +488,8 @@ public function login(Request $request)
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'access_token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
             'user' => [
             'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
