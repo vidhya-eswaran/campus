@@ -402,6 +402,8 @@ public function login(Request $request)
         return response()->json(['errors' => $validator->errors()], 400);
     }
 
+    $school = DB::table('schools')->where('name', $request->school)->first();
+
     // If a selected_user_id is provided, attempt to log in directly with that ID
     if ($selectedUserId) {
         $user = User::find($selectedUserId);
@@ -433,7 +435,8 @@ public function login(Request $request)
             'message' => 'Login successful',
             ],
             'school_db' => [
-                    'name' => $request->school
+                    'name' => $request->school,
+                    'school' => $school->school
                 ]
         ];
 
@@ -478,7 +481,8 @@ public function login(Request $request)
             'message' => 'Login successful',
             ] ,
             'school_db' => [
-                    'name' => $request->school
+                    'name' => $request->school,
+                    'school' => $school->school
                 ]
                 
         ];
@@ -511,7 +515,8 @@ public function login(Request $request)
             'message' => 'Login successful',
             ],
             'school_db' => [
-                    'name' => $request->school
+                    'name' => $request->school,
+                    'school' => $school->school
                 ]
         ];
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
