@@ -23,7 +23,7 @@ class SchoolController extends Controller
                 'name' => 'required|unique:schools,name',
                 'admin_name' => 'required|string',
                 'admin_email' => 'required|email|unique:users,email',
-
+                'school' => 'nullable',
                 'school_logo' => 'nullable',
                 'school_type' => 'nullable|in:Public,Private,International',
                 'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
@@ -124,6 +124,7 @@ class SchoolController extends Controller
         // Insert into schools and get the inserted ID
         $schoolId = DB::table('schools')->insertGetId([
             'name' => $schoolName,
+            'school' => $request->name,
             'db_name' => $dbName,
             'db_username' => 'root',
             'db_password' => env('DB_PASSWORD', ''),
