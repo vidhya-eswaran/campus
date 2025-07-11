@@ -120,16 +120,7 @@ class StudentController extends Controller
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                             $path = 'student_images/' . $filename;
 
-                            // Compress and encode the image
-                            $compressedImage = Image::make($file)
-                                ->resize(1024, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })
-                                ->encode($file->getClientOriginalExtension(), 75); // compression quality
-
-                            // Store the compressed image on S3
-                            Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
+                            Storage::disk('s3')->put($path, (string) $file, 'public');
 
                             // Set the full URL for accessing the image
                             $mappedData[$field] = Storage::disk('s3')->url($path);
@@ -197,16 +188,7 @@ class StudentController extends Controller
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                                 $path = 'student_images/' . $filename;
 
-                                // Compress and encode the image
-                                $compressedImage = Image::make($file)
-                                    ->resize(1024, null, function ($constraint) {
-                                        $constraint->aspectRatio();
-                                        $constraint->upsize();
-                                    })
-                                    ->encode($file->getClientOriginalExtension(), 75); // compression quality
-
-                                // Store the compressed image on S3
-                                Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
+                                Storage::disk('s3')->put($path, (string) $file, 'public');
 
                                 // Set the full URL for accessing the image
                                 $mappedData[$field] = Storage::disk('s3')->url($path);
