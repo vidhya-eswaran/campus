@@ -39,7 +39,8 @@ class CentralAuthController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'school_db' => [
-                    'name' => $school->name
+                    'name' => $school->name,
+                    'school' => $school->school,
                 ]
             ]);
         }
