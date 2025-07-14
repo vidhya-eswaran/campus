@@ -37,7 +37,7 @@ class NoticeBoardController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category' => 'required|integer',
+            'category' => 'required',
             'notice_message' => 'required|string',
             'file' => 'nullable|string', // Base64 file should be sent as string
         ]);
@@ -81,7 +81,7 @@ class NoticeBoardController extends Controller
         $notice = NoticeBoard::findOrFail($id);
 
         $validated = $request->validate([
-            'category' => 'required|integer',
+            'category' => 'required',
             'notice_message' => 'required|string',
             'file' => 'nullable|string', // Base64 file is sent as a string
         ]);

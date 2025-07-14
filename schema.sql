@@ -1504,7 +1504,7 @@ CREATE TABLE `module_permissions` (
 
 CREATE TABLE `notice_boards` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `category` int(11) NOT NULL,
+  `category` varchar(255) NOT NULL,
   `notice_message` text NOT NULL,
   `file` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
