@@ -39,7 +39,7 @@ class NoticeBoardController extends Controller
         $validated = $request->validate([
             'category' => 'required',
             'notice_message' => 'required|string',
-            'file' => 'nullable|string', // Base64 file should be sent as string
+            'file' => 'nullable', // Base64 file should be sent as string
             'createdBy' => 'required',
         ]);
 
@@ -84,7 +84,7 @@ class NoticeBoardController extends Controller
         $validated = $request->validate([
             'category' => 'required',
             'notice_message' => 'required|string',
-            'file' => 'nullable|string', // Base64 file is sent as a string
+            'file' => 'nullable', // Base64 file is sent as a string
             'createdBy' => 'required',
         ]);
 
