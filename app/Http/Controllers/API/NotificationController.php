@@ -285,77 +285,69 @@ if (!$user) {
             'announcementDate' => $request->announcementDate,
         ];
         
-        // Handle file upload
-        // if ($request->hasFile('file')) {
-        //     $file = $request->file('file');
-        //     $fileName = time() . '_' . $file->getClientOriginalName();
-        //     $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/'; // Store in public_html/announcements
-        //     $file->move($destinationPath, $fileName);
-        //     $fullfileName = $this->base_url . 'announcements/' . $fileName;
-        //     $validated['file'] = $fullfileName; // Store only file name
-        // }
+      
         // Handle Base64 file upload
-if ($request->has('file')) {
-    $base64File = $request->file;
-    $originalFileName = $request->input('file_name'); // <- Get original file name
-    // Validate Base64 format
-    if (preg_match('/^data:(\w+\/[\w\-.+]+);base64,/', $base64File, $matches)) {
-        $fileType = $matches[1]; // Get MIME type (e.g., image/jpeg, application/pdf)
+        if ($request->has('file')) {
+            $base64File = $request->file;
+            $originalFileName = $request->input('file_name'); // <- Get original file name
+            // Validate Base64 format
+            if (preg_match('/^data:(\w+\/[\w\-.+]+);base64,/', $base64File, $matches)) {
+                $fileType = $matches[1]; // Get MIME type (e.g., image/jpeg, application/pdf)
 
-        // Allowed MIME types and corresponding extensions
-        $mimeToExtension = [
-            'image/jpeg' => 'jpg',
-            'image/png' => 'png',
-            'image/gif' => 'gif',
-            'application/pdf' => 'pdf',
-            'application/msword' => 'doc',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
-            'application/vnd.ms-excel' => 'xls',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
-            'application/octet-stream' => 'xlsx', // Sometimes Excel sends xlsx as octet-stream
-            'application/zip' => 'xlsx', // XLSX files may be treated as zip files
-            'text/csv' => 'csv',
-        ];
+                // Allowed MIME types and corresponding extensions
+                $mimeToExtension = [
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                    'image/gif' => 'gif',
+                    'application/pdf' => 'pdf',
+                    'application/msword' => 'doc',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+                    'application/vnd.ms-excel' => 'xls',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+                    'application/octet-stream' => 'xlsx', // Sometimes Excel sends xlsx as octet-stream
+                    'application/zip' => 'xlsx', // XLSX files may be treated as zip files
+                    'text/csv' => 'csv',
+                ];
 
-        // Check if the MIME type is allowed and get the correct extension
-        if (array_key_exists($fileType, $mimeToExtension)) {
-            $extension = $mimeToExtension[$fileType];
-        } else {
-            return response()->json(['error' => 'Invalid file type'], 400);
+                // Check if the MIME type is allowed and get the correct extension
+                if (array_key_exists($fileType, $mimeToExtension)) {
+                    $extension = $mimeToExtension[$fileType];
+                } else {
+                    return response()->json(['error' => 'Invalid file type'], 400);
+                }
+
+                // Decode Base64 data
+                $decodedData = base64_decode(preg_replace('/^data:\w+\/[\w\-.+]+;base64,/', '', $base64File));
+
+                // Check if decoding was successful
+                if (!$decodedData) {
+                    return response()->json(['error' => 'Invalid base64 data'], 400);
+                }
+
+                // Generate a unique file name with a timestamp
+                $fileName = time() . '_announcement.' . $extension;
+
+                // Define the destination path in public_html
+                $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/';
+
+                // Save the decoded data to the target path
+                file_put_contents($destinationPath . $originalFileName, $decodedData);
+
+                // Generate the public URL for the file
+                $fullFileName = $this->base_url . 'announcements/' . $originalFileName;
+
+                // Add the full file URL to the request data
+                $requestData['file'] = $fullFileName;
+
+                // Optional: Return file URL if needed
+                // return response()->json([
+                //     'success' => true,
+                //     'file_url' => $fullFileName
+                // ]);
+            } else {
+                return response()->json(['error' => 'Invalid file format'], 400);
+            }
         }
-
-        // Decode Base64 data
-        $decodedData = base64_decode(preg_replace('/^data:\w+\/[\w\-.+]+;base64,/', '', $base64File));
-
-        // Check if decoding was successful
-        if (!$decodedData) {
-            return response()->json(['error' => 'Invalid base64 data'], 400);
-        }
-
-        // Generate a unique file name with a timestamp
-        $fileName = time() . '_announcement.' . $extension;
-
-        // Define the destination path in public_html
-        $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/';
-
-        // Save the decoded data to the target path
-        file_put_contents($destinationPath . $originalFileName, $decodedData);
-
-        // Generate the public URL for the file
-        $fullFileName = $this->base_url . 'announcements/' . $originalFileName;
-
-        // Add the full file URL to the request data
-        $requestData['file'] = $fullFileName;
-
-        // Optional: Return file URL if needed
-        // return response()->json([
-        //     'success' => true,
-        //     'file_url' => $fullFileName
-        // ]);
-    } else {
-        return response()->json(['error' => 'Invalid file format'], 400);
-    }
-}
 
         // Create announcement
         $announcement = Announcement::create($requestData);
@@ -405,42 +397,7 @@ if ($request->has('file')) {
     
             // Store notification in the database
             $notifications[] = $notificationData;
-             // Fetch user phone number
-                // $users = User::find($usersdata['id']);
-                // if($users->admission_no != ""){
-                //     $existingStudent = Student::where('admission_no', 'like', $users->admission_no)->first();
-                // } else {
-                //     $existingStudent = "";
-                // }
-                
-            // if ($request->announcementType == 0 && !empty($existingStudent->MOBILE_NUMBER)) {
-            //     // $mobile = "8940497830";
-            //     $mobile = $existingStudent->MOBILE_NUMBER;
-            //     $smsTemplate = "Dear {#name#}, your OTP for Santhosha Vidhyalaya student portal is {#otp#}. This code is valid for 10 minutes. Please do not share it with anyone.";
-            //     $otp = rand(10000, 99999);
-            //     $message = str_replace(
-            //         ['{#name#}', '{#otp#}'],
-            //         [$users->name, $otp],
-            //         $smsTemplate
-            //     );
-            //      $smsResponse = Http::withHeaders([
-            //                 'Content-Type' => 'application/json',
-            //                 'Authorization' => 'Basic MXpnQjhHdHZMNm5DR2ZaeEpKZ1E6Q1o4ZDVBNWNta2k1R0dZaWZlcE5tSG02ZGh1Z0Rwb3haT29TRWRMMQ==', // Replace with your BASIC AUTH string
-            //             ])->post('https://restapi.smscountry.com/v0.1/Accounts/1zgB8GtvL6nCGfZxJJgQ/SMSes/', [
-            //                 "Text" => $message,
-            //                 "Number" => $mobile,
-            //                 "SenderId" => "SANTHV",
-            //                 "DRNotifyUrl" => "https://www.domainname.com/notifyurl",
-            //                 "DRNotifyHttpMethod" => "POST",
-            //                 "Tool" => "API",
-            //             ]);
-            //     if ($smsResponse->status() != 202) {
-            //         Log::error('SMS sending failed. Response: ' . $smsResponse->body());
-            //         return response()->json(['status' => 'error', 'message' => 'Failed to send OTP via SMS'], 500);
-            //     }
-        
-            //     Log::info('SMS sent successfully. OTP: ' . $otp);
-            // }
+           
         }
         // Bulk Insert Notifications
         UserNotification::insert($notifications);

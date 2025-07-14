@@ -31,7 +31,7 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             "target_type" => "required|in:target,role,class",
             "target" => "nullable|integer",
-            "category" => "required|exists:event_category_masters,id",
+            "category" => "required",
             "announcementDescription" => "required|string",
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
@@ -97,7 +97,7 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             "target_type" => "required|in:target,role,class",
             "target" => "nullable|integer",
-            "category" => "required|exists:event_category_masters,id",
+            "category" => "required",
             "announcementDescription" => "required|string",
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
