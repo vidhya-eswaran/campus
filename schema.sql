@@ -2737,7 +2737,7 @@ CREATE TABLE `user_notifications` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `notification_type` varchar(255) NOT NULL,
-  `notification_category` int(11) NOT NULL,
+  `notification_category` varchar(255) NOT NULL,
   `notification_text` text NOT NULL,
   `schedule_time` datetime DEFAULT NULL,
   `send_status` enum('sent','pending','failed') DEFAULT 'pending',
