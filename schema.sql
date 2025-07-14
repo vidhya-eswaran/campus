@@ -638,7 +638,7 @@ CREATE TABLE `announcements` (
   `announcementType` tinyint(1) NOT NULL DEFAULT 0,
   `announcementDate` date NOT NULL,
   `file` varchar(255) DEFAULT NULL,
-  `createdBy` int(100) NOT NULL,
+  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1509,7 +1509,7 @@ CREATE TABLE `notice_boards` (
   `notice_message` text NOT NULL,
   `file` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
-  `createdBy` int(100) NOT NULL,
+  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
