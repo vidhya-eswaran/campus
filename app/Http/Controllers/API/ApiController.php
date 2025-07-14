@@ -402,7 +402,7 @@ public function login(Request $request)
         return response()->json(['errors' => $validator->errors()], 400);
     }
 
-    $school = DB::connection('central_db')->table('schools')->where('name', $request->school)->first();
+    $school = DB::connection('central')->table('schools')->where('name', $request->school)->first();
 
     // If a selected_user_id is provided, attempt to log in directly with that ID
     if ($selectedUserId) {
