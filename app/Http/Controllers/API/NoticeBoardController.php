@@ -40,6 +40,7 @@ class NoticeBoardController extends Controller
             'category' => 'required',
             'notice_message' => 'required|string',
             'file' => 'nullable|string', // Base64 file should be sent as string
+            'createdBy' => 'required',
         ]);
 
         // Handle file upload if present
@@ -84,6 +85,7 @@ class NoticeBoardController extends Controller
             'category' => 'required',
             'notice_message' => 'required|string',
             'file' => 'nullable|string', // Base64 file is sent as a string
+            'createdBy' => 'required',
         ]);
 
         // Handle Base64 file upload

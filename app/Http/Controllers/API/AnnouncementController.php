@@ -36,6 +36,7 @@ class AnnouncementController extends Controller
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
             "file" => "nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048",
+            'createdBy' => 'required',
         ]);
 
         // Handle file upload
@@ -102,6 +103,7 @@ class AnnouncementController extends Controller
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
             "file" => "nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048",
+            'createdBy' => 'required',
         ]);
 
         // Handle file upload
