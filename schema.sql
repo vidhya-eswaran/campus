@@ -633,7 +633,7 @@ CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `target_type` enum('target','role','class') NOT NULL,
   `target` bigint(20) UNSIGNED DEFAULT NULL,
-  `category` bigint(20) UNSIGNED NOT NULL,
+  `category` varchar(255) NOT NULL,
   `announcementDescription` text NOT NULL,
   `announcementType` tinyint(1) NOT NULL DEFAULT 0,
   `announcementDate` date NOT NULL,
