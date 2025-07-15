@@ -35,7 +35,7 @@ class StudentPromotionController extends Controller
             $validatedData = $request->validate([
                 'promotion_data' => 'nullable|array',
                 'promotion_data.*.id' => 'integer|exists:users,id',
-                'promotion_data.*.std' => 'string',
+                'promotion_data.*.std' => 'nullable',
                 'promotion_data.*.sec' => 'string',
                 'promotion_data.*.previous_academic_year' => 'string',
                 'promotion_data.*.current_academic_year' => 'string',
@@ -43,7 +43,7 @@ class StudentPromotionController extends Controller
     
                 'detention_data' => 'nullable|array', // Detention data is optional
                 'detention_data.*.id' => 'integer|exists:users,id',
-                'detention_data.*.std' => 'string',
+                'detention_data.*.std' => 'nullable',
                 'detention_data.*.sec' => 'string',
                 'detention_data.*.previous_academic_year' => 'string',
                 'detention_data.*.current_academic_year' => 'string',
