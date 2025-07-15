@@ -236,6 +236,7 @@ class StudentController extends Controller
                             "Error occurred while uploading data: " .
                                 $e->getMessage()
                         );
+                        dd($e->errors());
                         $response["uploaded"][] = [
                             "email" => $recordEmail,
                             "admission_no" => $recordAdmissionNo,
@@ -360,6 +361,7 @@ class StudentController extends Controller
                                 "Error occurred while uploading data: " .
                                     $e->getMessage()
                             );
+                            dd($e->errors());
                             $response["uploaded"][] = [
                                 "email" => $recordEmail,
                                 "admission_no" => $recordAdmissionNo,
