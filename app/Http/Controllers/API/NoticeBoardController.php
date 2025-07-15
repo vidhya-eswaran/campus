@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\NoticeBoard;
 use App\Models\User;
 use App\Models\UserNotification;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+
 
 class NoticeBoardController extends Controller
 {
@@ -45,7 +52,16 @@ class NoticeBoardController extends Controller
 
         // Handle file upload if present
         if ($request->has('file')) {
-            $validated['file'] = $this->handleBase64File($request->file, $request->file_name, 'noticeboard');
+                $file = $request->file('file');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'NoticeBoard/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $validated['file'] = Storage::disk('s3')->url($path);
         }
 
         $notice = NoticeBoard::create($validated);
@@ -90,12 +106,16 @@ class NoticeBoardController extends Controller
 
         // Handle Base64 file upload
         if ($request->has('file')) {
-            // Delete the old file if exists
-            if ($notice->file) {
-                $this->deleteOldFile($notice->file, 'noticeboard');
-            }
+                $file = $request->file('file');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $validated['file'] = $this->handleBase64File($request->file, $request->file_name, 'noticeboard');
+               $path = 'NoticeBoard/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $validated['file'] = Storage::disk('s3')->url($path);
         }
 
         // Update the notice
