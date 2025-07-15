@@ -31,6 +31,7 @@ class StudentPromotionController extends Controller
     public function update(Request $request)
     {
         try {
+            dd($request->all());
             // Validate the request data
             $validatedData = $request->validate([
                 'promotion_data' => 'nullable|array',
