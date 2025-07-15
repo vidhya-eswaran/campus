@@ -231,18 +231,9 @@ class StudentController extends Controller
                             "admission_no" => $recordAdmissionNo,
                             "message" => "Data uploaded successfully.",
                         ];
-                    } catch (\Exception $e) {
-                        Log::error(
-                            "Error occurred while uploading data: " .
-                                $e->getMessage()
-                        );
-                        dd($e->errors());
-                        $response["uploaded"][] = [
-                            "email" => $recordEmail,
-                            "admission_no" => $recordAdmissionNo,
-                            "message" => "Error occurred while uploading data.",
-                        ];
-                    }
+                    } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
+        }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
               // dd("4");
@@ -355,20 +346,9 @@ class StudentController extends Controller
                                 "admission_no" => $recordAdmissionNo,
                                 "message" => "Data uploaded successfully.",
                             ];
-                        } catch (\Exception $e) {
-                           // dd($e->getMessage());
-                            Log::error(
-                                "Error occurred while uploading data: " .
-                                    $e->getMessage()
-                            );
-                            dd($e->errors());
-                            $response["uploaded"][] = [
-                                "email" => $recordEmail,
-                                "admission_no" => $recordAdmissionNo,
-                                "message" =>
-                                    "Error occurred while uploading data.",
-                            ];
-                        }
+                        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
+        }
                     
                 }
             }
