@@ -41,6 +41,23 @@ class CentralAuthController extends Controller
                 'school_db' => [
                     'name' => $school->name,
                     'school' => $school->school,
+                    'school_logo' => $school->school_logo,
+                    'school_type' => $school->school_type,
+                    'school_category' => $school->school_category,
+                    'established_year' => $school->established_year,
+                    'website_url' => $school->website_url,
+                    'country' => $school->country,
+                    'state' => $school->state,
+                    'city' => $school->city,
+                    'postal_code' => $school->postal_code,
+                    'full_address' => $school->full_address,
+                    'phone_number' => $school->phone_number,
+                    'alternate_phone_number' => $school->alternate_phone_number,
+                    'support_email' => $school->support_email,
+                    'selected_plan' => $school->selected_plan,
+                    'subscription_start_date' => $school->subscription_start_date,
+                    'subscription_end_date' => $school->subscription_end_date,
+                    'payment_method' => $school->payment_method,
                 ]
             ]);
         }
