@@ -120,7 +120,7 @@ class StudentController extends Controller
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                             $path = 'student_images/' . $filename;
 
-                            Storage::disk('s3')->put($path, (string) $file);
+                            Storage::disk('s3')->put($path, $file);
 
                             // Set the full URL for accessing the image
                             $mappedData[$field] = Storage::disk('s3')->url($path);
@@ -189,7 +189,7 @@ class StudentController extends Controller
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                                 $path = 'student_images/' . $filename;
 
-                                Storage::disk('s3')->put($path, (string) $file);
+                                Storage::disk('s3')->put($path, $file);
 
                                 // Set the full URL for accessing the image
                                 $mappedData[$field] = Storage::disk('s3')->url($path);
@@ -308,7 +308,7 @@ class StudentController extends Controller
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                                     $path = 'student_images/' . $filename;
 
-                                    Storage::disk('s3')->put($path, (string) $file);
+                                    Storage::disk('s3')->put($path, $file);
 
                                     // Set the full URL for accessing the image
                                     $mappedData[$field] = Storage::disk('s3')->url($path);
