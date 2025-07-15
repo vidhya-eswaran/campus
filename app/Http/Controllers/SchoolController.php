@@ -56,7 +56,6 @@ class SchoolController extends Controller
                 $school_logo = Storage::disk('s3')->url($path);
 
             }
-            dd($school_logo);
        
         $schoolName = $request->name;
         $adminName = $request->admin_name;
@@ -120,7 +119,7 @@ class SchoolController extends Controller
             'db_password' => env('DB_PASSWORD', ''),
             'db_host' => '127.0.0.1',
             
-            'school_logo' => $school_logo ?? '',
+            'school_logo' => $school_logo,
             'school_type' => $request->school_type,
             'school_category' => $request->school_category,
             'established_year' => $request->established_year,
