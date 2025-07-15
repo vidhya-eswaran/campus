@@ -131,11 +131,8 @@ class StudentPromotionController extends Controller
             return response()->json([
                 'message' => 'Users updated successfully',
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error updating users',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
         }
     }
     public function moveToDetention(Request $request)
