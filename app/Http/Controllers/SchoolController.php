@@ -197,9 +197,23 @@ class SchoolController extends Controller
             'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
         ]);
 
+        if ($request->hasFile('school_logo')) {
+                $file = $request->file('school_logo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'school_logo/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $school_logo = Storage::disk('s3')->url($path);
+
+            }
+
         DB::table('schools')->where('id', $id)->update([
            // 'admin_name' => $request->admin_name ?? $school->admin_name,
-            'school_logo' => $request->filled('school_logo') ? $request->school_logo : $school->school_logo,
+            'school_logo' => $request->filled('school_logo') ? $school_logo : $school->school_logo,
             'school_type' => $request->school_type ?? $school->school_type,
             'school_category' => $request->school_category ?? $school->school_category,
             'established_year' => $request->established_year ?? $school->established_year,
