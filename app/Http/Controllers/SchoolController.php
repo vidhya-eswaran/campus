@@ -177,7 +177,7 @@ class SchoolController extends Controller
 
         $request->validate([
             //'admin_name' => 'nullable|string',
-            'school_logo' => 'nullable|string',
+            'school_logo' => 'nullable',
             'school_type' => 'nullable|in:Public,Private,International',
             'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
             'established_year' => 'nullable|digits:4',
