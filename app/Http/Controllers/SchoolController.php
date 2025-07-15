@@ -47,24 +47,14 @@ class SchoolController extends Controller
                 $file = $request->file('school_logo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-                // Compress and encode the image
-                $compressedImage = Image::make($file)
-                    ->resize(1024, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality
+               $path = 'school_logo/' . $filename;           
 
-                // Define the path to store
-                $relativePath = 'public/school_logo/' . $filename;
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
 
-                // Store the image manually using Storage::put
-                Storage::put($relativePath, $compressedImage);
+                // Get public URL
+                $school_logo = Storage::disk('s3')->url($path);
 
-                // Convert path for public access
-                $school_logo = str_replace('public/', 'storage/', $relativePath);
-
-              //  dd($school_logo);
             }
 
        
