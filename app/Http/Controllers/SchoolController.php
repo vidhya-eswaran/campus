@@ -210,7 +210,7 @@ class SchoolController extends Controller
                 $school_logo = Storage::disk('s3')->url($path);
 
             }
-
+            dd($school_logo);
         DB::table('schools')->where('id', $id)->update([
            // 'admin_name' => $request->admin_name ?? $school->admin_name,
             'school_logo' => $request->filled('school_logo') ? $school_logo : $school->school_logo,
