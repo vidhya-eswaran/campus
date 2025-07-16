@@ -147,9 +147,11 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::post("/login", [ApiController::class , "login"]);
 
     Route::post("/addSVSUser", [listUserController::class , "addUser"]);
-
-    Route::get('/check-token', function (Request $request) {
-        return response()->json(['user' => $request->user()]);
+    
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/check-token', function (Request $request) {
+            return response()->json(['user' => $request->user()]);
+        });
     });
 
    // Route::middleware('auth:api')->group(function () {
