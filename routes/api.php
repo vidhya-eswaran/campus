@@ -147,7 +147,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     Route::post("/addSVSUser", [listUserController::class , "addUser"]);
 
-    Route::middleware('auth:api')->group(function () {
+   // Route::middleware('auth:api')->group(function () {
 
         Route::prefix("noticeboard")->group(function ()
         {
@@ -167,7 +167,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
             Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
         });
 
-    });
+    //});
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
     Route::post("/healthcare/edit/{id}", [StudentHealthcareController::class , "editHealthcareRecord", ]);
