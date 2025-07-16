@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Razorpay\Api\Api;
 use Illuminate\Http\Request;
 
