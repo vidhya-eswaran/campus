@@ -135,12 +135,10 @@ Route::get('/check-passport-key', function () {
 //=========================================================================================
 // School Database
 
-Route::middleware('auth:api')->get('/check-token', function (Request $request) {
-    return response()->json(['user' => $request->user()]);
-});
 
 
-Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
+
+Route::group(["prefix" => "{school}", "middleware" =>  ["school.db", "auth:api"]], function ()
 {
     Route::post("/users", [SchoolUserController::class , "store"]);
 
@@ -149,6 +147,10 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/login", [ApiController::class , "login"]);
 
     Route::post("/addSVSUser", [listUserController::class , "addUser"]);
+
+    Route::get('/check-token', function (Request $request) {
+        return response()->json(['user' => $request->user()]);
+    });
 
    // Route::middleware('auth:api')->group(function () {
 
