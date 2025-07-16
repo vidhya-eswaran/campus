@@ -70,6 +70,7 @@ use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\HostelAdmissionController;
 use App\Http\Controllers\API\StudentAttendanceController;
 use App\Http\Controllers\API\PhotoController;
+use App\Http\Controllers\RazorpayPaymentController;
 
 // use App\Http\Controllers\API\school_fees_master; storeSendForm
 // use App\Http\Controllers\API\school_miscellaneous_bill_master;
@@ -165,7 +166,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
             Route::get("/{id}", [AnnouncementController::class , "viewbyid"]);
             Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
         });
-        
+
     });
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
@@ -196,6 +197,11 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     //ApiController
     Route::get("/lifecycle", [ApiController::class , "lifecycle"]);
+
+    Route::post('/razorpay/create-order', [RazorpayPaymentController::class, 'createOrder']);
+
+    Route::post('/razorpay/verify-payment', [RazorpayPaymentController::class, 'verifyPayment']);
+
 
 
     //Promotion student Routes
