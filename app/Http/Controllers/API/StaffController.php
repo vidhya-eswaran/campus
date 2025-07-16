@@ -241,9 +241,7 @@ class StaffController extends Controller
             );
         }
         if ($staff->staff_photo) {
-            $staff->staff_photo = asset(
-                "storage/app/public/" . $staff->staff_photo
-            );
+            $staff->staff_photo = $staff->staff_photo;
         } else {
             $staff->staff_photo = null; // If no photo, set to null
         }
@@ -326,9 +324,7 @@ class StaffController extends Controller
             }
 
             if ($staffMember->staff_photo) {
-                $staffMember->staff_photo = asset(
-                    "storage/app/public/" . $staffMember->staff_photo
-                );
+                $staffMember->staff_photo =  $staffMember->staff_photo;
             } else {
                 $staffMember->staff_photo = null; // If no photo, set to null
             }
