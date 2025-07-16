@@ -135,6 +135,9 @@ Route::get('/check-passport-key', function () {
 //=========================================================================================
 // School Database
 
+Route::middleware('auth:api')->get('/check-token', function (Request $request) {
+    return response()->json(['user' => $request->user()]);
+});
 
 
 Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
