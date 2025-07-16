@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -49,6 +50,10 @@ class NoticeBoardController extends Controller
             'file' => 'nullable', // Base64 file should be sent as string
             'createdBy' => 'required',
         ]);
+
+        $user = Auth::user();
+
+        dd($user);
 
         // Handle file upload if present
         if ($request->has('file')) {

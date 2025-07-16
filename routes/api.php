@@ -146,6 +146,27 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
 
     Route::post("/addSVSUser", [listUserController::class , "addUser"]);
 
+    Route::middleware('auth:api')->group(function () {
+
+        Route::prefix("noticeboard")->group(function ()
+        {
+            Route::get("/", [NoticeBoardController::class , "index"]);
+            Route::post("/", [NoticeBoardController::class , "store"]);
+            Route::put("/{id}", [NoticeBoardController::class , "update"]);
+            Route::get("/{id}", [NoticeBoardController::class , "viewbyid"]);
+            Route::delete("/{id}", [NoticeBoardController::class , "destroy"]);
+        });
+
+        Route::prefix("announcements")->group(function ()
+        {
+            Route::get("/", [AnnouncementController::class , "index"]);
+            Route::post("/", [AnnouncementController::class , "store"]);
+            Route::put("/{id}", [AnnouncementController::class , "update"]);
+            Route::get("/{id}", [AnnouncementController::class , "viewbyid"]);
+            Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
+        });
+        
+    });
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
     Route::post("/healthcare/edit/{id}", [StudentHealthcareController::class , "editHealthcareRecord", ]);
@@ -545,24 +566,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
         Route::delete("/{id}", [NotificationCategoryController::class , "destroy"]);
     });
 
-    Route::prefix("noticeboard")->group(function ()
-    {
-        Route::get("/", [NoticeBoardController::class , "index"]);
-        Route::post("/", [NoticeBoardController::class , "store"]);
-        Route::put("/{id}", [NoticeBoardController::class , "update"]);
-        Route::get("/{id}", [NoticeBoardController::class , "viewbyid"]);
-        Route::delete("/{id}", [NoticeBoardController::class , "destroy"]);
-    });
-
-    Route::prefix("announcements")->group(function ()
-    {
-        Route::get("/", [AnnouncementController::class , "index"]);
-        Route::post("/", [AnnouncementController::class , "store"]);
-        Route::put("/{id}", [AnnouncementController::class , "update"]);
-        Route::get("/{id}", [AnnouncementController::class , "viewbyid"]);
-        Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
-    });
-
+    
     Route::prefix("std_sec_group_mapping")->group(function ()
     {
         Route::get("/", [StandardSectionMappingController::class , "index"]);
