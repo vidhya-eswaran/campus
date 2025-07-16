@@ -46,7 +46,6 @@ class StaffController extends Controller
             "teacher_type" => "nullable",
             "previous_experience" => "nullable",
             "date_of_joining" => "nullable",
-            "staff_photo" => "nullable",
             "mobile_no" => "nullable",
             "marital_status" => "nullable",
             "no_of_children" => "nullable",
@@ -75,17 +74,30 @@ class StaffController extends Controller
             $requestData["date_of_joining"]
         );
 
-        $staff = Staff::create($requestData);
-        if ($request->has("staff_photo")) {
-            // request, $staff, fieldname on API, file path, db column name
-            $this->handleImageUpdate(
-                $request,
-                $staff,
-                "staff_photo",
-                "staff_photo",
-                "staff_photo"
-            );
+        if ($request->has('staff_photo')) {
+                $file = $request->file('staff_photo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'Staff/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $requestData['staff_photo'] = Storage::disk('s3')->url($path);
         }
+
+        $staff = Staff::create($requestData);
+        // if ($request->has("staff_photo")) {
+        //     // request, $staff, fieldname on API, file path, db column name
+        //     $this->handleImageUpdate(
+        //         $request,
+        //         $staff,
+        //         "staff_photo",
+        //         "staff_photo",
+        //         "staff_photo"
+        //     );
+        // }
 
         if ($staff) {
             $lastid = User::latest("id")->value("id") + 1;
@@ -151,7 +163,6 @@ class StaffController extends Controller
             "teacher_type" => "nullable",
             "previous_experience" => "nullable",
             "date_of_joining" => "nullable",
-            "staff_photo" => "nullable",
             "mobile_no" => "nullable",
             "marital_status" => "nullable",
             "no_of_children" => "nullable",
@@ -177,16 +188,29 @@ class StaffController extends Controller
             );
         }
 
-        if ($request->has("staff_photo")) {
-            // request, $staff, fieldname on API, file path, db column name
-            $this->handleImageUpdate(
-                $request,
-                $staff,
-                "staff_photo",
-                "staff_photo",
-                "staff_photo"
-            );
+        if ($request->has('staff_photo')) {
+                $file = $request->file('staff_photo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'Staff/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $requestData['staff_photo'] = Storage::disk('s3')->url($path);
         }
+
+        // if ($request->has("staff_photo")) {
+        //     // request, $staff, fieldname on API, file path, db column name
+        //     $this->handleImageUpdate(
+        //         $request,
+        //         $staff,
+        //         "staff_photo",
+        //         "staff_photo",
+        //         "staff_photo"
+        //     );
+        // }
 
         // Update the staff record with the new data
         $staff->update($requestData);
@@ -326,7 +350,7 @@ class StaffController extends Controller
         try {
             if ($request->has($fieldNameApi)) {
                 $base64Image = $request->input($fieldNameApi);
-
+                dd($base64Image);
                 // Ensure it's a base64 image
                 if (preg_match("/^data:image\/(\w+);base64,/", $base64Image, $matches)) {
                     $extension = $matches[1]; // Extract file extension
