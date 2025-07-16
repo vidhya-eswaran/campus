@@ -137,7 +137,7 @@ Route::get('/check-passport-key', function () {
 
 
 
-Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
+Route::group(["prefix" => "{school}", "middleware" => ["school.db", "auth:api"]], function ()
 {
     Route::post("/users", [SchoolUserController::class , "store"]);
 
