@@ -315,6 +315,7 @@ class StaffController extends Controller
 
     // request, $staff, fieldname on API, file path, db column name
 
+
     private function handleImageUpdate(
         $request,
         $staff,
@@ -327,24 +328,13 @@ class StaffController extends Controller
                 $base64Image = $request->input($fieldNameApi);
 
                 // Ensure it's a base64 image
-                if (
-                    preg_match(
-                        "/^data:image\/(\w+);base64,/",
-                        $base64Image,
-                        $matches
-                    )
-                ) {
-                    $extension = $matches[1]; // Extract file extension (e.g., jpg, png)
-                    $base64Image = substr(
-                        $base64Image,
-                        strpos($base64Image, ",") + 1
-                    ); // Strip metadata
+                if (preg_match("/^data:image\/(\w+);base64,/", $base64Image, $matches)) {
+                    $extension = $matches[1]; // Extract file extension
+                    $base64Image = substr($base64Image, strpos($base64Image, ",") + 1); // Strip metadata
                     $base64Image = base64_decode($base64Image);
 
                     if ($base64Image === false) {
-                        throw new \Exception(
-                            "Base64 decoding failed for field: $fieldNameApi"
-                        );
+                        throw new \Exception("Base64 decoding failed for field: $fieldNameApi");
                     }
 
                     // Generate a unique file name
@@ -352,35 +342,25 @@ class StaffController extends Controller
                     $fileName = uniqid() . "_{$timestamp}." . $extension;
                     $filePathWithName = $filePath . "/" . $fileName;
 
-                    // Save the image to storage
-                    $fullPath = Storage::disk("public")->path(
-                        $filePathWithName
-                    );
-                    $isWritten = file_put_contents($fullPath, $base64Image);
+                    // Store image in S3
+                    Storage::disk('s3')->put($filePathWithName, file_get_contents($base64Image));
 
-                    if ($isWritten === false) {
-                        throw new \Exception(
-                            "Failed to write file for field: $fieldNameApi"
-                        );
-                    }
+                    // Generate S3 public URL (optional)
+                    $s3Url = Storage::disk('s3')->url($filePathWithName);
 
-                    // Store only the image name in the database
-                    $staff->update([$dbName => $filePathWithName]);
+                    // Store only the file path or the full URL in DB (choose as needed)
+                    $staff->update([$dbName => $s3Url]);
 
-                    // Log success
-                    Log::info(
-                        "Successfully updated {$fieldNameApi} with file path: {$filePathWithName}"
-                    );
+                    Log::info("Successfully uploaded {$fieldNameApi} to S3: {$s3Url}");
                 } else {
-                    throw new \Exception(
-                        "Invalid base64 string for field: $fieldNameApi"
-                    );
+                    throw new \Exception("Invalid base64 string for field: $fieldNameApi");
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Error updating {$fieldNameApi}: " . $e->getMessage());
+            Log::error("Error uploading {$fieldNameApi} to S3: " . $e->getMessage());
         }
     }
+
 
     public function deleteStaff(Request $request,$id)
     {
