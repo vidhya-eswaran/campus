@@ -288,9 +288,121 @@ class StaffInvoiceController extends Controller
         // Fetch pending fees
         $query = DB::table("staff_fees_mapping")->where("status", "pending");
 
-        if (!empty($staffIds)) {
-            $staffIdsArray = is_array($staffIds) ? $staffIds : [$staffIds];
-            $query->whereIn("staff_id", $staffIdsArray);
+            if (!empty($staffIds)) {
+                $staffIdsArray = is_array($staffIds) ? $staffIds : [$staffIds];
+                $query->whereIn("staff_id", $staffIdsArray);
+            }
+
+            $pendingFees = $query->get();
+
+            if ($pendingFees->isEmpty()) {
+                return response()->json(
+                    ["message" => "No pending fees found"],
+                    404
+                );
+            }
+
+            $staffInvoices = [];
+
+            foreach ($pendingFees->groupBy("staff_id") as $staffId => $fees) {
+                $totalAmount = $fees->sum("amount");
+
+            // ✅ FIXED: Disable previous invoices except latest one
+            $latestInvoiceId = DB::table("staff_invoices")
+                ->where("created_by", $staffId)
+                ->max("id");
+
+            if ($latestInvoiceId) {
+                DB::table("staff_invoices")
+                    ->where("created_by", $staffId)
+                    ->where("id", "!=", $latestInvoiceId)
+                    ->update(["status" => "disabled"]);
+            }
+
+            // 🔹 Generate invoice number
+            $datePart = now()->format("dmYs");
+                $lastInvoice = DB::table("staff_invoices")
+                    ->where("invoice_no", "LIKE", "STF{$datePart}%")
+                    ->orderBy("invoice_no", "desc")
+                    ->value("invoice_no");
+
+                // Extract last sequence and increment
+                $nextSequence = $lastInvoice
+                    ? intval(substr($lastInvoice, -4)) + 1
+                    : 1;
+
+            $invoiceNo = "STF{$datePart}" . str_pad($nextSequence, 4, "0", STR_PAD_LEFT);
+
+            // 🔹 Calculate dues
+                $totalPaid = DB::table("staff_payments")
+                    ->whereIn("invoice_id", function ($query) use ($staffId) {
+                    $query->select("id")
+                            ->from("staff_invoices")
+                            ->where("created_by", $staffId);
+                    })
+                    ->sum("amount");
+
+                $totalInvoices = DB::table("staff_invoices")
+                    ->where("created_by", $staffId)
+                    ->sum("total_amount");
+
+                $previousDue = max($totalInvoices - $totalPaid, 0);
+                $newDue = $previousDue + $totalAmount;
+
+                // Insert into invoices table
+                $invoiceId = DB::table("staff_invoices")->insertGetId([
+                    "invoice_no" => $invoiceNo,
+                    "total_amount" => $totalAmount,
+                    "due_amount" => $newDue,
+                    "status" => "pending",
+                    "created_by" => $staffId,
+                    "created_at" => now(),
+                    "updated_at" => now(),
+                ]);
+
+                // Insert invoice details
+                foreach ($fees as $fee) {
+                    DB::table("staff_invoice_details")->insert([
+                        "invoice_id" => $invoiceId,
+                        "fees_type" => $fee->fees_type,
+                        "amount" => $fee->amount,
+                        "created_at" => now(),
+                        "updated_at" => now(),
+                    ]);
+
+                    // Update mapping table status to "generated"
+                    DB::table("staff_fees_mapping")
+                        ->where("id", $fee->id)
+                        ->update(["status" => "invoice_generated"]);
+                }
+
+                // Record transaction
+                DB::table("staff_transactions")->insert([
+                    "staff_id" => $staffId,
+                    "transaction_date" => now(),
+                    "transaction_no" => $invoiceNo,
+                    "transaction_type" => "INVOICE",
+                    "invoice_amount" => $totalAmount,
+                    "receipt_amount" => 0,
+                    "due_amount" => $newDue,
+                    "created_at" => now(),
+                    "updated_at" => now(),
+                ]);
+
+                $staffInvoices[$staffId] = $invoiceNo;
+            }
+
+            DB::commit();
+            return response()->json(
+                [
+                    "message" => "Invoices generated successfully",
+                    "invoice_nos" => $staffInvoices,
+                ],
+                201
+            );
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(["error" => $e->getMessage()], 500);
         }
 
         $pendingFees = $query->get();

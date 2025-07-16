@@ -402,6 +402,8 @@ public function login(Request $request)
         return response()->json(['errors' => $validator->errors()], 400);
     }
 
+    $school = DB::connection('central')->table('schools')->where('name', $request->school)->first();
+
     // If a selected_user_id is provided, attempt to log in directly with that ID
     if ($selectedUserId) {
         $user = User::find($selectedUserId);
@@ -415,11 +417,10 @@ public function login(Request $request)
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
-            'user_type' => $user->user_type ?? '',
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
+            'user' => [
+            'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
             'id' => $user->id ?? '',
@@ -432,6 +433,28 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
+            ],
+            'school_db' => [
+                    'name' => $request->school,
+                    'school' => $school->school,
+                    'school_logo' => $school->school_logo,
+                    'school_type' => $school->school_type,
+                    'school_category' => $school->school_category,
+                    'established_year' => $school->established_year,
+                    'website_url' => $school->website_url,
+                    'country' => $school->country,
+                    'state' => $school->state,
+                    'city' => $school->city,
+                    'postal_code' => $school->postal_code,
+                    'full_address' => $school->full_address,
+                    'phone_number' => $school->phone_number,
+                    'alternate_phone_number' => $school->alternate_phone_number,
+                    'support_email' => $school->support_email,
+                    'selected_plan' => $school->selected_plan,
+                    'subscription_start_date' => $school->subscription_start_date,
+                    'subscription_end_date' => $school->subscription_end_date,
+                    'payment_method' => $school->payment_method,
+                ]
         ];
 
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
@@ -457,11 +480,11 @@ public function login(Request $request)
         $tokenResult = $oldestUser->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
-            'user_type' => $oldestUser->user_type ?? '',
+                            
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
+            'user' => [
+            'role' => $oldestUser->user_type ?? '',
             'name' => $oldestUser->name ?? '',
             'email' => $oldestUser->email ?? '',
             'id' => $oldestUser->id ?? '',
@@ -473,6 +496,29 @@ public function login(Request $request)
             'admission_no' => $oldestUser->admission_no ?? '',
             'status' => $oldestUser->status ?? '',
             'message' => 'Login successful',
+            ] ,
+            'school_db' => [
+                    'name' => $request->school,
+                    'school' => $school->school,
+                    'school_logo' => $school->school_logo,
+                    'school_type' => $school->school_type,
+                    'school_category' => $school->school_category,
+                    'established_year' => $school->established_year,
+                    'website_url' => $school->website_url,
+                    'country' => $school->country,
+                    'state' => $school->state,
+                    'city' => $school->city,
+                    'postal_code' => $school->postal_code,
+                    'full_address' => $school->full_address,
+                    'phone_number' => $school->phone_number,
+                    'alternate_phone_number' => $school->alternate_phone_number,
+                    'support_email' => $school->support_email,
+                    'selected_plan' => $school->selected_plan,
+                    'subscription_start_date' => $school->subscription_start_date,
+                    'subscription_end_date' => $school->subscription_end_date,
+                    'payment_method' => $school->payment_method,
+                ]
+                
         ];
         if ($oldestUser->user_type === 'admin' || $oldestUser->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $oldestUser->email)->first();
@@ -485,11 +531,10 @@ public function login(Request $request)
         $tokenResult = $user->createToken('MyApp');
         $token = $tokenResult->accessToken;
         $response = [
-            'token' => [
-                'accessToken' => $token,
-                'token' => $tokenResult->token,
-            ],
-            'user_type' => $user->user_type ?? '',
+            'token' => $tokenResult->token,
+            'accessToken' => $token, 
+            'user' => [
+            'role' => $user->user_type ?? '',
             'name' => $user->name ?? '',
             'email' => $user->email ?? '',
             'id' => $user->id ?? '',
@@ -502,6 +547,28 @@ public function login(Request $request)
             'admission_no' => $user->admission_no ?? '',
             'status' => $user->status ?? '',
             'message' => 'Login successful',
+            ],
+            'school_db' => [
+                    'name' => $request->school,
+                    'school' => $school->school,
+                    'school_logo' => $school->school_logo,
+                    'school_type' => $school->school_type,
+                    'school_category' => $school->school_category,
+                    'established_year' => $school->established_year,
+                    'website_url' => $school->website_url,
+                    'country' => $school->country,
+                    'state' => $school->state,
+                    'city' => $school->city,
+                    'postal_code' => $school->postal_code,
+                    'full_address' => $school->full_address,
+                    'phone_number' => $school->phone_number,
+                    'alternate_phone_number' => $school->alternate_phone_number,
+                    'support_email' => $school->support_email,
+                    'selected_plan' => $school->selected_plan,
+                    'subscription_start_date' => $school->subscription_start_date,
+                    'subscription_end_date' => $school->subscription_end_date,
+                    'payment_method' => $school->payment_method,
+                ]
         ];
         if ($user->user_type === 'admin' || $user->user_type === 'staff') {
             $response['staff_master_dd'] = Staff::where('email', $user->email)->first();

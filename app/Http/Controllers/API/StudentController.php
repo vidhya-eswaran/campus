@@ -120,16 +120,7 @@ class StudentController extends Controller
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                             $path = 'student_images/' . $filename;
 
-                            // Compress and encode the image
-                            $compressedImage = Image::make($file)
-                                ->resize(1024, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })
-                                ->encode($file->getClientOriginalExtension(), 75); // compression quality
-
-                            // Store the compressed image on S3
-                            Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
+                            Storage::disk('s3')->put($path, file_get_contents($file));
 
                             // Set the full URL for accessing the image
                             $mappedData[$field] = Storage::disk('s3')->url($path);
@@ -137,6 +128,7 @@ class StudentController extends Controller
                             $mappedData[$field] = null;
                         }
                     }
+                   // dd("s3", $mappedData);
 
                     // If date fields need to be converted, handle them separately
                     if (!empty($record->dob)) {
@@ -197,16 +189,7 @@ class StudentController extends Controller
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
                                 $path = 'student_images/' . $filename;
 
-                                // Compress and encode the image
-                                $compressedImage = Image::make($file)
-                                    ->resize(1024, null, function ($constraint) {
-                                        $constraint->aspectRatio();
-                                        $constraint->upsize();
-                                    })
-                                    ->encode($file->getClientOriginalExtension(), 75); // compression quality
-
-                                // Store the compressed image on S3
-                                Storage::disk('s3')->put($path, (string) $compressedImage, 'public');
+                                Storage::disk('s3')->put($path, file_get_contents($file));
 
                                 // Set the full URL for accessing the image
                                 $mappedData[$field] = Storage::disk('s3')->url($path);
@@ -214,6 +197,7 @@ class StudentController extends Controller
                                 $mappedData[$field] = null;
                             }
                         }
+                      //  dd("s31", $mappedData);
 
                         if (!empty($record->dob)) {
                             $mappedData['dob'] = $this->convertExcelDate($record->dob);
@@ -247,17 +231,9 @@ class StudentController extends Controller
                             "admission_no" => $recordAdmissionNo,
                             "message" => "Data uploaded successfully.",
                         ];
-                    } catch (\Exception $e) {
-                        Log::error(
-                            "Error occurred while uploading data: " .
-                                $e->getMessage()
-                        );
-                        $response["uploaded"][] = [
-                            "email" => $recordEmail,
-                            "admission_no" => $recordAdmissionNo,
-                            "message" => "Error occurred while uploading data.",
-                        ];
-                    }
+                    } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
+        }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
               // dd("4");
@@ -321,16 +297,15 @@ class StudentController extends Controller
                                 if ($request->hasFile($field)) {
                                     $file = $request->file($field);
 
-                                    // Generate unique filename with date and time
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                                    $path = 'student_images/' . $filename;
 
-                                    // Store the file in storage/app/public/student_images/
-                                    $path = $file->storeAs('public/student_images', $filename);
+                                    Storage::disk('s3')->put($path, file_get_contents($file));
 
-                                    // Save the relative path in the mapped data (without "public/")
-                                    $mappedData[$field] = str_replace('public/', 'storage/', $path);
+                                    // Set the full URL for accessing the image
+                                    $mappedData[$field] = Storage::disk('s3')->url($path);
                                 } else {
-                                    $mappedData[$field] = null; // or handle as needed
+                                    $mappedData[$field] = null;
                                 }
                             }
 
@@ -371,19 +346,9 @@ class StudentController extends Controller
                                 "admission_no" => $recordAdmissionNo,
                                 "message" => "Data uploaded successfully.",
                             ];
-                        } catch (\Exception $e) {
-                           // dd($e->getMessage());
-                            Log::error(
-                                "Error occurred while uploading data: " .
-                                    $e->getMessage()
-                            );
-                            $response["uploaded"][] = [
-                                "email" => $recordEmail,
-                                "admission_no" => $recordAdmissionNo,
-                                "message" =>
-                                    "Error occurred while uploading data.",
-                            ];
-                        }
+                        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
+        }
                     
                 }
             }
@@ -737,7 +702,7 @@ class StudentController extends Controller
                 $path = 'student_images/' . $filename;             
 
                 // Upload to S3
-                Storage::disk('s3')->put($path, (string) $file);
+                Storage::disk('s3')->put($path, file_get_contents($file));
 
                 // Get public URL
                 $admission->$field = Storage::disk('s3')->url($path);

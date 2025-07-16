@@ -12,6 +12,7 @@ use App\Models\UserGradeHistory;
 use App\Models\AdmissionForm;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\LifecycleLogger;  
+use Illuminate\Validation\Rule;
 
 
 
@@ -31,19 +32,26 @@ class StudentPromotionController extends Controller
     public function update(Request $request)
     {
         try {
+            //dd($request->all());
             // Validate the request data
             $validatedData = $request->validate([
                 'promotion_data' => 'nullable|array',
-                'promotion_data.*.id' => 'integer|exists:users,id',
-                'promotion_data.*.std' => 'string',
+                'promotion_data.*.id' => [
+                    'integer',
+                    Rule::exists('school.users', 'id'), // use the correct connection name
+                ],
+                'promotion_data.*.std' => 'nullable',
                 'promotion_data.*.sec' => 'string',
                 'promotion_data.*.previous_academic_year' => 'string',
                 'promotion_data.*.current_academic_year' => 'string',
                 'promotion_data.*.grade_status' => 'string',
     
                 'detention_data' => 'nullable|array', // Detention data is optional
-                'detention_data.*.id' => 'integer|exists:users,id',
-                'detention_data.*.std' => 'string',
+                'detention_data.*.id' => [
+                    'integer',
+                    Rule::exists('school.users', 'id'),
+                ],
+                'detention_data.*.std' => 'nullable',
                 'detention_data.*.sec' => 'string',
                 'detention_data.*.previous_academic_year' => 'string',
                 'detention_data.*.current_academic_year' => 'string',
@@ -131,20 +139,18 @@ class StudentPromotionController extends Controller
             return response()->json([
                 'message' => 'Users updated successfully',
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error updating users',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
         }
     }
     public function moveToDetention(Request $request)
     {
+       // dd($request->all());
         try {
             $validatedData = $request->validate([
                 'student_details' => 'nullable|array', // Detention data is optional
                 'student_details.*.id' => 'integer|exists:users,id',
-                'student_details.*.std' => 'nullable|string',
+                'student_details.*.std' => 'nullable',
                 'student_details.*.sec' => 'nullable|string',
                 'student_details.*.group' => 'nullable|string',
                 'student_details.*.previous_academic_year' => 'nullable|string',
@@ -174,9 +180,9 @@ class StudentPromotionController extends Controller
                         $existingStudent = Student::where('admission_no', $existingUser->admission_no)->first();
                         if ($existingStudent) {
                             $studentData = array_filter([
-                                'SOUGHT_STD' => $history['std'] ?? null,
+                                'std_sought' => $history['std'] ?? null,
                                 'sec' => $history['sec'] ?? null,
-                                'GROUP_12' => $history['group'] ?? null,
+                                'group_first_choice' => $history['group'] ?? null,
                                 'academic_year' => $history['previous_academic_year'] ?? null,
                                 'grade_status' => $history['grade_status'] ?? null,
                             ], fn($value) => !is_null($value)); // Remove null values
@@ -216,11 +222,8 @@ class StudentPromotionController extends Controller
                 'message' => 'Students data updated successfully',
             ], 200);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error updating students',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // this will show validation errors
         }
     }
 

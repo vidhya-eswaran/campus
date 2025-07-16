@@ -23,7 +23,7 @@ class SchoolController extends Controller
                 'name' => 'required|unique:schools,name',
                 'admin_name' => 'required|string',
                 'admin_email' => 'required|email|unique:users,email',
-
+                'school' => 'nullable',
                 'school_logo' => 'nullable',
                 'school_type' => 'nullable|in:Public,Private,International',
                 'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
@@ -47,26 +47,15 @@ class SchoolController extends Controller
                 $file = $request->file('school_logo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-                // Compress and encode the image
-                $compressedImage = Image::make($file)
-                    ->resize(1024, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->encode($file->getClientOriginalExtension(), 75); // 75 = compression quality
+               $path = 'school_logo/' . $filename;           
 
-                // Define the path to store
-                $relativePath = 'public/school_logo/' . $filename;
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
 
-                // Store the image manually using Storage::put
-                Storage::put($relativePath, $compressedImage);
+                // Get public URL
+                $school_logo = Storage::disk('s3')->url($path);
 
-                // Convert path for public access
-                $school_logo = str_replace('public/', 'storage/', $relativePath);
-
-              //  dd($school_logo);
             }
-
        
         $schoolName = $request->name;
         $adminName = $request->admin_name;
@@ -124,12 +113,13 @@ class SchoolController extends Controller
         // Insert into schools and get the inserted ID
         $schoolId = DB::table('schools')->insertGetId([
             'name' => $schoolName,
+            'school' => $request->name,
             'db_name' => $dbName,
             'db_username' => 'root',
             'db_password' => env('DB_PASSWORD', ''),
             'db_host' => '127.0.0.1',
             
-            'school_logo' => $school_logo ?? '',
+            'school_logo' => $school_logo,
             'school_type' => $request->school_type,
             'school_category' => $request->school_category,
             'established_year' => $request->established_year,
@@ -187,7 +177,7 @@ class SchoolController extends Controller
 
         $request->validate([
             //'admin_name' => 'nullable|string',
-            'school_logo' => 'nullable|string',
+            'school_logo' => 'nullable',
             'school_type' => 'nullable|in:Public,Private,International',
             'school_category' => 'nullable|in:Primary,Secondary,Higher Secondary,University',
             'established_year' => 'nullable|digits:4',
@@ -207,9 +197,23 @@ class SchoolController extends Controller
             'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
         ]);
 
+        if ($request->hasFile('school_logo')) {
+                $file = $request->file('school_logo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'school_logo/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $school_logo = Storage::disk('s3')->url($path);
+
+            }
+            //dd($school_logo);
         DB::table('schools')->where('id', $id)->update([
            // 'admin_name' => $request->admin_name ?? $school->admin_name,
-            'school_logo' => $request->filled('school_logo') ? $request->school_logo : $school->school_logo,
+            'school_logo' => $request->hasFile('school_logo') ? $school_logo : $school->school_logo,
             'school_type' => $request->school_type ?? $school->school_type,
             'school_category' => $request->school_category ?? $school->school_category,
             'established_year' => $request->established_year ?? $school->established_year,

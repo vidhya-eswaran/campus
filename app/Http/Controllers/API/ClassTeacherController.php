@@ -81,6 +81,7 @@ class ClassTeacherController extends Controller
     // Update teacher details
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $teacher = ClassTeacher::where("id", $id)->first();
 
         if (!$teacher) {

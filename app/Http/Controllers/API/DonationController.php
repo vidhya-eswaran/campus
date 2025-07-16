@@ -31,19 +31,16 @@ class DonationController extends Controller
         // Handle image upload
         if ($request->hasFile("image")) {
             $file = $request->file("image");
-            $fileName = time() . "_" . $file->getClientOriginalName();
+            $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $destinationPath = public_path("donation"); // this resolves to public/donation
+            $path = 'Donation/' . $filename;           
 
-            // Create folder if not exists
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
+                // Upload to S3
+            Storage::disk('s3')->put($path, file_get_contents($file));
 
-            $file->move($destinationPath, $fileName);
+                // Get public URL
+            $imagePath = Storage::disk('s3')->url($path);
 
-            // Image path for database (relative to public/)
-            $imagePath = "donation/" . $fileName;
         }
         // dd($imagePath);
         // Create the donation record
@@ -95,15 +92,15 @@ class DonationController extends Controller
             }
 
             $file = $request->file("image");
-            $fileName = time() . "_" . $file->getClientOriginalName();
-            $destinationPath = public_path("donation");
+            $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
+            $path = 'Donation/' . $filename;           
 
-            $file->move($destinationPath, $fileName);
-            $donation->image = "donation/" . $fileName;
+                // Upload to S3
+            Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+            $donation->image = Storage::disk('s3')->url($path);
         }
 
         // Update other fields

@@ -5,6 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Announcement;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class AnnouncementController extends Controller
 {
@@ -31,28 +39,30 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             "target_type" => "required|in:target,role,class",
             "target" => "nullable|integer",
-            "category" => "required|exists:event_category_masters,id",
+            "category" => "required",
             "announcementDescription" => "required|string",
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
             "file" => "nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048",
+            'createdBy' => 'required',
         ]);
+
+        $user = Auth::user();
+
+        dd($user);
 
         // Handle file upload
         if ($request->hasFile("file")) {
             $file = $request->file("file");
-            $fileName = time() . "_" . $file->getClientOriginalName();
-            // $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/'; // Store in public_html/announcements
-            $folderName = env("APP_FOLDER", "SVSTEST"); // Default to 'SVSTEST' if not set in .env
-            $destinationPath =
-                $_SERVER["DOCUMENT_ROOT"] .
-                "/" .
-                $folderName .
-                "/announcements/"; // Store in public_html/announcements
+            $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $file->move($destinationPath, $fileName);
-            $fullfileName = $this->base_url . "announcements/" . $fileName;
-            $validated["file"] = $fullfileName; // Store only file name
+               $path = 'Announcement/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $validated['file'] = Storage::disk('s3')->url($path);
         }
 
         $announcement = Announcement::create($validated);
@@ -97,43 +107,27 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             "target_type" => "required|in:target,role,class",
             "target" => "nullable|integer",
-            "category" => "required|exists:event_category_masters,id",
+            "category" => "required",
             "announcementDescription" => "required|string",
             "announcementType" => "required|in:0,1",
             "announcementDate" => "required|date",
             "file" => "nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048",
+            'createdBy' => 'required',
         ]);
 
         // Handle file upload
-        if ($request->hasFile("file")) {
-            // Delete old file if exists
-            if ($announcement->file) {
-                // $oldFilePath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/' . $announcement->file;
-                $folderName = env("APP_FOLDER", "SVSTEST"); // Default to 'SVSTEST' if not set in .env
-                $oldFilePath =
-                    $_SERVER["DOCUMENT_ROOT"] .
-                    "/" .
-                    $folderName .
-                    "/announcements/" .
-                    $announcement->file;
-
-                if (file_exists($oldFilePath)) {
-                    unlink($oldFilePath); // Remove old file
-                }
-            }
+        if ($request->hasFile("file")) {            
 
             $file = $request->file("file");
-            $fileName = time() . "_" . $file->getClientOriginalName();
-            // $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/SVSTEST/announcements/'; // Store in public_html/announcements
-            $folderName = env("APP_FOLDER", "SVSTEST"); // Default to 'SVSTEST' if not set in .env
-            $destinationPath =
-                $_SERVER["DOCUMENT_ROOT"] .
-                "/" .
-                $folderName .
-                "/announcements/"; // Store in public_html/announcements
+            $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $file->move($destinationPath, $fileName);
-            $validated["file"] = $fileName;
+               $path = 'Announcement/' . $filename;           
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $validated['file'] = Storage::disk('s3')->url($path);
         }
 
         $announcement->update($validated);
@@ -156,19 +150,19 @@ class AnnouncementController extends Controller
         $id = $request->id;
         $announcement = Announcement::findOrFail($id);
 
-        // Delete file if exists
-        if ($announcement->file) {
-            $folderName = env("APP_FOLDER", "SVSTEST"); // Get folder name from .env, default to 'SVSTEST'
-            $filePath =
-                $_SERVER["DOCUMENT_ROOT"] .
-                "/" .
-                $folderName .
-                "/announcements/" .
-                $announcement->file;
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
-        }
+        // // Delete file if exists
+        // if ($announcement->file) {
+        //     $folderName = env("APP_FOLDER", "SVSTEST"); // Get folder name from .env, default to 'SVSTEST'
+        //     $filePath =
+        //         $_SERVER["DOCUMENT_ROOT"] .
+        //         "/" .
+        //         $folderName .
+        //         "/announcements/" .
+        //         $announcement->file;
+        //     if (file_exists($filePath)) {
+        //         unlink($filePath);
+        //     }
+        // }
 
         $announcement->delete();
 
