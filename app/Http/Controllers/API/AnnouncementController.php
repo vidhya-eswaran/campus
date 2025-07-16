@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class AnnouncementController extends Controller
 {
@@ -44,6 +46,10 @@ class AnnouncementController extends Controller
             "file" => "nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048",
             'createdBy' => 'required',
         ]);
+
+        $user = Auth::user();
+
+        dd($user);
 
         // Handle file upload
         if ($request->hasFile("file")) {
