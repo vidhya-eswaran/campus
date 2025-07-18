@@ -978,7 +978,7 @@ class InvoiceController extends Controller
                 "email"
             )
             ->get();
-                dd($students);
+        
         // Initialize an empty array to store student records
         $studentRecords = [];
         $studentinfo = [];
@@ -990,6 +990,8 @@ class InvoiceController extends Controller
             )
                 ->where("fees_cat", $sponsorType)
                 ->get();
+
+                   dd($studentRecord); 
             // Loop through the students and retrieve their records
             // Check if $studentRecord is not empty
             if (!$studentRecord->isEmpty()) {
