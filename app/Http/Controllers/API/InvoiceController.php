@@ -963,6 +963,7 @@ class InvoiceController extends Controller
         // You can use the code discussed earlier to retrieve the students
         $sponsorId =  $request->query("sponsorId");
         $sponsorType = $request->query("sponsortype");
+        dd($sponsorId);
         $students = User::where("sponser_id", $sponsorId)
             ->where("status", 1)
             // ->select(
