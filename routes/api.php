@@ -422,7 +422,7 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
     Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
     Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
-    Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
+    Route::post("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
     Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
     Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
     Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);

@@ -957,7 +957,7 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function getSponsorIDStudentstwo(Request $request, $sponsorId)
+    public function getSponsorIDStudentstwo(Request $request)
     {
         // Fetch and return the sponsor's students based on $sponsorId
         // You can use the code discussed earlier to retrieve the students
