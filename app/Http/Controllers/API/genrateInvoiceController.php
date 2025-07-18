@@ -2014,7 +2014,7 @@ class genrateInvoiceController extends Controller
         } else {
             // Sponsor is paying (logic remains the same)
             $sponsorUser = User::find($sponsor);
-             dd($sponsorUser, "sponuser" , $sponsor,"sponser");
+            // dd($sponsorUser, "sponuser" , $sponsor,"sponser");
             Log::build([
                 "driver" => "single",
                 "path" => storage_path("logs/sponsor.log"),
