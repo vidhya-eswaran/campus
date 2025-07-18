@@ -1104,7 +1104,7 @@ class InvoiceController extends Controller
 
         $sponser = DB::table('users')->where('id', $sponserId)->first();
 
-        if ($sponser->isEmpty()) {
+        if (!$sponser) {
             return response()->json(['message' => 'Sponsor not found.'], 404);
         }
 
