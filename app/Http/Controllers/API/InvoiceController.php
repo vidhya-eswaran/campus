@@ -961,39 +961,36 @@ class InvoiceController extends Controller
     {
         // Fetch and return the sponsor's students based on $sponsorId
         // You can use the code discussed earlier to retrieve the students
+        dd($request->all());
         $sponsorId =  $request->query("sponsorId");
         $sponsorType = $request->query("sponsortype");
-        dd($sponsorId);
         $students = User::where("sponser_id", $sponsorId)
             ->where("status", 1)
-            // ->select(
-            //     "id",
-            //     "admission_no",
-            //     "roll_no",
-            //     "name",
-            //     "gender",
-            //     "standard",
-            //     "twe_group",
-            //     "sec",
-            //     "hostelOrDay",
-            //     "email"
-            // )
+            ->select(
+                "id",
+                "admission_no",
+                "roll_no",
+                "name",
+                "gender",
+                "standard",
+                "twe_group",
+                "sec",
+                "hostelOrDay",
+                "email"
+            )
             ->get();
-        dd($students);
+
         // Initialize an empty array to store student records
         $studentRecords = [];
         $studentinfo = [];
 
         foreach ($students as $student) {
-             dd($student->id,"hhuhhb", $sponsorType); 
             $studentRecord = GenerateInvoiceView::where(
                 "student_id",
                 $student->id
             )
                 ->where("fees_cat", $sponsorType)
                 ->get();
-
-                  
             // Loop through the students and retrieve their records
             // Check if $studentRecord is not empty
             if (!$studentRecord->isEmpty()) {
