@@ -51,7 +51,7 @@ class NoticeBoardController extends Controller
             'createdBy' => 'required',
         ]);
 
-       dd(auth()->guard('api')->user());
+       //dd(auth()->guard('api')->user());
 
         // Handle file upload if present
         if ($request->has('file')) {

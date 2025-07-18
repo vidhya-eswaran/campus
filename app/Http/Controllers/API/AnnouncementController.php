@@ -49,7 +49,7 @@ class AnnouncementController extends Controller
 
         $user = Auth::user();
 
-        dd($user);
+       // dd($user);
 
         // Handle file upload
         if ($request->hasFile("file")) {
