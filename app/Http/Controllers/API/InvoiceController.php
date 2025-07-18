@@ -965,18 +965,18 @@ class InvoiceController extends Controller
         $sponsorType = $request->query("sponsortype");
         $students = User::where("sponser_id", $sponsorId)
             ->where("status", 1)
-            ->select(
-                "id",
-                "admission_no",
-                "roll_no",
-                "name",
-                "gender",
-                "standard",
-                "twe_group",
-                "sec",
-                "hostelOrDay",
-                "email"
-            )
+            // ->select(
+            //     "id",
+            //     "admission_no",
+            //     "roll_no",
+            //     "name",
+            //     "gender",
+            //     "standard",
+            //     "twe_group",
+            //     "sec",
+            //     "hostelOrDay",
+            //     "email"
+            // )
             ->get();
         dd($students);
         // Initialize an empty array to store student records
