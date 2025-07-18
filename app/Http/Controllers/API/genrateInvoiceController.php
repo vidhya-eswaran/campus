@@ -2014,6 +2014,7 @@ class genrateInvoiceController extends Controller
         } else {
             // Sponsor is paying (logic remains the same)
             $sponsorUser = User::find($sponsor);
+             dd($sponsorUser, "sponuser" , $sponsor,"sponser");
             Log::build([
                 "driver" => "single",
                 "path" => storage_path("logs/sponsor.log"),
@@ -2033,7 +2034,7 @@ class genrateInvoiceController extends Controller
                 "amount" => $amount,
                 "most_recent_dues" => $most_recent_dues,
             ]);
-
+           
             if ($amount < $most_recent_dues) {
                 // return response()->json(['amt' => $amount,'most' => $most_recent_dues,'jjj'=>($sponsorUser->excess_amount < $amount),'logic'=>'big'], 404);
 
