@@ -1102,6 +1102,22 @@ class InvoiceController extends Controller
         // Fetch all users with the given sponsor
         $users = DB::table('users')->where('sponser_id', $sponserId)->get();
 
+        $sponser = DB::table('users')->where('id', $sponserId)->first();
+
+        if ($sponser->isEmpty()) {
+            return response()->json(['message' => 'Sponsor not found.'], 404);
+        }
+
+        $updateData = [];
+            if (!is_null($schoolExcess)) {
+                $updateData['excess_amount'] = $schoolExcess;
+            }
+            if (!is_null($hostelExcess)) {
+                $updateData['h_excess_amount'] = $hostelExcess;
+            }
+
+            DB::table('users')->where('id', $sponserId)->update($updateData);
+
         if ($users->isEmpty()) {
             return response()->json(['message' => 'No users found for this sponsor.'], 404);
         }
