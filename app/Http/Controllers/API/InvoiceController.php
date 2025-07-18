@@ -984,6 +984,7 @@ class InvoiceController extends Controller
         $studentinfo = [];
 
         foreach ($students as $student) {
+             dd($student->id,"hhuhhb", $sponsorType); 
             $studentRecord = GenerateInvoiceView::where(
                 "student_id",
                 $student->id
@@ -991,7 +992,7 @@ class InvoiceController extends Controller
                 ->where("fees_cat", $sponsorType)
                 ->get();
 
-                   dd($studentRecord); 
+                  
             // Loop through the students and retrieve their records
             // Check if $studentRecord is not empty
             if (!$studentRecord->isEmpty()) {
