@@ -961,7 +961,7 @@ class InvoiceController extends Controller
     {
         // Fetch and return the sponsor's students based on $sponsorId
         // You can use the code discussed earlier to retrieve the students
-        dd($request->all());
+       // dd($request->all());
         $sponsorId =  $request->query("sponsorId");
         $sponsorType = $request->query("sponsortype");
         $students = User::where("sponser_id", $sponsorId)
