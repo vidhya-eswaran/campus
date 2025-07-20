@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentsExport;
 use Intervention\Image\Facades\Image;
 use App\Helpers\LifecycleLogger;
+use Illuminate\Support\Collection;
 
 class StudentController extends Controller
 {
@@ -71,7 +72,29 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        try {
+        $request->validate([
+                'student_file' => 'nullable|file|mimes:xlsx,xls,csv|max:10240', // up to 10MB
+                
+            ]);
+
+            if ($request->hasFile('student_file')) {
+                $this->handleBulkUpload($request->file('student_file'));
+            } else {
+                $this->handleSingleUpload($request);
+            }       
+
+            return response()->json([
+                'message' => 'Upload complete',
+                'uploaded' => $response['uploaded'] ?? [],
+                'duplicates' => $response['duplicates'] ?? [],
+            ]);
+
+    }
+
+    public function processStudentRecord($request)
+    {
+        try {        
+            
             $record =  (object) $request->all();
 
             $imageFields = [
@@ -232,8 +255,8 @@ class StudentController extends Controller
                             "message" => "Data uploaded successfully.",
                         ];
                     } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // this will show validation errors
-        }
+                        dd($e->errors()); // this will show validation errors
+                    }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
               // dd("4");
@@ -347,8 +370,8 @@ class StudentController extends Controller
                                 "message" => "Data uploaded successfully.",
                             ];
                         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // this will show validation errors
-        }
+                        dd($e->errors()); // this will show validation errors
+                    }
                     
                 }
             }
@@ -363,8 +386,30 @@ class StudentController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
-
     }
+
+    public function handleSingleUpload(Request $request)
+    {
+        $this->processStudentRecord($request);
+    }
+
+
+    public function handleBulkUpload($file)
+    {
+        $rows = Excel::toCollection(null, $file)->first(); // Collection of rows
+
+        foreach ($rows as $index => $record) {
+            $formatted = $record->toArray(); // Ensure it's an array
+            $requestObj = new \Illuminate\Http\Request($formatted);
+
+            try {
+                $this->processStudentRecord($requestObj);
+            } catch (\Exception $e) {
+                Log::error("Row $index failed: " . $e->getMessage());
+            }
+        }
+    }
+
 
 
     public function insertStudentData(array $data)
