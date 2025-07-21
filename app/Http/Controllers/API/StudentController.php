@@ -945,8 +945,9 @@ class StudentController extends Controller
         return response()->json(["data" => $students]);
     }
 
-    public function readByadmissioNo($admission_no)
+    public function readByadmissioNo(Request $request, $admission_no)
     {
+        $admission_no = $request->admission_no;
         $students = Student::where("admission_no", $admission_no)->get();
 
         if ($students) {
