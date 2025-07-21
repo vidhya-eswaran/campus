@@ -13,14 +13,19 @@ use App\Models\AdmissionForm;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentsExport;
 use Intervention\Image\Facades\Image;
 use App\Helpers\LifecycleLogger;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Schema;
+
 
 class StudentController extends Controller
 {
+
     public function index()
     {
         dd("eeeeee");
@@ -93,6 +98,7 @@ class StudentController extends Controller
 
     public function processStudentRecord($request)
     {
+        //dd($request);
         try {        
             
             $record =  (object) $request->all();
@@ -390,24 +396,268 @@ class StudentController extends Controller
 
     public function handleSingleUpload(Request $request)
     {
+        //dd("single");
         $this->processStudentRecord($request);
     }
 
 
+
+
     public function handleBulkUpload($file)
     {
-        $rows = Excel::toCollection(null, $file)->first(); // Collection of rows
+        $collection = Excel::toCollection(null, $file)->first();
 
-        foreach ($rows as $index => $record) {
-            $formatted = $record->toArray(); // Ensure it's an array
-            $requestObj = new \Illuminate\Http\Request($formatted);
+        if ($collection->isEmpty() || $collection->count() < 2) {
+            return response()->json(['message' => 'The Excel file is empty or has no data rows.'], 422);
+        }
 
-            try {
-                $this->processStudentRecord($requestObj);
-            } catch (\Exception $e) {
-                Log::error("Row $index failed: " . $e->getMessage());
+        // Get headers from the first row
+        $headers = $collection->first()->toArray();
+
+        foreach ($collection->skip(1) as $index => $row) {
+            if ($row->filter()->isNotEmpty()) {
+                $values = $row->toArray();
+
+                // Map headers to values
+                $data = array_combine($headers, $values);
+
+            try {       
+                
+                $record =  (object) $data;
+
+                //dd($record->admission_no);
+                
+                if (isset($record->admission_no) && $record->admission_no !== "") {
+                                
+                    $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
+                    $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
+                    if ($existingStudentuser) {
+                    // dd("2");
+                        // Move the existing record to history table
+                        //$studentHistory = new StudentHistory();
+
+                        $studentHistory = new StudentHistory();
+                        $studentHistory->original_id = $existingStudent->id;
+
+                        foreach ($existingStudent->getAttributes() as $key => $value) {
+                            if ($key === 'id') {
+                                continue;
+                            }
+
+                            if (Schema::hasColumn('admitted_students_history', $key)) {
+                                $studentHistory->$key = $value;
+                            }
+                        }
+
+                        $studentHistory->save();
+                    
+                        $mappedData = $data;
+                    
+                        // If date fields need to be converted, handle them separately
+                        if (!empty($record->dob)) {
+                            $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                        }
+
+                        if (!empty($record->date_form)) {
+                            $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                        }
+                    //  dd($mappedData);
+                        $existingStudent->fill($mappedData);
+                        $existingStudent->save();
+                    // dd("SSs");
+
+
+                        //existing user update
+                        $existingStudentuser->name = $record->student_name ?? null;
+                        $existingStudentuser->gender = $record->gender ?? null;
+                        $existingStudentuser->email = $record->father_email_id ?? null;
+                        $existingStudentuser->standard = $record->std_sought ?? null;
+                        $existingStudentuser->sec = $record->sec ?? null;
+                        $existingStudentuser->twe_group = $record->syllabus ?? null;
+                        $existingStudentuser->hostelOrDay = "hostel";
+                        $existingStudentuser->save();
+
+                        LifecycleLogger::log(
+                            "Student Record Updated",
+                            $existingStudentuser->id,
+                            "student_record_update",
+                            [
+                                "student_name" => $existingStudentuser->name,
+                                "roll_no" => $existingStudentuser->roll_no,
+                                "standard" => $existingStudentuser->standard,
+                                "section" => $existingStudentuser->sec,
+                            ]
+                        );
+                        //dd($existingStudentuser);
+                        $response["duplicates"][] = [
+                            "email" => $record->father_email_id,
+                            "admission_no" => $record->admission_no,
+                            "message" =>
+                                "Data modified successfully as it is already exists.",
+                        ];
+                    } else {
+                        // dd("3");
+                        $recordEmail = $record->father_email_id;
+                        $recordAdmissionNo = $record->admission_no;
+
+                        try {
+                            $student = new Student();
+
+                            $mappedData = $data;
+
+                            if (!empty($record->dob)) {
+                                $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                            }
+
+                            if (!empty($record->date_form)) {
+                                $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                            }
+
+                            $student->fill($mappedData);
+                            $student->save();
+
+                        // dd("SSS");
+                            $user = new User();
+                            $lastid = User::latest("id")->value("id");
+                            $lastid = $lastid + 1;
+                            $user->id = $lastid;
+                            $user->name = $record->student_name ?? null;
+                            $user->gender = $record->gender ?? null;
+                            $user->email = $record->father_email_id ?? null;
+                            $user->standard = $record->std_sought ?? null;
+                            $user->sec = $record->sec ?? null;
+                            $user->twe_group = $record->group_first_choice ?? null;
+                            $user->hostelOrDay = "hostel";
+                            $user->password = Hash::make("Student@123");
+                            $user->admission_no = $record->admission_no ?? null;
+                            $user->roll_no = $record->roll_no ?? null;
+                            $user->save();
+                            $response["uploaded"][] = [
+                                "email" => $recordEmail,
+                                "admission_no" => $recordAdmissionNo,
+                                "message" => "Data uploaded successfully.",
+                            ];
+                        } catch (\Illuminate\Validation\ValidationException $e) {
+                            dd($e->errors()); // this will show validation errors
+                        }
+                    }
+                } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
+                    //  dd($record);
+                    $lastAdmissionNo = User::where("admission_no", "like", "%SV%")
+                        ->whereRaw("LENGTH(admission_no) = 12")
+                        ->orderByRaw(
+                            "STR_TO_DATE(SUBSTRING(admission_no, 3, 6), '%d%m%y') DESC"
+                        )
+                        ->orderByRaw(
+                            "CAST(SUBSTRING(admission_no, 9, 4) AS UNSIGNED) DESC"
+                        )
+                        ->first();
+
+                    $format = "SV" . date("dmy");
+
+                    if ($lastAdmissionNo) {
+                        // Extract the numeric part of the last admission number
+                        $lastNumber = intval(
+                            substr($lastAdmissionNo->admission_no, 8)
+                        );
+
+                        // Check if the last number is 9999, reset to 0001 if it is
+                        if ($lastNumber === 9999) {
+                            $newNumber = 1;
+                        } else {
+                            // Increment the last number by 1
+                            $newNumber = $lastNumber + 1;
+                        }
+                    } else {
+                        // If no previous admission numbers found, start with 0001
+                        $newNumber = 1;
+                    }
+
+                    // Pad the new number with leading zeros to make it 4 digits
+                    $newNumberPadded = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
+
+                    // Combine the format and new number to create the new admission number
+                    $newAdmissionNo = $format . $newNumberPadded;
+                    $admissionId = $newAdmissionNo;
+                    
+                    if ($admissionId && $record->father_email_id) {
+                        //dd("5");
+                        $existingUser = User::where("name", $record->student_name)
+                            //->where('Father', $record[20])
+                            //  ->where('Mobilenumber', $record[26])
+                            ->where("standard", $record->std_sought)
+                            //    ->where('sec', $record[50])  ///////////
+                            ->first();
+
+                            $recordEmail = $record->father_email_id ?? "";
+                            $recordAdmissionNo = $admissionId;
+
+                        
+                            try {
+                                $student = new Student();
+                            // $student->admission_no = $admissionId ?? null;
+
+                                $mappedData = $data;
+
+                            
+                                $mappedData['admission_no'] = $admissionId ?? null;
+
+                                // If date fields need to be converted, handle them separately
+                                if (!empty($record->dob)) {
+                                    $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                                }
+
+                                if (!empty($record->date_form)) {
+                                    $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                                }
+
+                                $student->fill($mappedData);
+                                $student->save();
+
+                            
+                                $user = new User();
+                                $lastid = User::latest("id")->value("id");
+                                $lastid = $lastid + 1;
+                                $user->id = $lastid;
+
+                                $user->name = $record->student_name ?? null;
+                                $user->gender = $record->gender ?? null;
+                                $user->email = $record->father_email_id ?? null;
+                                $user->standard = $record->std_sought ?? null;
+                                $user->sec = $record->sec ?? null;
+                                $user->twe_group = $record->group_first_choice ?? null;
+                                $user->hostelOrDay = "hostel";
+                                $user->password = Hash::make("Student@123");
+                                $user->admission_no = $admissionId ?? null;
+                                $user->roll_no = $record->roll_no ?? null;
+
+                                $user->save();
+                                $response["uploaded"][] = [
+                                    "email" => $recordEmail,
+                                    "admission_no" => $recordAdmissionNo,
+                                    "message" => "Data uploaded successfully.",
+                                ];
+                            } catch (\Illuminate\Validation\ValidationException $e) {
+                            dd($e->errors()); // this will show validation errors
+                        }
+                        
+                    }
+                }           
+                
+
+                } catch (\Exception $e) {
+                    Log::error("Row $index failed: " . $e->getMessage());
+                    $response['errors'][] = [
+                        'row' => $index + 1, // Human-readable row number
+                        'message' => $e->getMessage(),
+                    ];
+                }
             }
         }
+        return response()
+                ->json($response, 200)
+                ->header("Access-Control-Allow-Origin", "*");
+
     }
 
 
