@@ -582,10 +582,10 @@ public function login(Request $request)
 private function filterMatchingUsers($users)
 {
     return $users->map(function ($user) {
-        $userArray = $user->toArray();
-        unset($userArray['password']);
-        return $userArray;
-    })->toArray();
+        $array = $user->toArray();
+        unset($array['password']);
+        return $array;
+    })->values()->all();
 }
 
 public function getMatchingUsers($input)
