@@ -1683,15 +1683,15 @@ class StudentController extends Controller
 
     public function downloadStudentTemplate()
     {
-        $path = storage_path('app/public/student_file.csv');
+        $path = storage_path('app/public/student_file.xlsx');
 
-        dd($path);
+        //dd($path);
         
         if (!file_exists($path)) {
             return response()->json(['error' => 'Template file not found'], 404);
         }
 
-        return response()->download($path, 'student_file.csv');
+        return response()->download($path, 'student_file.xlsx');
     }
 
 }
