@@ -61,12 +61,12 @@ class ClassSubjectController extends Controller
             $group_no = $request->query('group_no'); // Group filter
             $term = $request->query('term'); // Term filter
             $standard = $request->query('class'); 
-
+dd($standard);
         
             // Fetch subjects with marks
             $subjectQuery = ClassSubject::where('class', '=', $standard)->where('delete_status', 0);
 
-            dd($subjectQuery);
+            
             
             // Add additional filters for subjects
             if ($group_no) {
