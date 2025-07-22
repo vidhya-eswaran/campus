@@ -297,6 +297,8 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::post("/Admission-update/{id}", [StudentController::class , "updatefromAdmission", ]);
     Route::post("/upload-photos", [PhotoController::class , "upload"]);
     Route::post("/bulk-status/profile", [bulkstatusController::class , "status"]);
+    Route::get('download-student-template', [StudentController::class, 'downloadStudentTemplate']);
+
 
     //TemplateEditorController
     Route::get("studentContactView", [TemplateEditorController::class , "studentContactView", ]);

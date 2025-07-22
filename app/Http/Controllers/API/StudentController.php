@@ -1611,127 +1611,7 @@ class StudentController extends Controller
             $admission->update([$fieldName => $path]);
         }
     }
-    public function updatetttt(Request $request, $id)
-    {
-        $record = Student::find($id); // Replace YourModel with the actual model name
-
-        if (!$record) {
-            return response()->json(["error" => "Record not found."]);
-        }
-
-        $record->id = $request->input("id");
-        $record->admission_no = $request->input("admission_no");
-        $record->roll_no = $request->input("roll_no");
-        $record->student_name = $request->input("student_name");
-        $record->sex = $request->input("sex");
-        $record->dob = $request->input("dob");
-        $record->blood_group = $request->input("blood_group");
-        $record->emis_no = $request->input("emis_no");
-        $record->Nationality = $request->input("Nationality");
-        $record->State = $request->input("State");
-        $record->Religion = $request->input("Religion");
-        $record->Denomination = $request->input("Denomination");
-        $record->Caste = $request->input("Caste");
-        $record->CasteClassification = $request->input("CasteClassification");
-        $record->AadhaarCardNo = $request->input("AadhaarCardNo");
-        $record->RationCard = $request->input("RationCard");
-        $record->Mothertongue = $request->input("Mothertongue");
-        $record->Father = $request->input("Father");
-        $record->Mother = $request->input("Mother");
-        $record->Guardian = $request->input("Guardian");
-        $record->Occupation = $request->input("Occupation");
-        $record->Organisation = $request->input("Organisation");
-        $record->Monthlyincome = $request->input("Monthlyincome");
-        $record->p_housenumber = $request->input("p_housenumber");
-        $record->p_Streetname = $request->input("p_Streetname");
-        $record->p_VillagetownName = $request->input("p_VillagetownName");
-        $record->p_Postoffice = $request->input("p_Postoffice");
-        $record->p_Taluk = $request->input("p_Taluk");
-        $record->p_District = $request->input("p_District");
-        $record->p_State = $request->input("p_State");
-        $record->p_Pincode = $request->input("p_Pincode");
-        $record->c_HouseNumber = $request->input("c_HouseNumber");
-        $record->c_StreetName = $request->input("c_StreetName");
-        $record->c_VillageTownName = $request->input("c_VillageTownName");
-        $record->c_Postoffice = $request->input("c_Postoffice");
-        $record->c_Taluk = $request->input("c_Taluk");
-        $record->c_District = $request->input("c_District");
-        $record->c_State = $request->input("c_State");
-        $record->c_Pincode = $request->input("c_Pincode");
-        $record->Mobilenumber = $request->input("Mobilenumber");
-        $record->WhatsAppNo = $request->input("WhatsAppNo");
-        $record->ClasslastStudied = $request->input("ClasslastStudied");
-        $record->EmailID = $request->input("EmailID");
-        $record->Nameofschool = $request->input("Nameofschool");
-        $record->File = $request->input("File");
-        $record->sought_Std = $request->input("sought_Std");
-        $record->sec = $request->input("sec");
-        $record->Part_I = $request->input("Part_I");
-        $record->Group = $request->input("Group");
-        $record->FOOD = $request->input("FOOD");
-        $record->special_information = $request->input("special_information");
-        $record->Declare_not_attended = $request->input("Declare_not_attended");
-        $record->Declare_dues = $request->input("Declare_dues");
-        $record->Declare_dob = $request->input("Declare_dob");
-        $record->Declare_Date = $request->input("Declare_Date");
-        $record->Declare_Place = $request->input("Declare_Place");
-        $record->Measles = $request->input("Measles");
-        $record->Chickenpox = $request->input("Chickenpox");
-        $record->Fits = $request->input("Fits");
-        $record->Rheumaticfever = $request->input("Rheumaticfever");
-        $record->Mumps = $request->input("Mumps");
-        $record->Jaundice = $request->input("Jaundice");
-        $record->Asthma = $request->input("Asthma");
-        $record->Nephritis = $request->input("Nephritis");
-        $record->Whoopingcough = $request->input("Whoopingcough");
-        $record->Tuberculosis = $request->input("Tuberculosis");
-        $record->Hayfever = $request->input("Hayfever");
-        $record->CongenitalHeartDisease = $request->input(
-            "CongenitalHeartDisease"
-        );
-        $record->P_Bronchial = $request->input("P_Bronchial");
-        $record->P_Tuberculosis = $request->input("P_Tuberculosis");
-        $record->BCG = $request->input("BCG");
-        $record->Triple_Vaccine = $request->input("Triple_Vaccine");
-        $record->Polio_Drops = $request->input("Polio_Drops");
-        $record->Measles_given = $request->input("Measles_given");
-        $record->MMR = $request->input("MMR");
-        $record->Dual_Vaccine = $request->input("Dual_Vaccine");
-        $record->Typhoid = $request->input("Typhoid");
-        $record->Cholera = $request->input("Cholera");
-        $record->permission_to_principal = $request->input(
-            "permission_to_principal"
-        );
-        $record->administration_of_anaesthetic = $request->input(
-            "administration_of_anaesthetic"
-        );
-        $record->hostelOrDay = $request->input("hostelOrDay");
-        $record->language = $request->input("language");
-        $record->state_student = $request->input("state_student");
-        $record->profile_photo = $request->input("profile_photo");
-        $record->admission_photo = $request->input("admission_photo");
-        $record->brother_1 = $request->input("brother_1");
-        $record->brother_2 = $request->input("brother_2");
-        $record->gender_1 = $request->input("gender_1");
-        $record->gender_2 = $request->input("gender_2");
-        $record->class_1 = $request->input("class_1");
-        $record->class_2 = $request->input("class_2");
-        $record->brother_3 = $request->input("brother_3");
-        $record->gender_3 = $request->input("gender_3");
-        $record->class_3 = $request->input("class_3");
-        $record->last_school_state = $request->input("last_school_state");
-        $record->second_language_school = $request->input(
-            "second_language_school"
-        );
-        $record->reference_name_1 = $request->input("reference_name_1");
-        $record->reference_name_2 = $request->input("reference_name_2");
-        $record->reference_phone_1 = $request->input("reference_phone_1");
-        $record->reference_phone_2 = $request->input("reference_phone_2");
-
-        $record->save(); // Save the updated record
-
-        return response()->json(["success" => "Record updated successfully."]);
-    }
+    
     public function deletefromstudent(Request $request, $id)
     {
         $admission = Student::findOrFail($id);
@@ -1800,21 +1680,16 @@ class StudentController extends Controller
         ]);
 
     }
+
+    public function downloadStudentTemplate()
+    {
+        $path = storage_path('app/public/student_file.csv');
+        
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        return response()->download($path, 'student_file.csv');
+    }
+
 }
-
-// function convertValue($value) {
-//     $romanNumerals = [
-//         'I' => 1, 'II' => 2, 'III' => 3, 'IV' => 4, 'V' => 5,
-//         'VI' => 6, 'VII' => 7, 'VIII' => 8, 'IX' => 9, 'X' => 10, 'XI' => 11,'XII' => 12,
-//     ];
-
-//     $value = strtoupper(trim($value));
-
-//     if (isset($romanNumerals[$value])) {
-//         return $romanNumerals[$value];
-//     } elseif ($value === 'LKG' || $value === 'UKG') {
-//         return strtolower($value); // Convert to lowercase
-//     } else {
-//         return null;
-//     }
-// }
