@@ -81,9 +81,9 @@ class ClassSubjectController extends Controller
                                 ->where('status', '=', 1);
             
             // Add filters for students
-            // if ($sec) {
-            //     $studentQuery->where('sec', '=', $sec);
-            // }
+            if ($sec) {
+                $studentQuery->where('sec', '=', $sec);
+            }
             if ($group_no) {
                 $studentQuery->where('twe_group', '=', $group_no);
             }
