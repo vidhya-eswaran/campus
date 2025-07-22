@@ -65,6 +65,8 @@ class ClassSubjectController extends Controller
         
             // Fetch subjects with marks
             $subjectQuery = ClassSubject::where('class', '=', $standard)->where('delete_status', 0);
+
+            dd($subjectQuery);
             
             // Add additional filters for subjects
             if ($group_no) {
