@@ -1684,6 +1684,8 @@ class StudentController extends Controller
     public function downloadStudentTemplate()
     {
         $path = storage_path('app/public/student_file.csv');
+
+        dd($path);
         
         if (!file_exists($path)) {
             return response()->json(['error' => 'Template file not found'], 404);
