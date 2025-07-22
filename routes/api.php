@@ -132,6 +132,23 @@ Route::get('/check-passport-key', function () {
     return config('passport.private_key');
 });
 
+Route::post('/send-test-email', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    $email = $request->email;
+
+    // Send the test email
+    Mail::raw('Test email contents', function ($message) use ($email) {
+        $message->to($email)->subject('Test Email');
+    });
+
+    return response()->json([
+        'message' => 'Test email sent successfullys!'
+    ], 200);
+});
+
 //=========================================================================================
 // School Database
 
