@@ -59,7 +59,7 @@ class HostelAdmissionController extends Controller
         Cache::put("otp_" . $email, $otp, now()->addMinutes(10));
 
         // Send mail
-        Mail::to($email)->send((new OtpMailHostelAdmission($otp))->from($senderEmail, 'Hostel Admission'));
+        Mail::to($email)->send(new OtpMailHostelAdmission($otp, 'Hostel Admission', $senderEmail));
 
         return response()->json(
             ["message" => "OTP sent successfully to " . $email],
