@@ -36,98 +36,98 @@ class AdmissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store_offline(Request $request)
-{
-    $admission = new Admission();
-    
-    // Storing admission details
-    $admission->name = $request->name;
-    $admission->date_form = $request->date_form;
-    $admission->language = $request->language;
-    $admission->state_student = $request->state_student;
-    $admission->date_of_birth = $request->date_of_birth;
-    $admission->gender = $request->gender;
-    $admission->blood_group = $request->blood_group;
-    $admission->nationality = $request->nationality;
-    $admission->religion = $request->religion;
-    $admission->church_denomination = $request->church_denomination;
-    $admission->caste = $request->caste;
-    $admission->caste_type = $request->caste_type;
-    $admission->aadhar_card_no = $request->aadhar_card_no;
-    $admission->ration_card_no = $request->ration_card_no;
-    $admission->emis_no = $request->emis_no;
-    $admission->pin_no = $request->pin_no;
-    $admission->veg_or_non = $request->veg_or_non;
-    $admission->chronic_des = $request->chronic_des;
-    $admission->medicine_taken = $request->medicine_taken;
-    $admission->father_name = $request->father_title . ' ' . $request->father_name;
-    $admission->father_occupation = $request->father_occupation;
-    $admission->mother_name = $request->mother_title . ' ' . $request->mother_name;
-    $admission->mother_occupation = $request->mother_occupation;
-    $admission->guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
-    $admission->guardian_occupation = $request->guardian_occupation;
-    $admission->father_contact_no = $request->father_contact_no;
-    $admission->father_email_id = $request->father_email_id;
-    $admission->mother_contact_no = $request->mother_contact_no;
-    $admission->mother_email_id = $request->mother_email_id;
-    $admission->guardian_contact_no = $request->guardian_contact_no;
-    $admission->guardian_email_id = $request->guardian_email_id;
-    
-    // Store address details
-    $admission->house_no = $request->house_no;
-    $admission->street = $request->street;
-    $admission->city = $request->city;
-    $admission->district = $request->district;
-    $admission->state = $request->state;
-    $admission->pincode = $request->pincode;
-    
-    $admission->save();
-    
-    // Uploading required documents
-    $documents = [
-        'profile_photo' => 'profile_photos',
-        'admission_photo' => 'admission_photos',
-        'birth_certificate_photo' => 'birth_certificate_photos',
-        'aadhar_card_photo' => 'aadhar_card_photos',
-        'ration_card_photo' => 'ration_card_photos',
-        'community_certificate_photo' => 'community_certificate_photos',
-        'slip_photo' => 'slip_photos',
-        'medical_certificate_photo' => 'medical_certificate_photos',
-        'reference_letter_photo' => 'reference_letter_photos',
-        'church_certificate_photo' => 'church_certificate_photos',
-        'transfer_certificate_photo' => 'transfer_certificate_photos'
-    ];
-    
-    foreach ($documents as $field => $folder) {
-        if ($request->hasFile($field)) {
-            $filePath = $folder . '/' . $admission->id . '.' . $request->$field->extension();
-            $request->$field->storeAs($folder, $filePath);
-            $admission->update([$field => $filePath]);
+    {
+        $admission = new Admission();
+        
+        // Storing admission details
+        $admission->name = $request->name;
+        $admission->date_form = $request->date_form;
+        $admission->language = $request->language;
+        $admission->state_student = $request->state_student;
+        $admission->date_of_birth = $request->date_of_birth;
+        $admission->gender = $request->gender;
+        $admission->blood_group = $request->blood_group;
+        $admission->nationality = $request->nationality;
+        $admission->religion = $request->religion;
+        $admission->church_denomination = $request->church_denomination;
+        $admission->caste = $request->caste;
+        $admission->caste_type = $request->caste_type;
+        $admission->aadhar_card_no = $request->aadhar_card_no;
+        $admission->ration_card_no = $request->ration_card_no;
+        $admission->emis_no = $request->emis_no;
+        $admission->pin_no = $request->pin_no;
+        $admission->veg_or_non = $request->veg_or_non;
+        $admission->chronic_des = $request->chronic_des;
+        $admission->medicine_taken = $request->medicine_taken;
+        $admission->father_name = $request->father_title . ' ' . $request->father_name;
+        $admission->father_occupation = $request->father_occupation;
+        $admission->mother_name = $request->mother_title . ' ' . $request->mother_name;
+        $admission->mother_occupation = $request->mother_occupation;
+        $admission->guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
+        $admission->guardian_occupation = $request->guardian_occupation;
+        $admission->father_contact_no = $request->father_contact_no;
+        $admission->father_email_id = $request->father_email_id;
+        $admission->mother_contact_no = $request->mother_contact_no;
+        $admission->mother_email_id = $request->mother_email_id;
+        $admission->guardian_contact_no = $request->guardian_contact_no;
+        $admission->guardian_email_id = $request->guardian_email_id;
+        
+        // Store address details
+        $admission->house_no = $request->house_no;
+        $admission->street = $request->street;
+        $admission->city = $request->city;
+        $admission->district = $request->district;
+        $admission->state = $request->state;
+        $admission->pincode = $request->pincode;
+        
+        $admission->save();
+        
+        // Uploading required documents
+        $documents = [
+            'profile_photo' => 'profile_photos',
+            'admission_photo' => 'admission_photos',
+            'birth_certificate_photo' => 'birth_certificate_photos',
+            'aadhar_card_photo' => 'aadhar_card_photos',
+            'ration_card_photo' => 'ration_card_photos',
+            'community_certificate_photo' => 'community_certificate_photos',
+            'slip_photo' => 'slip_photos',
+            'medical_certificate_photo' => 'medical_certificate_photos',
+            'reference_letter_photo' => 'reference_letter_photos',
+            'church_certificate_photo' => 'church_certificate_photos',
+            'transfer_certificate_photo' => 'transfer_certificate_photos'
+        ];
+        
+        foreach ($documents as $field => $folder) {
+            if ($request->hasFile($field)) {
+                $filePath = $folder . '/' . $admission->id . '.' . $request->$field->extension();
+                $request->$field->storeAs($folder, $filePath);
+                $admission->update([$field => $filePath]);
+            }
         }
+        
+        // Sending admission confirmation email
+        $admissionData = $admission->toArray();
+        Mail::send('emails.admissionMail', $admissionData, function ($message) use ($admissionData, $pdfContent) {
+            $toEmail = 'admissions@santhoshavidhyalaya.com'; // Ensure this is not empty or null
+
+            if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
+                return redirect('/error')->with('error', 'Invalid recipient email!');
+            }
+
+            $message->to($toEmail)
+                    ->subject('Admission PDF')
+                    ->attachData($pdfContent, 'admission.pdf', [
+                        'mime' => 'application/pdf',
+                    ]);
+        });
+
+        if (Mail::failures()) {
+            return redirect('/error')->with('error', 'Failed to send email!');
+        }
+
+        
+        return redirect()->back()->with('success', 'Admission stored successfully!');
     }
-    
-    // Sending admission confirmation email
-    $admissionData = $admission->toArray();
-Mail::send('emails.admissionMail', $admissionData, function ($message) use ($admissionData, $pdfContent) {
-    $toEmail = 'admissions@santhoshavidhyalaya.com'; // Ensure this is not empty or null
-
-    if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-        return redirect('/error')->with('error', 'Invalid recipient email!');
-    }
-
-    $message->to($toEmail)
-            ->subject('Admission PDF')
-            ->attachData($pdfContent, 'admission.pdf', [
-                'mime' => 'application/pdf',
-            ]);
-});
-
-if (Mail::failures()) {
-    return redirect('/error')->with('error', 'Failed to send email!');
-}
-
-    
-    return redirect()->back()->with('success', 'Admission stored successfully!');
-}
 
 
     public function index()
@@ -142,39 +142,26 @@ if (Mail::failures()) {
     }
     public function Data(){
         // dd("a");
-   $result = AdmissionForm::get();
-    $data = $result->toArray();
-   // dd($data);
-   // dd($data);
-    
-        
-// $result = Admission::get();
-// $names = $result->pluck('name')->all();
-// $data = $names;
-
+        $result = AdmissionForm::get();
+        $data = $result->toArray();
+ 
         return view('admission.data',['data'=>$data]);
         
     }
     public function Data_1(){
         // dd("a");
-   $result = AdmissionForm::get();
-  $result_1 = PaymentOrdersDetails::get();
-  //dd($result_1->toArray());
-  $result = AdmissionForm::join('payment_orders_statuses', 'admission_process_live.payment_order_id', '=', 'payment_orders_statuses.clnt_txn_ref')
-    ->select('admission_process_live.*', 'payment_orders_statuses.*') 
-    ->get();
+        $result = AdmissionForm::get();
+        $result_1 = PaymentOrdersDetails::get();
+        //dd($result_1->toArray());
+        $result = AdmissionForm::join('payment_orders_statuses', 'admission_process_live.payment_order_id', '=', 'payment_orders_statuses.clnt_txn_ref')
+            ->select('admission_process_live.*', 'payment_orders_statuses.*') 
+            ->get();
 
- dd($result->toArray());
-    $data = $result->toArray();
-   // dd($data);
-   // dd($data);
-    
+        dd($result->toArray());
+            $data = $result->toArray();
         
-// $result = Admission::get();
-// $names = $result->pluck('name')->all();
-// $data = $names;
 
-        return view('admission.data_1',['data'=>$data]);
+                return view('admission.data_1',['data'=>$data]);
         
     }
     /**
@@ -205,80 +192,80 @@ if (Mail::failures()) {
             //dd($request);
                  $admission = new AdmissionForm();
           
-  $admission-> name = $request->name;
-  $admission-> date_form = $request->date_form;
-  $admission-> language = $request->language;
-  $admission-> state_student = $request->state_student;
-  $admission-> date_of_birth = $request->date_of_birth;
-  $admission-> gender = $request->gender;
-  $admission-> blood_group = $request->blood_group;
-  $admission-> nationality = $request->nationality;
-  $admission-> religion = $request->religion;
-  $admission-> church_denomination = $request->church_denomination;
-  $admission-> caste = $request->caste;
-  $admission-> caste_type = $request->caste_type;
-  $admission-> aadhar_card_no = $request->aadhar_card_no;
-  $admission-> ration_card_no = $request->ration_card_no;
-  $admission-> emis_no = $request->emis_no;
-  $admission-> veg_or_non = $request->veg_or_non;
-  $admission-> chronic_des = $request->chronic_des;
-  $admission-> medicine_taken = $request->medicine_taken;
-//   $admission-> father_name = $request->father_name;
-$admission->father_name = $request->father_title . ' ' . $request->father_name;
-  $admission-> father_occupation = $request->father_occupation;
-//   $admission-> mother_name = $request->mother_name;
-$admission-> mother_name =  $request->mother_title . ' ' . $request->mother_name;
-  $admission-> mother_occupation = $request->mother_occupation;
-//   $admission-> guardian_name = $request->guardian_name;
-    $admission-> guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
+        $admission-> name = $request->name;
+        $admission-> date_form = $request->date_form;
+        $admission-> language = $request->language;
+        $admission-> state_student = $request->state_student;
+        $admission-> date_of_birth = $request->date_of_birth;
+        $admission-> gender = $request->gender;
+        $admission-> blood_group = $request->blood_group;
+        $admission-> nationality = $request->nationality;
+        $admission-> religion = $request->religion;
+        $admission-> church_denomination = $request->church_denomination;
+        $admission-> caste = $request->caste;
+        $admission-> caste_type = $request->caste_type;
+        $admission-> aadhar_card_no = $request->aadhar_card_no;
+        $admission-> ration_card_no = $request->ration_card_no;
+        $admission-> emis_no = $request->emis_no;
+        $admission-> veg_or_non = $request->veg_or_non;
+        $admission-> chronic_des = $request->chronic_des;
+        $admission-> medicine_taken = $request->medicine_taken;
+        //   $admission-> father_name = $request->father_name;
+        $admission->father_name = $request->father_title . ' ' . $request->father_name;
+        $admission-> father_occupation = $request->father_occupation;
+        //   $admission-> mother_name = $request->mother_name;
+        $admission-> mother_name =  $request->mother_title . ' ' . $request->mother_name;
+        $admission-> mother_occupation = $request->mother_occupation;
+        //   $admission-> guardian_name = $request->guardian_name;
+            $admission-> guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
 
-  $admission-> guardian_occupation = $request->guardian_occupation;
-  $admission-> father_contact_no = $request->father_contact_no;
-  $admission-> father_email_id = $request->father_email_id;
-  $admission-> mother_contact_no = $request->mother_contact_no;
-  $admission-> mother_email_id = $request->mother_email_id;
-  $admission-> guardian_contact_no = $request->guardian_contact_no;
-  $admission-> guardian_email_id = $request->guardian_email_id;
-  $admission-> house_no = $request->house_no;
-  $admission-> street = $request->street;
-  $admission-> city = $request->city;
-  $admission-> district = $request->district;
-  $admission-> state = $request->state;
-  $admission-> pincode = $request->pincode;
-  $admission-> house_no_1 = $request->house_no_1;
-  $admission-> street_1 = $request->street_1;
-  $admission-> city_1 = $request->city_1;
-  $admission-> district_1 = $request->district_1;
-  $admission-> state_1 = $request->state_1;
-  $admission-> pincode_1 = $request->pincode_1;
-  $admission-> last_class_std = $request->last_class_std;
-  $admission-> last_school = $request->last_school;
-  $admission-> admission_for_class = $request->admission_for_class;
-  $admission-> syllabus = $request->syllabus;
-  $admission-> group_no = $request->group_no;
-  $admission-> second_group_no = $request->second_group_no;
-  $admission-> second_language = $request->second_language;
-  $admission-> brother_1 = $request->brother_1;
-$admission-> brother_2 = $request->brother_2;
-$admission-> brother_3 = $request->brother_3;
-$admission-> gender_1 = $request->gender_1;
-$admission-> gender_2 = $request->gender_2;
-$admission-> gender_3 = $request->gender_3;
-$admission-> class_1 = $request->class_1;
-$admission-> class_2 = $request->class_2;
-$admission-> class_3 = $request->class_3;
-$admission-> father_income = $request->father_income;
-$admission-> mother_income = $request->mother_income;
-$admission-> guardian_income = $request->guardian_income;
-$admission-> reference_name_1 = $request->reference_name_1;
-$admission-> reference_phone_1 = $request->reference_phone_1;
-$admission-> reference_name_2 = $request->reference_name_2;
-$admission-> reference_phone_2 = $request->reference_phone_1;
-$admission-> second_language_school = $request->second_language_school;
-$admission-> last_school_state = $request->last_school_state;
-$admission-> father_organization = $request->father_organization;
-$admission-> mother_organization = $request->mother_organization;
-$admission-> guardian_organization = $request->father_organization;
+        $admission-> guardian_occupation = $request->guardian_occupation;
+        $admission-> father_contact_no = $request->father_contact_no;
+        $admission-> father_email_id = $request->father_email_id;
+        $admission-> mother_contact_no = $request->mother_contact_no;
+        $admission-> mother_email_id = $request->mother_email_id;
+        $admission-> guardian_contact_no = $request->guardian_contact_no;
+        $admission-> guardian_email_id = $request->guardian_email_id;
+        $admission-> house_no = $request->house_no;
+        $admission-> street = $request->street;
+        $admission-> city = $request->city;
+        $admission-> district = $request->district;
+        $admission-> state = $request->state;
+        $admission-> pincode = $request->pincode;
+        $admission-> house_no_1 = $request->house_no_1;
+        $admission-> street_1 = $request->street_1;
+        $admission-> city_1 = $request->city_1;
+        $admission-> district_1 = $request->district_1;
+        $admission-> state_1 = $request->state_1;
+        $admission-> pincode_1 = $request->pincode_1;
+        $admission-> last_class_std = $request->last_class_std;
+        $admission-> last_school = $request->last_school;
+        $admission-> admission_for_class = $request->admission_for_class;
+        $admission-> syllabus = $request->syllabus;
+        $admission-> group_no = $request->group_no;
+        $admission-> second_group_no = $request->second_group_no;
+        $admission-> second_language = $request->second_language;
+        $admission-> brother_1 = $request->brother_1;
+        $admission-> brother_2 = $request->brother_2;
+        $admission-> brother_3 = $request->brother_3;
+        $admission-> gender_1 = $request->gender_1;
+        $admission-> gender_2 = $request->gender_2;
+        $admission-> gender_3 = $request->gender_3;
+        $admission-> class_1 = $request->class_1;
+        $admission-> class_2 = $request->class_2;
+        $admission-> class_3 = $request->class_3;
+        $admission-> father_income = $request->father_income;
+        $admission-> mother_income = $request->mother_income;
+        $admission-> guardian_income = $request->guardian_income;
+        $admission-> reference_name_1 = $request->reference_name_1;
+        $admission-> reference_phone_1 = $request->reference_phone_1;
+        $admission-> reference_name_2 = $request->reference_name_2;
+        $admission-> reference_phone_2 = $request->reference_phone_1;
+        $admission-> second_language_school = $request->second_language_school;
+        $admission-> last_school_state = $request->last_school_state;
+        $admission-> father_organization = $request->father_organization;
+        $admission-> mother_organization = $request->mother_organization;
+        $admission-> guardian_organization = $request->father_organization;
 
         
         $transactionId = randomId();
@@ -287,36 +274,36 @@ $admission-> guardian_organization = $request->father_organization;
         $admission->save();
         // dd($admission);
         if ($request->hasFile('profile_photo')) {
-    $profile_path = 'profile' . $admission->id . '.' . $request->profile_photo->extension();
-    $request->profile_photo->storeAs('profile_photos', $profile_path);
+            $profile_path = 'profile' . $admission->id . '.' . $request->profile_photo->extension();
+            $request->profile_photo->storeAs('profile_photos', $profile_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['profile_photo' => $profile_path]);
-}
-if ($request->hasFile('admission_photo')) {
-    $admission_path = 'admission' . $admission->id . '.' . $request->admission_photo->extension();
-    $request->admission_photo->storeAs('admission_photos', $admission_path);
+            // Update the admission model with the profile photo path
+            $admission->update(['profile_photo' => $profile_path]);
+        }
+        if ($request->hasFile('admission_photo')) {
+            $admission_path = 'admission' . $admission->id . '.' . $request->admission_photo->extension();
+            $request->admission_photo->storeAs('admission_photos', $admission_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['admission_photo' => $admission_path]);
-}        
+            // Update the admission model with the profile photo path
+            $admission->update(['admission_photo' => $admission_path]);
+        }        
 
-if ($request->hasFile('birth_certificate_photo')) {
-    $birth_certificate_path = 'birth_certificate' . $admission->id . '.' . $request->birth_certificate_photo->extension();
-    $request->birth_certificate_photo->storeAs('birth_certificate_photos', $birth_certificate_path);
+        if ($request->hasFile('birth_certificate_photo')) {
+            $birth_certificate_path = 'birth_certificate' . $admission->id . '.' . $request->birth_certificate_photo->extension();
+            $request->birth_certificate_photo->storeAs('birth_certificate_photos', $birth_certificate_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['birth_certificate_photo' => $birth_certificate_path]);
-}
+            // Update the admission model with the profile photo path
+            $admission->update(['birth_certificate_photo' => $birth_certificate_path]);
+        }
 
- if ($request->hasFile('aadhar_card_photo')) {
-            $aadhar_card_path = 'aadhar_card' . $admission->id . '.' . $request->aadhar_card_photo->extension();
-            $request->aadhar_card_photo->storeAs('aadhar_card_photos', $aadhar_card_path);
-        
-            // Update the aadhar_card model with the profile photo path
-            $admission->update(['aadhar_card_photo' => $aadhar_card_path]);
-        }  
- if ($request->hasFile('ration_card_photo')) {
+        if ($request->hasFile('aadhar_card_photo')) {
+                    $aadhar_card_path = 'aadhar_card' . $admission->id . '.' . $request->aadhar_card_photo->extension();
+                    $request->aadhar_card_photo->storeAs('aadhar_card_photos', $aadhar_card_path);
+                
+                    // Update the aadhar_card model with the profile photo path
+                    $admission->update(['aadhar_card_photo' => $aadhar_card_path]);
+                }  
+        if ($request->hasFile('ration_card_photo')) {
             $ration_card_path = 'ration_card' . $admission->id . '.' . $request->ration_card_photo->extension();
             $request->ration_card_photo->storeAs('ration_card_photos', $ration_card_path);
         
@@ -374,68 +361,68 @@ if ($request->hasFile('birth_certificate_photo')) {
     
         $requestform = new AdmissionForm([
              "name"=>isset($admission->name)?$admission->name:null,
-   "date_form"=>isset($admission->date_form)?$admission->date_form:null,
-   "language"=>isset($admission->language)?$admission->language:null,
-   "state_student"=>isset($admission->state_student)?$admission->state_student:null,
-   "date_of_birth"=>isset($admission->date_of_birth)?$admission->date_of_birth:null,
-   "gender"=>isset($admission->gender)?$admission->gender:null,
-   "blood_group"=>isset($admission->blood_group)?$admission->blood_group:null,
-   "nationality"=>isset($admission->nationality)?$admission->nationality:null,
-   "religion"=>isset($admission->religion)?$admission->religion:null,
-   "church_denomination"=>isset($admission->church_denomination)?$admission->church_denomination:null,
-   "caste"=>isset($admission->caste)?$admission->caste:null,
-   "caste_type"=>isset($admission->caste_type)?$admission->caste_type:null,
-   "aadhar_card_no"=>isset($admission->aadhar_card_no)?$admission->aadhar_card_no:null,
-   "ration_card_no"=>isset($admission->ration_card_no)?$admission->ration_card_no:null,
-   "emis_no"=>isset($admission->emis_no)?$admission->emis_no:null,
-   "veg_or_non"=>isset($admission->veg_or_non)?$admission->veg_or_non:null,
-   "chronic_des"=>isset($admission->chronic_des)?$admission->chronic_des:null,
-   "medicine_taken"=>isset($admission->medicine_taken)?$admission->medicine_taken:null,
-   "father_name"=>isset($admission->father_name)?$admission->father_name:null,
-   "father_occupation"=>isset($admission->father_occupation)?$admission->father_occupation:null,
-   "mother_name"=>isset($admission->mother_name)?$admission->mother_name:null,
-   "mother_occupation"=>isset($admission->mother_occupation)?$admission->mother_occupation:null,
-   "guardian_name"=>isset($admission->guardian_name)?$admission->guardian_name:null,
-   "guardian_occupation"=>isset($admission->guardian_occupation)?$admission->guardian_occupation:null,
-   "father_contact_no"=>isset($admission->father_contact_no)?$admission->father_contact_no:null,
-   "father_email_id"=>isset($admission->father_email_id)?$admission->father_email_id:null,
-   "mother_contact_no"=>isset($admission->mother_contact_no)?$admission->mother_contact_no:null,
-   "mother_email_id"=>isset($admission->mother_email_id)?$admission->mother_email_id:null,
-   "guardian_contact_no"=>isset($admission->guardian_contact_no)?$admission->guardian_contact_no:null,
-   "guardian_email_id"=>isset($admission->guardian_email_id)?$admission->guardian_email_id:null,
-   "house_no"=>isset($admission->house_no)?$admission->house_no:null,
-   "street"=>isset($admission->street)?$admission->street:null,
-   "city"=>isset($admission->city)?$admission->city:null,
-   "district"=>isset($admission->district)?$admission->district:null,
-   "state"=>isset($admission->state)?$admission->state:null,
-   "pincode"=>isset($admission->pincode)?$admission->pincode:null,
-   "house_no_1"=>isset($admission->house_no_1)?$admission->house_no_1:null,
-   "street_1"=>isset($admission->street_1)?$admission->street_1:null,
-   "city_1"=>isset($admission->city_1)?$admission->city_1:null,
-   "district_1"=>isset($admission->district_1)?$admission->district_1:null,
-   "state_1"=>isset($admission->state_1)?$admission->state_1:null,
-   "pincode_1"=>isset($admission->pincode_1)?$admission->pincode_1:null,
-   "last_class_std"=>isset($admission->last_class_std)?$admission->last_class_std:null,
-   "last_school"=>isset($admission->last_school)?$admission->last_school:null,
-   "admission_for_class"=>isset($admission->admission_for_class)?$admission->admission_for_class:null,
-   "syllabus"=>isset($admission->syllabus)?$admission->syllabus:null,
-   "group_no"=>isset($admission->group_no)?$admission->group_no:null,
-   "second_group_no"=>isset($admission->second_group_no)?$admission->second_group_no:null,
-   "second_language"=>isset($admission->second_language)?$admission->second_language:null,
-    "profile_photo" => isset($admission->profile_photo)?$admission->profile_photo:null,
-       "admission_photo" => isset($admission->admission_photo)?$admission->admission_photo:null,
-     "birth_certificate_photo" => isset($admission->birth_certificate_photo)?$admission->birth_certificate_photo:null,
-     "aadhar_card_photo" => isset($admission->aadhar_card_photo)?$admission->aadhar_card_photo:null,
-     "ration_card_photo" => isset($admission->ration_card_photo)?$admission->ration_card_photo:null,
-     "community_certificate" => isset($admission->community_certificate)?$admission->community_certificate:null,
-     "slip_photo" => isset($admission->slip_photo)?$admission->slip_photo:null,
-     "medical_certificate_photo" => isset($admission->medical_certificate_photo)?$admission->medical_certificate_photo:null,
-     "reference_letter_photo" => isset($admission->reference_letter_photo)?$admission->reference_letter_photo:null,
-     "church_certificate_photo" => isset($admission->church_certificate_photo)?$admission->church_certificate_photo:null,
-     "transfer_certificate_photo" => isset($admission->transfer_certificate_photo)?$admission->transfer_certificate_photo:null,
-     "father_organization" => isset($admission->father_organization)?$admission->father_organization:null,
-     "mother_organization" => isset($admission->mother_organization)?$admission->mother_organization:null,
-     "guardian_organization" => isset($admission->guardian_organization)?$admission->guardian_organization:null,
+        "date_form"=>isset($admission->date_form)?$admission->date_form:null,
+        "language"=>isset($admission->language)?$admission->language:null,
+        "state_student"=>isset($admission->state_student)?$admission->state_student:null,
+        "date_of_birth"=>isset($admission->date_of_birth)?$admission->date_of_birth:null,
+        "gender"=>isset($admission->gender)?$admission->gender:null,
+        "blood_group"=>isset($admission->blood_group)?$admission->blood_group:null,
+        "nationality"=>isset($admission->nationality)?$admission->nationality:null,
+        "religion"=>isset($admission->religion)?$admission->religion:null,
+        "church_denomination"=>isset($admission->church_denomination)?$admission->church_denomination:null,
+        "caste"=>isset($admission->caste)?$admission->caste:null,
+        "caste_type"=>isset($admission->caste_type)?$admission->caste_type:null,
+        "aadhar_card_no"=>isset($admission->aadhar_card_no)?$admission->aadhar_card_no:null,
+        "ration_card_no"=>isset($admission->ration_card_no)?$admission->ration_card_no:null,
+        "emis_no"=>isset($admission->emis_no)?$admission->emis_no:null,
+        "veg_or_non"=>isset($admission->veg_or_non)?$admission->veg_or_non:null,
+        "chronic_des"=>isset($admission->chronic_des)?$admission->chronic_des:null,
+        "medicine_taken"=>isset($admission->medicine_taken)?$admission->medicine_taken:null,
+        "father_name"=>isset($admission->father_name)?$admission->father_name:null,
+        "father_occupation"=>isset($admission->father_occupation)?$admission->father_occupation:null,
+        "mother_name"=>isset($admission->mother_name)?$admission->mother_name:null,
+        "mother_occupation"=>isset($admission->mother_occupation)?$admission->mother_occupation:null,
+        "guardian_name"=>isset($admission->guardian_name)?$admission->guardian_name:null,
+        "guardian_occupation"=>isset($admission->guardian_occupation)?$admission->guardian_occupation:null,
+        "father_contact_no"=>isset($admission->father_contact_no)?$admission->father_contact_no:null,
+        "father_email_id"=>isset($admission->father_email_id)?$admission->father_email_id:null,
+        "mother_contact_no"=>isset($admission->mother_contact_no)?$admission->mother_contact_no:null,
+        "mother_email_id"=>isset($admission->mother_email_id)?$admission->mother_email_id:null,
+        "guardian_contact_no"=>isset($admission->guardian_contact_no)?$admission->guardian_contact_no:null,
+        "guardian_email_id"=>isset($admission->guardian_email_id)?$admission->guardian_email_id:null,
+        "house_no"=>isset($admission->house_no)?$admission->house_no:null,
+        "street"=>isset($admission->street)?$admission->street:null,
+        "city"=>isset($admission->city)?$admission->city:null,
+        "district"=>isset($admission->district)?$admission->district:null,
+        "state"=>isset($admission->state)?$admission->state:null,
+        "pincode"=>isset($admission->pincode)?$admission->pincode:null,
+        "house_no_1"=>isset($admission->house_no_1)?$admission->house_no_1:null,
+        "street_1"=>isset($admission->street_1)?$admission->street_1:null,
+        "city_1"=>isset($admission->city_1)?$admission->city_1:null,
+        "district_1"=>isset($admission->district_1)?$admission->district_1:null,
+        "state_1"=>isset($admission->state_1)?$admission->state_1:null,
+        "pincode_1"=>isset($admission->pincode_1)?$admission->pincode_1:null,
+        "last_class_std"=>isset($admission->last_class_std)?$admission->last_class_std:null,
+        "last_school"=>isset($admission->last_school)?$admission->last_school:null,
+        "admission_for_class"=>isset($admission->admission_for_class)?$admission->admission_for_class:null,
+        "syllabus"=>isset($admission->syllabus)?$admission->syllabus:null,
+        "group_no"=>isset($admission->group_no)?$admission->group_no:null,
+        "second_group_no"=>isset($admission->second_group_no)?$admission->second_group_no:null,
+        "second_language"=>isset($admission->second_language)?$admission->second_language:null,
+            "profile_photo" => isset($admission->profile_photo)?$admission->profile_photo:null,
+            "admission_photo" => isset($admission->admission_photo)?$admission->admission_photo:null,
+            "birth_certificate_photo" => isset($admission->birth_certificate_photo)?$admission->birth_certificate_photo:null,
+            "aadhar_card_photo" => isset($admission->aadhar_card_photo)?$admission->aadhar_card_photo:null,
+            "ration_card_photo" => isset($admission->ration_card_photo)?$admission->ration_card_photo:null,
+            "community_certificate" => isset($admission->community_certificate)?$admission->community_certificate:null,
+            "slip_photo" => isset($admission->slip_photo)?$admission->slip_photo:null,
+            "medical_certificate_photo" => isset($admission->medical_certificate_photo)?$admission->medical_certificate_photo:null,
+            "reference_letter_photo" => isset($admission->reference_letter_photo)?$admission->reference_letter_photo:null,
+            "church_certificate_photo" => isset($admission->church_certificate_photo)?$admission->church_certificate_photo:null,
+            "transfer_certificate_photo" => isset($admission->transfer_certificate_photo)?$admission->transfer_certificate_photo:null,
+            "father_organization" => isset($admission->father_organization)?$admission->father_organization:null,
+            "mother_organization" => isset($admission->mother_organization)?$admission->mother_organization:null,
+            "guardian_organization" => isset($admission->guardian_organization)?$admission->guardian_organization:null,
             "payment_order_id" =>  $admission->payment_order_id
             ]);
       $result = AdmissionForm::
@@ -456,11 +443,11 @@ if ($request->hasFile('birth_certificate_photo')) {
                     $profile_pic9 =  $result->church_certificate_photo;
                      $profile_pic10 =  $result->transfer_certificate_photo;
         //mail ku data $admissionData intha variable la pass pannaum
-      $admissionform1 = $requestform->payment_order_id;
- $admissionData = ['admissionData' => 'https://www.santhoshavidhyalaya.com/SVS/admission-view/'.$admissionform1 ];
-// dd($admissionData);
-Mail::send('emails.admissionMail', $admissionData, function ($message) use ($profile_pic, $profile_pic2, $profile_pic1,$profile_pic3,$profile_pic4,$profile_pic5,$profile_pic6,$profile_pic7,$profile_pic8,$profile_pic9,$profile_pic10)  {
-    $message->to('admissions@santhoshavidhyalaya.com')->cc('principal@santhoshavidhyalaya.com','prince@santhoshavidhyalaya.com','udhaya.suriya@eucto.com')
+        $admissionform1 = $requestform->payment_order_id;
+        $admissionData = ['admissionData' => 'https://www.santhoshavidhyalaya.com/SVS/admission-view/'.$admissionform1 ];
+        // dd($admissionData);
+        Mail::send('emails.admissionMail', $admissionData, function ($message) use ($profile_pic, $profile_pic2, $profile_pic1,$profile_pic3,$profile_pic4,$profile_pic5,$profile_pic6,$profile_pic7,$profile_pic8,$profile_pic9,$profile_pic10)  {
+            $message->to('admissions@santhoshavidhyalaya.com')->cc('principal@santhoshavidhyalaya.com','prince@santhoshavidhyalaya.com','udhaya.suriya@eucto.com')
         ->subject('Admission Form');
 
     // Attach profile photo if it exists
@@ -544,35 +531,35 @@ Mail::send('emails.admissionMail', $admissionData, function ($message) use ($pro
     }
   
 });
- if($result->father_email_id != '' ){
-      $admissionData2 = ['name' => $result->father_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->father_email_id];
- //dd($admissionData2);
-Mail::send('emails.admissionMail2', $admissionData2, function ($message) use ($admissionData2)  {
-    // dd($admissionData2['father_mail']);
-    $message->to($admissionData2['father_mail'])
-        ->subject('Confirmation of Admission Form Submission for Your Child');
-    
-});
-        
-    }else if($result->mother_email_id != '' ){
-        $admissionData2 = ['name' => $result->mother_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->mother_email_id];
-// dd($admissionData2);
-Mail::send('$result->mother_email_id', $admissionData2, function ($message) use ($admissionData2)  {
-  // dd($admissionData2);
-    $message->to($admissionData2['father_mail'])
-        ->subject('Confirmation of Admission Form Submission for Your Child');
-    
-});
-    }else {
-      $admissionData2 = ['name' => $result->guardian_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->guardia_email_id];
-// dd($admissionData2);
-Mail::send('emails.admissionMail2', $admissionData2, function ($message) use ($admissionData2)  {
-  // dd($admissionData2);
-    $message->to($admissionData2['father_mail'])
-        ->subject('Confirmation of Admission Form Submission for Your Child');
-    
-});
-}
+        if($result->father_email_id != '' ){
+            $admissionData2 = ['name' => $result->father_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->father_email_id];
+        //dd($admissionData2);
+        Mail::send('emails.admissionMail2', $admissionData2, function ($message) use ($admissionData2)  {
+            // dd($admissionData2['father_mail']);
+            $message->to($admissionData2['father_mail'])
+                ->subject('Confirmation of Admission Form Submission for Your Child');
+            
+        });
+                
+            }else if($result->mother_email_id != '' ){
+                $admissionData2 = ['name' => $result->mother_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->mother_email_id];
+        // dd($admissionData2);
+        Mail::send('$result->mother_email_id', $admissionData2, function ($message) use ($admissionData2)  {
+        // dd($admissionData2);
+            $message->to($admissionData2['father_mail'])
+                ->subject('Confirmation of Admission Form Submission for Your Child');
+            
+        });
+            }else {
+            $admissionData2 = ['name' => $result->guardian_name,'child_name' => $result->name,'class_name' => $result->admission_for_class,'father_mail'=> $result->guardia_email_id];
+        // dd($admissionData2);
+        Mail::send('emails.admissionMail2', $admissionData2, function ($message) use ($admissionData2)  {
+        // dd($admissionData2);
+            $message->to($admissionData2['father_mail'])
+                ->subject('Confirmation of Admission Form Submission for Your Child');
+            
+        });
+        }
     //  dd($admissionform);
                     //  $admissionform = AdmissionForm::create($admissionform);
 
@@ -588,78 +575,78 @@ Mail::send('emails.admissionMail2', $admissionData2, function ($message) use ($a
         
         $admission = new Admission();
           
-   $admission-> name = $request->name;
-   $admission-> date_form = $request->date_form;
-   $admission-> language = $request->language;
-   $admission-> state_student = $request->state_student;
-   $admission-> date_of_birth = $request->date_of_birth;
-   $admission-> gender = $request->gender;
-   $admission-> blood_group = $request->blood_group;
-   $admission-> nationality = $request->nationality;
-   $admission-> religion = $request->religion;
-   $admission-> church_denomination = $request->church_denomination;
-   $admission-> caste = $request->caste;
-   $admission-> caste_type = $request->caste_type;
-   $admission-> aadhar_card_no = $request->aadhar_card_no;
-   $admission-> ration_card_no = $request->ration_card_no;
-   $admission-> emis_no = $request->emis_no;
-   $admission-> veg_or_non = $request->veg_or_non;
-   $admission-> chronic_des = $request->chronic_des;
-   $admission-> medicine_taken = $request->medicine_taken;
-   $admission->father_title = $request->father_title ;
-   $admission->father_name = $request->father_name ;
-   $admission-> father_occupation = $request->father_occupation;
-   $admission-> mother_title =  $request->mother_title;
-   $admission-> mother_name =  $request->mother_name;
-   $admission-> mother_occupation = $request->mother_occupation;
-   $admission-> guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
-   $admission-> guardian_occupation = $request->guardian_occupation;
-   $admission-> father_contact_no = $request->father_contact_no;
-   $admission-> father_email_id = $request->father_email_id;
-   $admission-> mother_contact_no = $request->mother_contact_no;
-   $admission-> mother_email_id = $request->mother_email_id;
-   $admission-> guardian_contact_no = $request->guardian_contact_no;
-   $admission-> guardian_email_id = $request->guardian_email_id;
-   $admission-> house_no = $request->house_no;
-   $admission-> street = $request->street;
-   $admission-> city = $request->city;
-   $admission-> district = $request->district;
-   $admission-> state = $request->state;
-   $admission-> pincode = $request->pincode;
-   $admission-> house_no_1 = $request->house_no_1;
-   $admission-> street_1 = $request->street_1;
-   $admission-> city_1 = $request->city_1;
-   $admission-> district_1 = $request->district_1;
-   $admission-> state_1 = $request->state_1;
-   $admission-> pincode_1 = $request->pincode_1;
-   $admission-> last_class_std = $request->last_class_std;
-   $admission-> last_school = $request->last_school;
-   $admission-> admission_for_class = $request->admission_for_class;
-   $admission-> syllabus = $request->syllabus;
-   $admission-> group_no = $request->group_no;
-   $admission-> second_group_no = $request->second_group_no;
-   $admission-> second_language = $request->second_language;
-   $admission-> brother_1 = $request->brother_1;
-$admission-> brother_2 = $request->brother_2;
-$admission-> brother_3 = $request->brother_3;
-$admission-> gender_1 = $request->gender_1;
-$admission-> gender_2 = $request->gender_2;
-$admission-> gender_3 = $request->gender_3;
-$admission-> class_1 = $request->class_1;
-$admission-> class_2 = $request->class_2;
-$admission-> class_3 = $request->class_3;
-$admission-> father_income = $request->father_income;
-$admission-> mother_income = $request->mother_income;
-$admission-> guardian_income = $request->guardian_income;
-$admission-> reference_name_1 = $request->reference_name_1;
-$admission-> reference_phone_1 = $request->reference_phone_1;
-$admission-> reference_name_2 = $request->reference_name_2;
-$admission-> reference_phone_2 = $request->reference_phone_1;
-$admission-> second_language_school = $request->second_language_school;
-$admission-> last_school_state = $request->last_school_state;
-$admission-> father_organization = $request->father_organization;
-$admission-> mother_organization = $request->mother_organization;
-$admission-> guardian_organization = $request->father_organization;
+        $admission-> name = $request->name;
+        $admission-> date_form = $request->date_form;
+        $admission-> language = $request->language;
+        $admission-> state_student = $request->state_student;
+        $admission-> date_of_birth = $request->date_of_birth;
+        $admission-> gender = $request->gender;
+        $admission-> blood_group = $request->blood_group;
+        $admission-> nationality = $request->nationality;
+        $admission-> religion = $request->religion;
+        $admission-> church_denomination = $request->church_denomination;
+        $admission-> caste = $request->caste;
+        $admission-> caste_type = $request->caste_type;
+        $admission-> aadhar_card_no = $request->aadhar_card_no;
+        $admission-> ration_card_no = $request->ration_card_no;
+        $admission-> emis_no = $request->emis_no;
+        $admission-> veg_or_non = $request->veg_or_non;
+        $admission-> chronic_des = $request->chronic_des;
+        $admission-> medicine_taken = $request->medicine_taken;
+        $admission->father_title = $request->father_title ;
+        $admission->father_name = $request->father_name ;
+        $admission-> father_occupation = $request->father_occupation;
+        $admission-> mother_title =  $request->mother_title;
+        $admission-> mother_name =  $request->mother_name;
+        $admission-> mother_occupation = $request->mother_occupation;
+        $admission-> guardian_name = $request->guardian_title . ' ' . $request->guardian_name;
+        $admission-> guardian_occupation = $request->guardian_occupation;
+        $admission-> father_contact_no = $request->father_contact_no;
+        $admission-> father_email_id = $request->father_email_id;
+        $admission-> mother_contact_no = $request->mother_contact_no;
+        $admission-> mother_email_id = $request->mother_email_id;
+        $admission-> guardian_contact_no = $request->guardian_contact_no;
+        $admission-> guardian_email_id = $request->guardian_email_id;
+        $admission-> house_no = $request->house_no;
+        $admission-> street = $request->street;
+        $admission-> city = $request->city;
+        $admission-> district = $request->district;
+        $admission-> state = $request->state;
+        $admission-> pincode = $request->pincode;
+        $admission-> house_no_1 = $request->house_no_1;
+        $admission-> street_1 = $request->street_1;
+        $admission-> city_1 = $request->city_1;
+        $admission-> district_1 = $request->district_1;
+        $admission-> state_1 = $request->state_1;
+        $admission-> pincode_1 = $request->pincode_1;
+        $admission-> last_class_std = $request->last_class_std;
+        $admission-> last_school = $request->last_school;
+        $admission-> admission_for_class = $request->admission_for_class;
+        $admission-> syllabus = $request->syllabus;
+        $admission-> group_no = $request->group_no;
+        $admission-> second_group_no = $request->second_group_no;
+        $admission-> second_language = $request->second_language;
+        $admission-> brother_1 = $request->brother_1;
+        $admission-> brother_2 = $request->brother_2;
+        $admission-> brother_3 = $request->brother_3;
+        $admission-> gender_1 = $request->gender_1;
+        $admission-> gender_2 = $request->gender_2;
+        $admission-> gender_3 = $request->gender_3;
+        $admission-> class_1 = $request->class_1;
+        $admission-> class_2 = $request->class_2;
+        $admission-> class_3 = $request->class_3;
+        $admission-> father_income = $request->father_income;
+        $admission-> mother_income = $request->mother_income;
+        $admission-> guardian_income = $request->guardian_income;
+        $admission-> reference_name_1 = $request->reference_name_1;
+        $admission-> reference_phone_1 = $request->reference_phone_1;
+        $admission-> reference_name_2 = $request->reference_name_2;
+        $admission-> reference_phone_2 = $request->reference_phone_1;
+        $admission-> second_language_school = $request->second_language_school;
+        $admission-> last_school_state = $request->last_school_state;
+        $admission-> father_organization = $request->father_organization;
+        $admission-> mother_organization = $request->mother_organization;
+        $admission-> guardian_organization = $request->father_organization;
 
         
         $transactionId = randomId();
@@ -677,37 +664,37 @@ $admission-> guardian_organization = $request->father_organization;
         
         
 
-if ($request->hasFile('profile_photo')) {
-    $profile_path = 'profile' . $admission->id . '.' . $request->profile_photo->extension();
-    $request->profile_photo->storeAs('profile_photos', $profile_path);
+        if ($request->hasFile('profile_photo')) {
+            $profile_path = 'profile' . $admission->id . '.' . $request->profile_photo->extension();
+            $request->profile_photo->storeAs('profile_photos', $profile_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['profile_photo' => $profile_path]);
-}
-if ($request->hasFile('admission_photo')) {
-    $admission_path = 'admission' . $admission->id . '.' . $request->admission_photo->extension();
-    $request->admission_photo->storeAs('admission_photos', $admission_path);
+            // Update the admission model with the profile photo path
+            $admission->update(['profile_photo' => $profile_path]);
+        }
+        if ($request->hasFile('admission_photo')) {
+            $admission_path = 'admission' . $admission->id . '.' . $request->admission_photo->extension();
+            $request->admission_photo->storeAs('admission_photos', $admission_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['admission_photo' => $admission_path]);
-}        
+            // Update the admission model with the profile photo path
+            $admission->update(['admission_photo' => $admission_path]);
+        }        
 
-if ($request->hasFile('birth_certificate_photo')) {
-    $birth_certificate_path = 'birth_certificate' . $admission->id . '.' . $request->birth_certificate_photo->extension();
-    $request->birth_certificate_photo->storeAs('birth_certificate_photos', $birth_certificate_path);
+        if ($request->hasFile('birth_certificate_photo')) {
+            $birth_certificate_path = 'birth_certificate' . $admission->id . '.' . $request->birth_certificate_photo->extension();
+            $request->birth_certificate_photo->storeAs('birth_certificate_photos', $birth_certificate_path);
 
-    // Update the admission model with the profile photo path
-    $admission->update(['birth_certificate_photo' => $birth_certificate_path]);
-}
+            // Update the admission model with the profile photo path
+            $admission->update(['birth_certificate_photo' => $birth_certificate_path]);
+        }
 
- if ($request->hasFile('aadhar_card_photo')) {
-            $aadhar_card_path = 'aadhar_card' . $admission->id . '.' . $request->aadhar_card_photo->extension();
-            $request->aadhar_card_photo->storeAs('aadhar_card_photos', $aadhar_card_path);
-        
-            // Update the aadhar_card model with the profile photo path
-            $admission->update(['aadhar_card_photo' => $aadhar_card_path]);
-        }  
- if ($request->hasFile('ration_card_photo')) {
+        if ($request->hasFile('aadhar_card_photo')) {
+                    $aadhar_card_path = 'aadhar_card' . $admission->id . '.' . $request->aadhar_card_photo->extension();
+                    $request->aadhar_card_photo->storeAs('aadhar_card_photos', $aadhar_card_path);
+                
+                    // Update the aadhar_card model with the profile photo path
+                    $admission->update(['aadhar_card_photo' => $aadhar_card_path]);
+                }  
+        if ($request->hasFile('ration_card_photo')) {
             $ration_card_path = 'ration_card' . $admission->id . '.' . $request->ration_card_photo->extension();
             $request->ration_card_photo->storeAs('ration_card_photos', $ration_card_path);
         
@@ -885,17 +872,17 @@ if ($request->hasFile('birth_certificate_photo')) {
         //         'profile_photo' => $profile_path,
         //         'admission_photo' => $admission_path,
         //     ]);
-Mail::send('emails.admissionMail', $admissionData, function($message) use ($admissionData, $pdfContent) {
-    $message->to('admissions@santhoshavidhyalaya.com')
-            ->subject('Admission PDF');
-    $message->attachData($pdfContent, 'admission.pdf', [
-        'mime' => 'application/pdf',
-    ]);
-});
+        Mail::send('emails.admissionMail', $admissionData, function($message) use ($admissionData, $pdfContent) {
+            $message->to('admissions@santhoshavidhyalaya.com')
+                    ->subject('Admission PDF');
+            $message->attachData($pdfContent, 'admission.pdf', [
+                'mime' => 'application/pdf',
+            ]);
+        });
 
-if (Mail::failures()) {
-    return redirect('/error')->with('error', 'Failed to send email!');
-}
+        if (Mail::failures()) {
+            return redirect('/error')->with('error', 'Failed to send email!');
+        }
 
 
     }
