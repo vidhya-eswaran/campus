@@ -168,11 +168,11 @@ CREATE TABLE `admission_live` (
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL,
   `group_no` int(11) DEFAULT NULL,
-  `siblings` varchar(10) DEFAULT NULL,
-  `second_language` varchar(10) DEFAULT NULL,
-  `father_title` varchar(10) DEFAULT NULL,
-  `mother_title` varchar(10) DEFAULT NULL,
-  `guardian_title` varchar(20) DEFAULT NULL,
+  `siblings` varchar(100) DEFAULT NULL,
+  `second_language` varchar(100) DEFAULT NULL,
+  `father_title` varchar(100) DEFAULT NULL,
+  `mother_title` varchar(100) DEFAULT NULL,
+  `guardian_title` varchar(200) DEFAULT NULL,
   `pen_no` int(11) DEFAULT NULL,
   `Declaration` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
