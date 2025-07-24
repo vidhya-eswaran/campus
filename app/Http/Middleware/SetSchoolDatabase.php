@@ -11,8 +11,7 @@ class SetSchoolDatabase
 {
     public function handle(Request $request, Closure $next)
     {
-        $school = $request->segment(2);
-
+        $school = $request->route('school');
         DB::purge('mysql');
         Config::set('database.connections.mysql.database', 'central_db');
         DB::reconnect('mysql');

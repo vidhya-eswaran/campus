@@ -71,7 +71,6 @@ use App\Http\Controllers\API\HostelAdmissionController;
 use App\Http\Controllers\API\StudentAttendanceController;
 use App\Http\Controllers\API\PhotoController;
 use App\Http\Controllers\RazorpayPaymentController;
-use App\Http\Controllers\AdmissionController;
 
 // use App\Http\Controllers\API\school_fees_master; storeSendForm
 // use App\Http\Controllers\API\school_miscellaneous_bill_master;
@@ -227,20 +226,7 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
 
     Route::post('/razorpay/verify-payment', [RazorpayPaymentController::class, 'verifyPayment']);
 
-    // Admission form
-
-    Route::resource('admission',AdmissionController::class);
-    Route::get('/admission-test', [AdmissionController::class, 'indexdemo']);
-    Route::post('/admission-redirect', [AdmissionController::class, 'admissionRetrunResponse']);
-    Route::get('/admission-data', [AdmissionController::class, 'Data']);
-    Route::get('/admission-offline', [AdmissionController::class, 'Offline']);
-    Route::post('/offline-store', [AdmissionController::class,'offline_store'])->name('admission.offline_store');
-    Route::get('/admission-view/{id}', [AdmissionController::class, 'view'])->name('admission.view_admission');
-    Route::get('/offline-store', [AdmissionController::class,'offline_store'])->name('admission.offline_store');
-    Route::get('/documents/{id}',[AdmissionController::class,'documents'])->name('admission.documents');
-
-
-
+    
     //Promotion student Routes
     Route::post("/studentpromotion-update", [StudentPromotionController::class , "update", ]);
     Route::post("/move-to-detention", [StudentPromotionController::class , "moveToDetention", ]);
