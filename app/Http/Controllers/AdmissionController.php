@@ -80,20 +80,20 @@ class AdmissionController extends Controller
         
         
         // Sending admission confirmation email
-        $admissionData = $admission->toArray();
-        Mail::send('emails.admissionMail', $admissionData, function ($message) use ($admissionData, $pdfContent) {
-            $toEmail = 'vidhyamca94@gmail.com'; // Ensure this is not empty or null
+        // $admissionData = $admission->toArray();
+        // Mail::send('emails.admissionMail', $admissionData, function ($message) use ($admissionData, $pdfContent) {
+        //     $toEmail = 'vidhyamca94@gmail.com'; // Ensure this is not empty or null
 
-            if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-                return redirect('/error')->with('error', 'Invalid recipient email!');
-            }
+        //     if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
+        //         return redirect('/error')->with('error', 'Invalid recipient email!');
+        //     }
 
-            $message->to($toEmail)
-                    ->subject('Admission PDF')
-                    ->attachData($pdfContent, 'admission.pdf', [
-                        'mime' => 'application/pdf',
-                    ]);
-        });
+        //     $message->to($toEmail)
+        //             ->subject('Admission PDF')
+        //             ->attachData($pdfContent, 'admission.pdf', [
+        //                 'mime' => 'application/pdf',
+        //             ]);
+        // });
 
         if (Mail::failures()) {
             return redirect('/error')->with('error', 'Failed to send email!');
