@@ -53,7 +53,7 @@ class AdmissionController extends Controller
                 'church_endorsement_image',
             ];
 
-        
+        $schoolSlug = request()->route('school');
         $mappedData = [];
 
         foreach ($imageFields as $field) {
@@ -61,7 +61,8 @@ class AdmissionController extends Controller
                 $file = $request->file($field);
 
                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                $path = 'student_images/' . $filename;
+                
+                $path = 'documents/' . $schoolSlug . '/admission_form/' . $filename;
 
                 Storage::disk('s3')->put($path, file_get_contents($file));
 

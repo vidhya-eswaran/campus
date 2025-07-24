@@ -42,12 +42,14 @@ class SchoolController extends Controller
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
             ]);
+
+            $schoolSlug = request()->route('school');
            
             if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'school_logo/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/school_logo/' . $filename;        
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -197,11 +199,13 @@ class SchoolController extends Controller
             'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
         ]);
 
+        $schoolSlug = request()->route('school');
+
         if ($request->hasFile('school_logo')) {
                 $file = $request->file('school_logo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'school_logo/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/school_logo/' . $filename;         
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));

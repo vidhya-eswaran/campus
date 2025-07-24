@@ -140,14 +140,14 @@ class StudentController extends Controller
                     }
 
                     $studentHistory->save();
-                   
+                    $schoolSlug = request()->route('school');
                     $mappedData = (array) $record;
                     foreach ($imageFields as $field) {
                         if ($request->hasFile($field)) {
                             $file = $request->file($field);
 
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                            $path = 'student_images/' . $filename;
+                            $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                             Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -210,13 +210,13 @@ class StudentController extends Controller
                         $student = new Student();
 
                         $mappedData = (array) $record;
-
+                        $schoolSlug = request()->route('school');
                         foreach ($imageFields as $field) {
                             if ($request->hasFile($field)) {
                                 $file = $request->file($field);
 
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                                $path = 'student_images/' . $filename;
+                                $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                                 Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -321,13 +321,13 @@ class StudentController extends Controller
                            // $student->admission_no = $admissionId ?? null;
 
                             $mappedData = (array) $record;
-
+                            $schoolSlug = request()->route('school');
                             foreach ($imageFields as $field) {
                                 if ($request->hasFile($field)) {
                                     $file = $request->file($field);
 
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                                    $path = 'student_images/' . $filename;
+                                    $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                                     Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -987,7 +987,7 @@ class StudentController extends Controller
         // Bulk update non-file fields
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
-
+        $schoolSlug = request()->route('school');
        //dd($imageFields);
         foreach ($imageFields as $field) {
             if ($request->hasFile($field)) {
@@ -995,7 +995,7 @@ class StudentController extends Controller
 
                 // Generate unique filename
                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                $path = 'student_images/' . $filename;             
+                $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;             
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));

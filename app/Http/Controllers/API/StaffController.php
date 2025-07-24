@@ -74,11 +74,13 @@ class StaffController extends Controller
             $requestData["date_of_joining"]
         );
 
+        $schoolSlug = request()->route('school');
+
         if ($request->has('staff_photo')) {
                 $file = $request->file('staff_photo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Staff/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Staff/' . $filename;          
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -188,11 +190,13 @@ class StaffController extends Controller
             );
         }
 
+        $schoolSlug = request()->route('school');
+
         if ($request->has('staff_photo')) {
                 $file = $request->file('staff_photo');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Staff/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Staff/' . $filename;          
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));

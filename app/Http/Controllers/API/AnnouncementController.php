@@ -49,6 +49,8 @@ class AnnouncementController extends Controller
 
         $user = Auth::user();
 
+        $schoolSlug = request()->route('school');
+
        // dd($user);
 
         // Handle file upload
@@ -56,7 +58,7 @@ class AnnouncementController extends Controller
             $file = $request->file("file");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Announcement/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Announcement/' . $filename;        
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -115,13 +117,15 @@ class AnnouncementController extends Controller
             'createdBy' => 'required',
         ]);
 
+        $schoolSlug = request()->route('school');
+
         // Handle file upload
         if ($request->hasFile("file")) {            
 
             $file = $request->file("file");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Announcement/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Announcement/' . $filename;         
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
