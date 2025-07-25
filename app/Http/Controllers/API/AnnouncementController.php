@@ -27,9 +27,11 @@ class AnnouncementController extends Controller
     // Fetch all announcements
     public function index()
     {
+        $perPage = $request->get('per_page', 10);
+
         $announcements = Announcement::with("categoryDetails")
             ->orderBy("created_at", "desc")
-            ->get();
+            ->paginate($perPage);
         return response()->json($announcements);
     }
 

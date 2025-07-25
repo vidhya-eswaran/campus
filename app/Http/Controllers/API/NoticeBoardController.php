@@ -37,7 +37,9 @@ class NoticeBoardController extends Controller
     // Fetch all notices (only non-deleted)
     public function index()
     {
-        $notices = NoticeBoard::with('categoryDetails')->orderBy('id', 'desc')->where('delete_status', 0)->get();
+        $perPage = $request->get('per_page', 10);
+
+        $notices = NoticeBoard::with('categoryDetails')->orderBy('id', 'desc')->where('delete_status', 0)->paginate($perPage);
         return response()->json($notices);
     }
 
