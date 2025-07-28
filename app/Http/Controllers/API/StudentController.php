@@ -1190,195 +1190,46 @@ class StudentController extends Controller
     {
         $id = $request->id;
         // Find the student admission record by ID
-        $admission = AdmissionForm::findOrFail($id);
+        $admission = Admission::findOrFail($id);
         Log::info("Request payload:", $request->all());
 
         // Update the student's basic information (non-file fields)
-        $admission->update([
-            //  'admission_no' => $request->input('admission_no'),
-            "name" => $request->input("STUDENT_NAME"),
-            "date_form" => $request->input("date_form"),
-            "language" => $request->input("MOTHERTONGUE"),
-            "state_student" => $request->input("STATE"),
-            "date_of_birth" => $request->input("DOB_DD_MM_YYYY"),
-            "gender" => $request->input("SEX"),
-            "blood_group" => $request->input("BLOOD_GROUP"),
-            "nationality" => $request->input("NATIONALITY"),
-            "religion" => $request->input("RELIGION"),
-            "church_denomination" => $request->input("DENOMINATION"),
-            "caste" => $request->input("CASTE"),
-            "caste_type" => $request->input("CASTE_CLASSIFICATION"),
-            "aadhar_card_no" => $request->input("AADHAAR_CARD_NO"),
-            "ration_card_no" => $request->input("RATIONCARDNO"),
-            "emis_no" => $request->input("EMIS_NO"),
-            "veg_or_non" => $request->input("FOOD"),
-            "chronic_des" => $request->input("chronic_des"),
-            "medicine_taken" => $request->input("medicine_taken"),
-            "father_name" => $request->input("FATHER"),
-            "father_occupation" => $request->input("OCCUPATION"),
-            "mother_name" => $request->input("MOTHER"),
-            "mother_occupation" => $request->input("mother_occupation"),
-            "guardian_name" => $request->input("GUARDIAN"),
-            "guardian_occupation" => $request->input("guardian_occupation"),
-            "father_contact_no" => $request->input("MOBILE_NUMBER"),
-            "father_email_id" => $request->input("EMAIL_ID"),
-            "mother_contact_no" => $request->input("WHATS_APP_NO"),
-            "mother_email_id" => $request->input("mother_email_id"),
-            "guardian_contact_no" => $request->input("guardian_contact_no"),
-            "guardian_email_id" => $request->input("guardian_email_id"),
-            "father_income" => $request->input("MONTHLY_INCOME"),
-            "mother_income" => $request->input("mother_income"),
-            "guardian_income" => $request->input("guardian_income"),
-            "house_no" => $request->input("PERMANENT_HOUSENUMBER"),
-            "street" => $request->input("P_STREETNAME"),
-            "city" => $request->input("P_VILLAGE_TOWN_NAME"),
-            "district" => $request->input("P_DISTRICT"),
-            "state" => $request->input("P_STATE"),
-            "pincode" => $request->input("P_PINCODE"),
-            "house_no_1" => $request->input("COMMUNICATION_HOUSE_NO"),
-            "street_1" => $request->input("C_STREET_NAME"),
-            "city_1" => $request->input("C_VILLAGE_TOWN_NAME"),
-            "district_1" => $request->input("C_DISTRICT"),
-            "state_1" => $request->input("C_STATE"),
-            "pincode_1" => $request->input("C_PINCODE"),
-            "last_class_std" => $request->input("CLASS_LAST_STUDIED"),
-            "last_school" => $request->input("NAME_OF_SCHOOL"),
-            "admission_for_class" => $request->input("SOUGHT_STD"),
-            "brother_1" => $request->input("brother_1"),
-            "brother_2" => $request->input("brother_2"),
-            "gender_1" => $request->input("gender_1"),
-            "gender_2" => $request->input("gender_2"),
-            "class_1" => $request->input("class_1"),
-            "class_2" => $request->input("class_2"),
-            "brother_3" => $request->input("brother_3"),
-            "gender_3" => $request->input("gender_3"),
-            "class_3" => $request->input("class_3"),
-            "last_school_state" => $request->input("last_school_state"),
-            "reference_name_1" => $request->input("reference_name_1"),
-            "reference_name_2" => $request->input("reference_name_2"),
-            "reference_phone_1" => $request->input("reference_phone_1"),
-            "reference_phone_2" => $request->input("reference_phone_2"),
-            "status" => $request->input("status"),
-            "syllabus" => $request->input("syllabus"),
-            "group_no" => $request->input("GROUP_12"),
-            "second_group_no" => $request->input("second_group_no"),
-            "second_language" => $request->input("second_language"),
-            "second_language_school" => $request->input(
-                "second_language_school"
-            ),
-            "guardian_organization" => $request->input("guardian_organization"),
-            "father_organization" => $request->input("ORGANISATION"),
-            "mother_organization" => $request->input("mother_organization"),
-            "father_title" => $request->father_title,
-            "mother_title" => $request->mother_title,
-        ]);
+        $imageFields = [
+                'profile_image',
+                'birth_certificate_image',
+                'aadhar_image',
+                'ration_card_image',
+                'community_image',
+                'salary_image',
+                'reference_letter_image',
+                'transfer_certificate_image',
+                'migration_image',
+                'church_endorsement_image',
+            ];
 
-        foreach (
-            [
-                "profile_photo",
-                "admission_photo",
-                "birth_certificate",
-                "aadhar_copy",
-                "ration_card",
-                "community_certificate",
-                "salary_certificate",
-                "medical_certificate",
-                "reference_letter",
-                "church_certificate",
-                "transfer_certificate",
-            ]
-            as $field
-        ) {
-            Log::info("Field {$field}:", [$request->input($field)]);
+        $schoolSlug = request()->route('school');
+        $mappedData = [];
+
+        foreach ($imageFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+
+                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                
+                $path = 'documents/' . $schoolSlug . '/admission_form/' . $filename;
+
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                                    // Set the full URL for accessing the image
+                $mappedData[$field] = Storage::disk('s3')->url($path);
+                } else {
+                    $mappedData[$field] = null;
+                }
         }
 
-        // Handle the image update (using the helper function)profile_photo
-        //  request,$dmission, feildname on api,filepath,dbname
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "migration_certificate",
-            "admission_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "profile_photo",
-            "profile_photos",
-            "profile_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "admission_photo",
-            "profile_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "birth_certificate",
-            "birth_certificate_photos",
-            "birth_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "aadhar_copy",
-            "aadhar_card_photos",
-            "aadhar_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "ration_card",
-            "ration_card_photos",
-            "ration_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "community_certificate",
-            "community_certificate_photos",
-            "community_certificate"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "salary_certificate",
-            "slip_photos",
-            "slip_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "medical_certificate",
-            "medical_certificate_photos",
-            "medical_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "reference_letter",
-            "reference_letter_photos",
-            "reference_letter_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "church_certificate",
-            "church_certificate_photos",
-            "church_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "transfer_certificate",
-            "transfer_certificate_photos",
-            "transfer_certificate_photo"
-        );
-
+        $inputData = array_merge($request->except($imageFields), $mappedData);
+        $admission->save();
+        
         // Return the updated student details
         return response()->json([
             "message" => "Student admission details updated successfully!",
@@ -1439,30 +1290,30 @@ class StudentController extends Controller
             );
         }
     }
-    public function showfromAdmission(Request $request,$id)
+    public function showfromAdmission(Request $request, $id)
     {
         try {
             $id = $request->id;
-            $admission = AdmissionForm::findOrFail($id);
+            $admission = Admission::findOrFail($id);
 
-            $imageFields = [
-                'profile_image',
-                'birth_certificate_image',
-                'aadhar_image',
-                'ration_card_image',
-                'community_image',
-                'salary_image',
-                'reference_letter_image',
-                'transfer_certificate_image',
-                'migration_image',
-                'church_endorsement_image',
-            ];
+            // $imageFields = [
+            //     'profile_image',
+            //     'birth_certificate_image',
+            //     'aadhar_image',
+            //     'ration_card_image',
+            //     'community_image',
+            //     'salary_image',
+            //     'reference_letter_image',
+            //     'transfer_certificate_image',
+            //     'migration_image',
+            //     'church_endorsement_image',
+            // ];
 
-            foreach ($imageFields as $field) {
-                if (!empty($admission->$field)) {
-                    $admission->$field = asset('storage/student_images/' . $admission->$field);
-                }
-            }
+            // foreach ($imageFields as $field) {
+            //     if (!empty($admission->$field)) {
+            //         $admission->$field = asset('storage/student_images/' . $admission->$field);
+            //     }
+            // }
 
             return response()->json([
                 "message" => "Student admission details fetched successfully!",

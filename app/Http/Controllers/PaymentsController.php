@@ -61,7 +61,7 @@ class PaymentsController extends Controller
         $urlEncodedJson = $request->query('data');
         $jsonString = urldecode($urlEncodedJson);
         $data = json_decode($jsonString, true);
-      $this->logInitedPayment('Initiate Payment Request Received', ['received_data' => $data, 'raw_query' => $request->getQueryString()]);
+        $this->logInitedPayment('Initiate Payment Request Received', ['received_data' => $data, 'raw_query' => $request->getQueryString()]);
 
         
         $userAccessToken =  $data['reqData']['accessToken'];
