@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 06:00 PM
+-- Generation Time: Jul 28, 2025 at 05:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `karthik`
+-- Database: `seven_day_20250709`
 --
 
 -- --------------------------------------------------------
@@ -74,107 +74,91 @@ CREATE TABLE `admission` (
 
 CREATE TABLE `admission_live` (
   `id` int(11) NOT NULL,
-  `student_name` varchar(220) DEFAULT NULL,
-  `date_form` varchar(100) DEFAULT NULL,
-  `mother_tongue` varchar(100) DEFAULT NULL,
-  `state` varchar(100) DEFAULT NULL,
-  `dob` varchar(100) DEFAULT NULL,
-  `gender` varchar(50) DEFAULT NULL,
-  `blood_group` varchar(50) DEFAULT NULL,
-  `nationality` varchar(220) DEFAULT NULL,
-  `religion` varchar(220) DEFAULT NULL,
-  `denomination` varchar(220) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `date_form` varchar(255) DEFAULT NULL,
+  `language` varchar(100) DEFAULT NULL,
+  `state_student` varchar(100) DEFAULT NULL,
+  `date_of_birth` varchar(100) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `blood_group` varchar(255) DEFAULT NULL,
+  `nationality` varchar(100) DEFAULT NULL,
+  `religion` varchar(100) DEFAULT NULL,
+  `church_denomination` varchar(255) DEFAULT NULL,
   `caste` varchar(100) DEFAULT NULL,
-  `caste_classification` varchar(220) DEFAULT NULL,
-  `aadhar_card_no` varchar(220) DEFAULT NULL,
-  `ration_card_no` varchar(220) DEFAULT NULL,
-  `emis_no` varchar(220) DEFAULT NULL,
-  `food_choice` varchar(220) DEFAULT NULL,
-  `chronic_des` varchar(220) DEFAULT NULL,
-  `medicine_taken` varchar(220) DEFAULT NULL,
-  `father_name` varchar(220) DEFAULT NULL,
-  `father_occupation` varchar(220) DEFAULT NULL,
-  `mother_name` varchar(220) DEFAULT NULL,
-  `mother_occupation` varchar(220) DEFAULT NULL,
-  `guardian_name` varchar(220) DEFAULT NULL,
-  `guardian_occupation` varchar(220) DEFAULT NULL,
-  `father_mobile_no` varchar(220) DEFAULT NULL,
-  `father_email_id` varchar(220) DEFAULT NULL,
-  `mother_mobile_no` varchar(220) DEFAULT NULL,
-  `mother_email_id` varchar(220) DEFAULT NULL,
-  `guardian_mobile_no` varchar(220) DEFAULT NULL,
-  `guardian_email_id` varchar(220) DEFAULT NULL,
-  `father_annual_income` varchar(90) DEFAULT NULL,
-  `mother_annual_income` varchar(220) DEFAULT NULL,
-  `guardian_annual_income` varchar(220) DEFAULT NULL,
-  `permanent_house_no` varchar(220) DEFAULT NULL,
-  `permanent_street_name` varchar(220) DEFAULT NULL,
-  `permanent_city_town_village` varchar(220) DEFAULT NULL,
-  `permanent_district` varchar(220) DEFAULT NULL,
-  `permanent_state` varchar(220) DEFAULT NULL,
-  `permanent_pincode` varchar(220) DEFAULT NULL,
-  `communication_house_no` varchar(100) DEFAULT NULL,
-  `communication_street_name` varchar(220) DEFAULT NULL,
-  `communication_city_town_village` varchar(220) DEFAULT NULL,
-  `communication_district` varchar(220) DEFAULT NULL,
-  `communication_state` varchar(220) DEFAULT NULL,
-  `communication_pincode` varchar(220) DEFAULT NULL,
-  `class_last_studied` varchar(220) DEFAULT NULL,
-  `last_school_name` varchar(220) DEFAULT NULL,
-  `std_sought` varchar(220) DEFAULT NULL,
-  `sec` varchar(220) DEFAULT NULL,
-  `syllabus` varchar(220) DEFAULT NULL,
-  `group_first_choice` varchar(220) DEFAULT NULL,
-  `group_second_choice` varchar(100) DEFAULT NULL,
-  `language` varchar(220) DEFAULT NULL,
-  `profile_image` varchar(220) DEFAULT NULL,
-  `birth_certificate_image` longtext DEFAULT NULL,
-  `aadhar_image` longtext DEFAULT NULL,
-  `ration_card_image` varchar(220) DEFAULT NULL,
-  `community_image` longtext DEFAULT NULL,
-  `salary_image` varchar(220) DEFAULT NULL,
-  `medical_certificate_image` longtext DEFAULT NULL,
-  `reference_letter_image` longtext DEFAULT NULL,
-  `church_certificate_photo` longtext DEFAULT NULL,
-  `transfer_certificate_image` longtext DEFAULT NULL,
-  `migration_image` varchar(255) DEFAULT NULL,
-  `church_endorsement_image` varchar(255) DEFAULT NULL,
-  `admission_photo` longtext DEFAULT NULL,
-  `payment_order_id` varchar(90) DEFAULT NULL,
-  `sibling_1` varchar(100) DEFAULT NULL,
-  `sibling_2` varchar(100) DEFAULT NULL,
-  `gender_1` varchar(90) DEFAULT NULL,
-  `gender_2` varchar(90) DEFAULT NULL,
-  `class_1` varchar(90) DEFAULT NULL,
-  `class_2` varchar(90) DEFAULT NULL,
-  `sibling_3` varchar(90) DEFAULT NULL,
-  `gender_3` varchar(90) DEFAULT NULL,
-  `class_3` varchar(90) DEFAULT NULL,
-  `last_school_state` varchar(90) DEFAULT NULL,
-  `second_language_school` varchar(90) DEFAULT NULL,
-  `reference_name_1` varchar(90) DEFAULT NULL,
-  `reference_name_2` varchar(90) DEFAULT NULL,
-  `reference_phone_1` varchar(90) DEFAULT NULL,
-  `reference_phone_2` varchar(90) DEFAULT NULL,
-  `father_organization` varchar(220) DEFAULT NULL,
-  `mother_organization` varchar(220) DEFAULT NULL,
-  `guardian_organization` varchar(220) DEFAULT NULL,
+  `caste_type` varchar(255) DEFAULT NULL,
+  `aadhar_card_no` varchar(255) DEFAULT NULL,
+  `ration_card_no` varchar(255) DEFAULT NULL,
+  `emis_no` varchar(255) DEFAULT NULL,
+  `veg_or_non` varchar(255) DEFAULT NULL,
+  `chronic_des` varchar(255) DEFAULT NULL,
+  `medicine_taken` varchar(255) DEFAULT NULL,
+  `father_name` varchar(255) DEFAULT NULL,
+  `father_occupation` varchar(255) DEFAULT NULL,
+  `mother_name` varchar(255) DEFAULT NULL,
+  `mother_occupation` varchar(255) DEFAULT NULL,
+  `guardian_name` varchar(255) DEFAULT NULL,
+  `guardian_occupation` varchar(255) DEFAULT NULL,
+  `father_contact_no` varchar(255) DEFAULT NULL,
+  `father_email_id` varchar(255) DEFAULT NULL,
+  `mother_contact_no` varchar(255) DEFAULT NULL,
+  `mother_email_id` varchar(255) DEFAULT NULL,
+  `guardian_contact_no` varchar(255) DEFAULT NULL,
+  `guardian_email_id` varchar(255) DEFAULT NULL,
+  `father_income` varchar(100) DEFAULT NULL,
+  `mother_income` varchar(100) DEFAULT NULL,
+  `guardian_income` varchar(100) DEFAULT NULL,
+  `house_no` varchar(255) DEFAULT NULL,
+  `street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `district` varchar(255) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `pincode` varchar(255) DEFAULT NULL,
+  `house_no_1` varchar(255) DEFAULT NULL,
+  `street_1` varchar(255) DEFAULT NULL,
+  `city_1` varchar(255) DEFAULT NULL,
+  `district_1` varchar(255) DEFAULT NULL,
+  `state_1` varchar(100) DEFAULT NULL,
+  `pincode_1` varchar(255) DEFAULT NULL,
+  `last_class_std` varchar(255) DEFAULT NULL,
+  `last_school` varchar(255) DEFAULT NULL,
+  `admission_for_class` varchar(255) DEFAULT NULL,
+  `syllabus` varchar(255) DEFAULT NULL,
+  `group_no` varchar(255) DEFAULT NULL,
+  `second_group_no` varchar(255) DEFAULT NULL,
+  `second_language` varchar(255) DEFAULT NULL,
+  `profile_photo` varchar(255) DEFAULT NULL,
+  `birth_certificate_photo` varchar(200) DEFAULT NULL,
+  `aadhar_card_photo` varchar(200) DEFAULT NULL,
+  `ration_card_photo` varchar(200) DEFAULT NULL,
+  `community_certificate` varchar(200) DEFAULT NULL,
+  `slip_photo` varchar(200) DEFAULT NULL,
+  `medical_certificate_photo` varchar(200) DEFAULT NULL,
+  `reference_letter_photo` varchar(200) DEFAULT NULL,
+  `church_certificate_photo` varchar(200) DEFAULT NULL,
+  `transfer_certificate_photo` varchar(200) DEFAULT NULL,
+  `admission_photo` varchar(255) DEFAULT NULL,
+  `payment_order_id` varchar(200) DEFAULT NULL,
+  `brother_1` varchar(200) DEFAULT NULL,
+  `brother_2` varchar(200) DEFAULT NULL,
+  `gender_1` varchar(200) DEFAULT NULL,
+  `gender_2` varchar(200) DEFAULT NULL,
+  `class_1` varchar(200) DEFAULT NULL,
+  `class_2` varchar(200) DEFAULT NULL,
+  `brother_3` varchar(100) DEFAULT NULL,
+  `gender_3` varchar(100) DEFAULT NULL,
+  `class_3` varchar(100) DEFAULT NULL,
+  `last_school_state` varchar(100) DEFAULT NULL,
+  `second_language_school` varchar(50) DEFAULT NULL,
+  `reference_name_1` varchar(100) DEFAULT NULL,
+  `reference_name_2` varchar(100) DEFAULT NULL,
+  `reference_phone_1` varchar(100) DEFAULT NULL,
+  `reference_phone_2` varchar(100) DEFAULT NULL,
+  `father_organization` varchar(50) DEFAULT NULL,
+  `mother_organization` varchar(50) DEFAULT NULL,
+  `guardian_organization` varchar(50) DEFAULT NULL,
   `pin_no` varchar(20) DEFAULT NULL,
-  `created_at` varchar(90) DEFAULT NULL,
-  `updated_at` varchar(90) DEFAULT NULL,
-  `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  `academic_year` varchar(100) DEFAULT NULL,
-  `grade_status` varchar(100) DEFAULT NULL,
-  `group_no` int(11) DEFAULT NULL,
-  `siblings` varchar(100) DEFAULT NULL,
-  `second_language` varchar(100) DEFAULT NULL,
-  `father_title` varchar(100) DEFAULT NULL,
-  `mother_title` varchar(100) DEFAULT NULL,
-  `guardian_title` varchar(200) DEFAULT NULL,
-  `pen_no` int(11) DEFAULT NULL,
-  `Declaration` varchar(255) DEFAULT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -267,8 +251,8 @@ CREATE TABLE `admission_live_demo` (
   `father_organization` varchar(50) DEFAULT NULL,
   `mother_organization` varchar(50) DEFAULT NULL,
   `guardian_organization` varchar(50) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -321,8 +305,8 @@ CREATE TABLE `admission_process` (
   `brother_2` varchar(200) DEFAULT NULL,
   `gender_2` varchar(200) DEFAULT NULL,
   `class_2` varchar(200) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -488,18 +472,18 @@ CREATE TABLE `admitted_students` (
   `group_second_choice` varchar(100) DEFAULT NULL,
   `language` varchar(220) DEFAULT NULL,
   `profile_image` varchar(220) DEFAULT NULL,
-  `birth_certificate_image` longtext DEFAULT NULL,
-  `aadhar_image` longtext DEFAULT NULL,
+  `birth_certificate_image` varchar(90) DEFAULT NULL,
+  `aadhar_image` varchar(90) DEFAULT NULL,
   `ration_card_image` varchar(220) DEFAULT NULL,
-  `community_image` longtext DEFAULT NULL,
+  `community_image` varchar(90) DEFAULT NULL,
   `salary_image` varchar(220) DEFAULT NULL,
-  `medical_certificate_image` longtext DEFAULT NULL,
-  `reference_letter_image` longtext DEFAULT NULL,
-  `church_certificate_photo` longtext DEFAULT NULL,
-  `transfer_certificate_image` longtext DEFAULT NULL,
+  `medical_certificate_image` varchar(90) DEFAULT NULL,
+  `reference_letter_image` varchar(90) DEFAULT NULL,
+  `church_certificate_photo` varchar(90) DEFAULT NULL,
+  `transfer_certificate_image` varchar(90) DEFAULT NULL,
   `migration_image` varchar(255) DEFAULT NULL,
   `church_endorsement_image` varchar(255) DEFAULT NULL,
-  `admission_photo` longtext DEFAULT NULL,
+  `admission_photo` varchar(90) DEFAULT NULL,
   `payment_order_id` varchar(90) DEFAULT NULL,
   `sibling_1` varchar(100) DEFAULT NULL,
   `sibling_2` varchar(100) DEFAULT NULL,
@@ -523,8 +507,8 @@ CREATE TABLE `admitted_students` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL,
   `group_no` int(11) DEFAULT NULL,
@@ -635,8 +619,8 @@ CREATE TABLE `admitted_students_history` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -649,12 +633,11 @@ CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `target_type` enum('target','role','class') NOT NULL,
   `target` bigint(20) UNSIGNED DEFAULT NULL,
-  `category` varchar(255) NOT NULL,
+  `category` bigint(20) UNSIGNED NOT NULL,
   `announcementDescription` text NOT NULL,
   `announcementType` tinyint(1) NOT NULL DEFAULT 0,
   `announcementDate` date NOT NULL,
   `file` varchar(255) DEFAULT NULL,
-  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -668,7 +651,7 @@ CREATE TABLE `announcements` (
 CREATE TABLE `bulk_sponser_payments` (
   `id` int(11) NOT NULL,
   `request_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`request_data`)),
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -684,8 +667,8 @@ CREATE TABLE `by_pay_informations` (
   `transactionId` varchar(121) NOT NULL,
   `amount` varchar(255) DEFAULT NULL,
   `sponsor` varchar(121) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `inv_amt` int(11) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   `due_amount` varchar(100) DEFAULT NULL,
@@ -803,8 +786,8 @@ CREATE TABLE `deletedreceipts` (
   `balance_amount` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `transaction_completed_status` varchar(255) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -837,8 +820,8 @@ CREATE TABLE `discount_lists` (
   `fees_cat` varchar(255) NOT NULL,
   `end_date` varchar(100) NOT NULL,
   `status` int(15) NOT NULL DEFAULT 0,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -899,8 +882,8 @@ CREATE TABLE `donation_donar_list` (
   `pincode` varchar(30) DEFAULT NULL,
   `pan_no` varchar(30) DEFAULT NULL,
   `invoice_pdf` varchar(30) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -919,9 +902,9 @@ CREATE TABLE `donation_list` (
   `btn_amt_1` decimal(10,2) NOT NULL,
   `btn_amt_2` decimal(10,2) NOT NULL,
   `btn_amt_3` decimal(10,2) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-    `delete_status` int(11) NOT NULL DEFAULT 0
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -939,8 +922,8 @@ CREATE TABLE `donation_statement` (
   `amount` decimal(10,2) NOT NULL,
   `transection_id` varchar(255) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1018,7 +1001,7 @@ CREATE TABLE `event_category_masters` (
 
 CREATE TABLE `exam_masters` (
   `id` int(10) UNSIGNED NOT NULL,
-   `term` varchar(255) NOT NULL,
+  `term` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
   `subject` varchar(255) DEFAULT NULL,
   `mark` varchar(255) DEFAULT NULL,
@@ -1042,7 +1025,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text NOT NULL,
   `payload` longtext NOT NULL,
   `exception` longtext NOT NULL,
-  `failed_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `failed_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1085,8 +1068,8 @@ CREATE TABLE `fee_map_arrays` (
   `Acad_Year` varchar(255) DEFAULT NULL,
   `Priority` varchar(100) DEFAULT NULL,
   `created_by` varchar(250) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1127,8 +1110,8 @@ CREATE TABLE `generate_invoice_views` (
   `additionalDetails` varchar(255) DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `disable` int(11) DEFAULT NULL,
   `due_amount` int(11) DEFAULT NULL,
   `s_excess_amount` int(11) DEFAULT NULL,
@@ -1157,7 +1140,7 @@ CREATE TABLE `group_masters` (
 
 CREATE TABLE `healthcare_records` (
   `id` int(11) NOT NULL,
- `student_id` int(255) NOT NULL,
+  `student_id` int(255) NOT NULL,
   `admission_no` varchar(100) NOT NULL,
   `hostel_name` varchar(100) DEFAULT NULL,
   `father_name` varchar(100) NOT NULL,
@@ -1351,8 +1334,8 @@ CREATE TABLE `invoice_histories` (
   `payment_status` varchar(30) DEFAULT NULL,
   `invoice_status` varchar(70) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1395,22 +1378,6 @@ CREATE TABLE `invoice_pendings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `invoice_sequences`
---
-
-CREATE TABLE `invoice_sequences` (
-  `id` int(11) NOT NULL,
-  `month_year` varchar(10) NOT NULL,
-  `latest_number` int(11) NOT NULL DEFAULT 0,
-  `title` varchar(50) NOT NULL DEFAULT 'invoice_no',
-  `payment_for` enum('school','others') DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `leave_applications`
 --
 
@@ -1428,8 +1395,8 @@ CREATE TABLE `leave_applications` (
   `leaveDays` int(11) DEFAULT NULL,
   `reason` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1537,11 +1504,10 @@ CREATE TABLE `module_permissions` (
 
 CREATE TABLE `notice_boards` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `category` varchar(255) NOT NULL,
+  `category` int(11) NOT NULL,
   `notice_message` text NOT NULL,
   `file` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
-  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1748,8 +1714,8 @@ CREATE TABLE `payment_notification_datas` (
   `invoice_nos` varchar(255) NOT NULL,
   `status` varchar(100) DEFAULT NULL,
   `show_hide` int(11) NOT NULL DEFAULT 1,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1857,9 +1823,9 @@ CREATE TABLE `payment_req_data` (
   `payment_req_iv` varchar(255) DEFAULT NULL,
   `payment_req_accountNo` varchar(255) DEFAULT NULL,
   `payment_req_webServiceLocator_PHP_EOL` text DEFAULT NULL,
-  `payment_req_date_time` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL
+  `payment_req_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1873,8 +1839,8 @@ CREATE TABLE `receipts` (
   `receipt_no` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_mode` varchar(255) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1922,8 +1888,8 @@ CREATE TABLE `school_fee_discounts` (
   `invoicefeescat` varchar(255) DEFAULT NULL,
   `year` varchar(100) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2107,11 +2073,11 @@ CREATE TABLE `staff` (
   `pan` varchar(20) DEFAULT NULL,
   `staff_status` varchar(50) DEFAULT NULL,
   `date_of_resignation` date DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-  -- --------------------------------------------------------
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `staff_fees_mapping`
@@ -2137,8 +2103,8 @@ CREATE TABLE `staff_fee_masters` (
   `id` int(11) NOT NULL,
   `feesType` varchar(155) NOT NULL,
   `created_by` varchar(111) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2316,8 +2282,8 @@ CREATE TABLE `student_fee_map_arrays` (
   `date` varchar(50) DEFAULT NULL,
   `acad_year` varchar(50) DEFAULT NULL,
   `created_by` varchar(100) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2650,8 +2616,8 @@ CREATE TABLE `temporary_student_marks` (
   `total` int(11) DEFAULT NULL,
   `percentage` float(5,2) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -2663,8 +2629,8 @@ CREATE TABLE `temporary_student_marks` (
 CREATE TABLE `terms` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
-  `updated_at` DATETIME NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -2683,8 +2649,8 @@ CREATE TABLE `transactions_donation_worldline` (
   `customer_email` varchar(255) DEFAULT NULL,
   `payment_type` varchar(100) DEFAULT NULL,
   `response_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`response_data`)),
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2729,8 +2695,8 @@ CREATE TABLE `users` (
   `h_excess_amount` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2768,8 +2734,8 @@ CREATE TABLE `user_grade_histories` (
   `new_grade_status` varchar(50) DEFAULT NULL,
   `previous_academic_year` varchar(20) DEFAULT NULL,
   `current_academic_year` varchar(20) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -2782,7 +2748,7 @@ CREATE TABLE `user_notifications` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `notification_type` varchar(255) NOT NULL,
-  `notification_category` varchar(255) NOT NULL,
+  `notification_category` int(11) NOT NULL,
   `notification_text` text NOT NULL,
   `schedule_time` datetime DEFAULT NULL,
   `send_status` enum('sent','pending','failed') DEFAULT 'pending',
@@ -3055,13 +3021,6 @@ ALTER TABLE `invoice_lists`
 --
 ALTER TABLE `invoice_pendings`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `invoice_sequences`
---
-ALTER TABLE `invoice_sequences`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_month_year` (`month_year`,`title`);
 
 --
 -- Indexes for table `leave_applications`
@@ -3696,12 +3655,6 @@ ALTER TABLE `invoice_pendings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `invoice_sequences`
---
-ALTER TABLE `invoice_sequences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `leave_applications`
 --
 ALTER TABLE `leave_applications`
@@ -3999,7 +3952,7 @@ ALTER TABLE `teacher_types`
 -- AUTO_INCREMENT for table `template_editors`
 --
 ALTER TABLE `template_editors`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `template_masters`
