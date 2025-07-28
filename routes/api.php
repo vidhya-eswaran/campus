@@ -86,6 +86,8 @@ use App\Mail\TestEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Razorpay\Api\Api;
+
 
 Route::get('/test-s3', function () {
     try {
@@ -116,7 +118,7 @@ Route::get('/test-razorpay/{school}', function ($school) {
        
         $service->configureRazorpayForSchool($school);
 
-         dd($service);
+        dd($service);
 
         $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
 

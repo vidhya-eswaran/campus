@@ -29,9 +29,9 @@ class RazorpayService
         //dd($school);
 
         // Switch to the tenant DB (if you're using per-school databases)
-        DB::purge('tenant');
-        config(['database.connections.tenant.database' => $school->db_name]);
-        DB::reconnect('tenant');
-        DB::setDefaultConnection('tenant');
+        // DB::purge('tenant');
+        // config(['database.connections.tenant.database' => $school->db_name]);
+        // DB::reconnect('tenant');
+        // DB::setDefaultConnection('tenant');
     }
 }
