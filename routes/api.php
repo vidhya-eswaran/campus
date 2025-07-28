@@ -113,6 +113,7 @@ Route::get('/test-s3', function () {
 Route::get('/test-razorpay/{school}', function ($school) {
     try {
         $service = new \App\Services\RazorpayService();
+        dd($service);
         $service->configureRazorpayForSchool($school);
 
         $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));

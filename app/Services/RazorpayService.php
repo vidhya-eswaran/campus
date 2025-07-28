@@ -15,13 +15,15 @@ class RazorpayService
             throw new \Exception("Invalid school");
         }
 
-        dd($school);
+        
 
         // Set Razorpay credentials dynamically
         config([
             'razorpay.key' => $school->razorpay_key,
             'razorpay.secret' => $school->razorpay_secret,
         ]);
+
+        //dd($school);
 
         // Switch to the tenant DB (if you're using per-school databases)
         DB::purge('tenant');
