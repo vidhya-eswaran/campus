@@ -1403,7 +1403,7 @@ CREATE TABLE `invoice_sequences` (
   `month_year` varchar(10) NOT NULL,
   `latest_number` int(11) NOT NULL DEFAULT 0,
   `title` varchar(50) NOT NULL DEFAULT 'invoice_no',
-  `payment_for` enum('school','others','','') DEFAULT NULL,
+  `payment_for` enum('school','others') DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
