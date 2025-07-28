@@ -15,6 +15,8 @@ class RazorpayService
             throw new \Exception("Invalid school");
         }
 
+        dd($school);
+
         // Set Razorpay credentials dynamically
         config([
             'razorpay.key' => $school->razorpay_key,
