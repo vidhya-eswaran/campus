@@ -35,7 +35,7 @@ class NoticeBoardController extends Controller
     ];
 
     // Fetch all notices (only non-deleted)
-    public function index()
+    public function index(Request $request)
     {
         $perPage = $request->get('per_page', 10);
 

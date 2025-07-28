@@ -25,7 +25,7 @@ class AnnouncementController extends Controller
     // Base URL without "public/"
 
     // Fetch all announcements
-    public function index()
+    public function index(Request $request)
     {
         $perPage = $request->get('per_page', 10);
 
