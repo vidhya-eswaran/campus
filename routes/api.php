@@ -118,7 +118,7 @@ Route::get('/test-razorpay/{school}', function ($school) {
        
         $service->configureRazorpayForSchool($school);
 
-        dd($service);
+        //dd($service);
 
         $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
 
