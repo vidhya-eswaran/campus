@@ -134,6 +134,7 @@ Route::get('/test-razorpay/{school}', function ($school) {
             'razorpay_key' => config('razorpay.key')
         ]);
     } catch (\Exception $e) {
+        dd($e->getMessage());
         return response()->json([
             'error' => $e->getMessage()
         ], 500);
