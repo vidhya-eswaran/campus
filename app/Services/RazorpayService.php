@@ -23,6 +23,9 @@ class RazorpayService
             'razorpay.secret' => $school->razorpay_secret,
         ]);
 
+        \Log::info('Razorpay Key: ' . config('razorpay.key'));
+        \Log::info('Razorpay Secret: ' . config('razorpay.secret'));
+
         //dd($school);
 
         // Switch to the tenant DB (if you're using per-school databases)
