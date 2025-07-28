@@ -1395,6 +1395,22 @@ CREATE TABLE `invoice_pendings` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `invoice_sequences`
+--
+
+CREATE TABLE `invoice_sequences` (
+  `id` int(11) NOT NULL,
+  `month_year` varchar(10) NOT NULL,
+  `latest_number` int(11) NOT NULL DEFAULT 0,
+  `title` varchar(50) NOT NULL DEFAULT 'invoice_no',
+  `payment_for` enum('school','others','','') DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `leave_applications`
 --
 
@@ -3028,6 +3044,13 @@ ALTER TABLE `invoice_pendings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `invoice_sequences`
+--
+ALTER TABLE `invoice_sequences`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_month_year` (`month_year`,`title`);
+
+--
 -- Indexes for table `leave_applications`
 --
 ALTER TABLE `leave_applications`
@@ -3657,6 +3680,12 @@ ALTER TABLE `invoice_lists`
 -- AUTO_INCREMENT for table `invoice_pendings`
 --
 ALTER TABLE `invoice_pendings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `invoice_sequences`
+--
+ALTER TABLE `invoice_sequences`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
