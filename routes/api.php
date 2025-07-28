@@ -110,6 +110,32 @@ Route::get('/test-s3', function () {
     }
 });
 
+Route::get('/test-razorpay/{school}', function ($school) {
+    try {
+        $service = new \App\Services\RazorpayService();
+        $service->configureRazorpayForSchool($school);
+
+        $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
+
+        $order = $api->order->create([
+            'receipt' => 'TEST-' . uniqid(),
+            'amount' => 10000, // ₹100
+            'currency' => 'INR',
+        ]);
+
+        return response()->json([
+            'message' => 'Razorpay Configured and Order Created Successfully',
+            'order_id' => $order['id'],
+            'razorpay_key' => config('razorpay.key')
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
+
+
 //========================================================================================
 //Central DB API
 Route::post("/create-school", [SchoolController::class , "createSchool"]);
@@ -222,9 +248,9 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     //ApiController
     Route::get("/lifecycle", [ApiController::class , "lifecycle"]);
 
-    Route::post('/razorpay/create-order', [RazorpayPaymentController::class, 'createOrder']);
-
-    Route::post('/razorpay/verify-payment', [RazorpayPaymentController::class, 'verifyPayment']);
+    //payment config
+    Route::post('/payment/create', [RazorpayPaymentController::class, 'createOrder']);
+    Route::post('/payment/callback', [RazorpayPaymentController::class, 'handleCallback']);
 
     
     //Promotion student Routes

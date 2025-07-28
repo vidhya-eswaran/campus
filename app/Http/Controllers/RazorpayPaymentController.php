@@ -4,26 +4,53 @@ namespace App\Http\Controllers;
 
 use Razorpay\Api\Api;
 use Illuminate\Http\Request;
+use App\Services\RazorpayService;
 
 class RazorpayPaymentController extends Controller
 {
-    public function createOrder(Request $request)
+    protected $razorpayService;
+
+    public function __construct(RazorpayService $razorpayService)
     {
-        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+        $this->razorpayService = $razorpayService;
+    }
+
+    public function createOrder(Request $request, $school)
+    {
+        $this->razorpayService->configureRazorpayForSchool($school);
+
+        $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
 
         $order = $api->order->create([
-            'receipt'         => 'rcptid_' . time(),
-            'amount'          => $request->amount * 100, // Amount in paise
-            'currency'        => 'INR',
-            'payment_capture' => 1,
+            'receipt' => 'RCPT-' . uniqid(),
+            'amount' => $request->amount * 100,
+            'currency' => 'INR',
         ]);
 
         return response()->json([
-            'order_id' => $order->id,
-            'key' => config('services.razorpay.key'),
-            'amount' => $request->amount,
+            'order_id' => $order['id'],
+            'razorpay_key' => config('razorpay.key'),
         ]);
     }
+
+
+    // public function createOrder(Request $request)
+    // {
+    //     $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+
+    //     $order = $api->order->create([
+    //         'receipt'         => 'rcptid_' . time(),
+    //         'amount'          => $request->amount * 100, // Amount in paise
+    //         'currency'        => 'INR',
+    //         'payment_capture' => 1,
+    //     ]);
+
+    //     return response()->json([
+    //         'order_id' => $order->id,
+    //         'key' => config('services.razorpay.key'),
+    //         'amount' => $request->amount,
+    //     ]);
+    // }
 
     public function verifyPayment(Request $request)
     {
