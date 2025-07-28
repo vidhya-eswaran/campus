@@ -122,7 +122,7 @@ Route::get('/test-razorpay/{school}', function ($school) {
 
         $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
 
-        dd($api);
+        //dd($api);
 
         $order = $api->order->create([
             'receipt' => 'TEST-' . uniqid(),
