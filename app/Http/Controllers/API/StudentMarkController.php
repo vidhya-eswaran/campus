@@ -533,7 +533,7 @@ class StudentMarkController extends Controller
 
             // Upload to S3
             $schoolSlug = request()->route('school');            
-            $s3Path = 'documents/' . $schoolSlug . "reports/report_card_{$student->roll_no}.pdf";
+            $s3Path = 'documents/' . $schoolSlug . "/reports/report_card_{$student->roll_no}.pdf";
             Storage::disk('s3')->put($s3Path, file_get_contents($tempPath), 'public');
 
             // Optionally delete local temp file
