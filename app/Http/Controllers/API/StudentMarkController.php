@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\StudentMarkRecord;
 use App\Models\TemporaryStudentMark;
@@ -333,6 +334,11 @@ class StudentMarkController extends Controller
             );
         }
 
+        $schoolSlug = request()->route('school');
+
+        $school = DB::connection('central')->table('schools')->where('name', $schoolSlug)->first();
+
+
         // Get additional student data
         $student_data = Student::where("roll_no", $request->query("roll_no"))->first();
 
@@ -352,7 +358,7 @@ class StudentMarkController extends Controller
         $termName = Term::where("name", $request->query("term"))->first()->name ?? $request->query("term");
 
         $template = TemplateMaster::where("template_name", "Report Card")->first();
-        $logo = "https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg";
+        $logo = $school->school_logo;
 
         if (!$template) {
             return response()->json(["message" => "Template not found"], 404);
@@ -516,24 +522,32 @@ class StudentMarkController extends Controller
                 ->setPaper('a4', 'portrait')
                 ->setOptions([
                     'defaultFont' => 'DejaVu Sans',
-                    'isRemoteEnabled' => false,  // Disable remote content
+                    'isRemoteEnabled' => false,
                     'isHtml5ParserEnabled' => true,
                     'isPhpEnabled' => false,
                 ]);
 
-            $pdfPath = public_path("reports/report_card_{$student->roll_no}.pdf");
-            $pdf->save($pdfPath);
+            // Save to temp location
+            $tempPath = storage_path("app/temp_report_{$student->roll_no}.pdf");
+            $pdf->save($tempPath);
 
-            // Step 7: Return the PDF link as response
-                return response()->json([
-                    "message" => "Report card generated successfully",
-                    "pdf_link" => url(
-                        "public/reports/report_card_{$student->roll_no}.pdf"
-                    ),
-                    "remarks" => $remarks,
-                    //'load'=>$populatedTemplate
-                    "name" => $termName,
-                ]);
+            // Upload to S3
+            $schoolSlug = request()->route('school');            
+            $s3Path = 'documents/' . $schoolSlug . "reports/report_card_{$student->roll_no}.pdf";
+            Storage::disk('s3')->put($s3Path, file_get_contents($tempPath), 'public');
+
+            // Optionally delete local temp file
+            unlink($tempPath);
+
+            // Get the public URL
+            $pdfUrl = Storage::disk('s3')->url($s3Path);
+
+            return response()->json([
+                "message" => "Report card generated successfully",
+                "pdf_link" => $pdfUrl,
+                "remarks" => $remarks,
+                "name" => $termName,
+            ]);
 
         } catch (Exception $e) {
             return response()->json([
