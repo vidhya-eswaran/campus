@@ -241,6 +241,8 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::get("/marks/temporary", [StudentMarkController::class , "getTemporary", ]);
     Route::get("/reportCard", [StudentMarkController::class , "viewReportCard", ]);
 
+    Route::post("/reportCard/verify", [StudentMarkController::class , "verifyParent"]);
+
     Route::get("/viewProfile", [App\Http\Controllers\API\ApiController::class , "viewProfile", ]);
 
     Route::post('/users', [SchoolUserController::class, 'store']);

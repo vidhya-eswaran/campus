@@ -644,4 +644,25 @@ class StudentMarkController extends Controller
             200
         );
     }
+
+    public function verifyParent(Request $request)
+    {
+        $request->validate([
+            'report_id' => 'required|integer',
+        ]);
+
+        $updated = DB::table('student_mark_records')
+            ->where('id', $request->student_id)
+            ->update(['verified' => 1]);
+
+        if ($updated) {
+            return response()->json([
+                'message' => 'Verification updated successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'No records updated. Maybe student_id is incorrect.',
+            ], 404);
+        }
+    }
 }
