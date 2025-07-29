@@ -652,7 +652,7 @@ class StudentMarkController extends Controller
         ]);
 
         $updated = DB::table('student_mark_records')
-            ->where('id', $request->student_id)
+            ->where('id', $request->report_id)
             ->update(['verified' => 1]);
 
         if ($updated) {
