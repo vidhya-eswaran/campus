@@ -431,6 +431,7 @@ class TemplateEditorController extends Controller
             HTML;
 
         $pdf = \PDF::loadHTML($htmlContent)->setPaper("a4", "portrait");
+        $pdfContent = $pdf->output();
 
         $fileName = $filePrefix . "_" . $student->id . ".pdf";
 
