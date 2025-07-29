@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\TemplateEditor;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -27,16 +28,30 @@ class TemplateEditorController extends Controller
         // Find the template by ID
         $template = TemplateEditor::find($id);
 
+        $schoolSlug = request()->route('school');
+
+        $school = DB::connection('central')->table('schools')->where('name', $schoolSlug)->first();
+
+
         // Check if template exists
         if ($template) {
-            // Prepare raw HTML + CSS content
+            $placeholders = [
+                '{{ $school_name }}' => $school->school,
+                '{{ $school_address }}' => $school->full_address,
+                '{{ $school_logo }}' => $school->school_logo,
+                '{{ $school_phone_1 }}' => $school->phone_number,
+                '{{ $school_phone_2 }}' => $school->alternate_phone_number,
+                '{{ $school_website }}' => $school->website_url,
+                '{{ $school_address_line1 }}' => $school->full_address,
+                '{{ $school_address_line2 }}' => trim(($school->city ?? '') . ', ' . ($school->state ?? '')),
+                '{{ $school_email }}' => $school->email_address,
+            ];
             $htmlContent = $template->template;
 
-            // Return as HTML with proper content type
-            return response($htmlContent, 200)->header(
-                "Content-Type",
-                "text/html; charset=UTF-8"
-            );
+            $htmlContent = str_replace(array_keys($placeholders), array_values($placeholders), $htmlContent);
+
+            return response($htmlContent, 200)->header("Content-Type", "text/html; charset=UTF-8");
+
         }
 
         // Return 404 if template is not found
