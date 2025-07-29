@@ -333,8 +333,8 @@ class TemplateEditorController extends Controller
         }
 
         $data = [
-            "student_name" => $student->STUDENT_NAME,
-            "class_name" => $student->SOUGHT_STD,
+            "student_name" => $student->student_name,
+            "class_name" => $student->std_sought,
             "academic_year" => $student->academic_year,
             "working_days" => "",
             "days_attended" => "",
@@ -434,31 +434,13 @@ class TemplateEditorController extends Controller
 
         $fileName = $filePrefix . "_" . $student->id . ".pdf";
 
-        // Get path to save certificate
-        $folderName = env("APP_FOLDER", "SVSTEST"); // default to SVSTEST if not set
-        $uploadPath =
-            $_SERVER["DOCUMENT_ROOT"] .
-            "/" .
-            $folderName .
-            "/public/certificates";
+        $schoolSlug = request()->route('school');  
 
-        // Create directory if it doesn't exist
-        if (!File::exists($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true);
-        }
+        $s3Path = 'documents/' . $schoolSlug ."/certificates/{$fileName}";
+        Storage::disk('s3')->put($s3Path, $pdfContent);
 
-        $filePath = $uploadPath . "/" . $fileName;
-
-        // ✅ Delete existing file if present
-        if (File::exists($filePath)) {
-            File::delete($filePath);
-        }
-
-        // Save new PDF
-        $pdf->save($filePath);
-
-        // Return public URL
-        $url = "/" . $folderName . "/public/certificates/" . $fileName;
+        // Return the full URL to access the file
+        $url = Storage::disk('s3')->url($s3Path);
 
         return $url;
     }
