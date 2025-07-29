@@ -2628,7 +2628,7 @@ CREATE TABLE `template_masters` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `extra` varchar(255) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL
+  `template` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
