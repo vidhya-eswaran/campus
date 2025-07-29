@@ -396,6 +396,7 @@ public function login(Request $request)
         'email' => 'required',
         'password' => 'required',
         'selected_user_id' => 'nullable|integer|exists:users,id',
+        'device_token' => 'nullable|string',
     ]);
 
     if ($validator->fails()) {
@@ -466,6 +467,11 @@ public function login(Request $request)
         $response['matching_users'] = $this->filterMatchingUsers($matchingUsers);
 
         return response()->json($response, 200);
+    }
+
+    if ($request->has('device_token')) {
+        $user->device_token = $request->device_token;
+        $user->save();
     }
 
     // If no selected_user_id is provided, perform the initial authentication attempt

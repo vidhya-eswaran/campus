@@ -2730,6 +2730,7 @@ CREATE TABLE `users` (
   `hostelOrDay` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
+  `device_token` varchar(255) DEFAULT NULL,
   `user_type` varchar(50) NOT NULL DEFAULT 'student',
   `fee_by` varchar(100) DEFAULT 'parent',
   `sponser_id` int(80) DEFAULT NULL,
