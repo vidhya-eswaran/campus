@@ -433,8 +433,8 @@ class StudentMarkController extends Controller
             '${term_name}' => htmlspecialchars($termName),
             '${logo}' => htmlspecialchars($logo),
             '${remarks}' => htmlspecialchars($remarks),
-            '${school_name}'=> htmlspecialchars($school->school),
-            '${school_logo}'=> htmlspecialchars($school->school_logo),
+            '${school_name}'=> $school->school,
+            '${school_logo}'=> $school->school_logo,
         ];
 
         $populatedTemplate = str_replace(
