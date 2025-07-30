@@ -704,12 +704,13 @@ class StudentMarkController extends Controller
             foreach ($subjects as $subject => $marks) {
                 $student->{$subject} = $marks;
             }
+            $student->subject_list = $subjects;
 
             // Remove the subjects field as we don't need it anymore
             unset($student->subjects);
 
             return $student;
         });
-        return response()->json(['student' => $students, 'subjects' => $subjects ]);
+        return response()->json(['student' => $students]);
     }
 }
