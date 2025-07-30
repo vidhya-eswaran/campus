@@ -669,10 +669,10 @@ class StudentMarkController extends Controller
 
     public function viewOneUser(Request $request)
     {
-        // Build the query to fetch records
+        // Build the query to fetch student mark records
         $query = DB::table("student_mark_records");
 
-        // Apply filters if present
+        // Apply filters
         if ($request->has("roll_no")) {
             $query->where("roll_no", $request->query("roll_no"));
         }
@@ -689,31 +689,38 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
-        $subjects = ClassSubject::where('class', '=', $request->has("standard"))
-        ->where('delete_status', 0)
-        ->get(['id', 'subject', 'mark']);
+        // Get the actual standard value
+        $standard = $request->query("standard");
+
+        // Get full marks from ClassSubject table
+        $classSubjects = ClassSubject::where('class', $standard)
+            ->where('delete_status', 0)
+            ->pluck('mark', 'subject'); // ['Maths' => 100, 'Science' => 100]
 
         // Fetch student records
         $students = $query->get();
 
-        // Get the filtered results
-        $students = $query->get();
-        // Process each student record to extract individual subjects
-        $students = $students->map(function ($student) {
-            // Decode the subjects JSON field to an associative array
-            $subjects = json_decode($student->subjects, true);
+        // Transform each student
+        $students = $students->map(function ($student) use ($classSubjects) {
+            $subjectMarks = json_decode($student->subjects, true);
 
-            // Merge subjects as separate columns
-            foreach ($subjects as $subject => $marks) {
-                $student->{$subject} = $marks;
+            $formattedSubjects = [];
+
+            foreach ($subjectMarks as $subject => $studentMark) {
+                $formattedSubjects[] = [
+                    'subject' => $subject,
+                    'student_mark' => $studentMark,
+                    'full_mark' => $classSubjects[$subject] ?? null, // match full mark
+                ];
             }
-            $student->subject_list = $subjects;
 
-            // Remove the subjects field as we don't need it anymore
-            unset($student->subjects);
+            // Replace subjects field with detailed subject data
+            $student->subjects = $formattedSubjects;
 
             return $student;
         });
+
         return response()->json(['student' => $students]);
     }
+
 }
