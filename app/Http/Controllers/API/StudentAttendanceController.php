@@ -44,17 +44,11 @@ class StudentAttendanceController extends Controller
             }
             if ($request->filled("date")) {
                 $query->whereDate("date", $request->date);
-            }
+            }      
 
-            if ($request->filled("roll_no")) {
-                $student = Student::where("roll_no", "=" ,$request->roll_no)->first();
-            } else{
-                $student = NULL;
-            }           
+            $attendances = $query->with('student')->orderBy("roll_no")->get();
 
-            $attendances = $query->orderBy("roll_no")->get();
-
-            return response()->json(["data" => $attendances, "student" => $student], 200);
+            return response()->json(["data" => $attendances], 200);
         } catch (\Exception $e) {
             Log::error(
                 "Error fetching attendance records: " . $e->getMessage()
