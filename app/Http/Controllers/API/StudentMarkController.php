@@ -689,7 +689,7 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
-        $subjectslist = ClassSubject::where('class', '=', $standard)
+        $subjectslist = ClassSubject::where('class', '=', $request->has("standard"))
         ->where('delete_status', 0)
         ->get(['id', 'subject', 'mark']);
 
