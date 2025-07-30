@@ -1212,12 +1212,12 @@ public function getMatchingUsers($input)
                 $nextYear = $createdYear + 1;
                 $calculatedAcademicYear = $createdYear . '-' . $nextYear;
 
-                dd($student['roll_no']);
+                //dd($student['roll_no']);
 
-                if ($student->roll_no) {
-                    $student = Student::where("roll_no", "=" ,$student->roll_no)->first();
+                if ($student['roll_no']) {
+                    $student_image = Student::where("roll_no", "=" ,$student['roll_no'])->first();
                 } else{
-                    $student = NULL;
+                    $student_image = NULL;
                 }
         
                 // Check if academic_year is missing, update in DB
@@ -1236,11 +1236,12 @@ public function getMatchingUsers($input)
                     'academic_year' => $student->academic_year ?? $calculatedAcademicYear, // Use stored or calculated year
                     'concordinate_string' => $student->roll_no . ' | ' . $student->name,
                     'grade_status' => $student->grade_status,
+                    'profile_image' => $student_image
                 ];
                 
             });            
         
-            return response()->json(["data" => $response, "student" => $student]);
+            return response()->json($response);
         }
 
 
