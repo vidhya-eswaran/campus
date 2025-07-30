@@ -1229,8 +1229,9 @@ public function getMatchingUsers($input)
                     'concordinate_string' => $student->roll_no . ' | ' . $student->name,
                     'grade_status' => $student->grade_status,
                 ];
+
                 if ($student->roll_no) {
-                    $student = Student::where("roll_no", "=" ,$request->roll_no)->first();
+                    $student = Student::where("roll_no", "=" ,$student->roll_no)->first();
                 } else{
                     $student = NULL;
                 }
