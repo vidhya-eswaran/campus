@@ -46,7 +46,7 @@ class StudentAttendanceController extends Controller
                 $query->whereDate("date", $request->date);
             }      
 
-            $attendances = $query->with('student')->orderBy("roll_no")->get();
+            $attendances = $query->with('student')->orderBy("roll_no")->get(['profile_image']);
 
             return response()->json(["data" => $attendances], 200);
         } catch (\Exception $e) {
