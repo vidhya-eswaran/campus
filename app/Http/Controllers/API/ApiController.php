@@ -1212,6 +1212,8 @@ public function getMatchingUsers($input)
                 $nextYear = $createdYear + 1;
                 $calculatedAcademicYear = $createdYear . '-' . $nextYear;
 
+                dd($student);
+
                 if ($student->roll_no) {
                     $student = Student::where("roll_no", "=" ,$student->roll_no)->first();
                 } else{
