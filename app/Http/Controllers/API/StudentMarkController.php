@@ -669,10 +669,9 @@ class StudentMarkController extends Controller
 
     public function viewOneUser(Request $request)
     {
-        // Build the query to fetch student mark records
+        // Build the student_mark_records query
         $query = DB::table("student_mark_records");
 
-        // Apply filters
         if ($request->has("roll_no")) {
             $query->where("roll_no", $request->query("roll_no"));
         }
@@ -689,32 +688,32 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
-        // Get the actual standard value
         $standard = $request->query("standard");
 
-        // Get full marks from ClassSubject table
+        // ✅ Get all subjects for the class with full marks
         $classSubjects = ClassSubject::where('class', $standard)
             ->where('delete_status', 0)
-            ->pluck('mark', 'subject'); // ['Maths' => 100, 'Science' => 100]
+            ->get(['subject', 'mark']);
 
-        // Fetch student records
+        // Key the subjects by name for easier matching
+        $subjectList = $classSubjects->keyBy('subject');
+
+        // Fetch student mark records
         $students = $query->get();
 
-        // Transform each student
-        $students = $students->map(function ($student) use ($classSubjects) {
-            $subjectMarks = json_decode($student->subjects, true);
+        $students = $students->map(function ($student) use ($subjectList) {
+            $studentMarks = json_decode($student->subjects, true); // JSON to array
 
             $formattedSubjects = [];
 
-            foreach ($subjectMarks as $subject => $studentMark) {
+            foreach ($subjectList as $subjectName => $subjectData) {
                 $formattedSubjects[] = [
-                    'subject' => $subject,
-                    'student_mark' => $studentMark,
-                    'full_mark' => $classSubjects[$subject] ?? null, // match full mark
+                    'subject' => $subjectName,
+                    'student_mark' => $studentMarks[$subjectName] ?? null,
+                    'full_mark' => $subjectData->mark,
                 ];
             }
 
-            // Replace subjects field with detailed subject data
             $student->subjects = $formattedSubjects;
 
             return $student;
@@ -722,5 +721,6 @@ class StudentMarkController extends Controller
 
         return response()->json(['student' => $students]);
     }
+
 
 }
