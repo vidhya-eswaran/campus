@@ -736,13 +736,13 @@ class StudentMarkController extends Controller
         }
 
         // Step 3: Parse the subjects JSON and prepare the marks table rows
-        $subjects = json_decode($student->subjects, true);
+        $subjects = json_decode($students->subjects, true);
 
         if (!$subjects || !is_array($subjects)) {
             return response()->json(["message" => "Invalid subjects data"], 400);
         }
 
-        $remarks = $student->remarks ?? 'Good performance';
+        $remarks = $students->remarks ?? 'Good performance';
         $subjectNames = array_keys($subjects);
         $subjectMarks = array_map(function ($mark) {
             return is_numeric($mark) ? (int) $mark : 0;
@@ -787,15 +787,15 @@ class StudentMarkController extends Controller
 
         // Step 4: Replace placeholders in the template
         $replacements = [
-            '${name}' => htmlspecialchars($student->name ?? 'N/A'),
-            '${roll_no}' => htmlspecialchars($student->roll_no ?? 'N/A'),
-            '${academic_year}' => htmlspecialchars($student->academic_year ?? 'N/A'),
-            '${term}' => htmlspecialchars($student->term ?? 'N/A'),
-            '${standard}' => htmlspecialchars($student->standard ?? 'N/A'),
+            '${name}' => htmlspecialchars($students->name ?? 'N/A'),
+            '${roll_no}' => htmlspecialchars($students->roll_no ?? 'N/A'),
+            '${academic_year}' => htmlspecialchars($students->academic_year ?? 'N/A'),
+            '${term}' => htmlspecialchars($students->term ?? 'N/A'),
+            '${standard}' => htmlspecialchars($students->standard ?? 'N/A'),
             '${section}' => htmlspecialchars($section),
             '${marksRows}' => $marksRows,
-            '${totalMarks}' => htmlspecialchars($student->total ?? '0'),
-            '${percentage}' => htmlspecialchars(($student->percentage ?? '0') . "%"),
+            '${totalMarks}' => htmlspecialchars($students->total ?? '0'),
+            '${percentage}' => htmlspecialchars(($students->percentage ?? '0') . "%"),
             '${chartUrl}' => htmlspecialchars($chartUrl),
             '${father}' => htmlspecialchars($fatherName),
             '${mother}' => htmlspecialchars($motherName),
@@ -842,11 +842,11 @@ class StudentMarkController extends Controller
 
                 <div class="student-info">
                     <h3>Student Information</h3>
-                    <p><strong>Name:</strong> ' . ($student->name ?? 'N/A') . '</p>
-                    <p><strong>Roll No:</strong> ' . ($student->roll_no ?? 'N/A') . '</p>
-                    <p><strong>Class:</strong> ' . ($student->standard ?? 'N/A') . '</p>
+                    <p><strong>Name:</strong> ' . ($students->name ?? 'N/A') . '</p>
+                    <p><strong>Roll No:</strong> ' . ($students->roll_no ?? 'N/A') . '</p>
+                    <p><strong>Class:</strong> ' . ($students->standard ?? 'N/A') . '</p>
                     <p><strong>Section:</strong> ' . $section . '</p>
-                    <p><strong>Academic Year:</strong> ' . ($student->academic_year ?? 'N/A') . '</p>
+                    <p><strong>Academic Year:</strong> ' . ($students->academic_year ?? 'N/A') . '</p>
                     <p><strong>Term:</strong> ' . $termName . '</p>
                     <p><strong>Father Name:</strong> ' . $fatherName . '</p>
                     <p><strong>Mother Name:</strong> ' . $motherName . '</p>
@@ -869,8 +869,8 @@ class StudentMarkController extends Controller
 
                 <div class="summary">
                     <h3>Summary</h3>
-                    <p><strong>Total Marks:</strong> ' . ($student->total ?? '0') . '</p>
-                    <p><strong>Percentage:</strong> ' . (($student->percentage ?? '0') . '%') . '</p>
+                    <p><strong>Total Marks:</strong> ' . ($students->total ?? '0') . '</p>
+                    <p><strong>Percentage:</strong> ' . (($students->percentage ?? '0') . '%') . '</p>
                     <p><strong>Remarks:</strong> ' . $remarks . '</p>
                 </div>
 
@@ -901,12 +901,12 @@ class StudentMarkController extends Controller
                 ]);
 
             // Save to temp location
-            $tempPath = storage_path("app/temp_report_{$student->roll_no}.pdf");
+            $tempPath = storage_path("app/temp_report_{$students->roll_no}.pdf");
             $pdf->save($tempPath);
 
             // Upload to S3
             $schoolSlug = request()->route('school');            
-            $s3Path = 'documents/' . $schoolSlug . "/reports/report_card_{$student->roll_no}.pdf";
+            $s3Path = 'documents/' . $schoolSlug . "/reports/report_card_{$students->roll_no}.pdf";
             Storage::disk('s3')->put($s3Path, file_get_contents($tempPath));
 
             // Optionally delete local temp file
