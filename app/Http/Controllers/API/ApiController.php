@@ -1230,12 +1230,14 @@ public function getMatchingUsers($input)
                     'grade_status' => $student->grade_status,
                 ];
 
-                if ($student->roll_no) {
+                
+            });
+
+            if ($student->roll_no) {
                     $student = Student::where("roll_no", "=" ,$request->roll_no)->first();
                 } else{
                     $student = NULL;
                 }
-            });
         
             return response()->json(["data" => $response, "student" => $student]);
         }
