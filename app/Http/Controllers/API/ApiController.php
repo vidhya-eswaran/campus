@@ -1211,6 +1211,12 @@ public function getMatchingUsers($input)
                 $createdYear = date('Y', strtotime($student->created_at));
                 $nextYear = $createdYear + 1;
                 $calculatedAcademicYear = $createdYear . '-' . $nextYear;
+
+                if ($student->roll_no) {
+                    $student = Student::where("roll_no", "=" ,$student->roll_no)->first();
+                } else{
+                    $student = NULL;
+                }
         
                 // Check if academic_year is missing, update in DB
                 if (!$student->academic_year) {
@@ -1229,12 +1235,6 @@ public function getMatchingUsers($input)
                     'concordinate_string' => $student->roll_no . ' | ' . $student->name,
                     'grade_status' => $student->grade_status,
                 ];
-
-                if ($student->roll_no) {
-                    $student = Student::where("roll_no", "=" ,$student->roll_no)->first();
-                } else{
-                    $student = NULL;
-                }
                 
             });            
         
