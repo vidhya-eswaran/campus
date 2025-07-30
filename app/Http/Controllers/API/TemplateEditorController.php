@@ -73,13 +73,13 @@ class TemplateEditorController extends Controller
             return response()->json(["message" => "Student not found"], 404);
         }
         $data = [
-            "student_name" => $student->STUDENT_NAME,
-            "father_or_mother_name" => $student->FATHER,
-            "class" => $student->SOUGHT_STD,
+            "student_name" => $student->student_name,
+            "father_or_mother_name" => $student->father_name,
+            "class" => $student->std_sought,
             "academic_year" => $student->academic_year,
-            "date_of_birth_numeric" => $student->DOB_DD_MM_YYYY,
+            "date_of_birth_numeric" => $student->dob,
             "date_of_birth_words" => $this->convertDateToWords(
-                $student->DOB_DD_MM_YYYY
+                $student->dob
             ),
             "admission_date" => $student->date_form,
             "st" => now()->format("d-m-Y"),
@@ -111,12 +111,12 @@ class TemplateEditorController extends Controller
         }
 
         $data = [
-            "student_name" => $student->STUDENT_NAME,
-            "parent_name" => $student->FATHER,
+            "student_name" => $student->student_name,
+            "parent_name" => $student->father_name,
             "start_date" => $student->date_form,
             "end_date" => \Carbon\Carbon::today()->toDateString(),
-            "class_name" => $student->SOUGHT_STD,
-            "completed_class" => $student->SOUGHT_STD,
+            "class_name" => $student->std_sought,
+            "completed_class" => $student->std_sought,
         ];
 
         // Replace placeholders in the HTML content
@@ -163,26 +163,26 @@ class TemplateEditorController extends Controller
             }
 
             // Get profile photo URL
-            $profilePhoto = $student->profile_photo; // e.g. "profile740.png"
+            $profilePhoto = $student->profile_image; // e.g. "profile740.png"
             $photoUrl =
                 env("APP_URL") . "/storage/app/profile_photos/" . $profilePhoto;
 
             // Prepare data for the template
             $data = [
-                "student_name" => $student->STUDENT_NAME,
+                "student_name" => $student->student_name,
                 "student_photo" => $photoUrl,
-                "DOB_DD_MM_YYYY" => $student->DOB_DD_MM_YYYY,
-                "SOUGHT_STD" => $student->SOUGHT_STD,
-                "MOBILE_NUMBER" => $student->MOBILE_NUMBER,
+                "DOB_DD_MM_YYYY" => $student->dob,
+                "SOUGHT_STD" => $student->std_sought,
+                "MOBILE_NUMBER" => $student->father_mobile_no,
                 "academic_year" => $student->academic_year,
 
                 // Permanent address
-                "PERMANENT_HOUSENUMBER" => $student->PERMANENT_HOUSENUMBER,
-                "P_STREETNAME" => $student->P_STREETNAME,
-                "P_VILLAGE_TOWN_NAME" => $student->P_VILLAGE_TOWN_NAME,
-                "P_DISTRICT" => $student->P_DISTRICT,
-                "P_STATE" => $student->P_STATE,
-                "P_PINCODE" => $student->P_PINCODE,
+                "PERMANENT_HOUSENUMBER" => $student->permanent_house_no,
+                "P_STREETNAME" => $student->permanent_street_name,
+                "P_VILLAGE_TOWN_NAME" => $student->permanent_city_town_village,
+                "P_DISTRICT" => $student->permanent_district,
+                "P_STATE" => $student->permanent_state,
+                "P_PINCODE" => $student->permanent_pincode,
 
                 // // Communication address
                 // 'COMMUNICATION_HOUSE_NO'  => $student->COMMUNICATION_HOUSE_NO,
@@ -196,7 +196,7 @@ class TemplateEditorController extends Controller
             // Generate a filename that includes the student's name
             $filename =
                 "idcard_" .
-                Str::slug($student->STUDENT_NAME) .
+                Str::slug($student->student_name) .
                 "_" .
                 $studentId;
             // Generate the certificate with custom filename
@@ -211,7 +211,7 @@ class TemplateEditorController extends Controller
             // Add to results array
             $results[] = [
                 "student_id" => $studentId,
-                "student_name" => $student->STUDENT_NAME,
+                "student_name" => $student->student_name,
                 "url" => $url,
             ];
         }
@@ -297,9 +297,9 @@ class TemplateEditorController extends Controller
         }
 
         $data = [
-            "student_name" => $student->STUDENT_NAME,
+            "student_name" => $student->student_name,
             "admission_no" => $student->admission_no,
-            "SOUGHT_STD" => $student->SOUGHT_STD,
+            "SOUGHT_STD" => $student->std_sought,
             "end_date" => \Carbon\Carbon::today()->toDateString(),
         ];
 
@@ -369,12 +369,12 @@ class TemplateEditorController extends Controller
         }
 
         $template_data = [
-            "student_name" => $student->STUDENT_NAME,
-            "parent_name" => $student->FATHER,
+            "student_name" => $student->student_name,
+            "parent_name" => $student->father_name,
             "start_date" => $student->date_form,
             "end_date" => \Carbon\Carbon::today()->toDateString(),
-            "class_name" => $student->SOUGHT_STD,
-            "completed_class" => $student->SOUGHT_STD,
+            "class_name" => $student->std_sought,
+            "completed_class" => $student->std_sought,
             "st" => now()->format("d-m-Y"),
         ];
 
@@ -694,7 +694,7 @@ class TemplateEditorController extends Controller
 
         // Apply filters
         if ($request->has("standard")) {
-            $query->where("SOUGHT_STD", $request->query("standard"));
+            $query->where("std_sought", $request->query("standard"));
         }
         if ($request->has("section")) {
             $query->where("sec", $request->query("section"));
@@ -720,12 +720,12 @@ class TemplateEditorController extends Controller
 
         foreach ($students as $student) {
             $template_data = [
-                "student_name" => $student->STUDENT_NAME,
-                "parent_name" => $student->FATHER,
+                "student_name" => $student->student_name,
+                "parent_name" => $student->father_name,
                 "start_date" => $student->date_form,
                 "end_date" => \Carbon\Carbon::today()->toDateString(),
-                "class_name" => $student->SOUGHT_STD,
-                "completed_class" => $student->SOUGHT_STD,
+                "class_name" => $student->std_sought,
+                "completed_class" => $student->std_sought,
                 "st" => now()->format("d-m-Y"),
             ];
 
@@ -739,9 +739,9 @@ class TemplateEditorController extends Controller
 
             $data[] = [
                 "student_id" => $student->id,
-                "student_name" => $student->STUDENT_NAME,
+                "student_name" => $student->student_name,
                 "roll_no" => $student->roll_no,
-                "class_name" => $student->SOUGHT_STD,
+                "class_name" => $student->std_sought,
                 "section" => $student->sec,
                 "academic_year" => $student->academic_year,
                 "url" => $url
