@@ -1236,7 +1236,7 @@ public function getMatchingUsers($input)
                     'academic_year' => $student->academic_year ?? $calculatedAcademicYear, // Use stored or calculated year
                     'concordinate_string' => $student->roll_no . ' | ' . $student->name,
                     'grade_status' => $student->grade_status,
-                    'profile_image' => $student_image
+                    'profile_image' => $student_image->profile_image
                 ];
                 
             });            
