@@ -694,7 +694,7 @@ class StudentMarkController extends Controller
 
         // For each student record, attach classSubjects based on standard
         $students = $students->map(function ($student) {
-            $classSubjects = ClassSubject::where('class', $student->standard)
+            $classSubjects = ClassSubject::where('class', $student->standard)->where('term', $student->term)
                 ->where('delete_status', 0)
                 ->get(['subject', 'mark']);
 
