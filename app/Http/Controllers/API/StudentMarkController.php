@@ -689,7 +689,7 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
-        $subjectslist = ClassSubject::where('class', '=', $request->has("standard"))
+        $subjects = ClassSubject::where('class', '=', $request->has("standard"))
         ->where('delete_status', 0)
         ->get(['id', 'subject', 'mark']);
 
@@ -707,7 +707,7 @@ class StudentMarkController extends Controller
             foreach ($subjects as $subject => $marks) {
                 $student->{$subject} = $marks;
             }
-            $student->subject_list = $subjectslist;
+            $student->subject_list = $subjects;
 
             // Remove the subjects field as we don't need it anymore
             unset($student->subjects);
