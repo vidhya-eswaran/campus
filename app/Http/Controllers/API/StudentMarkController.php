@@ -665,4 +665,46 @@ class StudentMarkController extends Controller
             ], 404);
         }
     }
+
+    public function viewOneUser(Request $request)
+    {
+        // Build the query to fetch records
+        $query = DB::table("student_mark_records");
+
+        // Apply filters if present
+        if ($request->has("roll_no")) {
+            $query->where("roll_no", $request->query("roll_no"));
+        }
+
+        if ($request->has("standard")) {
+            $query->where("standard", $request->query("standard"));
+        }
+
+        if ($request->has("section")) {
+            $query->where("section", $request->query("section"));
+        }
+
+        if ($request->has("academic_year")) {
+            $query->where("academic_year", $request->query("academic_year"));
+        }
+
+        // Get the filtered results
+        $students = $query->get();
+        // Process each student record to extract individual subjects
+        $students = $students->map(function ($student) {
+            // Decode the subjects JSON field to an associative array
+            $subjects = json_decode($student->subjects, true);
+
+            // Merge subjects as separate columns
+            foreach ($subjects as $subject => $marks) {
+                $student->{$subject} = $marks;
+            }
+
+            // Remove the subjects field as we don't need it anymore
+            unset($student->subjects);
+
+            return $student;
+        });
+        return response()->json($students);
+    }
 }
