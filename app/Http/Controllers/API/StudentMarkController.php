@@ -703,7 +703,234 @@ class StudentMarkController extends Controller
             return $student;
         });
 
-        return response()->json(['student' => $students]);
+        //report card pdf
+
+        $schoolSlug = request()->route('school');
+
+        $school = DB::connection('central')->table('schools')->where('name', $schoolSlug)->first();
+
+
+        // Get additional student data
+        $student_data = Student::where("roll_no", $request->query("roll_no"))->first();
+
+        if (!$student_data) {
+            return response()->json(
+                ["message" => "Student details not found"],
+                404
+            );
+        }
+
+        $fatherName = $student_data->father_name ?? 'N/A';
+        $motherName = $student_data->mother_name ?? 'N/A';
+        $dob = $student_data->dob ?? 'N/A';
+        $admissionNo = $student_data->admission_no ?? 'N/A';
+        $section = $student_data->sec ?? $student->section;
+
+        $termName = Term::where("name", $request->query("term"))->first()->name ?? $request->query("term");
+
+        $template = TemplateMaster::where("template_name", "Report Card")->first();
+        $logo = $school->school_logo;
+
+        if (!$template) {
+            return response()->json(["message" => "Template not found"], 404);
+        }
+
+        // Step 3: Parse the subjects JSON and prepare the marks table rows
+        $subjects = json_decode($student->subjects, true);
+
+        if (!$subjects || !is_array($subjects)) {
+            return response()->json(["message" => "Invalid subjects data"], 400);
+        }
+
+        $remarks = $student->remarks ?? 'Good performance';
+        $subjectNames = array_keys($subjects);
+        $subjectMarks = array_map(function ($mark) {
+            return is_numeric($mark) ? (int) $mark : 0;
+        }, array_values($subjects));
+
+        // Assign unique colors for each bar
+        $barColors = [
+            "FF6384", "36A2EB", "FFCE56", "4BC0C0", "9966FF", "FF9F40",
+        ];
+
+        // Ensure we have enough colors
+        while (count($barColors) < count($subjectNames)) {
+            $barColors = array_merge($barColors, $barColors);
+        }
+
+        $barColors = array_slice($barColors, 0, count($subjectNames));
+
+        // Generate the Image-Charts URL
+        $chartUrl = "https://image-charts.com/chart?" . http_build_query([
+            "cht" => "bvg", // Vertical bar graph
+            "chs" => "700x400", // Chart size
+            "chd" => "t:" . implode(",", $subjectMarks), // Chart data
+            "chxl" => "0:|" . implode("|", $subjectNames), // X-axis labels
+            "chxt" => "x,y", // Display X and Y axis
+            "chco" => implode(",", $barColors), // Bar colors
+            "chbh" => "30,5,15", // Bar width and spacing
+            "chtt" => "Student+Performance+Graph", // Title
+            "chts" => "000000,20", // Title style
+            "chds" => "0,100", // Y-axis range
+        ]);
+
+        // Build marks table rows
+        $marksRows = "";
+        foreach ($subjects as $subject => $marks) {
+            $marksRows .= "
+                <tr>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>" . htmlspecialchars($subject) . "</td>
+                    <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>" . htmlspecialchars($marks) . "</td>
+                </tr>
+            ";
+        }
+
+        // Step 4: Replace placeholders in the template
+        $replacements = [
+            '${name}' => htmlspecialchars($student->name ?? 'N/A'),
+            '${roll_no}' => htmlspecialchars($student->roll_no ?? 'N/A'),
+            '${academic_year}' => htmlspecialchars($student->academic_year ?? 'N/A'),
+            '${term}' => htmlspecialchars($student->term ?? 'N/A'),
+            '${standard}' => htmlspecialchars($student->standard ?? 'N/A'),
+            '${section}' => htmlspecialchars($section),
+            '${marksRows}' => $marksRows,
+            '${totalMarks}' => htmlspecialchars($student->total ?? '0'),
+            '${percentage}' => htmlspecialchars(($student->percentage ?? '0') . "%"),
+            '${chartUrl}' => htmlspecialchars($chartUrl),
+            '${father}' => htmlspecialchars($fatherName),
+            '${mother}' => htmlspecialchars($motherName),
+            '${dob}' => htmlspecialchars($dob),
+            '${admission_no}' => htmlspecialchars($admissionNo),
+            '${term_name}' => htmlspecialchars($termName),
+            '${logo}' => htmlspecialchars($logo),
+            '${remarks}' => htmlspecialchars($remarks),
+            '${school_name}'=> $school->school,
+            '${school_logo}'=> $school->school_logo,
+        ];
+
+        $populatedTemplate = str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $template->template
+        );
+
+        // Step 5: Create fallback template if original template is empty or malformed
+        if (empty(trim($populatedTemplate)) || strlen($populatedTemplate) < 100) {
+            $populatedTemplate = '
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Report Card</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    .header { text-align: center; margin-bottom: 20px; }
+                    .logo { max-width: 100px; height: auto; }
+                    .student-info { margin-bottom: 20px; }
+                    .marks-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    .marks-table th, .marks-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    .marks-table th { background-color: #f2f2f2; }
+                    .summary { margin: 20px 0; }
+                    .chart { text-align: center; margin: 20px 0; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <img src="' . $logo . '" alt="School Logo" class="logo">
+                    <h1>Student Report Card</h1>
+                </div>
+
+                <div class="student-info">
+                    <h3>Student Information</h3>
+                    <p><strong>Name:</strong> ' . ($student->name ?? 'N/A') . '</p>
+                    <p><strong>Roll No:</strong> ' . ($student->roll_no ?? 'N/A') . '</p>
+                    <p><strong>Class:</strong> ' . ($student->standard ?? 'N/A') . '</p>
+                    <p><strong>Section:</strong> ' . $section . '</p>
+                    <p><strong>Academic Year:</strong> ' . ($student->academic_year ?? 'N/A') . '</p>
+                    <p><strong>Term:</strong> ' . $termName . '</p>
+                    <p><strong>Father Name:</strong> ' . $fatherName . '</p>
+                    <p><strong>Mother Name:</strong> ' . $motherName . '</p>
+                    <p><strong>Date of Birth:</strong> ' . $dob . '</p>
+                    <p><strong>Admission No:</strong> ' . $admissionNo . '</p>
+                </div>
+
+                <h3>Subject-wise Marks</h3>
+                <table class="marks-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ' . $marksRows . '
+                    </tbody>
+                </table>
+
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <p><strong>Total Marks:</strong> ' . ($student->total ?? '0') . '</p>
+                    <p><strong>Percentage:</strong> ' . (($student->percentage ?? '0') . '%') . '</p>
+                    <p><strong>Remarks:</strong> ' . $remarks . '</p>
+                </div>
+
+                <div class="chart">
+                    <h3>Performance Graph</h3>
+                    <img src="' . $chartUrl . '" alt="Performance Chart" style="max-width: 100%; height: auto;">
+                </div>
+            </body>
+            </html>';
+        }
+
+        // Save debug template for inspection
+        file_put_contents(public_path('debug_template.html'), $populatedTemplate);
+
+        // In your viewReportCard function, replace the PDF generation part:
+        try {
+            // Disable remote images temporarily
+            $populatedTemplate = str_replace($chartUrl, '', $populatedTemplate);
+            $populatedTemplate = str_replace($logo, '', $populatedTemplate);
+
+            $pdf = PDF::loadHTML($populatedTemplate)
+                ->setPaper('a4', 'portrait')
+                ->setOptions([
+                    'defaultFont' => 'DejaVu Sans',
+                    'isRemoteEnabled' => false,
+                    'isHtml5ParserEnabled' => true,
+                    'isPhpEnabled' => false,
+                ]);
+
+            // Save to temp location
+            $tempPath = storage_path("app/temp_report_{$student->roll_no}.pdf");
+            $pdf->save($tempPath);
+
+            // Upload to S3
+            $schoolSlug = request()->route('school');            
+            $s3Path = 'documents/' . $schoolSlug . "/reports/report_card_{$student->roll_no}.pdf";
+            Storage::disk('s3')->put($s3Path, file_get_contents($tempPath));
+
+            // Optionally delete local temp file
+            unlink($tempPath);
+
+            // Get the public URL
+            $pdfUrl = Storage::disk('s3')->url($s3Path);
+
+            return response()->json([
+                "message" => "Report card generated successfully",
+                'student' => $students,
+                "pdf_link" => $pdfUrl,
+                "remarks" => $remarks,
+                "name" => $termName,
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => "Error generating PDF: " . $e->getMessage(),
+                "suggestion" => "Please enable GD extension in PHP"
+            ], 500);
+        }
+
+        //return response()->json(['student' => $students]);
     }
 
 
