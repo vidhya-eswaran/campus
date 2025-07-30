@@ -669,9 +669,10 @@ class StudentMarkController extends Controller
 
     public function viewOneUser(Request $request)
     {
-        // Build the student_mark_records query
+        // Build the base query
         $query = DB::table("student_mark_records");
 
+        // Apply filters
         if ($request->has("roll_no")) {
             $query->where("roll_no", $request->query("roll_no"));
         }
@@ -688,39 +689,23 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
-        $standard = $request->query("standard");
-
-        // ✅ Get all subjects for the class with full marks
-        $classSubjects = ClassSubject::where('class', $standard)
-            ->where('delete_status', 0)
-            ->get(['subject', 'mark']);
-
-        // Key the subjects by name for easier matching
-        $subjectList = $classSubjects->keyBy('subject');
-
-        // Fetch student mark records
+        // Get student mark records
         $students = $query->get();
 
-        $students = $students->map(function ($student) use ($subjectList) {
-            $studentMarks = json_decode($student->subjects, true); // JSON to array
+        // For each student record, attach classSubjects based on standard
+        $students = $students->map(function ($student) {
+            $classSubjects = ClassSubject::where('class', $student->standard)
+                ->where('delete_status', 0)
+                ->get(['subject', 'mark']);
 
-            $formattedSubjects = [];
-
-            foreach ($subjectList as $subjectName => $subjectData) {
-                $formattedSubjects[] = [
-                    'subject' => $subjectName,
-                    'student_mark' => $studentMarks[$subjectName] ?? null,
-                    'full_mark' => $subjectData->mark,
-                ];
-            }
-
-            $student->subjects = $formattedSubjects;
+            $student->class_subjects = $classSubjects;
 
             return $student;
         });
 
         return response()->json(['student' => $students]);
     }
+
 
 
 }
