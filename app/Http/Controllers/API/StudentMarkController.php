@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\TemplateMaster;
 use App\Models\Student;
+use App\Models\ClassSubject;
 use App\Models\Term;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Helpers\LifecycleLogger;
