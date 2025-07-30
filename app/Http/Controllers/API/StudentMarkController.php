@@ -688,6 +688,10 @@ class StudentMarkController extends Controller
             $query->where("academic_year", $request->query("academic_year"));
         }
 
+        $subjectQuery = ClassSubject::where('class', '=', $request->has("standard"))->where('delete_status', 0);
+
+        $subjects = $subjectQuery->get(['id','subject', 'mark']);
+
         // Get the filtered results
         $students = $query->get();
         // Process each student record to extract individual subjects
@@ -705,6 +709,6 @@ class StudentMarkController extends Controller
 
             return $student;
         });
-        return response()->json($students);
+        return response()->json(['student' => $students, 'subjects' => $subjects ]);
     }
 }
