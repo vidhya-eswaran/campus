@@ -1228,6 +1228,7 @@ public function getMatchingUsers($input)
                 
                 return [
                     'id' => $student->id,
+                    'student_id' => $student_image->id,
                     'roll_no' => $student->roll_no,
                     'name' => $student->name,
                     'std' => $student->standard,
