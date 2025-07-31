@@ -545,10 +545,21 @@ class StudentMarkController extends Controller
 
             // Get the public URL
             $pdfUrl = Storage::disk('s3')->url($s3Path);
+            
+            // Extract key from full URL
+            $s3Key = ltrim(parse_url($pdfUrl, PHP_URL_PATH), '/');
+
+                    // Generate temporary signed download link
+            $downloadLink = Storage::disk('s3')->temporaryUrl(
+                        $s3Key,
+                        now()->addMinutes(5),
+                        ['ResponseContentDisposition' => 'attachment']
+            );
 
             return response()->json([
                 "message" => "Report card generated successfully",
                 "pdf_link" => $pdfUrl,
+                "downloadlink" => $downloadLink,
                 "remarks" => $remarks,
                 "name" => $termName,
             ]);
