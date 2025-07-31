@@ -710,6 +710,14 @@ class StudentMarkController extends Controller
                 $response = Http::get($url);
                 if ($response->ok() && isset($response['pdf_link'])) {
                     $student->pdf_link = $response['pdf_link'];
+
+                    $downloadLink = Storage::disk('s3')->temporaryUrl(
+                        $student->pdf_link,
+                        now()->addMinutes(5),
+                        ['ResponseContentDisposition' => 'attachment'] // forces download
+                    );
+                    $student->downloadLink = $downloadLink;
+
                 } else {
                     $student->pdf_link = null;
                 }
