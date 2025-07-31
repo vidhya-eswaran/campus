@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\LeaveApplication;
 use App\Helpers\LifecycleLogger;
 use App\Models\User;
+use Carbon\Carbon;
+
 class LeaveApplicationController extends Controller
 {
     public function index(Request $request)
