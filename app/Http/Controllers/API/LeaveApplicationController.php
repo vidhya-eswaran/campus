@@ -23,8 +23,10 @@ class LeaveApplicationController extends Controller
             $from = Carbon::parse($request->fromDate)->startOfDay();
             $to = Carbon::parse($request->toDate)->endOfDay();
 
-            $query->whereBetween('fromDate', [$from, $to])
-                ->orWhereBetween('toDate', [$from, $to]);
+            $query->where(function ($q) use ($from, $to) {
+                $q->where('fromDate', '<=', $to)
+                ->where('toDate', '>=', $from);
+            });
         }
 
 
