@@ -78,6 +78,11 @@ class AdmissionController extends Controller
         $admission = new Admission();
         $admission->fill($inputData);
         $admission->save();
+
+        $student = new Student();
+        $student->admission_id = $admission->id;
+        $student->fill($inputData);
+        $student->save();
         
         
         // Sending admission confirmation email
