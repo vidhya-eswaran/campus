@@ -700,7 +700,9 @@ class StudentMarkController extends Controller
 
             $student->class_subjects = $classSubjects;
 
-            $baseUrl = url('/reportCard'); // change this if you have a specific named route
+            $schoolSlug = request()->route('school');
+
+            $baseUrl = url('/api/'.$schoolSlug.'/reportCard');// change this if you have a specific named route
             $student->report_card_url = $baseUrl . '?roll_no=' . $student->roll_no . '&term=' . $student->term . '&standard=' . $student->standard;
 
 
