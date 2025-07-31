@@ -18,9 +18,13 @@ class LeaveApplicationController extends Controller
         }
 
         if ($request->has('fromDate') && $request->has('toDate')) {
-            $query->whereDate('fromDate', '>=', $request->fromDate)
-                ->whereDate('toDate', '<=', $request->toDate);
+            $from = Carbon::parse($request->fromDate)->startOfDay();
+            $to = Carbon::parse($request->toDate)->endOfDay();
+
+            $query->whereBetween('fromDate', [$from, $to])
+                ->orWhereBetween('toDate', [$from, $to]);
         }
+
 
         $leaveApplications = $query->orderBy('id', 'desc')->get();
 
