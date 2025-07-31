@@ -268,17 +268,29 @@ class TemplateEditorController extends Controller
         // 5. Generate PDF
         $pdf = PDF::loadHTML($html);
 
-        // 6. Save to root directory
-        $folderPath = base_path("certificates");
-        if (!File::exists($folderPath)) {
-            File::makeDirectory($folderPath, 0755, true);
-        }
+        $pdfContent = $pdf->output();
 
-        $fullPath = $folderPath . "/" . $filename;
-        $pdf->save($fullPath);
+        $fileName = $filePrefix . "_" . $student->id . ".pdf";
+
+        $schoolSlug = request()->route('school');  
+
+        $s3Path = 'documents/' . $schoolSlug ."/idcard/{$fileName}";
+        Storage::disk('s3')->put($s3Path, $pdfContent);
+
+        // Return the full URL to access the file
+        $url1 = Storage::disk('s3')->url($s3Path);
+
+        $s3Key = ltrim(parse_url($url1, PHP_URL_PATH), '/');
+
+                    // Generate temporary signed download link
+        $url = Storage::disk('s3')->temporaryUrl(
+                        $s3Key,
+                        now()->addMinutes(5),
+                        ['ResponseContentDisposition' => 'attachment']
+        );
 
         // 7. Return the URL (using root path)
-        return env("APP_URL") . "/certificates/" . $filename;
+        return $url;
     }
 
     public function noDue(Request $request)
@@ -441,7 +453,16 @@ class TemplateEditorController extends Controller
         Storage::disk('s3')->put($s3Path, $pdfContent);
 
         // Return the full URL to access the file
-        $url = Storage::disk('s3')->url($s3Path);
+        $url1 = Storage::disk('s3')->url($s3Path);
+
+        $s3Key = ltrim(parse_url($url1, PHP_URL_PATH), '/');
+
+                    // Generate temporary signed download link
+        $url = Storage::disk('s3')->temporaryUrl(
+                        $s3Key,
+                        now()->addMinutes(5),
+                        ['ResponseContentDisposition' => 'attachment']
+        );
 
         return $url;
     }
