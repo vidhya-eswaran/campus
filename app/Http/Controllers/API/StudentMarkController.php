@@ -9,6 +9,7 @@ use App\Models\StudentMarkRecord;
 use App\Models\TemporaryStudentMark;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\TemplateMaster;
 use App\Models\Student;
@@ -702,9 +703,19 @@ class StudentMarkController extends Controller
 
             $schoolSlug = request()->route('school');
 
-            $baseUrl = url('/api/'.$schoolSlug.'/reportCard');// change this if you have a specific named route
-            $student->report_card_url = $baseUrl . '?roll_no=' . $student->roll_no . '&term=' . $student->term . '&standard=' . $student->standard;
+            $url = url("/api/{$schoolSlug}/reportCard?roll_no={$student->roll_no}&standard={$student->standard}&section={$student->section}&term={$student->term}&academic_year={$student->academic_year}");
 
+            // Call the report card API and get the PDF link
+            try {
+                $response = Http::get($url);
+                if ($response->ok() && isset($response['pdf_link'])) {
+                    $student->pdf_link = $response['pdf_link'];
+                } else {
+                    $student->pdf_link = null;
+                }
+            } catch (\Exception $e) {
+                $student->pdf_link = null;
+            }
 
             return $student;
         });
