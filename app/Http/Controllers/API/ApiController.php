@@ -260,7 +260,7 @@ public function login(Request $request)
         $user->save();
     }
 
-    $user->notify(new app\Notifications\PushNotification('Login Successful', 'Welcome back!'));
+    $user->notify(new PushNotification('Login Successful', 'Welcome back!'));
 
     // If no selected_user_id is provided, perform the initial authentication attempt
     $matchingUsers = $this->getMatchingUsers($input);
