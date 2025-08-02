@@ -1563,6 +1563,27 @@ CREATE TABLE `notification_categories` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notification_users`
+--
+
+CREATE TABLE `notification_users` (
+  `id` int(11) NOT NULL,
+  `form_user_id` int(11) NOT NULL,
+  `to_user_id` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `to_email` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `body` text DEFAULT NULL,
+  `is_sent` tinyint(1) NOT NULL DEFAULT 0,
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `updated_by` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `oauth_access_tokens`
 --
 
@@ -3122,6 +3143,12 @@ ALTER TABLE `notification_categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notification_users`
+--
+ALTER TABLE `notification_users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `oauth_access_tokens`
 --
 ALTER TABLE `oauth_access_tokens`
@@ -3758,6 +3785,12 @@ ALTER TABLE `notice_boards`
 --
 ALTER TABLE `notification_categories`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notification_users`
+--
+ALTER TABLE `notification_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
