@@ -253,6 +253,7 @@ public function login(Request $request)
         return response()->json($response, 200);
     }
 
+    dd($user);
     if ($request->has('device_token')) {
         $user->device_token = $request->device_token;
         $user->save();
