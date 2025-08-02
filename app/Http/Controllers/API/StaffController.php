@@ -19,24 +19,8 @@ class StaffController extends Controller
             // 'staff_id' => 'nullable',
             "designation" => "nullable|string|max:255",
             "email" => "nullable",
-            "permanentAddress" => "array",
-            "permanentAddress.addressLine1" => "nullable",
-            "permanentAddress.addressLine2" => "nullable",
-            "permanentAddress.city" => "nullable",
-            "permanentAddress.state" => "nullable",
-            "permanentAddress.pincode" => "nullable",
-            "permanentAddress.country" => "nullable",
-            "communicationAddress" => "array",
-            "communicationAddress.addressLine1" => "nullable",
-            "communicationAddress.addressLine2" => "nullable",
-            "communicationAddress.city" => "nullable",
-            "communicationAddress.state" => "nullable",
-            "communicationAddress.pincode" => "nullable",
-            "communicationAddress.country" => "nullable",
-            "communicationAddress.spouseName" => "nullable",
-            "communicationAddress.spouseWorking" => "nullable",
-            "communicationAddress.spouseMobileNo" => "nullable",
-            "communicationAddress.spouseMail" => "nullable",
+            "permanentAddress" => "nullable",            
+            "communicationAddress" => "nullable",            
             "staff_photo" => "nullable",
             "date_of_joining" => "nullable",
             "isdeleted" => "nullable|boolean",
@@ -59,17 +43,7 @@ class StaffController extends Controller
             "date_of_resignation" => "nullable",
         ]);
 
-        if (isset($requestData["permanentAddress"])) {
-            $requestData["permanentAddress"] = json_encode(
-                $requestData["permanentAddress"]
-            );
-        }
-
-        if (isset($requestData["communicationAddress"])) {
-            $requestData["communicationAddress"] = json_encode(
-                $requestData["communicationAddress"]
-            );
-        }
+       
         $requestData["staff_id"] = Autogeneratenumber::generateStaffId(
             $requestData["date_of_joining"]
         );
@@ -138,24 +112,10 @@ class StaffController extends Controller
             "staff_id" => "nullable",
             "designation" => "nullable|string|max:255",
             "email" => "nullable",
-            "permanentAddress" => "array",
-            "permanentAddress.addressLine1" => "nullable",
-            "permanentAddress.addressLine2" => "nullable",
-            "permanentAddress.city" => "nullable",
-            "permanentAddress.state" => "nullable",
-            "permanentAddress.pincode" => "nullable",
-            "permanentAddress.country" => "nullable",
-            "communicationAddress" => "array",
-            "communicationAddress.addressLine1" => "nullable",
-            "communicationAddress.addressLine2" => "nullable",
-            "communicationAddress.city" => "nullable",
-            "communicationAddress.state" => "nullable",
-            "communicationAddress.pincode" => "nullable",
-            "communicationAddress.country" => "nullable",
-            "communicationAddress.spouseName" => "nullable",
-            "communicationAddress.spouseWorking" => "nullable",
-            "communicationAddress.spouseMobileNo" => "nullable",
-            "communicationAddress.spouseMail" => "nullable",
+            "permanentAddress" => "nullable",
+            
+            "communicationAddress" => "nullable",
+           
             "staff_photo" => "nullable",
             "date_of_joining" => "nullable",
             "isdeleted" => "nullable|boolean",
@@ -179,16 +139,16 @@ class StaffController extends Controller
         ]);
 
         // Encode the address data to JSON format
-        if (isset($requestData["permanentAddress"])) {
-            $requestData["permanentAddress"] = json_encode(
-                $requestData["permanentAddress"]
-            );
-        }
-        if (isset($requestData["communicationAddress"])) {
-            $requestData["communicationAddress"] = json_encode(
-                $requestData["communicationAddress"]
-            );
-        }
+        // if (isset($requestData["permanentAddress"])) {
+        //     $requestData["permanentAddress"] = json_encode(
+        //         $requestData["permanentAddress"]
+        //     );
+        // }
+        // if (isset($requestData["communicationAddress"])) {
+        //     $requestData["communicationAddress"] = json_encode(
+        //         $requestData["communicationAddress"]
+        //     );
+        // }
 
         $schoolSlug = request()->route('school');
 
@@ -238,23 +198,23 @@ class StaffController extends Controller
         if (!$staff) {
             return response()->json(["message" => "Staff not found"], 404);
         }
-        if ($staff->permanentAddress) {
-            $staff->permanentAddress = json_decode(
-                $staff->permanentAddress,
-                true
-            );
-        }
+        // if ($staff->permanentAddress) {
+        //     $staff->permanentAddress = json_decode(
+        //         $staff->permanentAddress,
+        //         true
+        //     );
+        // }
         if ($staff->staff_photo) {
             $staff->staff_photo = $staff->staff_photo;
         } else {
             $staff->staff_photo = null; // If no photo, set to null
         }
-        if ($staff->communicationAddress) {
-            $staff->communicationAddress = json_decode(
-                $staff->communicationAddress,
-                true
-            );
-        }
+        // if ($staff->communicationAddress) {
+        //     $staff->communicationAddress = json_decode(
+        //         $staff->communicationAddress,
+        //         true
+        //     );
+        // }
         return response()->json(["staff" => $staff], 200);
     }
 
@@ -313,19 +273,19 @@ class StaffController extends Controller
 
         // Decode JSON fields back to arrays
         foreach ($staff as $staffMember) {
-            if ($staffMember->permanentAddress) {
-                $staffMember->permanentAddress = json_decode(
-                    $staffMember->permanentAddress,
-                    true
-                );
-            }
+            // if ($staffMember->permanentAddress) {
+            //     $staffMember->permanentAddress = json_decode(
+            //         $staffMember->permanentAddress,
+            //         true
+            //     );
+            // }
 
-            if ($staffMember->communicationAddress) {
-                $staffMember->communicationAddress = json_decode(
-                    $staffMember->communicationAddress,
-                    true
-                );
-            }
+            // if ($staffMember->communicationAddress) {
+            //     $staffMember->communicationAddress = json_decode(
+            //         $staffMember->communicationAddress,
+            //         true
+            //     );
+            // }
 
             if ($staffMember->staff_photo) {
                 $staffMember->staff_photo =  $staffMember->staff_photo;
