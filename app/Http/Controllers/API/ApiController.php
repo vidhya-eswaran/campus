@@ -22,7 +22,7 @@ use App\Models\Staff;
 use App\Models\SponserMaster;
 use Carbon\Carbon;
 use App\Helpers\ResponseHelper;
-use app\Notifications\PushNotification;
+use App\Notifications\PushNotification;
 
 class ApiController extends Controller{
     public function lifecycle(Request $request)
