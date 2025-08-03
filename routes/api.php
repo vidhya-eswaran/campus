@@ -71,6 +71,7 @@ use App\Http\Controllers\API\HostelAdmissionController;
 use App\Http\Controllers\API\StudentAttendanceController;
 use App\Http\Controllers\API\PhotoController;
 use App\Http\Controllers\RazorpayPaymentController;
+use App\Http\Controllers\PushNotificationController;
 
 // use App\Http\Controllers\API\school_fees_master; storeSendForm
 // use App\Http\Controllers\API\school_miscellaneous_bill_master;
@@ -142,6 +143,9 @@ Route::get('/test-razorpay/{school}', function ($school) {
         ], 500);
     }
 });
+
+Route::post('/send-push', [PushNotificationController::class, 'sendPushNotification']);
+
 
 
 //========================================================================================
