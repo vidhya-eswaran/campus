@@ -150,7 +150,7 @@ class TemplateEditorController extends Controller
                 400
             );
         }
-
+        
         $results = [];
         $errors = [];
 
@@ -166,6 +166,10 @@ class TemplateEditorController extends Controller
             $profilePhoto = $student->profile_image; // e.g. "profile740.png"
             $photoUrl =
                 env("APP_URL") . "/storage/app/profile_photos/" . $profilePhoto;
+
+            $schoolSlug = request()->route('school');
+
+            $school = DB::connection('central')->table('schools')->where('name', $schoolSlug)->first();
 
             // Prepare data for the template
             $data = [
@@ -184,13 +188,15 @@ class TemplateEditorController extends Controller
                 "P_STATE" => $student->permanent_state,
                 "P_PINCODE" => $student->permanent_pincode,
 
-                // // Communication address
-                // 'COMMUNICATION_HOUSE_NO'  => $student->COMMUNICATION_HOUSE_NO,
-                // 'C_STREET_NAME'           => $student->C_STREET_NAME,
-                // 'C_VILLAGE_TOWN_NAME'     => $student->C_VILLAGE_TOWN_NAME,
-                // 'C_DISTRICT'              => $student->C_DISTRICT,
-                // 'C_STATE'                 => $student->C_STATE,
-                // 'C_PINCODE'               => $student->C_PINCODE,
+                '{{ $school_name }}' => $school->school,
+                '{{ $school_address }}' => $school->full_address,
+                '{{ $school_logo }}' => $school->school_logo,
+                '{{ $school_phone_1 }}' => $school->phone_number,
+                '{{ $school_phone_2 }}' => $school->alternate_phone_number,
+                '{{ $school_website }}' => $school->website_url,
+                '{{ $school_address_line1 }}' => $school->full_address,
+                '{{ $school_address_line2 }}' => trim(($school->city ?? '') . ', ' . ($school->state ?? '')),
+                '{{ $school_email }}' => $school->email_address,
             ];
 
             // Generate a filename that includes the student's name
@@ -267,10 +273,11 @@ class TemplateEditorController extends Controller
 
         // 5. Generate PDF
         $pdf = PDF::loadHTML($html);
+        //dd($html);
 
         $pdfContent = $pdf->output();
-
-        $fileName = $filePrefix . "_" . $student->id . ".pdf";
+//dd("CCc");
+        $fileName = $filenamePrefix . "_" . $student->id . ".pdf";
 
         $schoolSlug = request()->route('school');  
 
