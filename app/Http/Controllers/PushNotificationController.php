@@ -21,24 +21,24 @@ class PushNotificationController extends Controller
         $factory = (new Factory)->withServiceAccount(storage_path('app/firebase/firebase_credentials.json'));
         $messaging = $factory->createMessaging();
 
-        // $message = [
-        //     'token' => $deviceToken,
-        //     'notification' => [
-        //         'title' => $title,
-        //         'body' => $body,
-        //     ],
-        //     'data' => [
-        //         'custom_key' => 'custom_value'
-        //     ]
-        // ];
+        $message = [
+            'token' => $deviceToken,
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+            ],
+            'data' => [
+                'custom_key' => 'custom_value'
+            ]
+        ];
 
-        //dd($deviceToken);
+        // //dd($deviceToken);
 
-        $message = CloudMessage::withTarget('token', $deviceToken)
-            ->withNotification(Notification::create($title, $body))
-            ->withData([
-                'custom_key' => 'custom_value',
-            ]);
+        // $message = CloudMessage::withTarget('token', $deviceToken)
+        //     ->withNotification(Notification::create($title, $body))
+        //     ->withData([
+        //         'custom_key' => 'custom_value',
+        //     ]);
 
         try {
             $messaging->send($message);
