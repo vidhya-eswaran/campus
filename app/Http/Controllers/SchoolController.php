@@ -41,6 +41,9 @@ class SchoolController extends Controller
                 'subscription_start_date' => 'nullable|date',
                 'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
                 'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
+                'razorpay_key' => 'nullable|string',
+                'razorpay_secret' => 'nullable|string',
+                'razorpay_webhook_secret' => 'nullable|string',
             ]);
 
             $schoolSlug = request()->route('school');
@@ -139,7 +142,9 @@ class SchoolController extends Controller
             'subscription_start_date' => $request->subscription_start_date,
             'subscription_end_date' => $request->subscription_end_date,
             'payment_method' => $request->payment_method,
-
+            'razorpay_key' => $request->razorpay_key,
+            'razorpay_secret' => $request->razorpay_secret,
+            'razorpay_webhook_secret' => $request->razorpay_webhook_secret,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -197,6 +202,9 @@ class SchoolController extends Controller
             'subscription_start_date' => 'nullable|date',
             'subscription_end_date' => 'nullable|date|after_or_equal:subscription_start_date',
             'payment_method' => 'nullable|in:Card,UPI,Bank Transfer',
+            'razorpay_key' => 'nullable|string',
+            'razorpay_secret' => 'nullable|string',
+            'razorpay_webhook_secret' => 'nullable|string',
         ]);
 
         $schoolSlug = request()->route('school');
@@ -235,6 +243,9 @@ class SchoolController extends Controller
             'subscription_start_date' => $request->subscription_start_date ?? $school->subscription_start_date,
             'subscription_end_date' => $request->subscription_end_date ?? $school->subscription_end_date,
             'payment_method' => $request->payment_method ?? $school->payment_method,
+              'razorpay_key' => $request->razorpay_key ?? $school->razorpay_key,
+            'razorpay_secret' => $request->razorpay_secret ?? $school->razorpay_secret,
+            'razorpay_webhook_secret' => $request->razorpay_webhook_secret ?? $school->razorpay_webhook_secret,
             'updated_at' => now(),
         ]);
 

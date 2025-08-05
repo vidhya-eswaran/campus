@@ -43,6 +43,7 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::get('/admission-offline', [AdmissionController::class, 'offline_store']);
     Route::post('/offline-store', [AdmissionController::class,'offline_store'])->name('admission.offline_store');
 
+    Route::get('/student/{studentId}/transactions', [PaymentsController::class, 'getTransactionLogs']);
 
 
     Route::get('/donate', function () {

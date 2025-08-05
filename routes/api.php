@@ -195,6 +195,41 @@ Route::post('/send-test-email', function (Request $request) {
 
 Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function ()
 {
+     Route::get('/test-razorpay', function (Request $request) {
+        $key = config('razorpay.key');
+        $secret = config('razorpay.secret');
+
+        if (!$key || !$secret) {
+            return response()->json([
+                'message' => 'Razorpay credentials are not set',
+            ], 500);
+        }
+
+        try {
+            $api = new Api($key, $secret);
+
+            $order = $api->order->create([
+                'receipt' => 'TEST-' . uniqid(),
+                'amount' => 10000, // ₹100 in paise
+                'currency' => 'INR',
+            ]);
+
+            return response()->json([
+                'message' => 'Razorpay credentials are valid',
+                'razorpay_key' => $key,
+                'order_id' => $order['id'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to use Razorpay credentials',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    });
+    Route::get('/intiate-payment', [PaymentsController::class, 'intiatePayment']);
+    Route::post('/redirect', [PaymentsController::class, 'processRetrunResponse']);
+    Route::get('/student/{studentId}/transactions', [PaymentsController::class, 'getTransactionLogs']);
+
     Route::post("/users", [SchoolUserController::class , "store"]);
 
     Route::post("/register", [ApiController::class , "register"]);
