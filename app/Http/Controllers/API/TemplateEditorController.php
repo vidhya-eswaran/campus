@@ -257,7 +257,7 @@ class TemplateEditorController extends Controller
         $filenamePrefix
     ) {
         // 1. Replace placeholders in the template
-        $html = $template->template;
+        $html = $template;
         
 
         foreach ($data as $key => $value) {
