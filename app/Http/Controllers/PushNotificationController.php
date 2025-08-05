@@ -54,7 +54,7 @@ class PushNotificationController extends Controller
                 ],
             ]);
 
-            dd($response->json());
+            //dd($response->json());
 
             DB::table('notification_users')->insert([
                 'form_user_id' => $fromUserId,
