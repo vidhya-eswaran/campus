@@ -57,6 +57,8 @@ class PushNotificationController extends Controller
         $factory = (new Factory)->withServiceAccount(storage_path('app/firebase/firebase_credentials.json'));
         $messaging = $factory->createMessaging();
 
+        dd($toUser->device_token);
+
         $message = [
             'token' => $toUser->device_token,
             'notification' => [
