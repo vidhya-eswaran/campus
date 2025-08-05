@@ -40,11 +40,11 @@ class PushNotificationController extends Controller
 
     public static function sendPushNotification($title, $body, $deviceToken, $type = 'general', $data = [], $toUserId = null)
     {
-        $fromUserId = $request->input('from_user_id');
-        $toUserId = $request->input('to_user_id');
-        $title = $request->input('title');
-        $body = $request->input('body');
-        $type = $request->input('type', 'general'); // Optional type
+        // $fromUserId = $request->input('from_user_id');
+        // $toUserId = $request->input('to_user_id');
+        // $title = $request->input('title');
+        // $body = $request->input('body');
+        // $type = $request->input('type', 'general'); // Optional type
 
         // Get recipient user
         $toUser = User::find($toUserId);
