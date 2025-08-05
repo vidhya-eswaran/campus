@@ -32,6 +32,8 @@ class PushNotificationController extends Controller
         //     ]
         // ];
 
+        dd($deviceToken);
+
         $message = CloudMessage::withTarget('token', $deviceToken)
             ->withNotification(Notification::create($title, $body))
             ->withData([
