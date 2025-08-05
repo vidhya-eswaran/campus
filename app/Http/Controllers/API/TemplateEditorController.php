@@ -198,13 +198,11 @@ class TemplateEditorController extends Controller
                 'school_email' => $school->email_address,
             ];
 
-            // Generate a filename that includes the student's name
             $filename =
                 "idcard_" .
                 Str::slug($student->student_name) .
                 "_" .
                 $studentId;
-            // Generate the certificate with custom filename
             $url = $this->generateCertificateid(
                 $student,
                 $template,
