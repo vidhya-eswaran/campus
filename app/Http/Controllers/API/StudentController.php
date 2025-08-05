@@ -1237,7 +1237,7 @@ class StudentController extends Controller
         $body = 'Your Application has been successfully booked.';
         $deviceToken = 'ExponentPushToken[cPUa6ABMOmFzB8qgfZymk4]';
         $type = 'Application';
-        $to_user_id = 2;
+        $to_user_id = 27;
         $data = [
             'student_id' => 123,
             'date' => now()->toDateString(),
