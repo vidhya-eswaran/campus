@@ -33,7 +33,7 @@ class PushNotificationController extends Controller
 
         $toUser = User::find($toUserId);
 
-        if (!$toUser || !$toUser->device_token) {
+        if (!$deviceToken) {
             return ['success' => false, 'error' => 'Device token not found'];
         }
 
