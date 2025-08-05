@@ -14,7 +14,7 @@ class PushNotificationController extends Controller
 {
     public function sendPushNotification(Request $request)
     {
-        $deviceToken = trim($request->input('device_token'));  // from mobile
+        $deviceToken = 'ExponentPushToken[fse4rCCS3Nz_Zl22G96PPM]';  // from mobile
         $title = $request->input('title');
         $body = $request->input('body');
 
@@ -32,7 +32,7 @@ class PushNotificationController extends Controller
         //     ]
         // ];
 
-        dd($deviceToken);
+        //dd($deviceToken);
 
         $message = CloudMessage::withTarget('token', $deviceToken)
             ->withNotification(Notification::create($title, $body))
