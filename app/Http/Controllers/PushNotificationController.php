@@ -48,6 +48,8 @@ class PushNotificationController extends Controller
                 ],
             ]);
 
+            dd($response);
+
             DB::table('notification_users')->insert([
                 'form_user_id' => $fromUserId,
                 'to_user_id' => $toUserId,
