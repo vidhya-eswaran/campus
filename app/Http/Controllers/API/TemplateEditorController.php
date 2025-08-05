@@ -164,8 +164,7 @@ class TemplateEditorController extends Controller
 
             // Get profile photo URL
             $profilePhoto = $student->profile_image; // e.g. "profile740.png"
-            $photoUrl =
-                env("APP_URL") . "/storage/app/profile_photos/" . $profilePhoto;
+            $photoUrl = $profilePhoto;
 
             $schoolSlug = request()->route('school');
 
@@ -188,15 +187,15 @@ class TemplateEditorController extends Controller
                 "P_STATE" => $student->permanent_state,
                 "P_PINCODE" => $student->permanent_pincode,
 
-                '{{ $school_name }}' => $school->school,
-                '{{ $school_address }}' => $school->full_address,
-                '{{ $school_logo }}' => $school->school_logo,
-                '{{ $school_phone_1 }}' => $school->phone_number,
-                '{{ $school_phone_2 }}' => $school->alternate_phone_number,
-                '{{ $school_website }}' => $school->website_url,
-                '{{ $school_address_line1 }}' => $school->full_address,
-                '{{ $school_address_line2 }}' => trim(($school->city ?? '') . ', ' . ($school->state ?? '')),
-                '{{ $school_email }}' => $school->email_address,
+                'school_name' => $school->school,
+                'school_address' => $school->full_address,
+                'school_logo' => $school->school_logo,
+                'school_phone_1' => $school->phone_number,
+                'school_phone_2' => $school->alternate_phone_number,
+                'school_website' => $school->website_url,
+                'school_address_line1' => $school->full_address,
+                'school_address_line2' => trim(($school->city ?? '') . ', ' . ($school->state ?? '')),
+                'school_email' => $school->email_address,
             ];
 
             // Generate a filename that includes the student's name
