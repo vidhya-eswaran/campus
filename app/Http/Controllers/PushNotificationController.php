@@ -11,8 +11,14 @@ use Illuminate\Support\Facades\Http;
 
 class PushNotificationController extends Controller
 {
-    public function sendPushNotification($fromUserId, $toUserId, $title, $body, $type = 'general',$deviceToken)
-    {
+        public static function sendPushNotification(
+            $title,
+            $body,
+            $type,
+            $data,
+            $toUserId,
+            $deviceToken
+        )    {
         // $deviceToken = $request->input('device_token');  // from mobile
         // $title = $request->input('title');
         // $body = $request->input('body');
