@@ -23,6 +23,8 @@ use App\Jobs\SendHostelAdmissionMailsJob;
 use Illuminate\Support\Facades\Http;
 use App\Helpers\SmsHelper;
 use App\Helpers\HelperEmail;
+use App\Http\Controllers\PushNotificationController;
+
 
 class HostelAdmissionController extends Controller
 {
@@ -365,6 +367,27 @@ class HostelAdmissionController extends Controller
                 // Get student details and send email
                 $student = User::find($hostelAdmission->student_id);
                 $hostelAdmission->student = $student;
+
+                //push notification
+                
+                $title = 'Hostel Admission Update';
+                $body = 'Your Hostel admission update.';
+                $deviceToken = $student->device_token;
+                $type = 'Hostel';
+                $toUserId = $student->id;
+                $data = [
+                    'student_id' => $student->id,
+                    'date' => now()->toDateString(),
+                ];
+
+                $response = PushNotificationController::sendPushNotification(
+                    $title,
+                    $body,
+                    $type,
+                    $data,
+                    $toUserId,
+                    $deviceToken
+                );
 
                 if ($student && $hostelAdmission->status == "Approved") {
                     DB::table("payment_notification_datas")->insert([

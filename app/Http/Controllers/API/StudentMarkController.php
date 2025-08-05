@@ -19,6 +19,8 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Helpers\LifecycleLogger;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\PushNotificationController;
+
 
 class StudentMarkController extends Controller
 {
@@ -92,6 +94,28 @@ class StudentMarkController extends Controller
                 ->latest("id")
                 ->value("id");
 
+            //push notification
+            $user_details = User::where("roll_no", $data["roll_no"])->first();
+
+            $title = 'Student Mark Update';
+            $body = 'Your mark update.';
+            $deviceToken = $user_details->device_token;
+            $type = 'mark';
+            $toUserId = $user_details->id;
+            $data = [
+                'student_id' => $user_details->id,
+                'date' => now()->toDateString(),
+            ];
+
+            $response = PushNotificationController::sendPushNotification(
+                $title,
+                $body,
+                $type,
+                $data,
+                $toUserId,
+                $deviceToken
+            );
+
             // Log the mark entry
             LifecycleLogger::log(
                 "Mark Record Created",
@@ -113,6 +137,7 @@ class StudentMarkController extends Controller
             [
                 "message" => "Student mark records saved successfully.",
                 "data" => $records,
+                "notification" => $response
             ],
             201
         );

@@ -1234,7 +1234,7 @@ class StudentController extends Controller
         //push notification
 
         $title = 'Update Application form';
-        $body = 'Your Application has been successfully booked.';
+        $body = 'Your Application form update.';
         $deviceToken = 'ExponentPushToken[fse4rCCS3Nz_Zl22G96PPM]';
         $type = 'Application';
         $toUserId = 27;

@@ -5,6 +5,8 @@ use App\Models\Student;
 use App\Models\StudentAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\PushNotificationController;
+
 
 class StudentAttendanceController extends Controller
 {
@@ -247,6 +249,28 @@ class StudentAttendanceController extends Controller
                         "match" => $match,
                         "update" => $update,
                     ]);
+
+                    //push notification
+                    $user_details = User::where("roll_no", $item["roll_no"])->first();
+
+                    $title = 'Student Attendance Update';
+                    $body = 'Your Attendance update.';
+                    $deviceToken = $user_details->device_token;
+                    $type = 'Attendance';
+                    $toUserId = $user_details->id;
+                    $data = [
+                        'student_id' => $user_details->id,
+                        'date' => now()->toDateString(),
+                    ];
+
+                    $response = PushNotificationController::sendPushNotification(
+                        $title,
+                        $body,
+                        $type,
+                        $data,
+                        $toUserId,
+                        $deviceToken
+                    );
                 } catch (\Exception $e) {
                     // Log any errors during the insert or update
                     Log::error("Error in updateOrInsert:", [
