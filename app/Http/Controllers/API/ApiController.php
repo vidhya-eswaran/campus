@@ -22,6 +22,7 @@ use App\Models\Staff;
 use App\Models\SponserMaster;
 use Carbon\Carbon;
 use App\Helpers\ResponseHelper;
+use App\Notifications\PushNotification;
 
 class ApiController extends Controller{
     public function lifecycle(Request $request)
@@ -107,223 +108,6 @@ class ApiController extends Controller{
     }
 
 
-    // public function login(Request $request)
-    // {
-    //     $credentials = [
-    //         'password' => $request->input('password'),
-    //     ];
-
-    //     $input = $request->input('email');
-    //     // Attempt authentication with email
-    //     if (Auth::attempt(['email' => $input, 'password' => $credentials['password']])) {
-    //         $user = Auth::user();
-
-
-    //         $reponse['token'] = $user->createToken('Myapp');
-    //         $reponse['user_type'] = $user->user_type ?? '';
-    //         $reponse['name'] = $user->name ?? '';
-    //         $reponse['email'] = $user->email ?? '';
-    //         $reponse['id'] = $user->id ?? '';
-    //         $reponse['gender'] = $user->gender ?? '';
-    //         $reponse['standard'] = $user->standard ?? '';
-    //         $reponse['sec'] = $user->sec ?? '';
-    //         $reponse['fee_by'] = $user->fee_by ?? '';
-    //         $reponse['sponser_id'] = $user->sponser_id ?? '';
-    //         $reponse['roll_no'] =   '';
-    //          $reponse['admission_no'] =   '';
-    //          $reponse['presence'] =   '';
-    //          $reponse['no_of_leaves'] =   '';
-    //         $reponse['status'] = $user->status ?? '';
-    //         if ($user->user_type === 'student') {
-    //              $reponse['roll_no'] = $user->roll_no ?? '';
-    //          $reponse['admission_no'] = $user->admission_no ?? '';
-    //           $reponse['presence'] =   '97';
-    //          $reponse['no_of_leaves'] =   '6';
-    //             $existingStudent = Student::where('admission_no', 'like', $user->admission_no)->first();
-
-    //             if ($existingStudent) {
-    //                 $currentAddress = $existingStudent->c_HouseNumber . ', ' .
-    //                     $existingStudent->c_StreetName . ', ' .
-    //                     $existingStudent->c_VillageTownName . ', ' .
-    //                     $existingStudent->c_Postoffice . ', ' .
-    //                     $existingStudent->c_Taluk . ', ' .
-    //                     $existingStudent->c_District . ', ' .
-    //                     $existingStudent->c_State . ', ' .
-    //                     $existingStudent->c_Pincode;
-
-    //                 $mobile = $existingStudent->Mobilenumber;
-    //                 $WhatsAppNo = $existingStudent->WhatsAppNo;
-    //                 $permanentAddress = $existingStudent->p_housenumber . ', ' .
-    //                     $existingStudent->p_Streetname . ', ' .
-    //                     $existingStudent->p_VillagetownName . ', ' .
-    //                     $existingStudent->p_Postoffice . ', ' .  $existingStudent->p_Taluk . ', ' .
-    //                     $existingStudent->p_District . ', ' .
-    //                     $existingStudent->p_State . ', ' .
-    //                     $existingStudent->p_Pincode;
-
-    //                 $combinedAddress = [
-    //                     'current_address' => $currentAddress,
-    //                     'permanent_address' => $permanentAddress,
-    //                     'mobile' => $mobile,
-    //                     'WhatsAppNo' => $WhatsAppNo,
-    //                 ];
-
-    //                 $reponse['student_info'] = $combinedAddress;
-    //             } else {
-    //                 $reponse['student_info'] = null; // Student not found
-    //             }
-    //         } elseif ($user->user_type === 'sponser') {
-    //             $existingStudent = SponserMaster::where('name', 'like', $user->name)->first();
-    //             if ($existingStudent) {
-    //                 $permanentAddress = $existingStudent->address1 . ', ' . $existingStudent->address2;
-    //                 $gst = $existingStudent->gst ?? '';
-    //                 $pan = $existingStudent->pan ?? '';
-    //                 $combinedAddress = [
-    //                     'current_address' => '',
-    //                     'permanent_address' => $permanentAddress,
-    //                     'gst' => $gst,
-    //                     'pan' => $pan,
-    //                 ];
-    //                 $reponse['student_info'] = $combinedAddress;
-    //             }
-    //         }
-    //          elseif ($user->user_type === 'admin') {
-    //              $reponse['staff_master_dd']  = Staff::where('email', 'like', $user->email)->first();
-    //          }
-
-
-
-    //         return response()->json($reponse, 200);
-    //     } else {
-            
-    //         // Attempt authentication with admission number
-    //         if (Auth::attempt(['roll_no' => $input, 'password' => $credentials['password']])) {
-    //             $user = Auth::user();
-
-
-
-
-    //             $reponse['token'] = $user->createToken('Myapp');
-    //             $reponse['user_type'] = $user->user_type ?? '';
-    //             $reponse['name'] = $user->name ?? '';
-    //             $reponse['email'] = $user->email ?? '';
-    //             $reponse['id'] = $user->id ?? '';
-    //             $reponse['gender'] = $user->gender ?? '';
-    //             $reponse['standard'] = $user->standard ?? '';
-    //             $reponse['sec'] = $user->sec ?? '';
-    //             $reponse['roll_no'] = $user->roll_no ?? '';
-    //             $reponse['admission_no'] = $user->admission_no ?? '';
-    //              $reponse['fee_by'] = $user->fee_by ?? '';
-    //             $reponse['sponser_id'] = $user->sponser_id ?? '';
-    //             $reponse['status'] = $user->status ?? '';
-    //             if ($user->user_type === 'student') {
-    //                 $existingStudent = Student::where('roll_no', 'like', $user->admission_no)->first();
-    
-    //                 if ($existingStudent) {
-    //                     $currentAddress = $existingStudent->c_HouseNumber . ', ' .
-    //                         $existingStudent->c_StreetName . ', ' .
-    //                         $existingStudent->c_VillageTownName . ', ' .
-    //                         $existingStudent->c_Postoffice . ', ' .
-    //                         $existingStudent->c_Taluk . ', ' .
-    //                         $existingStudent->c_District . ', ' .
-    //                         $existingStudent->c_State . ', ' .
-    //                         $existingStudent->c_Pincode;
-    
-    //                     $mobile = $existingStudent->Mobilenumber;
-    //                     $WhatsAppNo = $existingStudent->WhatsAppNo;
-    //                     $permanentAddress = $existingStudent->p_housenumber . ', ' .
-    //                         $existingStudent->p_Streetname . ', ' .
-    //                         $existingStudent->p_VillagetownName . ', ' .
-    //                         $existingStudent->p_Postoffice . ', ' .  $existingStudent->p_Taluk . ', ' .
-    //                         $existingStudent->p_District . ', ' .
-    //                         $existingStudent->p_State . ', ' .
-    //                         $existingStudent->p_Pincode;
-    
-    //                     $combinedAddress = [
-    //                         'current_address' => $currentAddress,
-    //                         'permanent_address' => $permanentAddress,
-    //                         'mobile' => $mobile,
-    //                         'WhatsAppNo' => $WhatsAppNo,
-    //                     ];
-    
-    //                     $reponse['student_info'] = $combinedAddress;
-    //                 } else {
-    //                     $reponse['student_info'] = null; // Student not found
-    //                 }
-    //             } elseif ($user->user_type === 'sponser') {
-    //                 $existingStudent = SponserMaster::where('name', 'like', $user->name)->first();
-    //                 if ($existingStudent) {
-    //                     $permanentAddress = $existingStudent->address1 . ', ' . $existingStudent->address2;
-    //                     $gst = $existingStudent->gst ?? '';
-    //                     $pan = $existingStudent->pan ?? '';
-    //                     $combinedAddress = [
-    //                         'current_address' => '',
-    //                         'permanent_address' => $permanentAddress,
-    //                         'gst' => $gst,
-    //                         'pan' => $pan,
-    //                     ];
-    //                     $reponse['student_info'] = $combinedAddress;
-    //                 }
-    //             }
-
-    //             return response()->json($reponse, 200);
-    //         } else {
-    //             // Attempt authentication with name
-    //             // if (Auth::attempt(['name' => $input, 'password' => $credentials['password']])) {
-    //             //     $user = Auth::user();
-
-
-
-    //             //     $reponse['token'] = $user->createToken('Myapp');
-    //             //     $reponse['user_type'] = $user->user_type ?? '';
-    //             //     $reponse['name'] = $user->name ?? '';
-    //             //     $reponse['email'] = $user->email ?? '';
-    //             //     $reponse['id'] = $user->id ?? '';
-    //             //     $reponse['gender'] = $user->gender ?? '';
-    //             //     $reponse['standard'] = $user->standard ?? '';
-    //             //     $reponse['sec'] = $user->sec ?? '';
-    //             //     $reponse['fee_by'] = $user->fee_by ?? '';
-    //             //     $reponse['sponser_id'] = $user->sponser_id ?? '';
-    //             //     $reponse['status'] = $user->status ?? '';
-
-    //             //     //  $reponse['id'] = $user->id;
-
-    //             //     //   $reponse['token']->token->id
-
-    //             //     return response()->json($reponse, 200);
-    //             // } else {
-    //             return response()->json(['message' => 'Invalid Credentials error'], 401);
-    //             // Handle the failure scenario (e.g., display an error message)
-    //             // }
-    //         }
-    //     }
-    //     //     if (Auth::attempt($credentials)) {
-
-    //     //     $user = Auth::user();
-
-
-    //     //     $reponse['token'] = $user->createToken('Myapp');
-    //     //     $reponse['user_type'] = $user->user_type;
-    //     //     $reponse['name'] = $user->name;
-    //     //     $reponse['email'] = $user->email;
-    //     //     $reponse['id'] = $user->id;
-    //     //     $reponse['gender'] = $user->gender;
-    //     //     $reponse['standard'] = $user->standard;
-    //     //     $reponse['sec'] = $user->sec;
-    //     //     $reponse['fee_by'] = $user->fee_by;
-    //     //     $reponse['sponser_id'] = $user->sponser_id;
-    //     //     $reponse['status'] = $user->status;
-
-    //     //     //  $reponse['id'] = $user->id;
-
-    //     //     //   $reponse['token']->token->id
-
-    //     //     return response()->json($reponse, 200);
-    //     // } else {
-    //     //     dd($credentials);
-    //     //     return response()->json(['message' => 'Invalid Credentials error'], 401);
-    //     // }
-    // }
 public function getMatchingUsersdd(Request $request)
 {
     $input = trim($request->input('email'));
@@ -396,6 +180,7 @@ public function login(Request $request)
         'email' => 'required',
         'password' => 'required',
         'selected_user_id' => 'nullable|integer|exists:users,id',
+        'device_token' => 'nullable|string',
     ]);
 
     if ($validator->fails()) {
@@ -467,6 +252,15 @@ public function login(Request $request)
 
         return response()->json($response, 200);
     }
+
+    //dd($user);
+    $user = User::where('email', $request->email)->first();
+    if ($request->has('device_token')) {
+        $user->device_token = $request->device_token;
+        $user->save();
+    }
+
+   // $user->notify(new PushNotification('Login Successful', 'Welcome back!'));
 
     // If no selected_user_id is provided, perform the initial authentication attempt
     $matchingUsers = $this->getMatchingUsers($input);
@@ -582,10 +376,10 @@ public function login(Request $request)
 private function filterMatchingUsers($users)
 {
     return $users->map(function ($user) {
-        $userArray = $user->toArray();
-        unset($userArray['password']);
-        return $userArray;
-    })->toArray();
+        $array = $user->toArray();
+        unset($array['password']);
+        return $array;
+    })->values()->all();
 }
 
 public function getMatchingUsers($input)
@@ -622,121 +416,6 @@ public function getMatchingUsers($input)
         ->values();
     return $matchingUsers;
 }
-
-
-
-// public function login(Request $request)
-// {
-//     $input = trim($request->input('email'));
-//     $password = $request->input('password');
-//     $selectedUserId = $request->input('selected_user_id');
-
-//     // Validate request data
-//     $validator = Validator::make($request->all(), [
-//         'email' => 'required',
-//         'password' => 'required',
-//         'selected_user_id' => 'nullable|integer|exists:users,id',
-//     ]);
-
-//     if ($validator->fails()) {
-//         return response()->json(['errors' => $validator->errors()], 400);
-//     }
-
-//     // If a selected_user_id is provided, attempt to log in directly with that ID
-//     if ($selectedUserId) {
-//         $user = User::find($selectedUserId);
-//         if (!$user) {
-//             return response()->json(['message' => 'Invalid user ID provided.'], 400);
-//         }
-//         if (!Hash::check($password, $user->password)) {
-//             return response()->json(['message' => 'Invalid password for the selected user.'], 401);
-//         }
-
-//         $tokenResult = $user->createToken('MyApp');
-//         $token = $tokenResult->accessToken; // Get the token string
-//         return response()->json([
-//             'token' => $token,
-//             'user_type' => $user->user_type ?? '',
-//             'name' => $user->name ?? '',
-//             'email' => $user->email ?? '',
-//             'id' => $user->id ?? '',
-//             'gender' => $user->gender ?? '',
-//             'standard' => $user->standard ?? '',
-//             'sec' => $user->sec ?? '',
-//             'fee_by' => $user->fee_by ?? '',
-//             'sponser_id' => $user->sponser_id ?? '',
-//             'roll_no' => $user->roll_no ?? '',
-//             'admission_no' => $user->admission_no ?? '',
-//             'status' => $user->status ?? '',
-//             'message' => 'Login successful',
-//         ], 200);
-//     }
-
-//     // If no selected_user_id is provided, perform the initial authentication attempt
-//     $usersByEmail = User::where('email', $input)->get();
-//     $usersByRollNo = User::where('roll_no', $input)->get();
-
-//     // Fetch user by mobile number from student table and then find the corresponding user
-//     $usersByMobile = [];
-//     $student = Student::where('MOBILE_NUMBER', $input)->first();
-//     if ($student) {
-//         $user = User::where('id', $student->user_id)->get();
-//         $usersByMobile = $user;
-//     }
-
-//     $matchingUsers = collect();
-//     $matchingUsers = $matchingUsers->merge($usersByEmail);
-//     $matchingUsers = $matchingUsers->merge($usersByRollNo);
-//     $matchingUsers = $matchingUsers->merge($usersByMobile);
-//     $matchingUsers = $matchingUsers->unique('id')->values();
-
-//     $matchingUsers = $matchingUsers->filter(function ($user) use ($password) {
-//         return Hash::check($password, $user->password);
-//     });
-
-//     if ($matchingUsers->count() > 1) {
-//         $response = $matchingUsers->map(function ($user) {
-//             return [
-//                 'id' => $user->id ?? '',
-//                 'name' => $user->name ?? '',
-//                 'email' => $user->email ?? '',
-//                 'user_type' => $user->user_type ?? '',
-//                 'standard' => $user->standard ?? '',
-//                 'sec' => $user->sec ?? '',
-//                 'roll_no' => $user->roll_no ?? '',
-//                 'admission_no' => $user->admission_no ?? '',
-//             ];
-//         });
-//         return response()->json([
-//             'users' => $response,
-//             'message' => 'Multiple users found. Please select a user and send the user ID as selected_user_id in the next request.',
-//         ], 200);
-//     } elseif ($matchingUsers->count() === 1) {
-//         $user = $matchingUsers->first();
-//         $tokenResult = $user->createToken('MyApp');
-//         $token = $tokenResult->accessToken; // Get the token string.  Important for older Passport versions
-//         return response()->json([
-//             'token' => $token,
-//             'user_type' => $user->user_type ?? '',
-//             'name' => $user->name ?? '',
-//             'email' => $user->email ?? '',
-//             'id' => $user->id ?? '',
-//             'gender' => $user->gender ?? '',
-//             'standard' => $user->standard ?? '',
-//             'sec' => $user->sec ?? '',
-//             'fee_by' => $user->fee_by ?? '',
-//             'sponser_id' => $user->sponser_id ?? '',
-//             'roll_no' => $user->roll_no ?? '',
-//             'admission_no' => $user->admission_no ?? '',
-//             'status' => $user->status ?? '',
-//             'message' => 'Login successful',
-//         ], 200);
-//     } else {
-//         return response()->json(['message' => 'Invalid Credentials'], 401);
-//     }
-// }
-
-
 
 
 
@@ -1137,43 +816,7 @@ public function getMatchingUsers($input)
             return response()->json($response);
         }
 
-        // public function SearchStandardSec($standard, Request $request)
-        // { 
-        //     // Retrieve 'sec' from query parameters (optional)
-        //     $sec = $request->query('sec');
-        
-        //     // Build the query
-        //     $query = User::where('standard', '=', $standard)
-        //                  ->where('status', '=', 1);
-        
-        //     // Add condition for 'sec' if provided
-        //     if ($sec) {
-        //         $query->where('sec', '=', $sec);
-        //     }
-        
-        //     // Fetch the students
-        //     $students = $query->get();
-        
-        //     // Prepare the response
-        //     $response = $students->map(function ($student) {
-        //         // Extract the year from the created_at field
-        //         $createdYear = date('Y', strtotime($student->created_at));
-        //         $academicYear = $createdYear . '-' . ($createdYear + 1);
-        
-        //         return [
-        //             'id' => $student->id,
-        //             'roll_no' => $student->roll_no,
-        //             'name' => $student->name,
-        //             'std' => $student->standard,
-        //             'sec' => $student->sec,
-        //             'group' => $student->twe_group,
-        //             'academic_year' => $academicYear, // Added academic year field
-        //             'concordinate_string' => $student->roll_no . ' |' . $student->name,
-        //         ];
-        //     });
-        
-        //     return response()->json($response);
-        // }
+      
         
         public function SearchStandardSec(Request $request)
         { 
@@ -1205,6 +848,14 @@ public function getMatchingUsers($input)
                 $createdYear = date('Y', strtotime($student->created_at));
                 $nextYear = $createdYear + 1;
                 $calculatedAcademicYear = $createdYear . '-' . $nextYear;
+
+                //dd($student['roll_no']);
+
+                if ($student['roll_no']) {
+                    $student_image = Student::where("roll_no", "=" ,$student['roll_no'])->first();
+                } else{
+                    $student_image = NULL;
+                }
         
                 // Check if academic_year is missing, update in DB
                 if (!$student->academic_year) {
@@ -1214,6 +865,7 @@ public function getMatchingUsers($input)
                 
                 return [
                     'id' => $student->id,
+                    'student_id' => $student_image->id,
                     'roll_no' => $student->roll_no,
                     'name' => $student->name,
                     'std' => $student->standard,
@@ -1222,8 +874,10 @@ public function getMatchingUsers($input)
                     'academic_year' => $student->academic_year ?? $calculatedAcademicYear, // Use stored or calculated year
                     'concordinate_string' => $student->roll_no . ' | ' . $student->name,
                     'grade_status' => $student->grade_status,
+                    'profile_image' => $student_image->profile_image
                 ];
-            });
+                
+            });            
         
             return response()->json($response);
         }

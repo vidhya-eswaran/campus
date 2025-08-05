@@ -7,7 +7,7 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-      <link rel="stylesheet" href="{{ asset('public/css/style-1.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/style-1.css') }}">
       <style>
          label{
          font-size: 14px !important;
@@ -44,25 +44,25 @@
                   <img src="{{ asset('public/images/1.jpg') }}" alt="">
                </div>
                <div class="col-md-10 headcol">
-                  <h4>Santhosha Vidhyalaya </h4>
-                  <p>Admission Application Form 2024 - 2025</p>
+                  <h4>{{ $school->school }}</h4>
+                  <p>Admission Application Form 2025 - 2026</p>
                   <p class="cinfo">
-                     <span><i class="fas fa-phone"></i>  +91 80125 12100</span>
+                     <span><i class="fas fa-phone"></i>  {{ $school->phone_number }}</span>
                      <span><i class="fas fa-envelope"></i> admissions@santhoshavidhyalaya.com</span>
-                     <span><i class="fas fa-map-marker-alt"></i>Dohnavur – 627102 Tirunelveli Dist. Tamilnadu</span>
+                     <span><i class="fas fa-map-marker-alt"></i>{{ $school->full_address }}{{ $school->city }}{{ $school->state }}{{ $school->postal_code }}</span>
                   </p>
                </div>
             </div>
           
     {{-- Or loop through an array --}}
-            <form method="POST" action="{{ route('admission.store') }}"  enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admission.store', ['school' => request()->segment(1)]) }}"  enctype="multipart/form-data">
                @csrf
                
 
                <div class="form-body">
                   <div class="form-title row">
                        <p style="font-size: 14px;
-    text-align: center;">Note: Please review the form and identify the mandatory details marked with an asterisk (*). Gather the necessary information and start the form-filling process. Upon form submission, you will be required to pay an application fee of Rs. 300 to complete the process with debit / credit card or internet banking.</p>
+    text-align: center;">Note: Please review the form and identify the mandatory details marked with an asterisk (*). Gather the necessary information and start the form-filling process.</p>
                      <h4>APPLICANT DETAILS</h4>
                   </div>
                   <div class="form-row row">
@@ -72,8 +72,8 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="text" name="name" id="first_name" placeholder="Enter Name"
-                           class="form-control form-control-sm" required value="{{ isset($data->name) ? $data->name : '' }}">
+                        <input type="text" name="student_name" id="first_name" placeholder="Enter Name"
+                           class="form-control form-control-sm" required value="{{ isset($data->student_name) ? $data->student_name : '' }}">
                      </div>
                      <div class="col-lg-2 col-md-4">
                         <label for="">Date of Application</label>
@@ -92,7 +92,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="text" name="language" id="last_name" value="{{ isset($data->language) ? $data->language : '' }}" placeholder="Mother tongue of the pupil"
+                        <input type="text" name="mother_tongue" id="last_name" value="{{ isset($data->mother_tongue) ? $data->mother_tongue : '' }}" placeholder="Mother tongue of the pupil"
                            class="form-control form-control-sm" >
                      </div>
                      <div class="col-lg-2 col-md-4">
@@ -102,7 +102,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="text" name="state_student" id="last_name" placeholder="State"
+                        <input type="text" name="state" id="last_name" placeholder="State"
                            class="form-control form-control-sm" required>
                      </div>
                   </div>
@@ -113,7 +113,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="date" placeholder="Enter Date of Birth" name="date_of_birth" id="date_of_birth "
+                        <input type="date" placeholder="Enter Date of Birth" name="dob" id="date_of_birth "
                            class="form-control form-control-sm" required>
                      </div>
                      <div class="col-lg-2 col-md-4">
@@ -174,7 +174,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="text" name="church_denomination" id="last_name" placeholder="For Christian Applicants"
+                        <input type="text" name="denomination" id="last_name" placeholder="For Christian Applicants"
                            class="form-control form-control-sm" >
                      </div>
                   </div>
@@ -194,7 +194,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <select class="form-select" name="caste_type" aria-label="Default select example">
+                        <select class="form-select" name="caste_classification" aria-label="Default select example">
                            <option value="" >Select Caste: </option>
                            <option value="SC">SC</option>
                            <option value="ST">ST</option>
@@ -241,7 +241,7 @@
                      </div>
                      <div class="col-lg-4 col-md-8">
                         
-                                 <select class="form-select" name="veg_or_non" aria-label="Default select example" required>
+                                 <select class="form-select" name="food_choice" aria-label="Default select example" required>
                            <option value="" >Select Food : </option>
                            <option value="Vegetarian">Vegetarian</option>
                            <option value="Non-Vegetarian">Non-Vegetarian</option>
@@ -333,7 +333,7 @@
     <div class="col-lg-4 col-md-8">
         <input
             type="tel"
-            name="father_contact_no"
+            name="father_mobile_no"
             placeholder="Enter Father's Mobile No"
             class="form-control form-control-sm father-field"
             required
@@ -359,7 +359,7 @@
     <div class="col-lg-4 col-md-8">
         <input
             type="text"
-            name="father_income"
+            name="father_annual_income"
             placeholder="Enter Father's Monthly Income"
             class="form-control form-control-sm father-field"
             required
@@ -439,7 +439,7 @@
     <div class="col-lg-4 col-md-8">
         <input
             type="text"
-            name="mother_contact_no"
+            name="mother_mobile_no"
             placeholder="Enter Mother's Mobile No"
             class="form-control form-control-sm mother-field"
             required
@@ -466,7 +466,7 @@
     <div class="col-lg-4 col-md-8">
         <input
             type="text"
-            name="mother_income"
+            name="mother_annual_income"
             placeholder="Enter Mother's Monthly Income"
             class="form-control form-control-sm mother-field"
             required
@@ -595,7 +595,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="number" name="guardian_contact_no" value=""  placeholder="Enter Guardian's Mobile No"
+                        <input type="number" name="guardian_mobile_no" value=""  placeholder="Enter Guardian's Mobile No"
                            class="form-control form-control-sm">
                      </div>
                      <div class="col-lg-2 col-md-4">
@@ -612,7 +612,7 @@
                         <span class="indc">:</span>
                      </div>
                      <div class="col-lg-4 col-md-8">
-                        <input type="text" name="guardian_income"  placeholder="Enter Guardian's Monthly Income"
+                        <input type="text" name="guardian_annual_income"  placeholder="Enter Guardian's Monthly Income"
                            class="form-control form-control-sm" >
                      </div>
                            <div class="col-lg-2 col-md-4">
@@ -632,7 +632,7 @@
         <span class="indc">:</span>
     </div>
     <div class="col-lg-4 col-md-8">
-        <select class="form-select" name="check_siblings" id="check_siblings" required>
+        <select class="form-select" name="siblings" id="check_siblings" required>
             <option value="">Select</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -654,7 +654,7 @@
         <tbody>
             <tr>
                 <th>1</th>
-                <td><input class="wpcf7-form-control wpcf7-text" type="text" name="brother_1"></td>
+                <td><input class="wpcf7-form-control wpcf7-text" type="text" name="sibling_1"></td>
                 <td>
                     <select class="form-select" name="gender_1" >
                         <option value="">Select</option>
@@ -688,7 +688,7 @@
 									</p>
 								</th>
 								<td>
-									<p><span class="wpcf7-form-control-wrap" data-name="brother2"><input class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="brother_2"></span>
+									<p><span class="wpcf7-form-control-wrap" data-name="brother2"><input class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="sibling_2"></span>
 									</p>
 								</td>
 								<td>
@@ -726,7 +726,7 @@
 									</p>
 								</th>
 								<td>
-									<p><span class="wpcf7-form-control-wrap" data-name="brother2"><input class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="brother_3"></span>
+									<p><span class="wpcf7-form-control-wrap" data-name="brother2"><input class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="sibling_3"></span>
 									</p>
 								</td>
 								<td>
@@ -788,7 +788,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="house_no" value="" placeholder="Enter House No"
+                       <input type="text" name="permanent_house_no" value="" placeholder="Enter House No"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -797,7 +797,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="street" placeholder="Enter Street "
+                       <input type="text" name="permanent_street_name" placeholder="Enter Street "
                           class="form-control form-control-sm" required>
                     </div>
                  </div>
@@ -808,7 +808,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="city" placeholder="Enter Town / City"
+                       <input type="text" name="permanent_city_town_village" placeholder="Enter Town / City"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -818,7 +818,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="district" placeholder="Enter District "
+                       <input type="text" name="permanent_district" placeholder="Enter District "
                           class="form-control form-control-sm" required>
                     </div>
                  </div>
@@ -829,7 +829,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="state" placeholder="Enter State"
+                       <input type="text" name="permanent_state" placeholder="Enter State"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -838,7 +838,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="pincode" value="" placeholder="Enter Postal Code"
+                       <input type="text" name="permanent_pincode" value="" placeholder="Enter Postal Code"
                           class="form-control form-control-sm" required>
                     </div>
                  </div>
@@ -852,7 +852,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="house_no_1" value="" placeholder="Enter House No"
+                       <input type="text" name="communication_house_no" value="" placeholder="Enter House No"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -861,7 +861,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="street_1" placeholder="Enter Street "
+                       <input type="text" name="communication_street_name" placeholder="Enter Street "
                           class="form-control form-control-sm" required>
                     </div>
                  </div>
@@ -872,7 +872,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="city_1" placeholder="Enter Town / City"
+                       <input type="text" name="communication_city_town_village" placeholder="Enter Town / City"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -883,7 +883,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="district_1" placeholder="Enter District "
+                       <input type="text" name="communication_district" placeholder="Enter District "
                           class="form-control form-control-sm"required >
                     </div>
                  </div>
@@ -894,7 +894,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="state_1" placeholder="Enter State"
+                       <input type="text" name="communication_state" placeholder="Enter State"
                           class="form-control form-control-sm" required>
                     </div>
                     <div class="col-lg-2 col-md-4">
@@ -903,7 +903,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="pincode_1" value="" placeholder="Enter Postal Code"
+                       <input type="text" name="communication_pincode" value="" placeholder="Enter Postal Code"
                           class="form-control form-control-sm" required>
                     </div>
                  </div>
@@ -920,7 +920,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                        <select class="form-select"  name= "last_class_std" aria-label="Default select example" required>
+                        <select class="form-select"  name= "class_last_studied" aria-label="Default select example" required>
                             <option value="" >Select class</option>
                             <option value="lkg">LKG</option>
                           <option value="ukg">UKG</option>
@@ -943,7 +943,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                       <input type="text" name="last_school" value="" placeholder="Enter School"
+                       <input type="text" name="last_school_name" value="" placeholder="Enter School"
                           class="form-control form-control-sm" >
                     </div>
                  </div>
@@ -954,7 +954,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                        <select class="form-select"  name= "admission_for_class" aria-label="Default select example" required>
+                        <select class="form-select"  name= "std_sought" aria-label="Default select example" required>
                             <option value="" >Select class</option>
                      <option value="lkg">LKG</option>
                           <option value="ukg">UKG</option>
@@ -1071,7 +1071,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                        <select class="form-select" name="group_no" aria-label="Default select example">
+                        <select class="form-select" name="group_first_choice" aria-label="Default select example">
                             <option value="" >Select Group</option>
                             <option value="Group I - English, Maths, Physics, Chemistry, Biology">Group I - English, Maths, Physics, Chemistry, Biology</option>
                             <option value="Group II - English, Computer Science, Physics, Chemistry, Biology">Group II - English, Computer Science, Physics, Chemistry, Biology</option>
@@ -1086,7 +1086,7 @@ $(document).ready(function() {
                        <span class="indc">:</span>
                     </div>
                     <div class="col-lg-4 col-md-8">
-                        <select class="form-select" name="second_group_no" aria-label="Default select example">
+                        <select class="form-select" name="group_second_choice" aria-label="Default select example">
                             <option value="" >Select Group</option>
                                <option value="Group I - English, Maths, Physics, Chemistry, Biology">Group I - English, Maths, Physics, Chemistry, Biology </option>
                             <option value="Group II - English, Computer Science, Physics, Chemistry, Biology">Group II - English, Computer Science, Physics, Chemistry, Biology</option>
@@ -1172,42 +1172,42 @@ $(document).ready(function() {
                            <p> Child Passport Size Photo <sup class="req">*</sup>:<br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="profile_photo" ></span>
+                              aria-invalid="false" type="photo" name="profile_image" ></span>
                            </p>
                            <p> Birth Certificate  <sup class="req">*</sup>:<br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="birth_certificate_photo" ></span>
+                              aria-invalid="false" type="photo" name="birth_certificate_image" ></span>
                            </p>
                            <p> Aadhaar Copy / UID <sup class="req">*</sup><br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="aadhar_card_photo" ></span>
+                              aria-invalid="false" type="photo" name="aadhar_image" ></span>
                            </p>
                            <p> Ration Card  <br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="ration_card_photo" ></span>
+                              aria-invalid="false" type="photo" name="ration_card_image" ></span>
                            </p>
                            <p> Community Certificate  <sup class="req">*</sup><br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="community_certificate_photo"  ></span>
+                              aria-invalid="false" type="photo" name="community_image"  ></span>
                            </p>
                            <p> Salary Certificate / Slip or Self Declaration of Income  <sup class="req">*</sup><br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="slip_photo" ></span>
+                              aria-invalid="false" type="photo" name="salary_image" ></span>
                            </p>
                            <p> Medical Certificate:<br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="medical_certificate_photo"></span>
+                              aria-invalid="false" type="photo" name="medical_certificate_image"></span>
                            </p>
                            <p> Organization Endorsement or Reference Letter  <sup class="req">*</sup>: <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="reference_letter_photo" ></span>
+                              aria-invalid="false" type="photo" name="reference_letter_image" ></span>
                            </p>
                         </div>
                         <div class="col-lg-6 col-md-4">
@@ -1225,7 +1225,7 @@ $(document).ready(function() {
                            <p> Transfer Certificate:<br> <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"
                               class="wpcf7-form-control wpcf7-file valid" accept="audio/*,video/*,image/*"
-                              aria-invalid="false" type="photo" name="transfer_certificate_photo"></span>
+                              aria-invalid="false" type="photo" name="transfer_certificate_image"></span>
                            </p>
                            <p> Migration Certificate <span class="wpcf7-form-control-wrap"
                               data-name="file-987"><input size="40" type="file"

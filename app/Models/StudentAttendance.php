@@ -11,4 +11,9 @@ class StudentAttendance  extends Model
     protected $primaryKey = 'id';
     protected $guarded = [];
 
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'roll_no', 'roll_no');
+    }
+
 }

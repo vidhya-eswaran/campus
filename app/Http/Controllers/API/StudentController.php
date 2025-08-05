@@ -13,13 +13,19 @@ use App\Models\AdmissionForm;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentsExport;
 use Intervention\Image\Facades\Image;
 use App\Helpers\LifecycleLogger;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Schema;
+
 
 class StudentController extends Controller
 {
+
     public function index()
     {
         dd("eeeeee");
@@ -71,7 +77,30 @@ class StudentController extends Controller
 
     public function uploadStudentData(Request $request)
     {
-        try {
+        $request->validate([
+                'student_file' => 'nullable|file|mimes:xlsx,xls,csv|max:10240', // up to 10MB
+                
+            ]);
+
+            if ($request->hasFile('student_file')) {
+                $this->handleBulkUpload($request->file('student_file'));
+            } else {
+                $this->handleSingleUpload($request);
+            }       
+
+            return response()->json([
+                'message' => 'Upload complete',
+                'uploaded' => $response['uploaded'] ?? [],
+                'duplicates' => $response['duplicates'] ?? [],
+            ]);
+
+    }
+
+    public function processStudentRecord($request)
+    {
+        //dd($request);
+        try {        
+            
             $record =  (object) $request->all();
 
             $imageFields = [
@@ -111,14 +140,14 @@ class StudentController extends Controller
                     }
 
                     $studentHistory->save();
-                   
+                    $schoolSlug = request()->route('school');
                     $mappedData = (array) $record;
                     foreach ($imageFields as $field) {
                         if ($request->hasFile($field)) {
                             $file = $request->file($field);
 
                             $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                            $path = 'student_images/' . $filename;
+                            $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                             Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -181,13 +210,13 @@ class StudentController extends Controller
                         $student = new Student();
 
                         $mappedData = (array) $record;
-
+                        $schoolSlug = request()->route('school');
                         foreach ($imageFields as $field) {
                             if ($request->hasFile($field)) {
                                 $file = $request->file($field);
 
                                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                                $path = 'student_images/' . $filename;
+                                $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                                 Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -232,8 +261,8 @@ class StudentController extends Controller
                             "message" => "Data uploaded successfully.",
                         ];
                     } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // this will show validation errors
-        }
+                        dd($e->errors()); // this will show validation errors
+                    }
                 }
             } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
               // dd("4");
@@ -292,13 +321,13 @@ class StudentController extends Controller
                            // $student->admission_no = $admissionId ?? null;
 
                             $mappedData = (array) $record;
-
+                            $schoolSlug = request()->route('school');
                             foreach ($imageFields as $field) {
                                 if ($request->hasFile($field)) {
                                     $file = $request->file($field);
 
                                     $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                                    $path = 'student_images/' . $filename;
+                                    $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;
 
                                     Storage::disk('s3')->put($path, file_get_contents($file));
 
@@ -347,8 +376,8 @@ class StudentController extends Controller
                                 "message" => "Data uploaded successfully.",
                             ];
                         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // this will show validation errors
-        }
+                        dd($e->errors()); // this will show validation errors
+                    }
                     
                 }
             }
@@ -363,8 +392,274 @@ class StudentController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function handleSingleUpload(Request $request)
+    {
+        //dd("single");
+        $this->processStudentRecord($request);
+    }
+
+
+
+
+    public function handleBulkUpload($file)
+    {
+        $collection = Excel::toCollection(null, $file)->first();
+
+        if ($collection->isEmpty() || $collection->count() < 2) {
+            return response()->json(['message' => 'The Excel file is empty or has no data rows.'], 422);
+        }
+
+        // Get headers from the first row
+        $headers = $collection->first()->toArray();
+
+        foreach ($collection->skip(1) as $index => $row) {
+            if ($row->filter()->isNotEmpty()) {
+                $values = $row->toArray();
+
+                // Map headers to values
+                $data = array_combine($headers, $values);
+
+            try {       
+                
+                $record =  (object) $data;
+
+                //dd($record->admission_no);
+                
+                if (isset($record->admission_no) && $record->admission_no !== "") {
+                                
+                    $existingStudent = Student::where("roll_no","like",$record->roll_no)->first();
+                    $existingStudentuser = User::where("roll_no","like",$record->roll_no)->first();
+                    if ($existingStudentuser) {
+                    // dd("2");
+                        // Move the existing record to history table
+                        //$studentHistory = new StudentHistory();
+
+                        $studentHistory = new StudentHistory();
+                        $studentHistory->original_id = $existingStudent->id;
+
+                        foreach ($existingStudent->getAttributes() as $key => $value) {
+                            if ($key === 'id') {
+                                continue;
+                            }
+
+                            if (Schema::hasColumn('admitted_students_history', $key)) {
+                                $studentHistory->$key = $value;
+                            }
+                        }
+
+                        $studentHistory->save();
+                    
+                        $mappedData = $data;
+                    
+                        // If date fields need to be converted, handle them separately
+                        if (!empty($record->dob)) {
+                            $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                        }
+
+                        if (!empty($record->date_form)) {
+                            $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                        }
+                    //  dd($mappedData);
+                        $existingStudent->fill($mappedData);
+                        $existingStudent->save();
+                    // dd("SSs");
+
+
+                        //existing user update
+                        $existingStudentuser->name = $record->student_name ?? null;
+                        $existingStudentuser->gender = $record->gender ?? null;
+                        $existingStudentuser->email = $record->father_email_id ?? null;
+                        $existingStudentuser->standard = $record->std_sought ?? null;
+                        $existingStudentuser->sec = $record->sec ?? null;
+                        $existingStudentuser->twe_group = $record->syllabus ?? null;
+                        $existingStudentuser->hostelOrDay = "hostel";
+                        $existingStudentuser->save();
+
+                        LifecycleLogger::log(
+                            "Student Record Updated",
+                            $existingStudentuser->id,
+                            "student_record_update",
+                            [
+                                "student_name" => $existingStudentuser->name,
+                                "roll_no" => $existingStudentuser->roll_no,
+                                "standard" => $existingStudentuser->standard,
+                                "section" => $existingStudentuser->sec,
+                            ]
+                        );
+                        //dd($existingStudentuser);
+                        $response["duplicates"][] = [
+                            "email" => $record->father_email_id,
+                            "admission_no" => $record->admission_no,
+                            "message" =>
+                                "Data modified successfully as it is already exists.",
+                        ];
+                    } else {
+                        // dd("3");
+                        $recordEmail = $record->father_email_id;
+                        $recordAdmissionNo = $record->admission_no;
+
+                        try {
+                            $student = new Student();
+
+                            $mappedData = $data;
+
+                            if (!empty($record->dob)) {
+                                $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                            }
+
+                            if (!empty($record->date_form)) {
+                                $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                            }
+
+                            $student->fill($mappedData);
+                            $student->save();
+
+                        // dd("SSS");
+                            $user = new User();
+                            $lastid = User::latest("id")->value("id");
+                            $lastid = $lastid + 1;
+                            $user->id = $lastid;
+                            $user->name = $record->student_name ?? null;
+                            $user->gender = $record->gender ?? null;
+                            $user->email = $record->father_email_id ?? null;
+                            $user->standard = $record->std_sought ?? null;
+                            $user->sec = $record->sec ?? null;
+                            $user->twe_group = $record->group_first_choice ?? null;
+                            $user->hostelOrDay = "hostel";
+                            $user->password = Hash::make("Student@123");
+                            $user->admission_no = $record->admission_no ?? null;
+                            $user->roll_no = $record->roll_no ?? null;
+                            $user->save();
+                            $response["uploaded"][] = [
+                                "email" => $recordEmail,
+                                "admission_no" => $recordAdmissionNo,
+                                "message" => "Data uploaded successfully.",
+                            ];
+                        } catch (\Illuminate\Validation\ValidationException $e) {
+                            dd($e->errors()); // this will show validation errors
+                        }
+                    }
+                } elseif (!$record->admission_no && $record->student_name && $record->std_sought) {
+                    //  dd($record);
+                    $lastAdmissionNo = User::where("admission_no", "like", "%SV%")
+                        ->whereRaw("LENGTH(admission_no) = 12")
+                        ->orderByRaw(
+                            "STR_TO_DATE(SUBSTRING(admission_no, 3, 6), '%d%m%y') DESC"
+                        )
+                        ->orderByRaw(
+                            "CAST(SUBSTRING(admission_no, 9, 4) AS UNSIGNED) DESC"
+                        )
+                        ->first();
+
+                    $format = "SV" . date("dmy");
+
+                    if ($lastAdmissionNo) {
+                        // Extract the numeric part of the last admission number
+                        $lastNumber = intval(
+                            substr($lastAdmissionNo->admission_no, 8)
+                        );
+
+                        // Check if the last number is 9999, reset to 0001 if it is
+                        if ($lastNumber === 9999) {
+                            $newNumber = 1;
+                        } else {
+                            // Increment the last number by 1
+                            $newNumber = $lastNumber + 1;
+                        }
+                    } else {
+                        // If no previous admission numbers found, start with 0001
+                        $newNumber = 1;
+                    }
+
+                    // Pad the new number with leading zeros to make it 4 digits
+                    $newNumberPadded = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
+
+                    // Combine the format and new number to create the new admission number
+                    $newAdmissionNo = $format . $newNumberPadded;
+                    $admissionId = $newAdmissionNo;
+                    
+                    if ($admissionId && $record->father_email_id) {
+                        //dd("5");
+                        $existingUser = User::where("name", $record->student_name)
+                            //->where('Father', $record[20])
+                            //  ->where('Mobilenumber', $record[26])
+                            ->where("standard", $record->std_sought)
+                            //    ->where('sec', $record[50])  ///////////
+                            ->first();
+
+                            $recordEmail = $record->father_email_id ?? "";
+                            $recordAdmissionNo = $admissionId;
+
+                        
+                            try {
+                                $student = new Student();
+                            // $student->admission_no = $admissionId ?? null;
+
+                                $mappedData = $data;
+
+                            
+                                $mappedData['admission_no'] = $admissionId ?? null;
+
+                                // If date fields need to be converted, handle them separately
+                                if (!empty($record->dob)) {
+                                    $mappedData['dob'] = $this->convertExcelDate($record->dob);
+                                }
+
+                                if (!empty($record->date_form)) {
+                                    $mappedData['date_form'] = $this->convertExcelDate($record->date_form);
+                                }
+
+                                $student->fill($mappedData);
+                                $student->save();
+
+                            
+                                $user = new User();
+                                $lastid = User::latest("id")->value("id");
+                                $lastid = $lastid + 1;
+                                $user->id = $lastid;
+
+                                $user->name = $record->student_name ?? null;
+                                $user->gender = $record->gender ?? null;
+                                $user->email = $record->father_email_id ?? null;
+                                $user->standard = $record->std_sought ?? null;
+                                $user->sec = $record->sec ?? null;
+                                $user->twe_group = $record->group_first_choice ?? null;
+                                $user->hostelOrDay = "hostel";
+                                $user->password = Hash::make("Student@123");
+                                $user->admission_no = $admissionId ?? null;
+                                $user->roll_no = $record->roll_no ?? null;
+
+                                $user->save();
+                                $response["uploaded"][] = [
+                                    "email" => $recordEmail,
+                                    "admission_no" => $recordAdmissionNo,
+                                    "message" => "Data uploaded successfully.",
+                                ];
+                            } catch (\Illuminate\Validation\ValidationException $e) {
+                            dd($e->errors()); // this will show validation errors
+                        }
+                        
+                    }
+                }           
+                
+
+                } catch (\Exception $e) {
+                    Log::error("Row $index failed: " . $e->getMessage());
+                    $response['errors'][] = [
+                        'row' => $index + 1, // Human-readable row number
+                        'message' => $e->getMessage(),
+                    ];
+                }
+            }
+        }
+        return response()
+                ->json($response, 200)
+                ->header("Access-Control-Allow-Origin", "*");
 
     }
+
 
 
     public function insertStudentData(array $data)
@@ -650,8 +945,9 @@ class StudentController extends Controller
         return response()->json(["data" => $students]);
     }
 
-    public function readByadmissioNo($admission_no)
+    public function readByadmissioNo(Request $request, $admission_no)
     {
+        $admission_no = $request->admission_no;
         $students = Student::where("admission_no", $admission_no)->get();
 
         if ($students) {
@@ -691,7 +987,7 @@ class StudentController extends Controller
         // Bulk update non-file fields
         $nonFileData = $request->except($imageFields);
         $admission->update($nonFileData);
-
+        $schoolSlug = request()->route('school');
        //dd($imageFields);
         foreach ($imageFields as $field) {
             if ($request->hasFile($field)) {
@@ -699,7 +995,7 @@ class StudentController extends Controller
 
                 // Generate unique filename
                 $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
-                $path = 'student_images/' . $filename;             
+                $path = 'documents/' . $schoolSlug . '/student_images/' . $filename;             
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -894,195 +1190,46 @@ class StudentController extends Controller
     {
         $id = $request->id;
         // Find the student admission record by ID
-        $admission = AdmissionForm::findOrFail($id);
+        $admission = Admission::findOrFail($id);
         Log::info("Request payload:", $request->all());
 
         // Update the student's basic information (non-file fields)
-        $admission->update([
-            //  'admission_no' => $request->input('admission_no'),
-            "name" => $request->input("STUDENT_NAME"),
-            "date_form" => $request->input("date_form"),
-            "language" => $request->input("MOTHERTONGUE"),
-            "state_student" => $request->input("STATE"),
-            "date_of_birth" => $request->input("DOB_DD_MM_YYYY"),
-            "gender" => $request->input("SEX"),
-            "blood_group" => $request->input("BLOOD_GROUP"),
-            "nationality" => $request->input("NATIONALITY"),
-            "religion" => $request->input("RELIGION"),
-            "church_denomination" => $request->input("DENOMINATION"),
-            "caste" => $request->input("CASTE"),
-            "caste_type" => $request->input("CASTE_CLASSIFICATION"),
-            "aadhar_card_no" => $request->input("AADHAAR_CARD_NO"),
-            "ration_card_no" => $request->input("RATIONCARDNO"),
-            "emis_no" => $request->input("EMIS_NO"),
-            "veg_or_non" => $request->input("FOOD"),
-            "chronic_des" => $request->input("chronic_des"),
-            "medicine_taken" => $request->input("medicine_taken"),
-            "father_name" => $request->input("FATHER"),
-            "father_occupation" => $request->input("OCCUPATION"),
-            "mother_name" => $request->input("MOTHER"),
-            "mother_occupation" => $request->input("mother_occupation"),
-            "guardian_name" => $request->input("GUARDIAN"),
-            "guardian_occupation" => $request->input("guardian_occupation"),
-            "father_contact_no" => $request->input("MOBILE_NUMBER"),
-            "father_email_id" => $request->input("EMAIL_ID"),
-            "mother_contact_no" => $request->input("WHATS_APP_NO"),
-            "mother_email_id" => $request->input("mother_email_id"),
-            "guardian_contact_no" => $request->input("guardian_contact_no"),
-            "guardian_email_id" => $request->input("guardian_email_id"),
-            "father_income" => $request->input("MONTHLY_INCOME"),
-            "mother_income" => $request->input("mother_income"),
-            "guardian_income" => $request->input("guardian_income"),
-            "house_no" => $request->input("PERMANENT_HOUSENUMBER"),
-            "street" => $request->input("P_STREETNAME"),
-            "city" => $request->input("P_VILLAGE_TOWN_NAME"),
-            "district" => $request->input("P_DISTRICT"),
-            "state" => $request->input("P_STATE"),
-            "pincode" => $request->input("P_PINCODE"),
-            "house_no_1" => $request->input("COMMUNICATION_HOUSE_NO"),
-            "street_1" => $request->input("C_STREET_NAME"),
-            "city_1" => $request->input("C_VILLAGE_TOWN_NAME"),
-            "district_1" => $request->input("C_DISTRICT"),
-            "state_1" => $request->input("C_STATE"),
-            "pincode_1" => $request->input("C_PINCODE"),
-            "last_class_std" => $request->input("CLASS_LAST_STUDIED"),
-            "last_school" => $request->input("NAME_OF_SCHOOL"),
-            "admission_for_class" => $request->input("SOUGHT_STD"),
-            "brother_1" => $request->input("brother_1"),
-            "brother_2" => $request->input("brother_2"),
-            "gender_1" => $request->input("gender_1"),
-            "gender_2" => $request->input("gender_2"),
-            "class_1" => $request->input("class_1"),
-            "class_2" => $request->input("class_2"),
-            "brother_3" => $request->input("brother_3"),
-            "gender_3" => $request->input("gender_3"),
-            "class_3" => $request->input("class_3"),
-            "last_school_state" => $request->input("last_school_state"),
-            "reference_name_1" => $request->input("reference_name_1"),
-            "reference_name_2" => $request->input("reference_name_2"),
-            "reference_phone_1" => $request->input("reference_phone_1"),
-            "reference_phone_2" => $request->input("reference_phone_2"),
-            "status" => $request->input("status"),
-            "syllabus" => $request->input("syllabus"),
-            "group_no" => $request->input("GROUP_12"),
-            "second_group_no" => $request->input("second_group_no"),
-            "second_language" => $request->input("second_language"),
-            "second_language_school" => $request->input(
-                "second_language_school"
-            ),
-            "guardian_organization" => $request->input("guardian_organization"),
-            "father_organization" => $request->input("ORGANISATION"),
-            "mother_organization" => $request->input("mother_organization"),
-            "father_title" => $request->father_title,
-            "mother_title" => $request->mother_title,
-        ]);
+        $imageFields = [
+                'profile_image',
+                'birth_certificate_image',
+                'aadhar_image',
+                'ration_card_image',
+                'community_image',
+                'salary_image',
+                'reference_letter_image',
+                'transfer_certificate_image',
+                'migration_image',
+                'church_endorsement_image',
+            ];
 
-        foreach (
-            [
-                "profile_photo",
-                "admission_photo",
-                "birth_certificate",
-                "aadhar_copy",
-                "ration_card",
-                "community_certificate",
-                "salary_certificate",
-                "medical_certificate",
-                "reference_letter",
-                "church_certificate",
-                "transfer_certificate",
-            ]
-            as $field
-        ) {
-            Log::info("Field {$field}:", [$request->input($field)]);
+        $schoolSlug = request()->route('school');
+        $mappedData = [];
+
+        foreach ($imageFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+
+                $filename = now()->format('Ymd_His') . '_' . $field . '.' . $file->getClientOriginalExtension();
+                
+                $path = 'documents/' . $schoolSlug . '/admission_form/' . $filename;
+
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                                    // Set the full URL for accessing the image
+                $mappedData[$field] = Storage::disk('s3')->url($path);
+                } else {
+                    $mappedData[$field] = null;
+                }
         }
 
-        // Handle the image update (using the helper function)profile_photo
-        //  request,$dmission, feildname on api,filepath,dbname
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "migration_certificate",
-            "admission_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "profile_photo",
-            "profile_photos",
-            "profile_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "admission_photo",
-            "profile_photos",
-            "admission_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "birth_certificate",
-            "birth_certificate_photos",
-            "birth_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "aadhar_copy",
-            "aadhar_card_photos",
-            "aadhar_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "ration_card",
-            "ration_card_photos",
-            "ration_card_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "community_certificate",
-            "community_certificate_photos",
-            "community_certificate"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "salary_certificate",
-            "slip_photos",
-            "slip_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "medical_certificate",
-            "medical_certificate_photos",
-            "medical_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "reference_letter",
-            "reference_letter_photos",
-            "reference_letter_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "church_certificate",
-            "church_certificate_photos",
-            "church_certificate_photo"
-        );
-        $this->handleImageUpdate(
-            $request,
-            $admission,
-            "transfer_certificate",
-            "transfer_certificate_photos",
-            "transfer_certificate_photo"
-        );
-
+        $inputData = array_merge($request->except($imageFields), $mappedData);
+        $admission->save();
+        
         // Return the updated student details
         return response()->json([
             "message" => "Student admission details updated successfully!",
@@ -1143,30 +1290,30 @@ class StudentController extends Controller
             );
         }
     }
-    public function showfromAdmission(Request $request,$id)
+    public function showfromAdmission(Request $request, $id)
     {
         try {
             $id = $request->id;
-            $admission = AdmissionForm::findOrFail($id);
+            $admission = Admission::findOrFail($id);
 
-            $imageFields = [
-                'profile_image',
-                'birth_certificate_image',
-                'aadhar_image',
-                'ration_card_image',
-                'community_image',
-                'salary_image',
-                'reference_letter_image',
-                'transfer_certificate_image',
-                'migration_image',
-                'church_endorsement_image',
-            ];
+            // $imageFields = [
+            //     'profile_image',
+            //     'birth_certificate_image',
+            //     'aadhar_image',
+            //     'ration_card_image',
+            //     'community_image',
+            //     'salary_image',
+            //     'reference_letter_image',
+            //     'transfer_certificate_image',
+            //     'migration_image',
+            //     'church_endorsement_image',
+            // ];
 
-            foreach ($imageFields as $field) {
-                if (!empty($admission->$field)) {
-                    $admission->$field = asset('storage/student_images/' . $admission->$field);
-                }
-            }
+            // foreach ($imageFields as $field) {
+            //     if (!empty($admission->$field)) {
+            //         $admission->$field = asset('storage/student_images/' . $admission->$field);
+            //     }
+            // }
 
             return response()->json([
                 "message" => "Student admission details fetched successfully!",
@@ -1315,127 +1462,7 @@ class StudentController extends Controller
             $admission->update([$fieldName => $path]);
         }
     }
-    public function updatetttt(Request $request, $id)
-    {
-        $record = Student::find($id); // Replace YourModel with the actual model name
-
-        if (!$record) {
-            return response()->json(["error" => "Record not found."]);
-        }
-
-        $record->id = $request->input("id");
-        $record->admission_no = $request->input("admission_no");
-        $record->roll_no = $request->input("roll_no");
-        $record->student_name = $request->input("student_name");
-        $record->sex = $request->input("sex");
-        $record->dob = $request->input("dob");
-        $record->blood_group = $request->input("blood_group");
-        $record->emis_no = $request->input("emis_no");
-        $record->Nationality = $request->input("Nationality");
-        $record->State = $request->input("State");
-        $record->Religion = $request->input("Religion");
-        $record->Denomination = $request->input("Denomination");
-        $record->Caste = $request->input("Caste");
-        $record->CasteClassification = $request->input("CasteClassification");
-        $record->AadhaarCardNo = $request->input("AadhaarCardNo");
-        $record->RationCard = $request->input("RationCard");
-        $record->Mothertongue = $request->input("Mothertongue");
-        $record->Father = $request->input("Father");
-        $record->Mother = $request->input("Mother");
-        $record->Guardian = $request->input("Guardian");
-        $record->Occupation = $request->input("Occupation");
-        $record->Organisation = $request->input("Organisation");
-        $record->Monthlyincome = $request->input("Monthlyincome");
-        $record->p_housenumber = $request->input("p_housenumber");
-        $record->p_Streetname = $request->input("p_Streetname");
-        $record->p_VillagetownName = $request->input("p_VillagetownName");
-        $record->p_Postoffice = $request->input("p_Postoffice");
-        $record->p_Taluk = $request->input("p_Taluk");
-        $record->p_District = $request->input("p_District");
-        $record->p_State = $request->input("p_State");
-        $record->p_Pincode = $request->input("p_Pincode");
-        $record->c_HouseNumber = $request->input("c_HouseNumber");
-        $record->c_StreetName = $request->input("c_StreetName");
-        $record->c_VillageTownName = $request->input("c_VillageTownName");
-        $record->c_Postoffice = $request->input("c_Postoffice");
-        $record->c_Taluk = $request->input("c_Taluk");
-        $record->c_District = $request->input("c_District");
-        $record->c_State = $request->input("c_State");
-        $record->c_Pincode = $request->input("c_Pincode");
-        $record->Mobilenumber = $request->input("Mobilenumber");
-        $record->WhatsAppNo = $request->input("WhatsAppNo");
-        $record->ClasslastStudied = $request->input("ClasslastStudied");
-        $record->EmailID = $request->input("EmailID");
-        $record->Nameofschool = $request->input("Nameofschool");
-        $record->File = $request->input("File");
-        $record->sought_Std = $request->input("sought_Std");
-        $record->sec = $request->input("sec");
-        $record->Part_I = $request->input("Part_I");
-        $record->Group = $request->input("Group");
-        $record->FOOD = $request->input("FOOD");
-        $record->special_information = $request->input("special_information");
-        $record->Declare_not_attended = $request->input("Declare_not_attended");
-        $record->Declare_dues = $request->input("Declare_dues");
-        $record->Declare_dob = $request->input("Declare_dob");
-        $record->Declare_Date = $request->input("Declare_Date");
-        $record->Declare_Place = $request->input("Declare_Place");
-        $record->Measles = $request->input("Measles");
-        $record->Chickenpox = $request->input("Chickenpox");
-        $record->Fits = $request->input("Fits");
-        $record->Rheumaticfever = $request->input("Rheumaticfever");
-        $record->Mumps = $request->input("Mumps");
-        $record->Jaundice = $request->input("Jaundice");
-        $record->Asthma = $request->input("Asthma");
-        $record->Nephritis = $request->input("Nephritis");
-        $record->Whoopingcough = $request->input("Whoopingcough");
-        $record->Tuberculosis = $request->input("Tuberculosis");
-        $record->Hayfever = $request->input("Hayfever");
-        $record->CongenitalHeartDisease = $request->input(
-            "CongenitalHeartDisease"
-        );
-        $record->P_Bronchial = $request->input("P_Bronchial");
-        $record->P_Tuberculosis = $request->input("P_Tuberculosis");
-        $record->BCG = $request->input("BCG");
-        $record->Triple_Vaccine = $request->input("Triple_Vaccine");
-        $record->Polio_Drops = $request->input("Polio_Drops");
-        $record->Measles_given = $request->input("Measles_given");
-        $record->MMR = $request->input("MMR");
-        $record->Dual_Vaccine = $request->input("Dual_Vaccine");
-        $record->Typhoid = $request->input("Typhoid");
-        $record->Cholera = $request->input("Cholera");
-        $record->permission_to_principal = $request->input(
-            "permission_to_principal"
-        );
-        $record->administration_of_anaesthetic = $request->input(
-            "administration_of_anaesthetic"
-        );
-        $record->hostelOrDay = $request->input("hostelOrDay");
-        $record->language = $request->input("language");
-        $record->state_student = $request->input("state_student");
-        $record->profile_photo = $request->input("profile_photo");
-        $record->admission_photo = $request->input("admission_photo");
-        $record->brother_1 = $request->input("brother_1");
-        $record->brother_2 = $request->input("brother_2");
-        $record->gender_1 = $request->input("gender_1");
-        $record->gender_2 = $request->input("gender_2");
-        $record->class_1 = $request->input("class_1");
-        $record->class_2 = $request->input("class_2");
-        $record->brother_3 = $request->input("brother_3");
-        $record->gender_3 = $request->input("gender_3");
-        $record->class_3 = $request->input("class_3");
-        $record->last_school_state = $request->input("last_school_state");
-        $record->second_language_school = $request->input(
-            "second_language_school"
-        );
-        $record->reference_name_1 = $request->input("reference_name_1");
-        $record->reference_name_2 = $request->input("reference_name_2");
-        $record->reference_phone_1 = $request->input("reference_phone_1");
-        $record->reference_phone_2 = $request->input("reference_phone_2");
-
-        $record->save(); // Save the updated record
-
-        return response()->json(["success" => "Record updated successfully."]);
-    }
+    
     public function deletefromstudent(Request $request, $id)
     {
         $admission = Student::findOrFail($id);
@@ -1504,21 +1531,18 @@ class StudentController extends Controller
         ]);
 
     }
+
+    public function downloadStudentTemplate()
+    {
+        $path = storage_path('app/public/student_file.xlsx');
+
+        //dd($path);
+        
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        return response()->download($path, 'student_file.xlsx');
+    }
+
 }
-
-// function convertValue($value) {
-//     $romanNumerals = [
-//         'I' => 1, 'II' => 2, 'III' => 3, 'IV' => 4, 'V' => 5,
-//         'VI' => 6, 'VII' => 7, 'VIII' => 8, 'IX' => 9, 'X' => 10, 'XI' => 11,'XII' => 12,
-//     ];
-
-//     $value = strtoupper(trim($value));
-
-//     if (isset($romanNumerals[$value])) {
-//         return $romanNumerals[$value];
-//     } elseif ($value === 'LKG' || $value === 'UKG') {
-//         return strtolower($value); // Convert to lowercase
-//     } else {
-//         return null;
-//     }
-// }

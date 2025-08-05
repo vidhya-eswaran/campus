@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
-
+use App\Models\Student;
 use App\Models\StudentAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -44,8 +44,9 @@ class StudentAttendanceController extends Controller
             }
             if ($request->filled("date")) {
                 $query->whereDate("date", $request->date);
-            }
-            $attendances = $query->orderBy("roll_no")->get();
+            }      
+
+            $attendances = $query->with('student:roll_no,profile_image')->orderBy("roll_no")->get();
 
             return response()->json(["data" => $attendances], 200);
         } catch (\Exception $e) {

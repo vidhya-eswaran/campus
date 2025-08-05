@@ -48,16 +48,20 @@ class HostelAdmissionController extends Controller
     {
         $request->validate([
             "email_id" => "required|email",
+            "sender_email_id" => "required|email",
         ]);
 
         $otp = rand(100000, 999999);
         $email = $request->email_id;
+        $senderEmail = $request->sender_email_id;
 
         // Cache OTP for 10 minutes
         Cache::put("otp_" . $email, $otp, now()->addMinutes(10));
 
         // Send mail
-        Mail::to($email)->send(new OtpMailHostelAdmission($otp));
+        Mail::to($email)->send(
+            (new OtpMailHostelAdmission($otp))->replyTo($senderEmail)
+        );
 
         return response()->json(
             ["message" => "OTP sent successfully to " . $email],

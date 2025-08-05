@@ -25,11 +25,13 @@ class AnnouncementController extends Controller
     // Base URL without "public/"
 
     // Fetch all announcements
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->get('per_page', 10);
+
         $announcements = Announcement::with("categoryDetails")
             ->orderBy("created_at", "desc")
-            ->get();
+            ->paginate($perPage);
         return response()->json($announcements);
     }
 
@@ -49,14 +51,16 @@ class AnnouncementController extends Controller
 
         $user = Auth::user();
 
-        dd($user);
+        $schoolSlug = request()->route('school');
+
+       // dd($user);
 
         // Handle file upload
         if ($request->hasFile("file")) {
             $file = $request->file("file");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Announcement/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Announcement/' . $filename;        
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -115,13 +119,15 @@ class AnnouncementController extends Controller
             'createdBy' => 'required',
         ]);
 
+        $schoolSlug = request()->route('school');
+
         // Handle file upload
         if ($request->hasFile("file")) {            
 
             $file = $request->file("file");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'Announcement/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/Announcement/' . $filename;         
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));

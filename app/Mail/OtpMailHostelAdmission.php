@@ -11,8 +11,9 @@ class OtpMailHostelAdmission extends Mailable
 
     public $otp;
     public $name;
+    public $fromEmail;
 
-    public function __construct($otp, $name = 'Parent/Guardian')
+    public function __construct($otp, $name = 'Parent/Guardian', $fromEmail = null)
     {
         $this->otp = $otp;
         $this->name = $name;
@@ -22,5 +23,10 @@ class OtpMailHostelAdmission extends Mailable
     {
         return $this->subject('OTP for Hostel Admission Verification')
                     ->view('emails.otp_mail_addmision');
+
+        if ($this->fromEmail) {
+            $mail->from($this->fromEmail, $this->name);
+        }
+        return $mail;
     }
 }

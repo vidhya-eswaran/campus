@@ -35,9 +35,11 @@ class NoticeBoardController extends Controller
     ];
 
     // Fetch all notices (only non-deleted)
-    public function index()
+    public function index(Request $request)
     {
-        $notices = NoticeBoard::with('categoryDetails')->orderBy('id', 'desc')->where('delete_status', 0)->get();
+        $perPage = $request->get('per_page', 10);
+
+        $notices = NoticeBoard::with('categoryDetails')->orderBy('id', 'desc')->where('delete_status', 0)->paginate($perPage);
         return response()->json($notices);
     }
 
@@ -51,14 +53,14 @@ class NoticeBoardController extends Controller
             'createdBy' => 'required',
         ]);
 
-       dd(auth()->guard('api')->user());
+        $schoolSlug = request()->route('school');
 
         // Handle file upload if present
         if ($request->has('file')) {
                 $file = $request->file('file');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'NoticeBoard/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/NoticeBoard/' . $filename;       
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));
@@ -107,12 +109,14 @@ class NoticeBoardController extends Controller
             'createdBy' => 'required',
         ]);
 
+        $schoolSlug = request()->route('school');
+
         // Handle Base64 file upload
         if ($request->has('file')) {
                 $file = $request->file('file');
                 $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-               $path = 'NoticeBoard/' . $filename;           
+               $path = 'documents/' . $schoolSlug . '/NoticeBoard/' . $filename;              
 
                 // Upload to S3
                 Storage::disk('s3')->put($path, file_get_contents($file));

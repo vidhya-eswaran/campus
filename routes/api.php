@@ -71,6 +71,7 @@ use App\Http\Controllers\API\HostelAdmissionController;
 use App\Http\Controllers\API\StudentAttendanceController;
 use App\Http\Controllers\API\PhotoController;
 use App\Http\Controllers\RazorpayPaymentController;
+use App\Http\Controllers\PushNotificationController;
 
 // use App\Http\Controllers\API\school_fees_master; storeSendForm
 // use App\Http\Controllers\API\school_miscellaneous_bill_master;
@@ -86,6 +87,8 @@ use App\Mail\TestEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Razorpay\Api\Api;
+
 
 Route::get('/test-s3', function () {
     try {
@@ -110,6 +113,41 @@ Route::get('/test-s3', function () {
     }
 });
 
+Route::get('/test-razorpay/{school}', function ($school) {
+    try {
+        $service = new \App\Services\RazorpayService();
+       
+        $service->configureRazorpayForSchool($school);
+
+        //dd($api);
+
+        $api = new \Razorpay\Api\Api(config('razorpay.key'), config('razorpay.secret'));
+
+        //dd($api);
+
+        $order = $api->order->create([
+            'receipt' => 'TEST-' . uniqid(),
+            'amount' => 10000, // ₹100
+            'currency' => 'INR',
+        ]);
+
+        return response()->json([
+            'message' => 'Razorpay Configured and Order Created Successfully',
+            'order_id' => $order['id'],
+            'razorpay_key' => config('razorpay.key')
+        ]);
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
+
+Route::post('/send-push', [PushNotificationController::class, 'sendPushNotification']);
+
+
+
 //========================================================================================
 //Central DB API
 Route::post("/create-school", [SchoolController::class , "createSchool"]);
@@ -132,13 +170,66 @@ Route::get('/check-passport-key', function () {
     return config('passport.private_key');
 });
 
+Route::post('/send-test-email', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    $email = $request->email;
+
+    // Send the test email
+    Mail::raw('Test email contents', function ($message) use ($email) {
+        $message->to($email)->subject('Test Email');
+    });
+
+    return response()->json([
+        'message' => 'Test email sent successfullys!'
+    ], 200);
+});
+
 //=========================================================================================
 // School Database
 
 
 
-Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function ()
+
+Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function ()
 {
+     Route::get('/test-razorpay', function (Request $request) {
+        $key = config('razorpay.key');
+        $secret = config('razorpay.secret');
+
+        if (!$key || !$secret) {
+            return response()->json([
+                'message' => 'Razorpay credentials are not set',
+            ], 500);
+        }
+
+        try {
+            $api = new Api($key, $secret);
+
+            $order = $api->order->create([
+                'receipt' => 'TEST-' . uniqid(),
+                'amount' => 10000, // ₹100 in paise
+                'currency' => 'INR',
+            ]);
+
+            return response()->json([
+                'message' => 'Razorpay credentials are valid',
+                'razorpay_key' => $key,
+                'order_id' => $order['id'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to use Razorpay credentials',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    });
+    Route::get('/intiate-payment', [PaymentsController::class, 'intiatePayment']);
+    Route::post('/redirect', [PaymentsController::class, 'processRetrunResponse']);
+    Route::get('/student/{studentId}/transactions', [PaymentsController::class, 'getTransactionLogs']);
+
     Route::post("/users", [SchoolUserController::class , "store"]);
 
     Route::post("/register", [ApiController::class , "register"]);
@@ -146,8 +237,14 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/login", [ApiController::class , "login"]);
 
     Route::post("/addSVSUser", [listUserController::class , "addUser"]);
-
+    
     Route::middleware('auth:api')->group(function () {
+        Route::get('/check-token', function (Request $request) {
+            return response()->json(['user' => $request->user()]);
+        });
+    });
+
+   // Route::middleware('auth:api')->group(function () {
 
         Route::prefix("noticeboard")->group(function ()
         {
@@ -167,7 +264,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
             Route::delete("/{id}", [AnnouncementController::class , "destroy"]);
         });
 
-    });
+    //});
 
     Route::post("/healthcare/add", [StudentHealthcareController::class , "addHealthcareRecord", ]);
     Route::post("/healthcare/edit/{id}", [StudentHealthcareController::class , "editHealthcareRecord", ]);
@@ -182,6 +279,10 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/marks/save-temporary", [StudentMarkController::class , "saveTemporary", ]);
     Route::get("/marks/temporary", [StudentMarkController::class , "getTemporary", ]);
     Route::get("/reportCard", [StudentMarkController::class , "viewReportCard", ]);
+
+    Route::post("/view-studentmark", [StudentMarkController::class , "viewOneUser"]);
+
+    Route::post("/reportCard/verify", [StudentMarkController::class , "verifyParent"]);
 
     Route::get("/viewProfile", [App\Http\Controllers\API\ApiController::class , "viewProfile", ]);
 
@@ -198,12 +299,11 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     //ApiController
     Route::get("/lifecycle", [ApiController::class , "lifecycle"]);
 
-    Route::post('/razorpay/create-order', [RazorpayPaymentController::class, 'createOrder']);
+    //payment config
+    Route::post('/payment/create', [RazorpayPaymentController::class, 'createOrder']);
+    Route::post('/payment/callback', [RazorpayPaymentController::class, 'handleCallback']);
 
-    Route::post('/razorpay/verify-payment', [RazorpayPaymentController::class, 'verifyPayment']);
-
-
-
+    
     //Promotion student Routes
     Route::post("/studentpromotion-update", [StudentPromotionController::class , "update", ]);
     Route::post("/move-to-detention", [StudentPromotionController::class , "moveToDetention", ]);
@@ -290,6 +390,8 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::post("/Admission-update/{id}", [StudentController::class , "updatefromAdmission", ]);
     Route::post("/upload-photos", [PhotoController::class , "upload"]);
     Route::post("/bulk-status/profile", [bulkstatusController::class , "status"]);
+    Route::get('download-student-template', [StudentController::class, 'downloadStudentTemplate']);
+
 
     //TemplateEditorController
     Route::get("studentContactView", [TemplateEditorController::class , "studentContactView", ]);
@@ -415,7 +517,7 @@ Route::group(["prefix" => "{school}", "middleware" => ["school.db"]], function (
     Route::get("/payment-receipt", [InvoiceController::class , "getPaymentReceipt", ]);
     Route::post("/geteachsponserstudent", [InvoiceController::class , "getsponserstudent", ]);
     Route::get("/sponsor/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudents", ]);
-    Route::get("/sponsortwo/{sponsorId}/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
+    Route::post("/sponsortwo/students", [InvoiceController::class , "getSponsorIDStudentstwo", ]);
     Route::get("/sponsor/select", [InvoiceController::class , "getSponsorSelectOptions", ]);
     Route::get("/student/select", [InvoiceController::class , "getParentSelectOptions", ]);
     Route::post("/sponsor/processCashPayment", [InvoiceController::class , "processCashPayment", ]);

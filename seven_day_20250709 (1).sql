@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 06:00 PM
+-- Generation Time: Jul 28, 2025 at 05:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `karthik`
+-- Database: `seven_day_20250709`
 --
 
 -- --------------------------------------------------------
@@ -74,107 +74,91 @@ CREATE TABLE `admission` (
 
 CREATE TABLE `admission_live` (
   `id` int(11) NOT NULL,
-  `student_name` varchar(220) DEFAULT NULL,
-  `date_form` varchar(100) DEFAULT NULL,
-  `mother_tongue` varchar(100) DEFAULT NULL,
-  `state` varchar(100) DEFAULT NULL,
-  `dob` varchar(100) DEFAULT NULL,
-  `gender` varchar(50) DEFAULT NULL,
-  `blood_group` varchar(50) DEFAULT NULL,
-  `nationality` varchar(220) DEFAULT NULL,
-  `religion` varchar(220) DEFAULT NULL,
-  `denomination` varchar(220) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `date_form` varchar(255) DEFAULT NULL,
+  `language` varchar(100) DEFAULT NULL,
+  `state_student` varchar(100) DEFAULT NULL,
+  `date_of_birth` varchar(100) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `blood_group` varchar(255) DEFAULT NULL,
+  `nationality` varchar(100) DEFAULT NULL,
+  `religion` varchar(100) DEFAULT NULL,
+  `church_denomination` varchar(255) DEFAULT NULL,
   `caste` varchar(100) DEFAULT NULL,
-  `caste_classification` varchar(220) DEFAULT NULL,
-  `aadhar_card_no` varchar(220) DEFAULT NULL,
-  `ration_card_no` varchar(220) DEFAULT NULL,
-  `emis_no` varchar(220) DEFAULT NULL,
-  `food_choice` varchar(220) DEFAULT NULL,
-  `chronic_des` varchar(220) DEFAULT NULL,
-  `medicine_taken` varchar(220) DEFAULT NULL,
-  `father_name` varchar(220) DEFAULT NULL,
-  `father_occupation` varchar(220) DEFAULT NULL,
-  `mother_name` varchar(220) DEFAULT NULL,
-  `mother_occupation` varchar(220) DEFAULT NULL,
-  `guardian_name` varchar(220) DEFAULT NULL,
-  `guardian_occupation` varchar(220) DEFAULT NULL,
-  `father_mobile_no` varchar(220) DEFAULT NULL,
-  `father_email_id` varchar(220) DEFAULT NULL,
-  `mother_mobile_no` varchar(220) DEFAULT NULL,
-  `mother_email_id` varchar(220) DEFAULT NULL,
-  `guardian_mobile_no` varchar(220) DEFAULT NULL,
-  `guardian_email_id` varchar(220) DEFAULT NULL,
-  `father_annual_income` varchar(90) DEFAULT NULL,
-  `mother_annual_income` varchar(220) DEFAULT NULL,
-  `guardian_annual_income` varchar(220) DEFAULT NULL,
-  `permanent_house_no` varchar(220) DEFAULT NULL,
-  `permanent_street_name` varchar(220) DEFAULT NULL,
-  `permanent_city_town_village` varchar(220) DEFAULT NULL,
-  `permanent_district` varchar(220) DEFAULT NULL,
-  `permanent_state` varchar(220) DEFAULT NULL,
-  `permanent_pincode` varchar(220) DEFAULT NULL,
-  `communication_house_no` varchar(100) DEFAULT NULL,
-  `communication_street_name` varchar(220) DEFAULT NULL,
-  `communication_city_town_village` varchar(220) DEFAULT NULL,
-  `communication_district` varchar(220) DEFAULT NULL,
-  `communication_state` varchar(220) DEFAULT NULL,
-  `communication_pincode` varchar(220) DEFAULT NULL,
-  `class_last_studied` varchar(220) DEFAULT NULL,
-  `last_school_name` varchar(220) DEFAULT NULL,
-  `std_sought` varchar(220) DEFAULT NULL,
-  `sec` varchar(220) DEFAULT NULL,
-  `syllabus` varchar(220) DEFAULT NULL,
-  `group_first_choice` varchar(220) DEFAULT NULL,
-  `group_second_choice` varchar(100) DEFAULT NULL,
-  `language` varchar(220) DEFAULT NULL,
-  `profile_image` varchar(220) DEFAULT NULL,
-  `birth_certificate_image` longtext DEFAULT NULL,
-  `aadhar_image` longtext DEFAULT NULL,
-  `ration_card_image` varchar(220) DEFAULT NULL,
-  `community_image` longtext DEFAULT NULL,
-  `salary_image` varchar(220) DEFAULT NULL,
-  `medical_certificate_image` longtext DEFAULT NULL,
-  `reference_letter_image` longtext DEFAULT NULL,
-  `church_certificate_photo` longtext DEFAULT NULL,
-  `transfer_certificate_image` longtext DEFAULT NULL,
-  `migration_image` varchar(255) DEFAULT NULL,
-  `church_endorsement_image` varchar(255) DEFAULT NULL,
-  `admission_photo` longtext DEFAULT NULL,
-  `payment_order_id` varchar(90) DEFAULT NULL,
-  `sibling_1` varchar(100) DEFAULT NULL,
-  `sibling_2` varchar(100) DEFAULT NULL,
-  `gender_1` varchar(90) DEFAULT NULL,
-  `gender_2` varchar(90) DEFAULT NULL,
-  `class_1` varchar(90) DEFAULT NULL,
-  `class_2` varchar(90) DEFAULT NULL,
-  `sibling_3` varchar(90) DEFAULT NULL,
-  `gender_3` varchar(90) DEFAULT NULL,
-  `class_3` varchar(90) DEFAULT NULL,
-  `last_school_state` varchar(90) DEFAULT NULL,
-  `second_language_school` varchar(90) DEFAULT NULL,
-  `reference_name_1` varchar(90) DEFAULT NULL,
-  `reference_name_2` varchar(90) DEFAULT NULL,
-  `reference_phone_1` varchar(90) DEFAULT NULL,
-  `reference_phone_2` varchar(90) DEFAULT NULL,
-  `father_organization` varchar(220) DEFAULT NULL,
-  `mother_organization` varchar(220) DEFAULT NULL,
-  `guardian_organization` varchar(220) DEFAULT NULL,
+  `caste_type` varchar(255) DEFAULT NULL,
+  `aadhar_card_no` varchar(255) DEFAULT NULL,
+  `ration_card_no` varchar(255) DEFAULT NULL,
+  `emis_no` varchar(255) DEFAULT NULL,
+  `veg_or_non` varchar(255) DEFAULT NULL,
+  `chronic_des` varchar(255) DEFAULT NULL,
+  `medicine_taken` varchar(255) DEFAULT NULL,
+  `father_name` varchar(255) DEFAULT NULL,
+  `father_occupation` varchar(255) DEFAULT NULL,
+  `mother_name` varchar(255) DEFAULT NULL,
+  `mother_occupation` varchar(255) DEFAULT NULL,
+  `guardian_name` varchar(255) DEFAULT NULL,
+  `guardian_occupation` varchar(255) DEFAULT NULL,
+  `father_contact_no` varchar(255) DEFAULT NULL,
+  `father_email_id` varchar(255) DEFAULT NULL,
+  `mother_contact_no` varchar(255) DEFAULT NULL,
+  `mother_email_id` varchar(255) DEFAULT NULL,
+  `guardian_contact_no` varchar(255) DEFAULT NULL,
+  `guardian_email_id` varchar(255) DEFAULT NULL,
+  `father_income` varchar(100) DEFAULT NULL,
+  `mother_income` varchar(100) DEFAULT NULL,
+  `guardian_income` varchar(100) DEFAULT NULL,
+  `house_no` varchar(255) DEFAULT NULL,
+  `street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `district` varchar(255) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `pincode` varchar(255) DEFAULT NULL,
+  `house_no_1` varchar(255) DEFAULT NULL,
+  `street_1` varchar(255) DEFAULT NULL,
+  `city_1` varchar(255) DEFAULT NULL,
+  `district_1` varchar(255) DEFAULT NULL,
+  `state_1` varchar(100) DEFAULT NULL,
+  `pincode_1` varchar(255) DEFAULT NULL,
+  `last_class_std` varchar(255) DEFAULT NULL,
+  `last_school` varchar(255) DEFAULT NULL,
+  `admission_for_class` varchar(255) DEFAULT NULL,
+  `syllabus` varchar(255) DEFAULT NULL,
+  `group_no` varchar(255) DEFAULT NULL,
+  `second_group_no` varchar(255) DEFAULT NULL,
+  `second_language` varchar(255) DEFAULT NULL,
+  `profile_photo` varchar(255) DEFAULT NULL,
+  `birth_certificate_photo` varchar(200) DEFAULT NULL,
+  `aadhar_card_photo` varchar(200) DEFAULT NULL,
+  `ration_card_photo` varchar(200) DEFAULT NULL,
+  `community_certificate` varchar(200) DEFAULT NULL,
+  `slip_photo` varchar(200) DEFAULT NULL,
+  `medical_certificate_photo` varchar(200) DEFAULT NULL,
+  `reference_letter_photo` varchar(200) DEFAULT NULL,
+  `church_certificate_photo` varchar(200) DEFAULT NULL,
+  `transfer_certificate_photo` varchar(200) DEFAULT NULL,
+  `admission_photo` varchar(255) DEFAULT NULL,
+  `payment_order_id` varchar(200) DEFAULT NULL,
+  `brother_1` varchar(200) DEFAULT NULL,
+  `brother_2` varchar(200) DEFAULT NULL,
+  `gender_1` varchar(200) DEFAULT NULL,
+  `gender_2` varchar(200) DEFAULT NULL,
+  `class_1` varchar(200) DEFAULT NULL,
+  `class_2` varchar(200) DEFAULT NULL,
+  `brother_3` varchar(100) DEFAULT NULL,
+  `gender_3` varchar(100) DEFAULT NULL,
+  `class_3` varchar(100) DEFAULT NULL,
+  `last_school_state` varchar(100) DEFAULT NULL,
+  `second_language_school` varchar(50) DEFAULT NULL,
+  `reference_name_1` varchar(100) DEFAULT NULL,
+  `reference_name_2` varchar(100) DEFAULT NULL,
+  `reference_phone_1` varchar(100) DEFAULT NULL,
+  `reference_phone_2` varchar(100) DEFAULT NULL,
+  `father_organization` varchar(50) DEFAULT NULL,
+  `mother_organization` varchar(50) DEFAULT NULL,
+  `guardian_organization` varchar(50) DEFAULT NULL,
   `pin_no` varchar(20) DEFAULT NULL,
-  `created_at` varchar(90) DEFAULT NULL,
-  `updated_at` varchar(90) DEFAULT NULL,
-  `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  `academic_year` varchar(100) DEFAULT NULL,
-  `grade_status` varchar(100) DEFAULT NULL,
-  `group_no` int(11) DEFAULT NULL,
-  `siblings` varchar(100) DEFAULT NULL,
-  `second_language` varchar(100) DEFAULT NULL,
-  `father_title` varchar(100) DEFAULT NULL,
-  `mother_title` varchar(100) DEFAULT NULL,
-  `guardian_title` varchar(200) DEFAULT NULL,
-  `pen_no` int(11) DEFAULT NULL,
-  `Declaration` varchar(255) DEFAULT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -267,8 +251,8 @@ CREATE TABLE `admission_live_demo` (
   `father_organization` varchar(50) DEFAULT NULL,
   `mother_organization` varchar(50) DEFAULT NULL,
   `guardian_organization` varchar(50) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -321,8 +305,8 @@ CREATE TABLE `admission_process` (
   `brother_2` varchar(200) DEFAULT NULL,
   `gender_2` varchar(200) DEFAULT NULL,
   `class_2` varchar(200) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -488,18 +472,18 @@ CREATE TABLE `admitted_students` (
   `group_second_choice` varchar(100) DEFAULT NULL,
   `language` varchar(220) DEFAULT NULL,
   `profile_image` varchar(220) DEFAULT NULL,
-  `birth_certificate_image` longtext DEFAULT NULL,
-  `aadhar_image` longtext DEFAULT NULL,
+  `birth_certificate_image` varchar(90) DEFAULT NULL,
+  `aadhar_image` varchar(90) DEFAULT NULL,
   `ration_card_image` varchar(220) DEFAULT NULL,
-  `community_image` longtext DEFAULT NULL,
+  `community_image` varchar(90) DEFAULT NULL,
   `salary_image` varchar(220) DEFAULT NULL,
-  `medical_certificate_image` longtext DEFAULT NULL,
-  `reference_letter_image` longtext DEFAULT NULL,
-  `church_certificate_photo` longtext DEFAULT NULL,
-  `transfer_certificate_image` longtext DEFAULT NULL,
+  `medical_certificate_image` varchar(90) DEFAULT NULL,
+  `reference_letter_image` varchar(90) DEFAULT NULL,
+  `church_certificate_photo` varchar(90) DEFAULT NULL,
+  `transfer_certificate_image` varchar(90) DEFAULT NULL,
   `migration_image` varchar(255) DEFAULT NULL,
   `church_endorsement_image` varchar(255) DEFAULT NULL,
-  `admission_photo` longtext DEFAULT NULL,
+  `admission_photo` varchar(90) DEFAULT NULL,
   `payment_order_id` varchar(90) DEFAULT NULL,
   `sibling_1` varchar(100) DEFAULT NULL,
   `sibling_2` varchar(100) DEFAULT NULL,
@@ -523,8 +507,8 @@ CREATE TABLE `admitted_students` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL,
   `group_no` int(11) DEFAULT NULL,
@@ -635,8 +619,8 @@ CREATE TABLE `admitted_students_history` (
   `created_at` varchar(90) DEFAULT NULL,
   `updated_at` varchar(90) DEFAULT NULL,
   `documents` varchar(220) DEFAULT NULL,
-  `upload_created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `upload_updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `upload_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `upload_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -649,12 +633,11 @@ CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `target_type` enum('target','role','class') NOT NULL,
   `target` bigint(20) UNSIGNED DEFAULT NULL,
-  `category` varchar(255) NOT NULL,
+  `category` bigint(20) UNSIGNED NOT NULL,
   `announcementDescription` text NOT NULL,
   `announcementType` tinyint(1) NOT NULL DEFAULT 0,
   `announcementDate` date NOT NULL,
   `file` varchar(255) DEFAULT NULL,
-  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -668,7 +651,7 @@ CREATE TABLE `announcements` (
 CREATE TABLE `bulk_sponser_payments` (
   `id` int(11) NOT NULL,
   `request_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`request_data`)),
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -684,8 +667,8 @@ CREATE TABLE `by_pay_informations` (
   `transactionId` varchar(121) NOT NULL,
   `amount` varchar(255) DEFAULT NULL,
   `sponsor` varchar(121) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `inv_amt` int(11) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   `due_amount` varchar(100) DEFAULT NULL,
@@ -803,8 +786,8 @@ CREATE TABLE `deletedreceipts` (
   `balance_amount` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `transaction_completed_status` varchar(255) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -837,8 +820,8 @@ CREATE TABLE `discount_lists` (
   `fees_cat` varchar(255) NOT NULL,
   `end_date` varchar(100) NOT NULL,
   `status` int(15) NOT NULL DEFAULT 0,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -899,8 +882,8 @@ CREATE TABLE `donation_donar_list` (
   `pincode` varchar(30) DEFAULT NULL,
   `pan_no` varchar(30) DEFAULT NULL,
   `invoice_pdf` varchar(30) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -919,9 +902,9 @@ CREATE TABLE `donation_list` (
   `btn_amt_1` decimal(10,2) NOT NULL,
   `btn_amt_2` decimal(10,2) NOT NULL,
   `btn_amt_3` decimal(10,2) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-    `delete_status` int(11) NOT NULL DEFAULT 0
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -939,8 +922,8 @@ CREATE TABLE `donation_statement` (
   `amount` decimal(10,2) NOT NULL,
   `transection_id` varchar(255) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1018,7 +1001,7 @@ CREATE TABLE `event_category_masters` (
 
 CREATE TABLE `exam_masters` (
   `id` int(10) UNSIGNED NOT NULL,
-   `term` varchar(255) NOT NULL,
+  `term` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
   `subject` varchar(255) DEFAULT NULL,
   `mark` varchar(255) DEFAULT NULL,
@@ -1042,7 +1025,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text NOT NULL,
   `payload` longtext NOT NULL,
   `exception` longtext NOT NULL,
-  `failed_at` DATETIME NOT NULL DEFAULT current_timestamp()
+  `failed_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1085,8 +1068,8 @@ CREATE TABLE `fee_map_arrays` (
   `Acad_Year` varchar(255) DEFAULT NULL,
   `Priority` varchar(100) DEFAULT NULL,
   `created_by` varchar(250) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1127,8 +1110,8 @@ CREATE TABLE `generate_invoice_views` (
   `additionalDetails` varchar(255) DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `disable` int(11) DEFAULT NULL,
   `due_amount` int(11) DEFAULT NULL,
   `s_excess_amount` int(11) DEFAULT NULL,
@@ -1157,7 +1140,7 @@ CREATE TABLE `group_masters` (
 
 CREATE TABLE `healthcare_records` (
   `id` int(11) NOT NULL,
- `student_id` int(255) NOT NULL,
+  `student_id` int(255) NOT NULL,
   `admission_no` varchar(100) NOT NULL,
   `hostel_name` varchar(100) DEFAULT NULL,
   `father_name` varchar(100) NOT NULL,
@@ -1351,8 +1334,8 @@ CREATE TABLE `invoice_histories` (
   `payment_status` varchar(30) DEFAULT NULL,
   `invoice_status` varchar(70) DEFAULT NULL,
   `created_by` varchar(33) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1395,22 +1378,6 @@ CREATE TABLE `invoice_pendings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `invoice_sequences`
---
-
-CREATE TABLE `invoice_sequences` (
-  `id` int(11) NOT NULL,
-  `month_year` varchar(10) NOT NULL,
-  `latest_number` int(11) NOT NULL DEFAULT 0,
-  `title` varchar(50) NOT NULL DEFAULT 'invoice_no',
-  `payment_for` enum('school','others') DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `leave_applications`
 --
 
@@ -1428,8 +1395,8 @@ CREATE TABLE `leave_applications` (
   `leaveDays` int(11) DEFAULT NULL,
   `reason` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1537,11 +1504,10 @@ CREATE TABLE `module_permissions` (
 
 CREATE TABLE `notice_boards` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `category` varchar(255) NOT NULL,
+  `category` int(11) NOT NULL,
   `notice_message` text NOT NULL,
   `file` varchar(255) DEFAULT NULL,
   `delete_status` tinyint(1) DEFAULT 0,
-  `createdBy` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1558,27 +1524,6 @@ CREATE TABLE `notification_categories` (
   `delete_status` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notification_users`
---
-
-CREATE TABLE `notification_users` (
-  `id` int(11) NOT NULL,
-  `form_user_id` int(11) NOT NULL,
-  `to_user_id` int(11) DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  `to_email` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `body` text DEFAULT NULL,
-  `is_sent` tinyint(1) NOT NULL DEFAULT 0,
-  `created_by` int(11) NOT NULL DEFAULT 0,
-  `updated_by` int(11) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1769,8 +1714,8 @@ CREATE TABLE `payment_notification_datas` (
   `invoice_nos` varchar(255) NOT NULL,
   `status` varchar(100) DEFAULT NULL,
   `show_hide` int(11) NOT NULL DEFAULT 1,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1878,9 +1823,9 @@ CREATE TABLE `payment_req_data` (
   `payment_req_iv` varchar(255) DEFAULT NULL,
   `payment_req_accountNo` varchar(255) DEFAULT NULL,
   `payment_req_webServiceLocator_PHP_EOL` text DEFAULT NULL,
-  `payment_req_date_time` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL
+  `payment_req_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1894,8 +1839,8 @@ CREATE TABLE `receipts` (
   `receipt_no` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_mode` varchar(255) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1943,8 +1888,8 @@ CREATE TABLE `school_fee_discounts` (
   `invoicefeescat` varchar(255) DEFAULT NULL,
   `year` varchar(100) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2128,11 +2073,11 @@ CREATE TABLE `staff` (
   `pan` varchar(20) DEFAULT NULL,
   `staff_status` varchar(50) DEFAULT NULL,
   `date_of_resignation` date DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-  -- --------------------------------------------------------
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `staff_fees_mapping`
@@ -2158,8 +2103,8 @@ CREATE TABLE `staff_fee_masters` (
   `id` int(11) NOT NULL,
   `feesType` varchar(155) NOT NULL,
   `created_by` varchar(111) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2337,8 +2282,8 @@ CREATE TABLE `student_fee_map_arrays` (
   `date` varchar(50) DEFAULT NULL,
   `acad_year` varchar(50) DEFAULT NULL,
   `created_by` varchar(100) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2539,7 +2484,6 @@ CREATE TABLE `student_mark_records` (
   `total` int(11) DEFAULT NULL,
   `percentage` float(5,2) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
-  `verified` int(11) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -2628,13 +2572,13 @@ CREATE TABLE `template_editors` (
 --
 
 INSERT INTO `template_editors` (`id`, `template_name`, `template`, `created_at`, `updated_at`) VALUES
-(1, 'Attendance Certificate', '<!-- <link rel=\"stylesheet\" href=\"styles.css\" /> -->\n<style>\n  @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n  body {\n    font-family: \"Times New Roman\", serif;\n    margin: 0;\n    padding: 0;\n    background-color: white; /* Ensure proper rendering in PDF */\n  }\n\n  @page {\n    size: A4;\n    margin: 0; /* Removes default browser print margins */\n  }\n\n  .certificate-container {\n    width: 210mm; /* A4 width */\n    height: 297mm; /* A4 height */\n    background-color: white;\n    margin: auto;\n    box-shadow: none; /* No shadow needed for PDF */\n    position: relative;\n    overflow: hidden;\n  }\n\n  /* Background Image for PDF */\n  .certificate-container::before {\n    content: \"\";\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 180mm; /* A4 width */\n    height: 250mm; /* A4 height */\n    background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n      no-repeat center;\n    background-size: contain;\n    opacity: 0.03; /* Medium opacity */\n    transform: translate(-47%, -50%);\n    z-index: 0;\n  }\n\n  /* Ensure layout remains consistent */\n  .left-bar {\n    background-color: #b91c1c;\n    width: 50px;\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 1;\n  }\n\n  .content {\n    padding-left: 70px;\n    width: 100%;\n    position: relative;\n    z-index: 1;\n  }\n  .content-div {\n    display: flex;\n    flex-direction: column;\n    width: 85%;\n    padding-bottom: 30px;\n  }\n\n  .header {\n    display: table;\n    align-items: center;\n    width: 100%;\n    padding-top: 10px;\n  }\n\n  .img-top,\n  .school-details,\n  .right-bar {\n    display: table-cell;\n    vertical-align: middle;\n  }\n\n  .logo {\n    width: 120px;\n    height: 120px;\n  }\n\n  .img-top {\n    width: 20%;\n    text-align: center;\n  }\n\n  .school-details {\n    width: 50%;\n    text-align: center;\n  }\n\n  .right-bar {\n    width: 30%;\n    z-index: 1;\n  }\n\n  .right-bar-sub {\n    height: 50px;\n    z-index: 1;\n    background-color: #b91c1c;\n  }\n\n  .sign-logo-div {\n    padding: 20px;\n    text-align: right; /* Ensures alignment works in PDF */\n    padding-right: 120px;\n    padding-top: 50px;\n  }\n\n  .sign-logo {\n    width: 180px;\n    height: 150px;\n  }\n\n  .school-details h1 {\n    font-family: \"Tahoma\", sans-serif;\n    color: #b91c1c;\n    font-size: 24px;\n    margin: 0;\n    font-weight: bold;\n    letter-spacing: 3px;\n  }\n\n  .school-details p {\n    font-family: \"Tahoma\", sans-serif;\n    font-size: 14px;\n    color: #b91c1c;\n    margin: 0;\n    letter-spacing: 1px;\n  }\n\n  .date {\n    width: 100%;\n    text-align: right;\n    font-weight: bold;\n    margin-top: 5px;\n  }\n\n  .certificate-title {\n    text-align: center;\n    font-size: 18px;\n    text-decoration: underline;\n    font-weight: bold;\n    margin-top: 10px;\n    width: 100%;\n  }\n\n  p {\n    font-size: 14px;\n    line-height: 1.5;\n  }\n\n  table {\n    width: 100%;\n    margin-top: 10px;\n    font-size: 14px;\n  }\n\n  td {\n    padding: 5px;\n  }\n\n  .footer-container {\n    width: 100%;\n    position: absolute;\n    bottom: 30px;\n    left: 0;\n    right: 0;\n    padding-left: 50px;\n  }\n\n  .contact-info {\n    color: #b91c1c;\n    font-size: 14px;\n    font-weight: 600;\n    font-family: \"Tahoma\", sans-serif;\n  }\n\n  .address-box {\n    background-color: #b91c1c;\n    color: white;\n    padding: 10px;\n    padding-right: 50px;\n    font-weight: 600;\n    text-align: center;\n    font-family: \"Tahoma\", sans-serif;\n  }\n</style>\n\n\n<div class=\"certificate-container\">\n  <div class=\"left-bar\"><br></div>\n  <div class=\"content\">\n    <div class=\"header\">\n      <div class=\"img-top\">\n        <img src=\"{{ $school_logo }}\" alt=\"School Logo\" class=\"logo\">\n      </div>\n      <div class=\"school-details\">\n        <h1>{{ $school_name }}</h1>\n        <p>{{ $school_type }}</p>\n      </div>\n      <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div></div>\n    </div>\n    <div class=\"content-div\">\n      <div class=\"date\">\n        <div style=\"padding-right: 20px; font-size: 18px;\">Date:<strong class=\"hidden-field\"> {{ st }}</strong></div>\n      </div>\n      <div class=\"certificate-title\">\n        <h2><span style=\"background-color: rgb(255, 255, 255); font-size: 28px;\">Attendance Certificate</span></h2>\n      </div>\n    </div>\n\n    <div style=\"padding-left: 40px;\">\n    <table style=\"border-collapse: collapse;\">\n       <tbody><tr>\n            <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n              <strong>Name of the Student</strong>\n            </td>\n            <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n              <strong>:<strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ student_name }}</strong></strong></td>\n          </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Class</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ class_name }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Academic Year</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ academic_year }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>No. of working days</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ working_days }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>No. of days attended</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ days_attended }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Percentage of Attendance</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>:<strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ attendance_percent }}</strong></strong></td>\n      </tr>\n    </tbody></table>\n</div>\n\n    <div class=\"sign-logo-div\">\n      \n    <img src=\"{{ $signature }}\" width=\"114\" height=\"190\"></div>\n  </div>\n  <div class=\"footer-container\">\n    <table width=\"100%\">\n        <tbody><tr>\n          <td style=\"display: flex; justify-content: center; align-items: center;\">\n            <p class=\"contact-info\">\n              <strong>{{ $school_website }}</strong><br>\n              {{ $school_phone_1 }}, {{ $school_phone_2 }}<br>\n              {{ $school_email }}\n            </p>\n          </td>\n          <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n            <p class=\"address-box\">\n              {{ $school_address_line1 }}<br>\n              {{ $school_address_line2 }}\n            </p>\n          </td>\n        </tr>\n      </tbody></table>\n  </div>\n</div>', '2025-04-09 04:00:40', '2025-04-23 10:12:26'),
-(2, 'Bonafide Certificate', '\n    <style>\n      @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n      body {\n        font-family: \"Times New Roman\", serif;\n        margin: 0;\n        padding: 0;\n        background-color: white; /* Ensure proper rendering in PDF */\n      }\n\n      @page {\n        size: A4;\n        margin: 0; /* Removes default browser print margins */\n      }\n\n      .certificate-container {\n        width: 210mm; /* A4 width */\n        height: 297mm; /* A4 height */\n        background-color: white;\n        margin: auto;\n        box-shadow: none; /* No shadow needed for PDF */\n        position: relative;\n        overflow: hidden;\n      }\n\n      /* Background Image for PDF */\n      .certificate-container::before {\n        content: \"\";\n        position: absolute;\n        top: 50%;\n        left: 50%;\n        width: 180mm; /* A4 width */\n        height: 250mm; /* A4 height */\n        background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n          no-repeat center;\n        background-size: contain;\n        opacity: 0.03; /* Medium opacity */\n        transform: translate(-47%, -50%);\n        z-index: 0;\n      }\n\n      /* Ensure layout remains consistent */\n      .left-bar {\n        background-color: #b91c1c;\n        width: 50px;\n        position: absolute;\n        left: 0;\n        top: 0;\n        bottom: 0;\n        z-index: 1;\n      }\n\n      .content {\n        padding-left: 70px;\n        width: 100%;\n        position: relative;\n        z-index: 1;\n      }\n      .content-div {\n        display: flex;\n        flex-direction: column;\n        width: 85%;\n      }\n\n      .header {\n        display: table;\n        align-items: center;\n        width: 100%;\n        padding-top: 10px;\n      }\n\n      .img-top,\n      .school-details,\n      .right-bar {\n        display: table-cell;\n        vertical-align: middle;\n      }\n\n      .logo {\n        width: 120px;\n        height: 120px;\n      }\n\n      .img-top {\n        width: 20%;\n        text-align: center;\n      }\n\n      .school-details {\n        width: 50%;\n        text-align: center;\n      }\n\n      .right-bar {\n        width: 30%;\n        z-index: 1;\n      }\n\n      .right-bar-sub {\n        height: 50px;\n        z-index: 1;\n        background-color: #b91c1c;\n      }\n\n      .sign-logo-div {\n        padding: 20px;\n        text-align: right; /* Ensures alignment works in PDF */\n        padding-right: 120px;\n        padding-top: 50px;\n      }\n\n      .sign-logo {\n        width: 180px;\n        height: 150px;\n      }\n\n      .school-details h1 {\n        font-family: \"Tahoma\", sans-serif;\n        color: #b91c1c;\n        font-size: 24px;\n        margin: 0;\n        font-weight: bold;\n        letter-spacing: 3px;\n      }\n\n      .school-details p {\n        font-family: \"Tahoma\", sans-serif;\n        font-size: 14px;\n        color: #b91c1c;\n        margin: 0;\n        letter-spacing: 1px;\n      }\n\n      .date {\n        width: 100%;\n        text-align: right;\n        font-weight: bold;\n        margin-top: 5px;\n      }\n\n      .certificate-title {\n        text-align: center;\n        font-size: 18px;\n        text-decoration: underline;\n        font-weight: bold;\n        margin-top: 10px;\n        width: 100%;\n      }\n\n      p {\n        font-size: 14px;\n        line-height: 1.5;\n      }\n\n      table {\n        width: 100%;\n        margin-top: 10px;\n        font-size: 14px;\n      }\n\n      td {\n        padding: 5px;\n      }\n\n      .footer-container {\n        width: 100%;\n        position: absolute;\n        bottom: 30px;\n        left: 0;\n        right: 0;\n        padding-left: 50px;\n      }\n\n      .contact-info {\n        color: #b91c1c;\n        font-size: 14px;\n        font-weight: 600;\n        font-family: \"Tahoma\", sans-serif;\n      }\n\n      .address-box {\n        background-color: #b91c1c;\n        color: white;\n        padding: 10px;\n        padding-right: 50px;\n        font-weight: 600;\n        text-align: center;\n        font-family: \"Tahoma\", sans-serif;\n      }\n      .underline-text {\n        display: inline-block;\n        border-bottom: 1px solid #000;\n        min-width: 200px; /* adjust width as needed */\n        padding: 0 5px;\n        font-size: 22px;\n      }\n        .hidden-text::before {\n        content: \"\";\n     }\n\n      .hidden-text {\n        color: transparent;\n        text-decoration: underline;\n        text-underline-offset: 3px;\n        pointer-events: none;      \n        user-select: none;         \n        caret-color: transparent;  \n      }\n    </style>\n\n  \n  \n    <div class=\"certificate-container\">\n      <div class=\"left-bar\"><br></div>\n      <div class=\"content\">\n        <div class=\"header\">\n          <div class=\"img-top\">\n            <img src=\"{{ $school_logo }}\" alt=\"School Logo\" class=\"logo\">\n          </div>\n          <div class=\"school-details\">\n            <h1>{{ $school_name }}</h1>\n            <p>{{ $school_type }}</p>\n          </div>\n          <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n        </div>\n        <div class=\"content-div\">\n          <div class=\"date\">\n            <div style=\"padding-right: 20px; font-size: 22px\">Date:</div>\n          </div>\n          <div class=\"certificate-title\">\n            <h2>Bonafide Certificate</h2>\n          </div>\n\n          <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n            This is to certify that\n            <span class=\"underline-text hidden-text\">{{student_name}}</span> S/O or D/O\n            <span class=\"underline-text hidden-text\">{{father_or_mother_name }}</span>, studying in class\n            <span class=\"underline-text hidden-text\">{{class }}</span>, is a student of this\n            school, during the academic year\n            <span class=\"underline-text hidden-text\">{{academic_year }}</span>. His/Her date of birth\n            as per our school record is\n            <span class=\"underline-text hidden-text\">{{date_of_birth_numeric }}</span> (dd/mm/yyyy) in words\n            <span class=\"underline-text hidden-text\">{{date_of_birth_words}}</span>.\n          </p>\n          \n          <p style=\"font-size: 22px; padding-left: 10px\">\n            He/She has been studying in this school since\n            <span class=\"underline-text hidden-text\">{{admission_date}}</span> and has\n            a good record of behaviour performance.\n          </p>\n          \n        </div>\n\n        <div class=\"sign-logo-div\">\n          <img src=\"{{ $signature }}\" alt=\"signature Logo\" class=\"sign-logo\">\n        </div>\n      </div>\n      <div class=\"footer-container\">\n        <table width=\"100%\">\n            <tbody><tr>\n              <td style=\"display: flex; justify-content: center; align-items: center;\">\n                <p class=\"contact-info\">\n                  <strong>{{ $school_website }}</strong><br>\n                  {{ $school_phone_1 }}, {{ $school_phone_2 }}<br>\n                  {{ $school_email }}\n                </p>\n              </td>\n              <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n                <p class=\"address-box\">\n                  {{ $school_address_line1 }}<br>\n                  {{ $school_address_line2 }}\n                </p>\n              </td>\n            </tr>\n          </tbody></table>\n      </div>\n    </div>', '2025-04-09 04:02:26', '2025-04-21 07:29:29'),
-(3, 'Conduct Certificate', '<style>\n    @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n    body {\n      font-family: \"Times New Roman\", serif;\n      margin: 0;\n      padding: 0;\n      background-color: white; /* Ensure proper rendering in PDF */\n    }\n\n    @page {\n      size: A4;\n      margin: 0; /* Removes default browser print margins */\n    }\n\n    .certificate-container {\n      width: 210mm; /* A4 width */\n      height: 297mm; /* A4 height */\n      background-color: white;\n      margin: auto;\n      box-shadow: none; /* No shadow needed for PDF */\n      position: relative;\n      overflow: hidden;\n    }\n\n    /* Background Image for PDF */\n    .certificate-container::before {\n      content: \"\";\n      position: absolute;\n      top: 50%;\n      left: 50%;\n      width: 180mm; /* A4 width */\n      height: 250mm; /* A4 height */\n      background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n        no-repeat center;\n      background-size: contain;\n      opacity: 0.03; /* Medium opacity */\n      transform: translate(-47%, -50%);\n      z-index: 0;\n    }\n\n    /* Ensure layout remains consistent */\n    .left-bar {\n      background-color: #b91c1c;\n      width: 50px;\n      position: absolute;\n      left: 0;\n      top: 0;\n      bottom: 0;\n      z-index: 1;\n    }\n\n    .content {\n      padding-left: 70px;\n      width: 100%;\n      position: relative;\n      z-index: 1;\n    }\n    .content-div {\n      display: flex;\n      flex-direction: column;\n      width: 85%;\n    }\n\n    .header {\n      display: table;\n      align-items: center;\n      width: 100%;\n      padding-top: 10px;\n    }\n\n    .img-top,\n    .school-details,\n    .right-bar {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .logo {\n      width: 120px;\n      height: 120px;\n    }\n\n    .img-top {\n      width: 20%;\n      text-align: center;\n    }\n\n    .school-details {\n      width: 50%;\n      text-align: center;\n    }\n\n    .right-bar {\n      width: 30%;\n      z-index: 1;\n    }\n\n    .right-bar-sub {\n      height: 50px;\n      z-index: 1;\n      background-color: #b91c1c;\n    }\n\n    .sign-logo-div {\n      padding: 20px;\n      text-align: right; /* Ensures alignment works in PDF */\n      padding-right: 120px;\n      padding-top: 50px;\n    }\n\n    .sign-logo {\n      width: 180px;\n      height: 150px;\n    }\n\n    .school-details h1 {\n      font-family: \"Tahoma\", sans-serif;\n      color: #b91c1c;\n      font-size: 24px;\n      margin: 0;\n      font-weight: bold;\n      letter-spacing: 3px;\n    }\n\n    .school-details p {\n      font-family: \"Tahoma\", sans-serif;\n      font-size: 14px;\n      color: #b91c1c;\n      margin: 0;\n      letter-spacing: 1px;\n    }\n\n    .date {\n      width: 100%;\n      text-align: right;\n      font-weight: bold;\n      margin-top: 5px;\n    }\n\n    .certificate-title {\n      text-align: center;\n      font-size: 18px;\n      text-decoration: underline;\n      font-weight: bold;\n      margin-top: 10px;\n      width: 100%;\n    }\n\n    p {\n      font-size: 14px;\n      line-height: 1.5;\n    }\n\n    table {\n      width: 100%;\n      margin-top: 10px;\n      font-size: 14px;\n    }\n\n    td {\n      padding: 5px;\n    }\n\n    .footer-container {\n      width: 100%;\n      position: absolute;\n      bottom: 30px;\n      left: 0;\n      right: 0;\n      padding-left: 50px;\n    }\n\n    .contact-info {\n      color: #b91c1c;\n      font-size: 14px;\n      font-weight: 600;\n      font-family: \"Tahoma\", sans-serif;\n    }\n\n    .address-box {\n      background-color: #b91c1c;\n      color: white;\n      padding: 10px;\n      padding-right: 50px;\n      font-weight: 600;\n      text-align: center;\n      font-family: \"Tahoma\", sans-serif;\n    }\n    .underline-text {\n      display: inline-block;\n      border-bottom: 1px solid #000;\n      min-width: 200px; /* adjust width as needed */\n      padding: 0 5px;\n      font-size: 22px;\n    }\n      .hidden-text::before {\n      content: \"\";\n   }\n\n    .hidden-text {\n      color: transparent;\n      text-decoration: underline;\n      text-underline-offset: 3px;\n      pointer-events: none;      \n      user-select: none;         \n      caret-color: transparent;  \n    }\n  </style>\n\n\n  <div class=\"certificate-container\">\n    <div class=\"left-bar\"><br></div>\n    <div class=\"content\">\n      <div class=\"header\">\n        <div class=\"img-top\">\n          <img src=\"{{ $school_logo }}\" alt=\"School Logo\" class=\"logo\">\n        </div>\n        <div class=\"school-details\">\n          <h1>{{ $school_name }}</h1>\n        <p>{{ $school_type }}</p>\n        </div>\n        <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n      </div>\n      <div class=\"content-div\">\n        <div class=\"date\">\n          <div style=\"padding-right: 20px; font-size: 22px\">Date:</div>\n        </div>\n        <div class=\"certificate-title\">\n          <h2>Conduct Certificate</h2>\n        </div>\n\n        <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n          This is to certify that\n          <span class=\"underline-text hidden-text\">{{student_name}}</span> S/O or D/O\n          <span class=\"underline-text hidden-text\">{{parent_name}}</span>, was a\n          student of this school from<span class=\"underline-text hidden-text\">{{start_date}}</span> to <span class=\"underline-text hidden-text\">{{end_date}}</span>. During this\n          period, he/she studied in class<span class=\"underline-text hidden-text\">{{class_name}}</span> and completed his/her\n          eduction upto class<span class=\"underline-text hidden-text\">{{completed_class}}</span>. \n        </p>\n        <p style=\"font-size: 22px; padding-left: 10px\">\n          He/She actively participated in\n          various extracurricular activites and has always conducted\n          himself/herself with discipline and integrity exhibiting excellent\n          moral character throughout his/her tenure at this school.</p>\n      </div>\n\n      <div class=\"sign-logo-div\">\n        <img src=\"{{ $signature }}\" alt=\"signature Logo\" class=\"sign-logo\">\n      </div>\n    </div>\n    <div class=\"footer-container\">\n    <table width=\"100%\">\n        <tbody><tr>\n          <td style=\"display: flex; justify-content: center; align-items: center;\">\n            <p class=\"contact-info\">\n              <strong>{{ $school_website }}</strong><br>\n              {{ $school_phone_1 }}, {{ $school_phone_2 }}<br>\n              {{ $school_email }}\n            </p>\n          </td>\n          <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n            <p class=\"address-box\">\n              {{ $school_address_line1 }}<br>\n              {{ $school_address_line2 }}\n            </p>\n          </td>\n        </tr>\n      </tbody></table>\n  </div>\n  </div>', '2025-04-09 04:05:54', '2025-04-23 10:11:14'),
-(4, 'Course Completion Certificate', '<style>\n  @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n  body {\n    font-family: \"Times New Roman\", serif;\n    margin: 0;\n    padding: 0;\n    background-color: white; /* Ensure proper rendering in PDF */\n  }\n\n  @page {\n    size: A4;\n    margin: 0; /* Removes default browser print margins */\n  }\n\n  .certificate-container {\n    width: 210mm; /* A4 width */\n    height: 297mm; /* A4 height */\n    background-color: white;\n    margin: auto;\n    box-shadow: none; /* No shadow needed for PDF */\n    position: relative;\n    overflow: hidden;\n  }\n\n  /* Background Image for PDF */\n  .certificate-container::before {\n    content: \"\";\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 180mm; /* A4 width */\n    height: 250mm; /* A4 height */\n    background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n      no-repeat center;\n    background-size: contain;\n    opacity: 0.03; /* Medium opacity */\n    transform: translate(-47%, -50%);\n    z-index: 0;\n  }\n\n  /* Ensure layout remains consistent */\n  .left-bar {\n    background-color: #b91c1c;\n    width: 50px;\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 1;\n  }\n\n  .content {\n    padding-left: 70px;\n    width: 100%;\n    position: relative;\n    z-index: 1;\n  }\n  .content-div {\n    display: flex;\n    flex-direction: column;\n    width: 85%;\n  }\n\n  .header {\n    display: table;\n    align-items: center;\n    width: 100%;\n    padding-top: 10px;\n  }\n\n  .img-top,\n  .school-details,\n  .right-bar {\n    display: table-cell;\n    vertical-align: middle;\n  }\n\n  .logo {\n    width: 120px;\n    height: 120px;\n  }\n\n  .img-top {\n    width: 20%;\n    text-align: center;\n  }\n\n  .school-details {\n    width: 50%;\n    text-align: center;\n  }\n\n  .right-bar {\n    width: 30%;\n    z-index: 1;\n  }\n\n  .right-bar-sub {\n    height: 50px;\n    z-index: 1;\n    background-color: #b91c1c;\n  }\n\n  .sign-logo-div {\n    padding: 20px;\n    text-align: right; /* Ensures alignment works in PDF */\n    padding-right: 120px;\n    padding-top: 50px;\n  }\n\n  .sign-logo {\n    width: 180px;\n    height: 150px;\n  }\n\n  .school-details h1 {\n    font-family: \"Tahoma\", sans-serif;\n    color: #b91c1c;\n    font-size: 24px;\n    margin: 0;\n    font-weight: bold;\n    letter-spacing: 3px;\n  }\n\n  .school-details p {\n    font-family: \"Tahoma\", sans-serif;\n    font-size: 14px;\n    color: #b91c1c;\n    margin: 0;\n    letter-spacing: 1px;\n  }\n\n  .date {\n    width: 100%;\n    text-align: right;\n    font-weight: bold;\n    margin-top: 5px;\n  }\n\n  .certificate-title {\n    text-align: center;\n    font-size: 18px;\n    text-decoration: underline;\n    font-weight: bold;\n    margin-top: 10px;\n    width: 100%;\n  }\n\n  p {\n    font-size: 14px;\n    line-height: 1.5;\n  }\n\n  table {\n    width: 100%;\n    margin-top: 10px;\n    font-size: 14px;\n  }\n\n  td {\n    padding: 5px;\n  }\n\n  .footer-container {\n    width: 100%;\n    position: absolute;\n    bottom: 30px;\n    left: 0;\n    right: 0;\n    padding-left: 50px;\n  }\n\n  .contact-info {\n    color: #b91c1c;\n    font-size: 14px;\n    font-weight: 600;\n    font-family: \"Tahoma\", sans-serif;\n  }\n\n  .address-box {\n    background-color: #b91c1c;\n    color: white;\n    padding: 10px;\n    padding-right: 50px;\n    font-weight: 600;\n    text-align: center;\n    font-family: \"Tahoma\", sans-serif;\n  }\n  .underline-text {\n        display: inline-block;\n        border-bottom: 1px solid #000;\n        min-width: 200px; /* adjust width as needed */\n        padding: 0 5px;\n        font-size: 22px;\n      }\n        .hidden-text::before {\n        content: \"\";\n     }\n\n      .hidden-text {\n        color: transparent;\n        text-decoration: underline;\n        text-underline-offset: 3px;\n        pointer-events: none;      \n        user-select: none;         \n        caret-color: transparent;  \n      }\n</style>\n\n\n<div class=\"certificate-container\">\n  <div class=\"left-bar\"><br></div>\n  <div class=\"content\">\n    <div class=\"header\">\n      <div class=\"img-top\">\n        <img src=\"{{ $school_logo }}\" alt=\"School Logo\" class=\"logo\">\n      </div>\n      <div class=\"school-details\">\n        <h1>{{ $school_name }}</h1>\n        <p>{{ $school_type }}</p>\n      </div>\n      <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n    </div>\n    <div class=\"content-div\">\n      <div class=\"date\">\n        <div style=\"padding-right: 100px; font-size: 22px\">Date:</div>\n      </div>\n      <div class=\"certificate-title\">\n        <h2>Course Completion Certificate</h2>\n      </div>\n\n      <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n        This is to certify that\n        <span class=\"underline-text hidden-text\">{{student_name}}</span>, S/O or D/O\n        <span class=\"underline-text hidden-text\">{{parent_name}}</span>, was a\n        student of the Higher Secondary Course in this school from\n        <span class=\"underline-text hidden-text\">{{start_date}}</span> to\n        <span class=\"underline-text hidden-text\">{{end_date}}</span>. He/She appeared for the\n        higher secondary (+2) Examination through this school in March 2023\n        and passed successfully in the first attempt. For details of his/her\n        marks, please refer to the mark certificate.\n      </p>\n      <p style=\"font-size: 22px; padding-left: 10px\">\n        He/She has completed the course successfully in the following\n        subjects:\n      </p>\n    </div>\n\n    <table style=\"padding-left: 150px\">\n      <tbody><tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 1</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 2</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 3</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n    </tbody></table>\n    <div class=\"sign-logo-div\">\n      <img src=\"{{ $signature }}\" alt=\"signature Logo\" class=\"sign-logo\">\n    </div>\n  </div>\n  <div class=\"footer-container\">\n    <table width=\"100%\">\n        <tbody><tr>\n          <td style=\"display: flex; justify-content: center; align-items: center;\">\n            <p class=\"contact-info\">\n              <strong>{{ $school_website }}</strong><br>\n              {{ $school_phone_1 }}, {{ $school_phone_2 }}<br>\n              {{ $school_email }}\n            </p>\n          </td>\n          <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n            <p class=\"address-box\">\n              {{ $school_address_line1 }}<br>\n              {{ $school_address_line2 }}\n            </p>\n          </td>\n        </tr>\n      </tbody></table>\n  </div>\n</div>', '2025-04-09 04:06:32', '2025-04-23 01:33:03'),
-(5, 'No Due Certificate', '<style>\n@import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\nbody {\nfont-family: \"Tahoma\", sans-serif;\nmargin: 0;\npadding: 0;\nbackground-color: white; /* Ensure proper rendering in PDF */\n}\n@page {\nsize: A4;\nmargin: 0; /* Removes default browser print margins */\n}\n.certificate {\nwidth: 200mm; /* A4 width */\nheight: 200mm; /* A4 height */\nborder: 2px solid #000;\nmargin: auto;\nborder-radius: 8px;\n}\n.header {\nfont-size: 24px;\nfont-weight: 500;\ntext-align: center;\nfont-family: \"Tahoma\", sans-serif;\nletter-spacing: 1px;\n}\n.sub-header {\nfont-size: 28px;\nfont-weight: 500;\nmargin-top: 10px;\ntext-align: center;\ntext-decoration: underline;\nfont-family: \"Tahoma\", sans-serif;\npadding-bottom: 20px;\nletter-spacing: 1px;\n}\n.logo {\npadding: 20px;\nwidth: 100px;\nheight: 100px;\n}\n.details {\nfont-size: 18px;\nmargin-top: 25px;\ntext-align: left;\n}\n.signature {\ndisplay: flex;\njustify-content: space-around;\nposition: absolute;\nbottom: 10px;\nwidth: 100%;\n}\n.signature div {\ntext-align: center;\n}\n.hidden-text::before {\ncontent: \"\";\n}\n.hidden-text {\ncolor: transparent;\ntext-decoration: underline;\ntext-underline-offset: 3px;\npointer-events: none;\nuser-select: none;\ncaret-color: transparent;\n}\n</style>\n\n\n<div class=\"certificate\">\n<div style=\"text-align: center\">\n<img src=\"{{ $school_logo }}\" alt=\"School Logo\" class=\"logo\">\n</div>\n<div class=\"header\">{{ $school_name }}</div>\n<div class=\"sub-header\"><string>No Due Certificate</string></div>\n<table width=\"100%\">\n<tbody><tr>\n<td style=\"border-bottom: 1px solid lightgray\"><br></td>\n</tr>\n</tbody></table>\n<p style=\"text-align: right; padding-right: 100px\">Date :<span class=\"hidden-text\"> {{end_date}}</span></p>\n<div class=\"details\">\n<table style=\"border-collapse: collapse; width: 100%\">\n<tbody><tr>\n<td style=\"\nwidth: 50%;\ntext-align: left;\npadding: 30px;\nfont-size: 16px;\n\">\nName of the Student : <span class=\"hidden-text\">{{student_name}}</span></td>\n<td style=\"\nwidth: 50%;\ntext-align: center;\npadding: 30px;\nfont-size: 16px;\n\">\nAdmission No : <span class=\"hidden-text\">{{admission_no}}</span>\n</td>\n</tr>\n<tr>\n<td style=\"width: 50%; text-align: left; padding: 30px; font-size: 16px;\">\nClass & Section : <span class=\"hidden-text\">{{SOUGHT_STD}}</span>\n</td>\n</tr>\n</tbody></table>\n</div>\n<div style=\"text-align: center; display: flex; justify-content: center\">\n<p style=\"width: 90%; letter-spacing: 1px\">\nWe hereby certify that there are\n<span style=\"font-size: 18px\">NO OUTSTANDING FEE DUES</span>\nfor the student mentioned above.\n</p>\n</div>\n<table width=\"100%\" style=\"margin-top: 80px; text-align: center;\">\n<tr>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Finance Coordinator</div>\n</td>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Chief Warden</div>\n</td>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Principal</div>\n</td>\n</tr>\n</table>\n</div>', '2025-04-09 04:07:18', '2025-04-23 01:45:11'),
-(7, 'IDCARD', '<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>ID Card</title>\n    <style>\n      body {\n        font-family: sans-serif;\n      }\n\n      .id-card {\n        width: 325px;\n        height: 500px;\n        border: 2px solid #000;\n        border-radius: 10px;\n        padding: 10px 5px;\n        box-sizing: border-box;\n        text-align: center;\n      }\n\n      .school-header img {\n        width: 90px;\n        height: 90px;\n        border-radius: 50%;\n      }\n\n      .school-name {\n        color: red;\n        font-weight: bold;\n        font-size: 18px;\n        margin-top: 5px;\n      }\n\n      .school-details {\n        font-size: 10px;\n        color: blue;\n        line-height: 1.2;\n        margin-top: 5px;\n      }\n\n      .id-title {\n        font-weight: bold;\n        font-size: 14px;\n        margin: 10px 0;\n        text-transform: uppercase;\n      }\n\n      .photo-box {\n        width: 110px;\n        height: 110px;\n        border: 2px solid purple;\n        margin: 0 auto 10px auto;\n      }\n\n      .photo-box img {\n        width: 100%;\n        height: 100%;\n      }\n\n      .student-name {\n        font-size: 14px;\n        font-weight: bold;\n        color: red;\n        margin-bottom: 5px;\n      }\n\n      .info-table {\n        width: 100%;\n        font-size: 12px;\n        margin-top: 8px;\n         margin-left: 34px;\n        border-collapse: collapse;\n      }\n\n      .info-table td {\n        padding: 2px;\n        vertical-align: top;\n      }\n\n      .address {\n        font-size: 10px;\n        font-weight: 600;\n        color: #030a57;\n        margin: 10px auto;\n        width: 90%;\n        text-align: left;\n      }\n\n      .sign-div img {\n        width: 120px;\n        height: auto;\n        float: right;\n      }\n      .hidden-text::before {\n  content: \"\";\n  }\n  .hidden-text {\n  color: transparent;\n  text-decoration: underline;\n  text-underline-offset: 3px;\n  pointer-events: none;\n  user-select: none;\n  caret-color: transparent;\n  }\n    </style>\n  </head>\n  <body>\n    <div class=\"id-card\">\n      <table style=\"width: 100%\">\n        <tr>\n          <td class=\"school-header\" align=\"center\">\n            <img\n              src=\"{{ school_logo }}\"\n              alt=\"School Logo\"\n            />\n          </td>\n          <td align=\"center\">\n            <div class=\"school-name\">{{ school_name }}</div>\n            <div class=\"school-details\">\n             \n              {{ school_phone_1 }}, {{ school_phone_2 }}<br />\n              {{ school_email }}<br />\n              {{ school_website }}\n            </div>\n          </td>\n        </tr>\n      </table>\n\n      <div class=\"id-title\">Identity Card</div>\n\n      <div class=\"photo-box\">\n        <img src=\"{{ school_logo }}\" alt=\"Photo\" />\n      </div>\n\n      <div class=\"student-name\">{{ student_name }}</div>\n      <table class=\"info-table\">\n        <tr>\n          <td align=\"left\"><strong>DOB</strong></td>\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\n          <td align=\"left\" style=\"margin-left: 20px;\" class=\"\">{{ DOB_DD_MM_YYYY }}</td>\n        </tr>\n        <tr>\n          <td align=\"left\"><strong>STD</strong></td>\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\n          <td align=\"left\" class=\"\">{{ SOUGHT_STD }}</td>\n        </tr>\n        <tr>\n          <td align=\"left\"><strong>Phone</strong></td>\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\n          <td align=\"left\" class=\"\">{{ MOBILE_NUMBER }}</td>\n        </tr>\n        <tr>\n          <td align=\"left\"><strong>Year</strong></td>\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\n          <td align=\"left\" class=\"\">{{ academic_year }}</td>\n        </tr>\n      </table>\n\n      <div class=\"address\">\n        , , ,\n        , , <br />\n      </div>\n\n      <div class=\"sign-div\">\n        <img\n          src=\"{{ signature }}\"\n          alt=\"Signature\"\n        />\n      </div>\n    </div>\n  </body>\n</html>', '2025-04-09 04:07:18', '2025-05-02 09:52:08');
-
+(1, 'Attendance Certificate', '<!-- <link rel=\"stylesheet\" href=\"styles.css\" /> -->\n<style>\n  @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n  body {\n    font-family: \"Times New Roman\", serif;\n    margin: 0;\n    padding: 0;\n    background-color: white; /* Ensure proper rendering in PDF */\n  }\n\n  @page {\n    size: A4;\n    margin: 0; /* Removes default browser print margins */\n  }\n\n  .certificate-container {\n    width: 210mm; /* A4 width */\n    height: 297mm; /* A4 height */\n    background-color: white;\n    margin: auto;\n    box-shadow: none; /* No shadow needed for PDF */\n    position: relative;\n    overflow: hidden;\n  }\n\n  /* Background Image for PDF */\n  .certificate-container::before {\n    content: \"\";\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 180mm; /* A4 width */\n    height: 250mm; /* A4 height */\n    background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n      no-repeat center;\n    background-size: contain;\n    opacity: 0.03; /* Medium opacity */\n    transform: translate(-47%, -50%);\n    z-index: 0;\n  }\n\n  /* Ensure layout remains consistent */\n  .left-bar {\n    background-color: #b91c1c;\n    width: 50px;\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 1;\n  }\n\n  .content {\n    padding-left: 70px;\n    width: 100%;\n    position: relative;\n    z-index: 1;\n  }\n  .content-div {\n    display: flex;\n    flex-direction: column;\n    width: 85%;\n    padding-bottom: 30px;\n  }\n\n  .header {\n    display: table;\n    align-items: center;\n    width: 100%;\n    padding-top: 10px;\n  }\n\n  .img-top,\n  .school-details,\n  .right-bar {\n    display: table-cell;\n    vertical-align: middle;\n  }\n\n  .logo {\n    width: 120px;\n    height: 120px;\n  }\n\n  .img-top {\n    width: 20%;\n    text-align: center;\n  }\n\n  .school-details {\n    width: 50%;\n    text-align: center;\n  }\n\n  .right-bar {\n    width: 30%;\n    z-index: 1;\n  }\n\n  .right-bar-sub {\n    height: 50px;\n    z-index: 1;\n    background-color: #b91c1c;\n  }\n\n  .sign-logo-div {\n    padding: 20px;\n    text-align: right; /* Ensures alignment works in PDF */\n    padding-right: 120px;\n    padding-top: 50px;\n  }\n\n  .sign-logo {\n    width: 180px;\n    height: 150px;\n  }\n\n  .school-details h1 {\n    font-family: \"Tahoma\", sans-serif;\n    color: #b91c1c;\n    font-size: 24px;\n    margin: 0;\n    font-weight: bold;\n    letter-spacing: 3px;\n  }\n\n  .school-details p {\n    font-family: \"Tahoma\", sans-serif;\n    font-size: 14px;\n    color: #b91c1c;\n    margin: 0;\n    letter-spacing: 1px;\n  }\n\n  .date {\n    width: 100%;\n    text-align: right;\n    font-weight: bold;\n    margin-top: 5px;\n  }\n\n  .certificate-title {\n    text-align: center;\n    font-size: 18px;\n    text-decoration: underline;\n    font-weight: bold;\n    margin-top: 10px;\n    width: 100%;\n  }\n\n  p {\n    font-size: 14px;\n    line-height: 1.5;\n  }\n\n  table {\n    width: 100%;\n    margin-top: 10px;\n    font-size: 14px;\n  }\n\n  td {\n    padding: 5px;\n  }\n\n  .footer-container {\n    width: 100%;\n    position: absolute;\n    bottom: 30px;\n    left: 0;\n    right: 0;\n    padding-left: 50px;\n  }\n\n  .contact-info {\n    color: #b91c1c;\n    font-size: 14px;\n    font-weight: 600;\n    font-family: \"Tahoma\", sans-serif;\n  }\n\n  .address-box {\n    background-color: #b91c1c;\n    color: white;\n    padding: 10px;\n    padding-right: 50px;\n    font-weight: 600;\n    text-align: center;\n    font-family: \"Tahoma\", sans-serif;\n  }\n</style>\n\n\n<div class=\"certificate-container\">\n  <div class=\"left-bar\"><br></div>\n  <div class=\"content\">\n    <div class=\"header\">\n      <div class=\"img-top\">\n        <img src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\" alt=\"School Logo\" class=\"logo\">\n      </div>\n      <div class=\"school-details\">\n        <h1>SANTHOSHA VIDHYALAYA</h1>\n        <p>MATRICULATION &amp; HIGHER SECONDARY SCHOOL</p>\n      </div>\n      <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div></div>\n    </div>\n    <div class=\"content-div\">\n      <div class=\"date\">\n        <div style=\"padding-right: 20px; font-size: 18px;\">Date:<strong class=\"hidden-field\"> {{ st }}</strong></div>\n      </div>\n      <div class=\"certificate-title\">\n        <h2><span style=\"background-color: rgb(255, 255, 255); font-size: 28px;\">Attendance Certificate</span></h2>\n      </div>\n    </div>\n\n    <div style=\"padding-left: 40px;\">\n    <table style=\"border-collapse: collapse;\">\n       <tbody><tr>\n            <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n              <strong>Name of the Student</strong>\n            </td>\n            <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n              <strong>:<strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ student_name }}</strong></strong></td>\n          </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Class</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ class_name }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Academic Year</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ academic_year }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>No. of working days</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ working_days }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>No. of days attended</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>: <strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ days_attended }}</strong></strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"white-space: nowrap; width:45%; padding: 20px 20px 20px 60px; font-size: 20px;\">\n          <strong>Percentage of Attendance</strong>\n        </td>\n        <td style=\"text-align: left; padding-left: 0px; font-size: 20px;\">\n          <strong>:<strong class=\"hidden-field\" style=\"padding-left:20px; font-size: 18px\"> {{ attendance_percent }}</strong></strong></td>\n      </tr>\n    </tbody></table>\n</div>\n\n    <div class=\"sign-logo-div\">\n      \n    <img src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\" width=\"114\" height=\"190\"></div>\n  </div>\n  <div class=\"footer-container\">\n    <table width=\"100%\">\n        <tbody><tr>\n          <td style=\"display: flex; justify-content: center; align-items: center;\">\n            <p class=\"contact-info\">\n              <strong>www.santhoshavidhyalaya.com</strong><br>\n              +91 80125 12100, +91 80125 12143<br>\n              info@santhoshavidhyalaya.com\n            </p>\n          </td>\n          <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n            <p class=\"address-box\">\n              Dohnavur Fellowship, Dohnavur - 627102<br>\n              Tirunelveli District, Tamil Nadu, India\n            </p>\n          </td>\n        </tr>\n      </tbody></table>\n  </div>\n</div>', '2025-04-09 04:00:40', '2025-04-23 10:12:26'),
+(2, 'Bonafide Certificate', '\n    <style>\n      @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n      body {\n        font-family: \"Times New Roman\", serif;\n        margin: 0;\n        padding: 0;\n        background-color: white; /* Ensure proper rendering in PDF */\n      }\n\n      @page {\n        size: A4;\n        margin: 0; /* Removes default browser print margins */\n      }\n\n      .certificate-container {\n        width: 210mm; /* A4 width */\n        height: 297mm; /* A4 height */\n        background-color: white;\n        margin: auto;\n        box-shadow: none; /* No shadow needed for PDF */\n        position: relative;\n        overflow: hidden;\n      }\n\n      /* Background Image for PDF */\n      .certificate-container::before {\n        content: \"\";\n        position: absolute;\n        top: 50%;\n        left: 50%;\n        width: 180mm; /* A4 width */\n        height: 250mm; /* A4 height */\n        background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n          no-repeat center;\n        background-size: contain;\n        opacity: 0.03; /* Medium opacity */\n        transform: translate(-47%, -50%);\n        z-index: 0;\n      }\n\n      /* Ensure layout remains consistent */\n      .left-bar {\n        background-color: #b91c1c;\n        width: 50px;\n        position: absolute;\n        left: 0;\n        top: 0;\n        bottom: 0;\n        z-index: 1;\n      }\n\n      .content {\n        padding-left: 70px;\n        width: 100%;\n        position: relative;\n        z-index: 1;\n      }\n      .content-div {\n        display: flex;\n        flex-direction: column;\n        width: 85%;\n      }\n\n      .header {\n        display: table;\n        align-items: center;\n        width: 100%;\n        padding-top: 10px;\n      }\n\n      .img-top,\n      .school-details,\n      .right-bar {\n        display: table-cell;\n        vertical-align: middle;\n      }\n\n      .logo {\n        width: 120px;\n        height: 120px;\n      }\n\n      .img-top {\n        width: 20%;\n        text-align: center;\n      }\n\n      .school-details {\n        width: 50%;\n        text-align: center;\n      }\n\n      .right-bar {\n        width: 30%;\n        z-index: 1;\n      }\n\n      .right-bar-sub {\n        height: 50px;\n        z-index: 1;\n        background-color: #b91c1c;\n      }\n\n      .sign-logo-div {\n        padding: 20px;\n        text-align: right; /* Ensures alignment works in PDF */\n        padding-right: 120px;\n        padding-top: 50px;\n      }\n\n      .sign-logo {\n        width: 180px;\n        height: 150px;\n      }\n\n      .school-details h1 {\n        font-family: \"Tahoma\", sans-serif;\n        color: #b91c1c;\n        font-size: 24px;\n        margin: 0;\n        font-weight: bold;\n        letter-spacing: 3px;\n      }\n\n      .school-details p {\n        font-family: \"Tahoma\", sans-serif;\n        font-size: 14px;\n        color: #b91c1c;\n        margin: 0;\n        letter-spacing: 1px;\n      }\n\n      .date {\n        width: 100%;\n        text-align: right;\n        font-weight: bold;\n        margin-top: 5px;\n      }\n\n      .certificate-title {\n        text-align: center;\n        font-size: 18px;\n        text-decoration: underline;\n        font-weight: bold;\n        margin-top: 10px;\n        width: 100%;\n      }\n\n      p {\n        font-size: 14px;\n        line-height: 1.5;\n      }\n\n      table {\n        width: 100%;\n        margin-top: 10px;\n        font-size: 14px;\n      }\n\n      td {\n        padding: 5px;\n      }\n\n      .footer-container {\n        width: 100%;\n        position: absolute;\n        bottom: 30px;\n        left: 0;\n        right: 0;\n        padding-left: 50px;\n      }\n\n      .contact-info {\n        color: #b91c1c;\n        font-size: 14px;\n        font-weight: 600;\n        font-family: \"Tahoma\", sans-serif;\n      }\n\n      .address-box {\n        background-color: #b91c1c;\n        color: white;\n        padding: 10px;\n        padding-right: 50px;\n        font-weight: 600;\n        text-align: center;\n        font-family: \"Tahoma\", sans-serif;\n      }\n      .underline-text {\n        display: inline-block;\n        border-bottom: 1px solid #000;\n        min-width: 200px; /* adjust width as needed */\n        padding: 0 5px;\n        font-size: 22px;\n      }\n        .hidden-text::before {\n        content: \"\";\n     }\n\n      .hidden-text {\n        color: transparent;\n        text-decoration: underline;\n        text-underline-offset: 3px;\n        pointer-events: none;      \n        user-select: none;         \n        caret-color: transparent;  \n      }\n    </style>\n\n  \n  \n    <div class=\"certificate-container\">\n      <div class=\"left-bar\"><br></div>\n      <div class=\"content\">\n        <div class=\"header\">\n          <div class=\"img-top\">\n            <img src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\" alt=\"School Logo\" class=\"logo\">\n          </div>\n          <div class=\"school-details\">\n            <h1>SANTHOSHA VIDHYALAYA</h1>\n            <p>MATRICULATION &amp; HIGHER SECONDARY SCHOOL</p>\n          </div>\n          <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n        </div>\n        <div class=\"content-div\">\n          <div class=\"date\">\n            <div style=\"padding-right: 20px; font-size: 22px\">Date:</div>\n          </div>\n          <div class=\"certificate-title\">\n            <h2>Bonafide Certificate</h2>\n          </div>\n\n          <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n            This is to certify that\n            <span class=\"underline-text hidden-text\">{{student_name}}</span> S/O or D/O\n            <span class=\"underline-text hidden-text\">{{father_or_mother_name }}</span>, studying in class\n            <span class=\"underline-text hidden-text\">{{class }}</span>, is a student of this\n            school, during the academic year\n            <span class=\"underline-text hidden-text\">{{academic_year }}</span>. His/Her date of birth\n            as per our school record is\n            <span class=\"underline-text hidden-text\">{{date_of_birth_numeric }}</span> (dd/mm/yyyy) in words\n            <span class=\"underline-text hidden-text\">{{date_of_birth_words}}</span>.\n          </p>\n          \n          <p style=\"font-size: 22px; padding-left: 10px\">\n            He/She has been studying in this school since\n            <span class=\"underline-text hidden-text\">{{admission_date}}</span> and has\n            a good record of behaviour performance.\n          </p>\n          \n        </div>\n\n        <div class=\"sign-logo-div\">\n          <img src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\" alt=\"signature Logo\" class=\"sign-logo\">\n        </div>\n      </div>\n      <div class=\"footer-container\">\n        <table width=\"100%\">\n          <tbody><tr>\n            <td style=\"display: flex; justify-content: center\">\n              <p class=\"contact-info\">\n                <strong>www.santhoshavidhyalaya.com</strong><br>\n                +91 80125 12100, +91 80125 12143<br>\n                info@santhoshavidhyalaya.com\n              </p>\n            </td>\n            <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n              <p class=\"address-box\">\n                Dohnavur Fellowship, Dohnavur - 627102<br>\n                Tirunelveli District, Tamil Nadu, India\n              </p>\n            </td>\n          </tr>\n        </tbody></table>\n      </div>\n    </div>', '2025-04-09 04:02:26', '2025-04-21 07:29:29'),
+(3, 'Conduct Certificate', '<style>\n    @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n    body {\n      font-family: \"Times New Roman\", serif;\n      margin: 0;\n      padding: 0;\n      background-color: white; /* Ensure proper rendering in PDF */\n    }\n\n    @page {\n      size: A4;\n      margin: 0; /* Removes default browser print margins */\n    }\n\n    .certificate-container {\n      width: 210mm; /* A4 width */\n      height: 297mm; /* A4 height */\n      background-color: white;\n      margin: auto;\n      box-shadow: none; /* No shadow needed for PDF */\n      position: relative;\n      overflow: hidden;\n    }\n\n    /* Background Image for PDF */\n    .certificate-container::before {\n      content: \"\";\n      position: absolute;\n      top: 50%;\n      left: 50%;\n      width: 180mm; /* A4 width */\n      height: 250mm; /* A4 height */\n      background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n        no-repeat center;\n      background-size: contain;\n      opacity: 0.03; /* Medium opacity */\n      transform: translate(-47%, -50%);\n      z-index: 0;\n    }\n\n    /* Ensure layout remains consistent */\n    .left-bar {\n      background-color: #b91c1c;\n      width: 50px;\n      position: absolute;\n      left: 0;\n      top: 0;\n      bottom: 0;\n      z-index: 1;\n    }\n\n    .content {\n      padding-left: 70px;\n      width: 100%;\n      position: relative;\n      z-index: 1;\n    }\n    .content-div {\n      display: flex;\n      flex-direction: column;\n      width: 85%;\n    }\n\n    .header {\n      display: table;\n      align-items: center;\n      width: 100%;\n      padding-top: 10px;\n    }\n\n    .img-top,\n    .school-details,\n    .right-bar {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .logo {\n      width: 120px;\n      height: 120px;\n    }\n\n    .img-top {\n      width: 20%;\n      text-align: center;\n    }\n\n    .school-details {\n      width: 50%;\n      text-align: center;\n    }\n\n    .right-bar {\n      width: 30%;\n      z-index: 1;\n    }\n\n    .right-bar-sub {\n      height: 50px;\n      z-index: 1;\n      background-color: #b91c1c;\n    }\n\n    .sign-logo-div {\n      padding: 20px;\n      text-align: right; /* Ensures alignment works in PDF */\n      padding-right: 120px;\n      padding-top: 50px;\n    }\n\n    .sign-logo {\n      width: 180px;\n      height: 150px;\n    }\n\n    .school-details h1 {\n      font-family: \"Tahoma\", sans-serif;\n      color: #b91c1c;\n      font-size: 24px;\n      margin: 0;\n      font-weight: bold;\n      letter-spacing: 3px;\n    }\n\n    .school-details p {\n      font-family: \"Tahoma\", sans-serif;\n      font-size: 14px;\n      color: #b91c1c;\n      margin: 0;\n      letter-spacing: 1px;\n    }\n\n    .date {\n      width: 100%;\n      text-align: right;\n      font-weight: bold;\n      margin-top: 5px;\n    }\n\n    .certificate-title {\n      text-align: center;\n      font-size: 18px;\n      text-decoration: underline;\n      font-weight: bold;\n      margin-top: 10px;\n      width: 100%;\n    }\n\n    p {\n      font-size: 14px;\n      line-height: 1.5;\n    }\n\n    table {\n      width: 100%;\n      margin-top: 10px;\n      font-size: 14px;\n    }\n\n    td {\n      padding: 5px;\n    }\n\n    .footer-container {\n      width: 100%;\n      position: absolute;\n      bottom: 30px;\n      left: 0;\n      right: 0;\n      padding-left: 50px;\n    }\n\n    .contact-info {\n      color: #b91c1c;\n      font-size: 14px;\n      font-weight: 600;\n      font-family: \"Tahoma\", sans-serif;\n    }\n\n    .address-box {\n      background-color: #b91c1c;\n      color: white;\n      padding: 10px;\n      padding-right: 50px;\n      font-weight: 600;\n      text-align: center;\n      font-family: \"Tahoma\", sans-serif;\n    }\n    .underline-text {\n      display: inline-block;\n      border-bottom: 1px solid #000;\n      min-width: 200px; /* adjust width as needed */\n      padding: 0 5px;\n      font-size: 22px;\n    }\n      .hidden-text::before {\n      content: \"\";\n   }\n\n    .hidden-text {\n      color: transparent;\n      text-decoration: underline;\n      text-underline-offset: 3px;\n      pointer-events: none;      \n      user-select: none;         \n      caret-color: transparent;  \n    }\n  </style>\n\n\n  <div class=\"certificate-container\">\n    <div class=\"left-bar\"><br></div>\n    <div class=\"content\">\n      <div class=\"header\">\n        <div class=\"img-top\">\n          <img src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\" alt=\"School Logo\" class=\"logo\">\n        </div>\n        <div class=\"school-details\">\n          <h1>SANTHOSHA VIDHYALAYA</h1>\n          <p>MATRICULATION &amp; HIGHER SECONDARY SCHOOL</p>\n        </div>\n        <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n      </div>\n      <div class=\"content-div\">\n        <div class=\"date\">\n          <div style=\"padding-right: 20px; font-size: 22px\">Date:</div>\n        </div>\n        <div class=\"certificate-title\">\n          <h2>Conduct Certificate</h2>\n        </div>\n\n        <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n          This is to certify that\n          <span class=\"underline-text hidden-text\">{{student_name}}</span> S/O or D/O\n          <span class=\"underline-text hidden-text\">{{parent_name}}</span>, was a\n          student of this school from<span class=\"underline-text hidden-text\">{{start_date}}</span> to <span class=\"underline-text hidden-text\">{{end_date}}</span>. During this\n          period, he/she studied in class<span class=\"underline-text hidden-text\">{{class_name}}</span> and completed his/her\n          eduction upto class<span class=\"underline-text hidden-text\">{{completed_class}}</span>. \n        </p>\n        <p style=\"font-size: 22px; padding-left: 10px\">\n          He/She actively participated in\n          various extracurricular activites and has always conducted\n          himself/herself with discipline and integrity exhibiting excellent\n          moral character throughout his/her tenure at this school.</p>\n      </div>\n\n      <div class=\"sign-logo-div\">\n        <img src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\" alt=\"signature Logo\" class=\"sign-logo\">\n      </div>\n    </div>\n    <div class=\"footer-container\">\n      <table width=\"100%\">\n        <tbody><tr>\n          <td style=\"display: flex; justify-content: center\">\n            <p class=\"contact-info\">\n              <strong>www.santhoshavidhyalaya.com</strong><br>\n              +91 80125 12100, +91 80125 12143<br>\n              info@santhoshavidhyalaya.com\n            </p>\n          </td>\n          <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n            <p class=\"address-box\">\n              Dohnavur Fellowship, Dohnavur - 627102<br>\n              Tirunelveli District, Tamil Nadu, India\n            </p>\n          </td>\n        </tr>\n      </tbody></table>\n    </div>\n  </div>', '2025-04-09 04:05:54', '2025-04-23 10:11:14'),
+(4, 'Course Completion Certificate', '<style>\n  @import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\n\n  body {\n    font-family: \"Times New Roman\", serif;\n    margin: 0;\n    padding: 0;\n    background-color: white; /* Ensure proper rendering in PDF */\n  }\n\n  @page {\n    size: A4;\n    margin: 0; /* Removes default browser print margins */\n  }\n\n  .certificate-container {\n    width: 210mm; /* A4 width */\n    height: 297mm; /* A4 height */\n    background-color: white;\n    margin: auto;\n    box-shadow: none; /* No shadow needed for PDF */\n    position: relative;\n    overflow: hidden;\n  }\n\n  /* Background Image for PDF */\n  .certificate-container::before {\n    content: \"\";\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 180mm; /* A4 width */\n    height: 250mm; /* A4 height */\n    background: url(\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\")\n      no-repeat center;\n    background-size: contain;\n    opacity: 0.03; /* Medium opacity */\n    transform: translate(-47%, -50%);\n    z-index: 0;\n  }\n\n  /* Ensure layout remains consistent */\n  .left-bar {\n    background-color: #b91c1c;\n    width: 50px;\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 1;\n  }\n\n  .content {\n    padding-left: 70px;\n    width: 100%;\n    position: relative;\n    z-index: 1;\n  }\n  .content-div {\n    display: flex;\n    flex-direction: column;\n    width: 85%;\n  }\n\n  .header {\n    display: table;\n    align-items: center;\n    width: 100%;\n    padding-top: 10px;\n  }\n\n  .img-top,\n  .school-details,\n  .right-bar {\n    display: table-cell;\n    vertical-align: middle;\n  }\n\n  .logo {\n    width: 120px;\n    height: 120px;\n  }\n\n  .img-top {\n    width: 20%;\n    text-align: center;\n  }\n\n  .school-details {\n    width: 50%;\n    text-align: center;\n  }\n\n  .right-bar {\n    width: 30%;\n    z-index: 1;\n  }\n\n  .right-bar-sub {\n    height: 50px;\n    z-index: 1;\n    background-color: #b91c1c;\n  }\n\n  .sign-logo-div {\n    padding: 20px;\n    text-align: right; /* Ensures alignment works in PDF */\n    padding-right: 120px;\n    padding-top: 50px;\n  }\n\n  .sign-logo {\n    width: 180px;\n    height: 150px;\n  }\n\n  .school-details h1 {\n    font-family: \"Tahoma\", sans-serif;\n    color: #b91c1c;\n    font-size: 24px;\n    margin: 0;\n    font-weight: bold;\n    letter-spacing: 3px;\n  }\n\n  .school-details p {\n    font-family: \"Tahoma\", sans-serif;\n    font-size: 14px;\n    color: #b91c1c;\n    margin: 0;\n    letter-spacing: 1px;\n  }\n\n  .date {\n    width: 100%;\n    text-align: right;\n    font-weight: bold;\n    margin-top: 5px;\n  }\n\n  .certificate-title {\n    text-align: center;\n    font-size: 18px;\n    text-decoration: underline;\n    font-weight: bold;\n    margin-top: 10px;\n    width: 100%;\n  }\n\n  p {\n    font-size: 14px;\n    line-height: 1.5;\n  }\n\n  table {\n    width: 100%;\n    margin-top: 10px;\n    font-size: 14px;\n  }\n\n  td {\n    padding: 5px;\n  }\n\n  .footer-container {\n    width: 100%;\n    position: absolute;\n    bottom: 30px;\n    left: 0;\n    right: 0;\n    padding-left: 50px;\n  }\n\n  .contact-info {\n    color: #b91c1c;\n    font-size: 14px;\n    font-weight: 600;\n    font-family: \"Tahoma\", sans-serif;\n  }\n\n  .address-box {\n    background-color: #b91c1c;\n    color: white;\n    padding: 10px;\n    padding-right: 50px;\n    font-weight: 600;\n    text-align: center;\n    font-family: \"Tahoma\", sans-serif;\n  }\n  .underline-text {\n        display: inline-block;\n        border-bottom: 1px solid #000;\n        min-width: 200px; /* adjust width as needed */\n        padding: 0 5px;\n        font-size: 22px;\n      }\n        .hidden-text::before {\n        content: \"\";\n     }\n\n      .hidden-text {\n        color: transparent;\n        text-decoration: underline;\n        text-underline-offset: 3px;\n        pointer-events: none;      \n        user-select: none;         \n        caret-color: transparent;  \n      }\n</style>\n\n\n<div class=\"certificate-container\">\n  <div class=\"left-bar\"><br></div>\n  <div class=\"content\">\n    <div class=\"header\">\n      <div class=\"img-top\">\n        <img src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\" alt=\"School Logo\" class=\"logo\">\n      </div>\n      <div class=\"school-details\">\n        <h1>SANTHOSHA VIDHYALAYA</h1>\n        <p>MATRICULATION &amp; HIGHER SECONDARY SCHOOL</p>\n      </div>\n      <div class=\"right-bar\"><div class=\"right-bar-sub\"><br></div><br></div>\n    </div>\n    <div class=\"content-div\">\n      <div class=\"date\">\n        <div style=\"padding-right: 100px; font-size: 22px\">Date:</div>\n      </div>\n      <div class=\"certificate-title\">\n        <h2>Course Completion Certificate</h2>\n      </div>\n\n      <p style=\"font-size: 22px; margin-bottom: 0px; padding-left: 10px\">\n        This is to certify that\n        <span class=\"underline-text hidden-text\">{{student_name}}</span>, S/O or D/O\n        <span class=\"underline-text hidden-text\">{{parent_name}}</span>, was a\n        student of the Higher Secondary Course in this school from\n        <span class=\"underline-text hidden-text\">{{start_date}}</span> to\n        <span class=\"underline-text hidden-text\">{{end_date}}</span>. He/She appeared for the\n        higher secondary (+2) Examination through this school in March 2023\n        and passed successfully in the first attempt. For details of his/her\n        marks, please refer to the mark certificate.\n      </p>\n      <p style=\"font-size: 22px; padding-left: 10px\">\n        He/She has completed the course successfully in the following\n        subjects:\n      </p>\n    </div>\n\n    <table style=\"padding-left: 150px\">\n      <tbody><tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 1</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 2</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"font-size: 22px; text-align: start\">\n          <strong>Part 3</strong>\n          <span style=\"padding-left: 30px\"><strong>:</strong></span>\n        </td>\n      </tr>\n    </tbody></table>\n    <div class=\"sign-logo-div\">\n      <img src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\" alt=\"signature Logo\" class=\"sign-logo\">\n    </div>\n  </div>\n  <div class=\"footer-container\">\n    <table width=\"100%\">\n      <tbody><tr>\n        <td style=\"display: flex; justify-content: center;\">\n          <p class=\"contact-info\">\n            <strong>www.santhoshavidhyalaya.com</strong><br>\n            +91 80125 12100, +91 80125 12143<br>\n            info@santhoshavidhyalaya.com\n          </p>\n        </td>\n        <td style=\"width: 50%; text-align: center; padding-right: 20px\">\n          <p class=\"address-box\">\n            Dohnavur Fellowship, Dohnavur - 627102<br>\n            Tirunelveli District, Tamil Nadu, India\n          </p>\n        </td>\n      </tr>\n    </tbody></table>\n  </div>\n</div>', '2025-04-09 04:06:32', '2025-04-23 01:33:03'),
+(5, 'No Due Certificate', '<style>\n@import url(\"https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap\");\nbody {\nfont-family: \"Tahoma\", sans-serif;\nmargin: 0;\npadding: 0;\nbackground-color: white; /* Ensure proper rendering in PDF */\n}\n@page {\nsize: A4;\nmargin: 0; /* Removes default browser print margins */\n}\n.certificate {\nwidth: 200mm; /* A4 width */\nheight: 200mm; /* A4 height */\nborder: 2px solid #000;\nmargin: auto;\nborder-radius: 8px;\n}\n.header {\nfont-size: 24px;\nfont-weight: 500;\ntext-align: center;\nfont-family: \"Tahoma\", sans-serif;\nletter-spacing: 1px;\n}\n.sub-header {\nfont-size: 28px;\nfont-weight: 500;\nmargin-top: 10px;\ntext-align: center;\ntext-decoration: underline;\nfont-family: \"Tahoma\", sans-serif;\npadding-bottom: 20px;\nletter-spacing: 1px;\n}\n.logo {\npadding: 20px;\nwidth: 100px;\nheight: 100px;\n}\n.details {\nfont-size: 18px;\nmargin-top: 25px;\ntext-align: left;\n}\n.signature {\ndisplay: flex;\njustify-content: space-around;\nposition: absolute;\nbottom: 10px;\nwidth: 100%;\n}\n.signature div {\ntext-align: center;\n}\n.hidden-text::before {\ncontent: \"\";\n}\n.hidden-text {\ncolor: transparent;\ntext-decoration: underline;\ntext-underline-offset: 3px;\npointer-events: none;\nuser-select: none;\ncaret-color: transparent;\n}\n</style>\n\n\n<div class=\"certificate\">\n<div style=\"text-align: center\">\n<img src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\" alt=\"School Logo\" class=\"logo\">\n</div>\n<div class=\"header\">Santhosha Vidhyalaya Higher Secondary School</div>\n<div class=\"sub-header\"><string>No Due Certificate</string></div>\n<table width=\"100%\">\n<tbody><tr>\n<td style=\"border-bottom: 1px solid lightgray\"><br></td>\n</tr>\n</tbody></table>\n<p style=\"text-align: right; padding-right: 100px\">Date :<span class=\"hidden-text\"> {{end_date}}</span></p>\n<div class=\"details\">\n<table style=\"border-collapse: collapse; width: 100%\">\n<tbody><tr>\n<td style=\"\nwidth: 50%;\ntext-align: left;\npadding: 30px;\nfont-size: 16px;\n\">\nName of the Student : <span class=\"hidden-text\">{{student_name}}</span></td>\n<td style=\"\nwidth: 50%;\ntext-align: center;\npadding: 30px;\nfont-size: 16px;\n\">\nAdmission No : <span class=\"hidden-text\">{{admission_no}}</span>\n</td>\n</tr>\n<tr>\n<td style=\"width: 50%; text-align: left; padding: 30px; font-size: 16px;\">\nClass & Section : <span class=\"hidden-text\">{{SOUGHT_STD}}</span>\n</td>\n</tr>\n</tbody></table>\n</div>\n<div style=\"text-align: center; display: flex; justify-content: center\">\n<p style=\"width: 90%; letter-spacing: 1px\">\nWe hereby certify that there are\n<span style=\"font-size: 18px\">NO OUTSTANDING FEE DUES</span>\nfor the student mentioned above.\n</p>\n</div>\n<table width=\"100%\" style=\"margin-top: 80px; text-align: center;\">\n<tr>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Finance Coordinator</div>\n</td>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Chief Warden</div>\n</td>\n<td style=\"width: 33%;\">\n<table width=\"95%\">\n<tr><td style=\"border-bottom: 1px solid lightgray;\"><br><br></td></tr>\n</table>\n<div style=\"padding-top: 10px;\">Principal</div>\n</td>\n</tr>\n</table>\n</div>', '2025-04-09 04:07:18', '2025-04-23 01:45:11'),
+(7, 'IDCARD', '<!DOCTYPE html>\r\n<html>\r\n  <head>\r\n    <meta charset=\"UTF-8\" />\r\n    <title>ID Card</title>\r\n    <style>\r\n      body {\r\n        font-family: sans-serif;\r\n      }\r\n\r\n      .id-card {\r\n        width: 325px;\r\n        height: 500px;\r\n        border: 2px solid #000;\r\n        border-radius: 10px;\r\n        padding: 10px 5px;\r\n        box-sizing: border-box;\r\n        text-align: center;\r\n      }\r\n\r\n      .school-header img {\r\n        width: 90px;\r\n        height: 90px;\r\n        border-radius: 50%;\r\n      }\r\n\r\n      .school-name {\r\n        color: red;\r\n        font-weight: bold;\r\n        font-size: 18px;\r\n        margin-top: 5px;\r\n      }\r\n\r\n      .school-details {\r\n        font-size: 10px;\r\n        color: blue;\r\n        line-height: 1.2;\r\n        margin-top: 5px;\r\n      }\r\n\r\n      .id-title {\r\n        font-weight: bold;\r\n        font-size: 14px;\r\n        margin: 10px 0;\r\n        text-transform: uppercase;\r\n      }\r\n\r\n      .photo-box {\r\n        width: 110px;\r\n        height: 110px;\r\n        border: 2px solid purple;\r\n        margin: 0 auto 10px auto;\r\n      }\r\n\r\n      .photo-box img {\r\n        width: 100%;\r\n        height: 100%;\r\n      }\r\n\r\n      .student-name {\r\n        font-size: 14px;\r\n        font-weight: bold;\r\n        color: red;\r\n        margin-bottom: 5px;\r\n      }\r\n\r\n      .info-table {\r\n        width: 100%;\r\n        font-size: 12px;\r\n        margin-top: 8px;\r\n        display: flex;\r\n        justify-content: center;\r\n        margin-left: 34px;\r\n      }\r\n\r\n      .info-table td {\r\n        padding: 2px;\r\n        vertical-align: top;\r\n      }\r\n\r\n      .address {\r\n        font-size: 10px;\r\n        font-weight: 600;\r\n        color: #030a57;\r\n        margin: 10px auto;\r\n        width: 90%;\r\n        text-align: left;\r\n      }\r\n\r\n      .sign-div img {\r\n        width: 120px;\r\n        height: auto;\r\n        float: right;\r\n      }\r\n      .hidden-text::before {\r\n  content: \"\";\r\n  }\r\n  .hidden-text {\r\n  color: transparent;\r\n  text-decoration: underline;\r\n  text-underline-offset: 3px;\r\n  pointer-events: none;\r\n  user-select: none;\r\n  caret-color: transparent;\r\n  }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <div class=\"id-card\">\r\n      <table style=\"width: 100%\">\r\n        <tr>\r\n          <td class=\"school-header\" align=\"center\">\r\n            <img\r\n              src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\"\r\n              alt=\"School Logo\"\r\n            />\r\n          </td>\r\n          <td align=\"center\">\r\n            <div class=\"school-name\">Santhosha Vidhyalaya</div>\r\n            <div class=\"school-details\">\r\n              Matriculation & Higher Secondary<br />\r\n              Dohnavur - 627 102, Tirunelveli<br />\r\n              Phone: 8012512143, 04635 265068<br />\r\n              Email: svdohn@gmail.com\r\n            </div>\r\n          </td>\r\n        </tr>\r\n      </table>\r\n\r\n      <div class=\"id-title\">Identity Card</div>\r\n\r\n      <div class=\"photo-box\">\r\n        <img src=\"{{student_photo}}\" alt=\"Photo\" />\r\n      </div>\r\n\r\n      <div class=\"student-name hidden-text\">{{student_name}}</div>\r\n      <table class=\"info-table\">\r\n        <tr>\r\n          <td align=\"left\"><strong>DOB</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" style=\"margin-left: 20px;\" class=\"hidden-text\">{{DOB_DD_MM_YYYY}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>STD</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{SOUGHT_STD}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>Phone</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{MOBILE_NUMBER}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>Year</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{academic_year}}</td>\r\n        </tr>\r\n      </table>\r\n\r\n      <div class=\"address hidden-text\">\r\n        {{PERMANENT_HOUSENUMBER}}, {{P_STREETNAME}}, {{P_VILLAGE_TOWN_NAME}},\r\n        {{P_DISTRICT}}, {{P_STATE}}, {{P_PINCODE}}<br />\r\n      </div>\r\n\r\n      <div class=\"sign-div\">\r\n        <img\r\n          src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\"\r\n          alt=\"Signature\"\r\n        />\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>', '2025-04-09 04:07:18', '2025-05-02 09:52:08'),
+(8, 'IDCARD44', '<!DOCTYPE html>\r\n<html>\r\n  <head>\r\n    <meta charset=\"UTF-8\" />\r\n    <title>ID Card</title>\r\n    <style>\r\n      body {\r\n        font-family: sans-serif;\r\n      }\r\n\r\n      .id-card {\r\n        width: 325px;\r\n        height: 500px;\r\n        border: 2px solid #000;\r\n        border-radius: 10px;\r\n        padding: 10px 5px;\r\n        box-sizing: border-box;\r\n        text-align: center;\r\n      }\r\n\r\n      .school-header img {\r\n        width: 90px;\r\n        height: 90px;\r\n        border-radius: 50%;\r\n      }\r\n\r\n      .school-name {\r\n        color: red;\r\n        font-weight: bold;\r\n        font-size: 18px;\r\n        margin-top: 5px;\r\n      }\r\n\r\n      .school-details {\r\n        font-size: 10px;\r\n        color: blue;\r\n        line-height: 1.2;\r\n        margin-top: 5px;\r\n      }\r\n\r\n      .id-title {\r\n        font-weight: bold;\r\n        font-size: 14px;\r\n        margin: 10px 0;\r\n        text-transform: uppercase;\r\n      }\r\n\r\n      .photo-box {\r\n        width: 110px;\r\n        height: 110px;\r\n        border: 2px solid purple;\r\n        margin: 0 auto 10px auto;\r\n      }\r\n\r\n      .photo-box img {\r\n        width: 100%;\r\n        height: 100%;\r\n      }\r\n\r\n      .student-name {\r\n        font-size: 14px;\r\n        font-weight: bold;\r\n        color: red;\r\n        margin-bottom: 5px;\r\n      }\r\n\r\n      .info-table {\r\n        width: 100%;\r\n        font-size: 12px;\r\n        margin-top: 8px;\r\n        display: flex;\r\n        justify-content: center;\r\n        margin-left: 34px;\r\n      }\r\n\r\n      .info-table td {\r\n        padding: 2px;\r\n        vertical-align: top;\r\n      }\r\n\r\n      .address {\r\n        font-size: 10px;\r\n        font-weight: 600;\r\n        color: #030a57;\r\n        margin: 10px auto;\r\n        width: 90%;\r\n        text-align: left;\r\n      }\r\n\r\n      .sign-div img {\r\n        width: 120px;\r\n        height: auto;\r\n        float: right;\r\n      }\r\n      .hidden-text::before {\r\n  content: \"\";\r\n  }\r\n  .hidden-text {\r\n  color: transparent;\r\n  text-decoration: underline;\r\n  text-underline-offset: 3px;\r\n  pointer-events: none;\r\n  user-select: none;\r\n  caret-color: transparent;\r\n  }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <div class=\"id-card\">\r\n      <table style=\"width: 100%\">\r\n        <tr>\r\n          <td class=\"school-header\" align=\"center\">\r\n            <img\r\n              src=\"https://santhoshavidhyalaya.com/svsportaladmintest/static/media/newlogo.f86bd51493e0e8166940.jpg\"\r\n              alt=\"School Logo\"\r\n            />\r\n          </td>\r\n          <td align=\"center\">\r\n            <div class=\"school-name\">Santhosha Vidhyalaya</div>\r\n            <div class=\"school-details\">\r\n              Matriculation & Higher Secondary<br />\r\n              Dohnavur - 627 102, Tirunelveli<br />\r\n              Phone: 8012512143, 04635 265068<br />\r\n              Email: svdohn@gmail.com\r\n            </div>\r\n          </td>\r\n        </tr>\r\n      </table>\r\n\r\n      <div class=\"id-title\">Identity Card</div>\r\n\r\n      <div class=\"photo-box\">\r\n        <img src=\"{{student_photo}}\" alt=\"Photo\" />\r\n      </div>\r\n\r\n      <div class=\"student-name hidden-text\">{{student_name}}</div>\r\n      <table class=\"info-table\">\r\n        <tr>\r\n          <td align=\"left\"><strong>DOB</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" style=\"margin-left: 20px;\" class=\"hidden-text\">{{DOB_DD_MM_YYYY}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>STD</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{SOUGHT_STD}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>Phone</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{MOBILE_NUMBER}}</td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\"><strong>Year</strong></td>\r\n          <td style=\"padding: 0px 10px;\"><strong>:</strong></td>\r\n          <td align=\"left\" class=\"hidden-text\">{{academic_year}}</td>\r\n        </tr>\r\n      </table>\r\n\r\n      <div class=\"address hidden-text\">\r\n        {{PERMANENT_HOUSENUMBER}}, {{P_STREETNAME}}, {{P_VILLAGE_TOWN_NAME}},\r\n        {{P_DISTRICT}}, {{P_STATE}}, {{P_PINCODE}}<br />\r\n      </div>\r\n\r\n      <div class=\"sign-div\">\r\n        <img\r\n          src=\"https://www.santhoshavidhyalaya.com/SVSTEST/public/images/signature.png\"\r\n          alt=\"Signature\"\r\n        />\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>', '2025-04-09 04:07:18', '2025-04-24 08:00:32');
 
 -- --------------------------------------------------------
 
@@ -2650,18 +2594,10 @@ CREATE TABLE `template_masters` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `extra` varchar(255) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `template` longtext DEFAULT NULL
+  `template` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
-
---
--- Dumping data for table `template_masters`
---
-
-INSERT INTO `template_masters` (`id`, `template_name`, `extra`, `comment`, `template`, `created_at`, `updated_at`) VALUES
-(1, 'Report Card', NULL, NULL, '<html>\n  <head>\n    <style>\n      /* Main container */\n      .report-card {\n        width: 100%;\n        max-width: 1000px;\n        margin: 0 auto;\n        font-family: \"Calibri\", \"Arial\", sans-serif;\n      }\n\n      /* Header styles */\n      .header-table {\n        width: 100%;\n        margin-bottom: 8px;\n      }\n\n      .school-logo {\n        width: 100px;\n        height: 100px;\n      }\n\n      .school-name-n {\n        font-size: 24px;\n        margin-left: -55px;\n        font-weight: bold;\n        text-align: center;\n        font-family: \"Times New Roman\", serif;\n      }\n      .school-name {\n        font-size: 24px;\n        font-weight: bold;\n        font-family: \"Times New Roman\", serif;\n        padding: 10px 0; /* Adjust padding for vertical centering */\n      }\n\n      /* Student info styles */\n      .student-info-table {\n        width: 100%;\n        border: 1px solid black;\n        margin-bottom: 10px;\n        border-collapse: collapse;\n      }\n\n      .student-info-table td {\n        padding: 5px;\n        font-size: 13px;\n        border: 1px solid black;\n      }\n\n      .student-photo {\n        width: 100px;\n        height: 100px;\n        border-radius: 10%;\n      }\n\n      /* Marks table */\n      .marks-table {\n        width: 100%;\n        border: 2px solid black;\n        border-collapse: collapse;\n        margin-bottom: 10px;\n      }\n\n      .marks-table th,\n      .marks-table td {\n        padding: 6px;\n        font-size: 13px;\n        border: 1px solid black;\n        text-align: center;\n      }\n\n      .marks-table th {\n        background-color: #f8f8f8;\n      }\n\n      /* Graph container */\n      .graph-container {\n        text-align: right;\n        margin-top: 10px;\n      }\n\n      .graph-image {\n        width: 50%;\n        height: auto;\n        max-height: 300px;\n      }\n\n      /* Summary tables */\n      .summary-table {\n        width: 100%;\n        border-collapse: collapse;\n        margin-top: 10px;\n      }\n\n      .summary-table th,\n      .summary-table td {\n        border: 1.5px solid red;\n        padding: 6px;\n        font-size: 13px;\n        text-align: center;\n        background-color: #fff9f9;\n      }\n\n      /* Scholastic heading */\n      .scholastic-heading {\n        font-size: 16px;\n        font-weight: bold;\n        padding: 8px;\n        background-color: #f8f8f8;\n        border-bottom: 2px solid black;\n        text-align: center;\n      }\n\n      /* Utility classes */\n      .text-center {\n        text-align: center;\n      }\n      .text-red {\n        color: red;\n      }\n      .text-bold {\n        font-weight: bold;\n      }\n      .no-margin {\n        margin: 0;\n      }\n\n      /* Student details text */\n      .student-detail {\n        font-size: 13px;\n        line-height: 1.4;\n      }\n\n      .student-label {\n        color: red;\n        font-weight: bold;\n      }\n\n      .student-value {\n        font-weight: bold;\n        color: #333;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"report-card\">\n      <!-- Header -->\n      <table class=\"header-table\">\n        <tr>\n          <td width=\"10%\">\n            <img\n              src=\"${school_logo}\"\n              alt=\"\"\n              class=\"school-logo\"\n              onerror=\"this.onerror=null; this.src=\'https://via.placeholder.com/150\';\"\n            />\n          </td>\n          <td width=\"90%\" class=\"school-name\">${school_name}</td>\n        </tr>\n      </table>\n\n      <!-- Report Card Title -->\n      <table width=\"100%\">\n        <tr>\n          <td class=\"text-center\">\n            <p class=\"no-margin\" style=\"font-size: 16px\">\n              <b>${term_name} Report Card ${academic_year}</b>\n            </p>\n            <p class=\"no-margin text-red\" style=\"font-size: 15px\">\n              <b>${name}</b>\n            </p>\n          </td>\n        </tr>\n      </table>\n\n      <!-- Student Info -->\n      <table class=\"student-info-table\">\n        <tr>\n          <td width=\"33%\" class=\"student-detail\">\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Roll Number:</span>\n              <span class=\"student-value\">${roll_no}</span>\n            </p>\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Class:</span>\n              <span class=\"student-value\">${standard}</span>\n            </p>\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Admission No:</span>\n              <span class=\"student-value\">${admission_no}</span>\n            </p>\n          </td>\n          <td width=\"33%\" class=\"text-center\">\n            <img\n              id=\"student-photo\"\n              src=\"${profile}\"\n              alt=\"Student Photo\"\n              class=\"student-photo\"\n            />\n          </td>\n          <td width=\"33%\" class=\"student-detail\">\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Father\'s Name:</span>\n              <span class=\"student-value\">${father}</span>\n            </p>\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Mother\'s Name:</span>\n              <span class=\"student-value\">${mother}</span>\n            </p>\n            <p class=\"no-margin\">\n              <span class=\"student-label\">Date of Birth:</span>\n              <span class=\"student-value\">${dob}</span>\n            </p>\n          </td>\n        </tr>\n      </table>\n\n      <!-- Marks Table -->\n      <table class=\"marks-table\">\n        <tr>\n          <td colspan=\"2\" class=\"scholastic-heading text-red\">\n            SCHOLASTIC AREAS\n          </td>\n        </tr>\n        <tr>\n          <th>Subject</th>\n          <th>Marks</th>\n        </tr>\n        ${marksRows}\n      </table>\n\n      <!-- Graph (Below the Table, Right Side) -->\n      <div class=\"graph-container\">\n        <img src=\"${chartUrl}\" alt=\"Graph\" class=\"graph-image\" />\n      </div>\n\n      <!-- Summary Tables -->\n      <table class=\"summary-table\">\n        <tr>\n          <td width=\"33%\">\n            <table width=\"100%\">\n              <tr>\n                <th>Total Marks</th>\n                <th>${totalMarks}</th>\n              </tr>\n            </table>\n          </td>\n          <td width=\"33%\">\n            <table width=\"100%\">\n              <tr>\n                <th>Percentage</th>\n                <th>${percentage}</th>\n              </tr>\n            </table>\n          </td>\n          <td width=\"33%\">\n            <table width=\"100%\">\n              <tr>\n                <th>Attendance</th>\n                <th>${attendance}</th>\n              </tr>\n            </table>\n          </td>\n        </tr>\n      </table>\n\n      <!-- Remarks -->\n      <table width=\"100%\" style=\"margin-top: 10px\">\n        <tr>\n          <td>\n            <p class=\"no-margin\" style=\"font-size: 14px\">\n              <strong>REMARKS :</strong>\n            </p>\n            <p class=\"no-margin\" style=\"font-size: 14px\">${remarks}</p>\n          </td>\n        </tr>\n      </table>\n    </div>\n  </body>\n</html>\n', '2025-01-24 16:29:41', '2025-07-29 17:46:32');
-
 
 --
 -- Table structure for table `temporary_student_marks`
@@ -2680,8 +2616,8 @@ CREATE TABLE `temporary_student_marks` (
   `total` int(11) DEFAULT NULL,
   `percentage` float(5,2) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -2693,8 +2629,8 @@ CREATE TABLE `temporary_student_marks` (
 CREATE TABLE `terms` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
-  `updated_at` DATETIME NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `delete_status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -2713,8 +2649,8 @@ CREATE TABLE `transactions_donation_worldline` (
   `customer_email` varchar(255) DEFAULT NULL,
   `payment_type` varchar(100) DEFAULT NULL,
   `response_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`response_data`)),
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2751,7 +2687,6 @@ CREATE TABLE `users` (
   `hostelOrDay` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `device_token` varchar(255) DEFAULT NULL,
   `user_type` varchar(50) NOT NULL DEFAULT 'student',
   `fee_by` varchar(100) DEFAULT 'parent',
   `sponser_id` int(80) DEFAULT NULL,
@@ -2760,8 +2695,8 @@ CREATE TABLE `users` (
   `h_excess_amount` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `academic_year` varchar(100) DEFAULT NULL,
   `grade_status` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2799,8 +2734,8 @@ CREATE TABLE `user_grade_histories` (
   `new_grade_status` varchar(50) DEFAULT NULL,
   `previous_academic_year` varchar(20) DEFAULT NULL,
   `current_academic_year` varchar(20) DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -2813,7 +2748,7 @@ CREATE TABLE `user_notifications` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `notification_type` varchar(255) NOT NULL,
-  `notification_category` varchar(255) NOT NULL,
+  `notification_category` int(11) NOT NULL,
   `notification_text` text NOT NULL,
   `schedule_time` datetime DEFAULT NULL,
   `send_status` enum('sent','pending','failed') DEFAULT 'pending',
@@ -3088,13 +3023,6 @@ ALTER TABLE `invoice_pendings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `invoice_sequences`
---
-ALTER TABLE `invoice_sequences`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_month_year` (`month_year`,`title`);
-
---
 -- Indexes for table `leave_applications`
 --
 ALTER TABLE `leave_applications`
@@ -3140,12 +3068,6 @@ ALTER TABLE `notice_boards`
 -- Indexes for table `notification_categories`
 --
 ALTER TABLE `notification_categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `notification_users`
---
-ALTER TABLE `notification_users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3733,12 +3655,6 @@ ALTER TABLE `invoice_pendings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `invoice_sequences`
---
-ALTER TABLE `invoice_sequences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `leave_applications`
 --
 ALTER TABLE `leave_applications`
@@ -3785,12 +3701,6 @@ ALTER TABLE `notice_boards`
 --
 ALTER TABLE `notification_categories`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `notification_users`
---
-ALTER TABLE `notification_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -4042,7 +3952,7 @@ ALTER TABLE `teacher_types`
 -- AUTO_INCREMENT for table `template_editors`
 --
 ALTER TABLE `template_editors`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `template_masters`

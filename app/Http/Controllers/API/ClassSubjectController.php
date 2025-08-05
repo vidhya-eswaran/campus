@@ -61,12 +61,10 @@ class ClassSubjectController extends Controller
             $group_no = $request->query('group_no'); // Group filter
             $term = $request->query('term'); // Term filter
             $standard = $request->query('class'); 
-
         
             // Fetch subjects with marks
             $subjectQuery = ClassSubject::where('class', '=', $standard)->where('delete_status', 0);
             
-            // Add additional filters for subjects
             if ($group_no) {
                 $subjectQuery->where('group_no', '=', $group_no);
             }
@@ -75,7 +73,9 @@ class ClassSubjectController extends Controller
             }
         
             $subjects = $subjectQuery->get(['id','subject', 'mark']); // Fetch subjects with marks
-        
+       
+            //dd($subjects);
+
             // Fetch students
             $studentQuery = User::where('standard', '=', $standard)
                                 ->where('status', '=', 1);

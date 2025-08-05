@@ -19,24 +19,8 @@ class StaffController extends Controller
             // 'staff_id' => 'nullable',
             "designation" => "nullable|string|max:255",
             "email" => "nullable",
-            "permanentAddress" => "array",
-            "permanentAddress.addressLine1" => "nullable",
-            "permanentAddress.addressLine2" => "nullable",
-            "permanentAddress.city" => "nullable",
-            "permanentAddress.state" => "nullable",
-            "permanentAddress.pincode" => "nullable",
-            "permanentAddress.country" => "nullable",
-            "communicationAddress" => "array",
-            "communicationAddress.addressLine1" => "nullable",
-            "communicationAddress.addressLine2" => "nullable",
-            "communicationAddress.city" => "nullable",
-            "communicationAddress.state" => "nullable",
-            "communicationAddress.pincode" => "nullable",
-            "communicationAddress.country" => "nullable",
-            "communicationAddress.spouseName" => "nullable",
-            "communicationAddress.spouseWorking" => "nullable",
-            "communicationAddress.spouseMobileNo" => "nullable",
-            "communicationAddress.spouseMail" => "nullable",
+            "permanentAddress" => "nullable",            
+            "communicationAddress" => "nullable",            
             "staff_photo" => "nullable",
             "date_of_joining" => "nullable",
             "isdeleted" => "nullable|boolean",
@@ -46,7 +30,6 @@ class StaffController extends Controller
             "teacher_type" => "nullable",
             "previous_experience" => "nullable",
             "date_of_joining" => "nullable",
-            "staff_photo" => "nullable",
             "mobile_no" => "nullable",
             "marital_status" => "nullable",
             "no_of_children" => "nullable",
@@ -60,32 +43,37 @@ class StaffController extends Controller
             "date_of_resignation" => "nullable",
         ]);
 
-        if (isset($requestData["permanentAddress"])) {
-            $requestData["permanentAddress"] = json_encode(
-                $requestData["permanentAddress"]
-            );
-        }
-
-        if (isset($requestData["communicationAddress"])) {
-            $requestData["communicationAddress"] = json_encode(
-                $requestData["communicationAddress"]
-            );
-        }
+       
         $requestData["staff_id"] = Autogeneratenumber::generateStaffId(
             $requestData["date_of_joining"]
         );
 
-        $staff = Staff::create($requestData);
-        if ($request->has("staff_photo")) {
-            // request, $staff, fieldname on API, file path, db column name
-            $this->handleImageUpdate(
-                $request,
-                $staff,
-                "staff_photo",
-                "staff_photo",
-                "staff_photo"
-            );
+        $schoolSlug = request()->route('school');
+
+        if ($request->has('staff_photo')) {
+                $file = $request->file('staff_photo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'documents/' . $schoolSlug . '/Staff/' . $filename;          
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $requestData['staff_photo'] = Storage::disk('s3')->url($path);
         }
+
+        $staff = Staff::create($requestData);
+        // if ($request->has("staff_photo")) {
+        //     // request, $staff, fieldname on API, file path, db column name
+        //     $this->handleImageUpdate(
+        //         $request,
+        //         $staff,
+        //         "staff_photo",
+        //         "staff_photo",
+        //         "staff_photo"
+        //     );
+        // }
 
         if ($staff) {
             $lastid = User::latest("id")->value("id") + 1;
@@ -124,24 +112,10 @@ class StaffController extends Controller
             "staff_id" => "nullable",
             "designation" => "nullable|string|max:255",
             "email" => "nullable",
-            "permanentAddress" => "array",
-            "permanentAddress.addressLine1" => "nullable",
-            "permanentAddress.addressLine2" => "nullable",
-            "permanentAddress.city" => "nullable",
-            "permanentAddress.state" => "nullable",
-            "permanentAddress.pincode" => "nullable",
-            "permanentAddress.country" => "nullable",
-            "communicationAddress" => "array",
-            "communicationAddress.addressLine1" => "nullable",
-            "communicationAddress.addressLine2" => "nullable",
-            "communicationAddress.city" => "nullable",
-            "communicationAddress.state" => "nullable",
-            "communicationAddress.pincode" => "nullable",
-            "communicationAddress.country" => "nullable",
-            "communicationAddress.spouseName" => "nullable",
-            "communicationAddress.spouseWorking" => "nullable",
-            "communicationAddress.spouseMobileNo" => "nullable",
-            "communicationAddress.spouseMail" => "nullable",
+            "permanentAddress" => "nullable",
+            
+            "communicationAddress" => "nullable",
+           
             "staff_photo" => "nullable",
             "date_of_joining" => "nullable",
             "isdeleted" => "nullable|boolean",
@@ -151,7 +125,6 @@ class StaffController extends Controller
             "teacher_type" => "nullable",
             "previous_experience" => "nullable",
             "date_of_joining" => "nullable",
-            "staff_photo" => "nullable",
             "mobile_no" => "nullable",
             "marital_status" => "nullable",
             "no_of_children" => "nullable",
@@ -166,27 +139,42 @@ class StaffController extends Controller
         ]);
 
         // Encode the address data to JSON format
-        if (isset($requestData["permanentAddress"])) {
-            $requestData["permanentAddress"] = json_encode(
-                $requestData["permanentAddress"]
-            );
-        }
-        if (isset($requestData["communicationAddress"])) {
-            $requestData["communicationAddress"] = json_encode(
-                $requestData["communicationAddress"]
-            );
+        // if (isset($requestData["permanentAddress"])) {
+        //     $requestData["permanentAddress"] = json_encode(
+        //         $requestData["permanentAddress"]
+        //     );
+        // }
+        // if (isset($requestData["communicationAddress"])) {
+        //     $requestData["communicationAddress"] = json_encode(
+        //         $requestData["communicationAddress"]
+        //     );
+        // }
+
+        $schoolSlug = request()->route('school');
+
+        if ($request->has('staff_photo')) {
+                $file = $request->file('staff_photo');
+                $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+               $path = 'documents/' . $schoolSlug . '/Staff/' . $filename;          
+
+                // Upload to S3
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                // Get public URL
+                $requestData['staff_photo'] = Storage::disk('s3')->url($path);
         }
 
-        if ($request->has("staff_photo")) {
-            // request, $staff, fieldname on API, file path, db column name
-            $this->handleImageUpdate(
-                $request,
-                $staff,
-                "staff_photo",
-                "staff_photo",
-                "staff_photo"
-            );
-        }
+        // if ($request->has("staff_photo")) {
+        //     // request, $staff, fieldname on API, file path, db column name
+        //     $this->handleImageUpdate(
+        //         $request,
+        //         $staff,
+        //         "staff_photo",
+        //         "staff_photo",
+        //         "staff_photo"
+        //     );
+        // }
 
         // Update the staff record with the new data
         $staff->update($requestData);
@@ -210,25 +198,23 @@ class StaffController extends Controller
         if (!$staff) {
             return response()->json(["message" => "Staff not found"], 404);
         }
-        if ($staff->permanentAddress) {
-            $staff->permanentAddress = json_decode(
-                $staff->permanentAddress,
-                true
-            );
-        }
+        // if ($staff->permanentAddress) {
+        //     $staff->permanentAddress = json_decode(
+        //         $staff->permanentAddress,
+        //         true
+        //     );
+        // }
         if ($staff->staff_photo) {
-            $staff->staff_photo = asset(
-                "storage/app/public/" . $staff->staff_photo
-            );
+            $staff->staff_photo = $staff->staff_photo;
         } else {
             $staff->staff_photo = null; // If no photo, set to null
         }
-        if ($staff->communicationAddress) {
-            $staff->communicationAddress = json_decode(
-                $staff->communicationAddress,
-                true
-            );
-        }
+        // if ($staff->communicationAddress) {
+        //     $staff->communicationAddress = json_decode(
+        //         $staff->communicationAddress,
+        //         true
+        //     );
+        // }
         return response()->json(["staff" => $staff], 200);
     }
 
@@ -287,24 +273,22 @@ class StaffController extends Controller
 
         // Decode JSON fields back to arrays
         foreach ($staff as $staffMember) {
-            if ($staffMember->permanentAddress) {
-                $staffMember->permanentAddress = json_decode(
-                    $staffMember->permanentAddress,
-                    true
-                );
-            }
+            // if ($staffMember->permanentAddress) {
+            //     $staffMember->permanentAddress = json_decode(
+            //         $staffMember->permanentAddress,
+            //         true
+            //     );
+            // }
 
-            if ($staffMember->communicationAddress) {
-                $staffMember->communicationAddress = json_decode(
-                    $staffMember->communicationAddress,
-                    true
-                );
-            }
+            // if ($staffMember->communicationAddress) {
+            //     $staffMember->communicationAddress = json_decode(
+            //         $staffMember->communicationAddress,
+            //         true
+            //     );
+            // }
 
             if ($staffMember->staff_photo) {
-                $staffMember->staff_photo = asset(
-                    "storage/app/public/" . $staffMember->staff_photo
-                );
+                $staffMember->staff_photo =  $staffMember->staff_photo;
             } else {
                 $staffMember->staff_photo = null; // If no photo, set to null
             }
@@ -326,7 +310,7 @@ class StaffController extends Controller
         try {
             if ($request->has($fieldNameApi)) {
                 $base64Image = $request->input($fieldNameApi);
-
+                dd($base64Image);
                 // Ensure it's a base64 image
                 if (preg_match("/^data:image\/(\w+);base64,/", $base64Image, $matches)) {
                     $extension = $matches[1]; // Extract file extension

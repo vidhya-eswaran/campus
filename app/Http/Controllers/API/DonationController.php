@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DonationList;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class DonationController extends Controller
 {
@@ -28,12 +30,14 @@ class DonationController extends Controller
             "image" => "required", // max 2MB
         ]);
 
+        $schoolSlug = request()->route('school');
+
         // Handle image upload
         if ($request->hasFile("image")) {
             $file = $request->file("image");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $path = 'Donation/' . $filename;           
+            $path = 'documents/' . $schoolSlug . '/Donation/' . $filename;         
 
                 // Upload to S3
             Storage::disk('s3')->put($path, file_get_contents($file));
@@ -81,6 +85,8 @@ class DonationController extends Controller
             "image" => "nullable",
         ]);
 
+        $schoolSlug = request()->route('school');
+
         // Handle new image upload if provided
         if ($request->hasFile("image")) {
             // Delete old image if it exists
@@ -94,7 +100,7 @@ class DonationController extends Controller
             $file = $request->file("image");
             $filename = now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $path = 'Donation/' . $filename;           
+            $path = 'documents/' . $schoolSlug . '/Donation/' . $filename;       
 
                 // Upload to S3
             Storage::disk('s3')->put($path, file_get_contents($file));

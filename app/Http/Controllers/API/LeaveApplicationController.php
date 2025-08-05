@@ -7,20 +7,33 @@ use Illuminate\Http\Request;
 use App\Models\LeaveApplication;
 use App\Helpers\LifecycleLogger;
 use App\Models\User;
+use Carbon\Carbon;
+
 class LeaveApplicationController extends Controller
 {
     public function index(Request $request)
     {
-    $query = LeaveApplication::where('delete_status', 0);
+        $query = LeaveApplication::where('delete_status', 0);
 
-    if ($request->has('studentId')) {
-        $query->where('studentId', $request->studentId);
+        if ($request->has('studentId')) {
+            $query->where('studentId', $request->studentId);
+        }
+
+        if ($request->has('fromDate') && $request->has('toDate')) {
+            $from = Carbon::parse($request->fromDate)->startOfDay();
+            $to = Carbon::parse($request->toDate)->endOfDay();
+
+            $query->where(function ($q) use ($from, $to) {
+                $q->where('fromDate', '<=', $to)
+                ->where('toDate', '>=', $from);
+            });
+        }
+
+
+        $leaveApplications = $query->orderBy('id', 'desc')->get();
+
+        return response()->json($leaveApplications);
     }
-
-    $leaveApplications = $query->orderBy('id', 'desc')->get();
-
-    return response()->json($leaveApplications);
-}
 
 
     public function store(Request $request)

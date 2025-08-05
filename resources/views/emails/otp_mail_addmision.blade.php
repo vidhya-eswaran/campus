@@ -8,7 +8,7 @@
         
         <!-- Header -->
         <div style=" padding: 20px; text-align: center;">
-            <img src="{{ $message->embed(public_path('images/1.jpg')) }}" alt="Logo" style="height: 120px;">
+            <!-- <img src="{{ $message->embed(public_path('images/1.jpg')) }}" alt="Logo" style="height: 120px;"> -->
             <h2 style="color: black; margin-top: 10px;">Hostel Admission Portal</h2>
         </div>
 
