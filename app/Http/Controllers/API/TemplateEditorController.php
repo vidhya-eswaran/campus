@@ -247,6 +247,8 @@ class TemplateEditorController extends Controller
             $html = str_replace("{{" . $key . "}}", $value, $html);
         }
 
+        dd($html);
+
         // 2. Remove "display: none" styles
         // $html = preg_replace('/display\s*:\s*none\s*;?/i', '', $html);
 
