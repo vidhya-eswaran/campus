@@ -20,7 +20,7 @@ class PushNotificationController extends Controller
         $messaging = $factory->createMessaging();
 
         $message = [
-            'token' => "ExponentPushToken[cPUa6ABMOmFzB8qgfZymk4]",
+            'token' => $deviceToken,
             'notification' => [
                 'title' => $title,
                 'body' => $body,
