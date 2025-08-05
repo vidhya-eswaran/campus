@@ -12,7 +12,7 @@ class PushNotificationController extends Controller
 {
     public function sendPushNotification(Request $request)
     {
-        $deviceToken = $request->input('device_token');  // from mobile
+        $deviceToken = trim($request->input('device_token'));  // from mobile
         $title = $request->input('title');
         $body = $request->input('body');
 
