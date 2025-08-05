@@ -21,6 +21,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\PushNotificationController;
 
 
 class StudentController extends Controller
@@ -1229,6 +1230,20 @@ class StudentController extends Controller
 
         $inputData = array_merge($request->except($imageFields), $mappedData);
         $admission->save();
+
+        //push notification
+
+        $title = 'Update Application form';
+        $body = 'Your Application has been successfully booked.';
+        $deviceToken = 'ExponentPushToken[cPUa6ABMOmFzB8qgfZymk4]';
+        $type = 'Application';
+        $to_user_id = 2;
+        $data = [
+            'student_id' => 123,
+            'date' => now()->toDateString(),
+        ];
+
+        PushNotificationController::sendPushNotification($title, $body, $deviceToken, $type, $data, $to_user_id);
         
         // Return the updated student details
         return response()->json([
