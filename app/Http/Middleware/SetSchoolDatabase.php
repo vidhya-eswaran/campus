@@ -36,33 +36,33 @@ class SetSchoolDatabase
     Log::info("✅ [Middleware] School found: {$schoolRecord->name} (ID: {$schoolRecord->id})");
 
     // Step 3: Set Razorpay and School Configuration
-    Config::set('razorpay.key', $schoolRecord->razorpay_key);
-    Config::set('razorpay.secret', $schoolRecord->razorpay_secret);
-    Config::set('razorpay.webhook_secret', $schoolRecord->razorpay_webhook_secret);
+    Config::set('razorpay.key', $schoolRecord->razorpay_key ?? null);
+    Config::set('razorpay.secret', $schoolRecord->razorpay_secret ?? null);
+    Config::set('razorpay.webhook_secret', $schoolRecord->razorpay_webhook_secret ?? null);
 
-    Config::set('school.id', $schoolRecord->id);
-    Config::set('school.name', $schoolRecord->name);
-    Config::set('school.school_logo', $schoolRecord->school_logo);
-    Config::set('school.school_type', $schoolRecord->school_type);
-    Config::set('school.school_category', $schoolRecord->school_category);
-    Config::set('school.established_year', $schoolRecord->established_year);
-    Config::set('school.website_url', $schoolRecord->website_url);
-    Config::set('school.country', $schoolRecord->country);
-    Config::set('school.state', $schoolRecord->state);
-    Config::set('school.city', $schoolRecord->city);
-    Config::set('school.postal_code', $schoolRecord->postal_code);
-    Config::set('school.full_address', $schoolRecord->full_address);
-    Config::set('school.phone_number', $schoolRecord->phone_number);
-    Config::set('school.alternate_phone_number', $schoolRecord->alternate_phone_number);
-    Config::set('school.email_address', $schoolRecord->email_address);
-    Config::set('school.support_email', $schoolRecord->support_email);
-    Config::set('school.admin_full_name', $schoolRecord->admin_full_name);
-    Config::set('school.admin_email', $schoolRecord->admin_email);
-    Config::set('school.admin_phone', $schoolRecord->admin_phone);
-    Config::set('school.selected_plan', $schoolRecord->selected_plan);
-    Config::set('school.subscription_start_date', $schoolRecord->subscription_start_date);
-    Config::set('school.subscription_end_date', $schoolRecord->subscription_end_date);
-    Config::set('school.payment_method', $schoolRecord->payment_method);
+    Config::set('school.id', $schoolRecord->id ?? null);
+    Config::set('school.name', $schoolRecord->name ?? null);
+    Config::set('school.school_logo', $schoolRecord->school_logo ?? null);
+    Config::set('school.school_type', $schoolRecord->school_type ?? null);
+    Config::set('school.school_category', $schoolRecord->school_category ?? null);
+    Config::set('school.established_year', $schoolRecord->established_year ?? null);
+    Config::set('school.website_url', $schoolRecord->website_url ?? null);
+    Config::set('school.country', $schoolRecord->country ?? null);
+    Config::set('school.state', $schoolRecord->state ?? null);
+    Config::set('school.city', $schoolRecord->city ?? null);
+    Config::set('school.postal_code', $schoolRecord->postal_code ?? null);
+    Config::set('school.full_address', $schoolRecord->full_address ?? null);
+    Config::set('school.phone_number', $schoolRecord->phone_number ?? null);
+    Config::set('school.alternate_phone_number', $schoolRecord->alternate_phone_number ?? null);
+    Config::set('school.email_address', $schoolRecord->email_address ?? null);
+    Config::set('school.support_email', $schoolRecord->support_email ?? null);
+    Config::set('school.admin_full_name', $schoolRecord->admin_full_name ?? null);
+    Config::set('school.admin_email', $schoolRecord->admin_email ?? null);
+    Config::set('school.admin_phone', $schoolRecord->admin_phone ?? null);
+    Config::set('school.selected_plan', $schoolRecord->selected_plan ?? null);
+    Config::set('school.subscription_start_date', $schoolRecord->subscription_start_date ?? null);
+    Config::set('school.subscription_end_date', $schoolRecord->subscription_end_date ?? null);
+    Config::set('school.payment_method', $schoolRecord->payment_method ?? null);
 
     // Step 4: Connect to the school's DB
     Config::set('database.connections.school', [
