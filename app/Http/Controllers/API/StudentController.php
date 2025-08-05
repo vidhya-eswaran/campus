@@ -1237,13 +1237,13 @@ class StudentController extends Controller
         $body = 'Your Application has been successfully booked.';
         $deviceToken = 'ExponentPushToken[cPUa6ABMOmFzB8qgfZymk4]';
         $type = 'Application';
-        $to_user_id = 27;
+        $toUserId = 27;
         $data = [
             'student_id' => 123,
             'date' => now()->toDateString(),
         ];
 
-        $response = PushNotificationController::sendPushNotification($title, $body, $deviceToken, $type, $data, $to_user_id);
+        $response = PushNotificationController::sendPushNotification($title, $body, $deviceToken, $type, $data, $toUserId);
         
         // Return the updated student details
         return response()->json([
