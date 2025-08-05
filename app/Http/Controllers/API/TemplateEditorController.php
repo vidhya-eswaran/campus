@@ -198,22 +198,6 @@ class TemplateEditorController extends Controller
                 'school_email' => $school->email_address,
             ];
 
-            $placeholders = [
-                '{{ $school_name }}' => $school->school,
-                '{{ $school_address }}' => $school->full_address,
-                '{{ $school_logo }}' => $school->school_logo,
-                '{{ $school_phone_1 }}' => $school->phone_number,
-                '{{ $school_phone_2 }}' => $school->alternate_phone_number,
-                '{{ $school_website }}' => $school->website_url,
-                '{{ $school_address_line1 }}' => $school->full_address,
-                '{{ $school_address_line2 }}' => trim(($school->city ?? '') . ', ' . ($school->state ?? '')),
-                '{{ $school_email }}' => $school->email_address,
-            ];
-
-            $htmlContent = $template->template;
-
-            $template = str_replace(array_keys($placeholders), array_values($placeholders), $htmlContent);
-
             $filename =
                 "idcard_" .
                 Str::slug($student->student_name) .
@@ -257,14 +241,12 @@ class TemplateEditorController extends Controller
         $filenamePrefix
     ) {
         // 1. Replace placeholders in the template
-        $html = $template;
-        
+        $html = $template->template;
 
         foreach ($data as $key => $value) {
             $html = str_replace("{{" . $key . "}}", $value, $html);
         }
-
-        dd($html);
+        
 
         // 2. Remove "display: none" styles
         // $html = preg_replace('/display\s*:\s*none\s*;?/i', '', $html);
