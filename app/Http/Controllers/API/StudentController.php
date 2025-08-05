@@ -1243,7 +1243,14 @@ class StudentController extends Controller
             'date' => now()->toDateString(),
         ];
 
-        $response = PushNotificationController::sendPushNotification($title, $body, $deviceToken, $type, $data, $toUserId);
+        $response = PushNotificationController::sendPushNotification(
+            $title,
+            $body,
+            $type,
+            $data,
+            $toUserId,
+            $deviceToken
+        );
         
         // Return the updated student details
         return response()->json([
