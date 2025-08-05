@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\PushNotificationController;
-
+use App\Models\Admission;
 
 class StudentController extends Controller
 {
