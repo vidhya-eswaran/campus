@@ -88,6 +88,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Razorpay\Api\Api;
+use Illuminate\Support\Facades\Log;
 
 
 Route::get('/test-s3', function () {
@@ -195,6 +196,52 @@ Route::post('/send-test-email', function (Request $request) {
 
 Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function ()
 {
+    Route::get('/test', function (Request $request, $school) {
+        Log::info('School from URL: ' . $school);
+        return $school;
+    });
+
+    Route::get('/test-razorpay', function (Request $request, $school) {
+        Log::info('School from URL: ' . $school); // ✅ Log the school value
+
+        $key = config('razorpay.key');
+        $secret = config('razorpay.secret');
+
+        if (!$key || !$secret) {
+            Log::error('Razorpay credentials are missing');
+            return response()->json([
+                'message' => 'Razorpay credentials are not set',
+            ], 500);
+        }
+
+        try {
+            $api = new Api($key, $secret);
+
+            $order = $api->order->create([
+                'receipt' => 'TEST-' . uniqid(),
+                'amount' => 10000,
+                'currency' => 'INR',
+            ]);
+
+            Log::info('Razorpay order created: ' . $order['id']);
+
+            return response()->json([
+                'message' => 'Razorpay credentials are valid',
+                'razorpay_key' => $key,
+                'order_id' => $order['id'],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Razorpay error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Failed to use Razorpay credentials',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    });
+    Route::get('/intiate-payment', [PaymentsController::class, 'intiatePayment']);
+    Route::post('/redirect', [PaymentsController::class, 'processRetrunResponse']);
+    Route::get('/student/{studentId}/transactions', [PaymentsController::class, 'getTransactionLogs']);
+
     Route::post("/users", [SchoolUserController::class , "store"]);
 
     Route::post("/register", [ApiController::class , "register"]);
