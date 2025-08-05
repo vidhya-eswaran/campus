@@ -36,6 +36,7 @@ class PushNotificationController extends Controller
         //         'custom_key' => 'custom_value'
         //     ]
         // ];
+        $fromUserId = $toUserId;
 
         $toUser = User::find($toUserId);
 
