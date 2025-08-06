@@ -634,9 +634,13 @@ class TemplateEditorController extends Controller
         if ($template) {
             $data = $request->validate([
                 "template" => "required", // HTML content
+                "template_name" => "required",
             ]);
 
+            //dd($data);
+
             $template->update($data);
+           // dd($data);
             return response()->json($template);
         }
         return response()->json(["message" => "Template not found"], 404);
