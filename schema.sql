@@ -174,7 +174,8 @@ CREATE TABLE `admission_live` (
   `mother_title` varchar(100) DEFAULT NULL,
   `guardian_title` varchar(200) DEFAULT NULL,
   `pen_no` int(11) DEFAULT NULL,
-  `Declaration` varchar(255) DEFAULT NULL
+  `Declaration` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
