@@ -32,6 +32,8 @@ use Illuminate\Support\Collection;
 use App\Mail\PaymentReceiptMail;
 use App\Helpers\FastInvoiceHelper;
 use App\Helpers\LifecycleLogger;
+use App\Http\Controllers\PushNotificationController;
+
 
 class genrateInvoiceController extends Controller
 {
@@ -272,6 +274,27 @@ class genrateInvoiceController extends Controller
             $concatenatedHeadings = "";
             $fees_items_details = []; // Fees items details json for invoice print
 
+            //push notification
+                
+                $title = 'Student Invoice generated';
+                $body = 'Your Student Invoice generated.';
+                $deviceToken = $userData->device_token;
+                $type = 'Invoice';
+                $toUserId = $userData->id;
+                $data = [
+                    'student_id' => $userData->id,
+                    'date' => now()->toDateString(),
+                ];
+
+                $response = PushNotificationController::sendPushNotification(
+                    $title,
+                    $body,
+                    $type,
+                    $data,
+                    $toUserId,
+                    $deviceToken
+                );
+
             /////////////for each input data ////////////////////////////////
 
             if ($cata == "school fees") {
@@ -347,26 +370,7 @@ class genrateInvoiceController extends Controller
                 $data->payment_status = "Invoice generated";
                 $data->created_by = $request->input("created_by");
 
-                ////////////////////////------------------------------------------
-                // $item['fees_items_details']
-
-                // if ($cata != "school fees") {
-                //     $SeperateFeesMap = SeperateFeesMap::where('status', '=', 1)->where('standard', '=',  $request->input('std'))->where('student_id', $userData->id)->sum('amount');
-                //     $SeperateFeesMap_l = SeperateFeesMap::where('status', '=', 1)->where('standard', '=',  $request->input('std'))->where('student_id', $userData->id)->get();
-                //     //$SeperateFeesMap_l_details = array(); // Fees items details json for invoice print
-
-                //     foreach ($SeperateFeesMap_l as $disrecord) {
-                //         // $concatenatedHeadings .= 'Fee Heading: ' . $disrecord->fees_heading . ' - Subheading: ' . $disrecord->fees_sub_heading . ' - Amount: ' . $disrecord->amount . '<br>';
-                //         $sep_items = (object) [];
-                //         $sep_items->discount_cat = $disrecord->discount_cat;
-                //         $sep_items->dis_amount = $disrecord->dis_amount;
-                //         array_push($data->fees_items_details, $sep_items); // pusing each item to the array
-                //         // Update the discount status in the database
-                //       //  $discountId = $disrecord->id; // Assuming you have a discount_id field in the $disrecord object
-                //     }
-                // }
-
-                ////////////////////////////////////////////////////////////
+              
                 $invoice_lists = GenerateInvoiceView::select(
                     "invoice_no"
                 )->get();
@@ -387,15 +391,7 @@ class genrateInvoiceController extends Controller
                 $year = date("y");
                 $month = date("m");
                 $rondomIdString = "GI" . $invoiceTypeString . $month . $year;
-                //////////////////////////////////end of invoice id//////////////////////////////////////
-                // $pending_record =  DB::table('invoice_pendings')
-                //     ->where('student_id', $userData->id)
-                //     ->where('closed_status', 0)
-                //     ->first();
-
-                // this is total correct for test it changed to
-
-                //$amount = 3;
+               
                 $total_invoice_amount = 0;
                 $pending_amount = 0;
 
@@ -430,19 +426,13 @@ class genrateInvoiceController extends Controller
                         ->where("status", 1)
                         ->get();
                 }
-                //////////////////////////////////end of Pendinding amount /////////////////////////////////////
-                // $discountSum = SchoolFeeDiscount::where('student_id', $userData->id)->where('status', 1)->sum('dis_amount');
-                // $discountSum_l = SchoolFeeDiscount::where('student_id', $userData->id)->get();
-                $dis_items_details = []; // Fees items details json for invoice print
+               
 
                 $amount =
                     null !== $discountSum
                         ? $data->amount - $discountSum
                         : $data->amount;
-                // if ($pending_record && $data->fees_cat == $pending_record->fees_cat) {
-                //     $pending_amount = $pending_record->pending_amount;
-                //     $total_invoice_amount = $amount + $pending_amount;
-                // } else {
+              
                 $total_invoice_amount = $amount;
                 // }
 
@@ -455,14 +445,7 @@ class genrateInvoiceController extends Controller
                     // Update the discount status in the database
                     $discountId = $disrecord->id; // Assuming you have a discount_id field in the $disrecord object
                 }
-                ///////////////////////end of discount concordination//////////////////////////////
-                // Generate a unique invoice number
-                // do {
-                //     $randomNumber = rand(1111, 9999);
-                //     $invoice_no = 'SVS' . date('dMy') . $randomNumber . date('His');
-                // } while (in_array(strtoupper($invoice_no), $usedInvoiceIdsNos));
-
-                // $invoice_no = strtoupper($invoice_no);
+              
                 $invoice_no = FastInvoiceHelper::generateInvoiceWithPrefix(
                     $fees_cat
                 );
@@ -591,60 +574,8 @@ class genrateInvoiceController extends Controller
                         "updated_at" => now(), // Update the timestamp
                     ]);
 
-                //////////////////////////////////invoice created //////////////////////////////////////////////////
-                // if ($GenerateInvoiceView) {
-                //     try {
-                //         $phone_no = Student::where('roll_no', $userData->roll_no)->value('Mobilenumber');
-
-                //         // Add Indian country code if the phone number is not empty
-                //         if (!empty($phone_no)) {
-                //             // Add +91 as the country code for Indian numbers
-                //             $phone_no = '+91' . $phone_no;
-
                 if ($GenerateInvoiceView) {
-                    // try {
-                    //     $phone_no = Student::where('roll_no', $userData->roll_no)->value('Mobilenumber');
-                    //     // SMS API authentication credentials
-                    //     // $username = "1zgB8GtvL6nCGfZxJJgQ";
-                    //     // $password = "MXpnQjhHdHZMNm5DR2ZaeEpKZ1E6Q1o4ZDVBNWNta2k1R0dZaWZlcE5tSG02ZGh1Z0Rwb3haT29TRWRMMQ==";
-
-                    //     // Add Indian country code if the phone number is not empty
-                    //     if (!empty($phone_no)) {
-                    //         // Add +91 as the country code for Indian numbers
-                    //         // $phone_no = '+91' . $phone_no;
-                    //         $phone_no = '+91' . $phone_no;
-
-                    //         $message = "Dear " . $userData->name . ", This is to inform you that your ward's fee has been generated. Your invoice number is " . $dataFeeMaps['invoice_no'] . " and the due date for payment is " . $dataFeeMaps['due_date'] . ". If you have any questions or require support, please feel free to contact the Santhosha Vidhyalaya administrator. Pay Online using  https://santhoshavidhyalaya.com/Payfeeportal/  - Santhosha Vidhyalaya";
-
-                    //         // Send SMS using Laravel HTTP client
-                    //         $smsResponse = Http::withHeaders([
-                    //             'Content-Type' => 'application/json',
-                    //             'Authorization' => 'Basic MXpnQjhHdHZMNm5DR2ZaeEpKZ1E6Q1o4ZDVBNWNta2k1R0dZaWZlcE5tSG02ZGh1Z0Rwb3haT29TRWRMMQ==', // Replace with your BASIC AUTH string
-                    //         ])->post('https://restapi.smscountry.com/v0.1/Accounts/1zgB8GtvL6nCGfZxJJgQ/SMSes/', [
-                    //             "Text" => $message,
-                    //             "Number" => $phone_no,
-                    //             "SenderId" => "SVHSTL",
-                    //             "DRNotifyUrl" => "https://www.domainname.com/notifyurl",
-                    //             "DRNotifyHttpMethod" => "POST",
-                    //             "Tool" => "API",
-                    //         ]);
-
-                    //         // Handle the SMS response (you can customize this as needed)
-                    //         $smsStatusCode = $smsResponse->status();
-                    //         $smsResponseBody = $smsResponse->body();
-
-                    //         if ($smsStatusCode == 200) {
-                    //             // SMS sent successfully
-                    //             Log::info('SMS sent successfully. Response: ' . $smsResponseBody);
-                    //         } else {
-                    //             // SMS sending failed
-                    //             Log::error('SMS sending failed. Response: ' . $smsResponseBody);
-                    //         }
-                    //     }
-                    // } catch (\Exception $e) {
-                    //     Log::error('Exception: ' . $e->getMessage());
-                    // }
-
+                  
                     if (!empty($discountId)) {
                         // Find the discount record
                         $discount = SchoolFeeDiscount::find($discountId);
@@ -654,24 +585,6 @@ class genrateInvoiceController extends Controller
                             $discount->save();
                         }
                     }
-                    // $contentWithLineBreaks =   htmlspecialchars_decode(nl2br(str_replace('<br>', "\n", $data->fees_glance)));
-                    // $invoiceMail = new InvoiceGenerated(
-                    //     $dataFeeMaps['invoice_no'],
-                    //     $userData->roll_no,
-                    //     $userData->name,
-                    //     $userData->standard,
-                    //     $userData->twe_group,
-                    //     $userData->sec,
-                    //     $userData->hostelOrDay,
-                    //     $userData->sponser_id,
-                    //     $userData->email,
-                    //     $contentWithLineBreaks,
-                    //     $data->fees_cat,
-                    //     json_encode($data->fees_items_details)
-                    // );
-                    // // Mail::to($userData->email)->send($invoiceMail);
-                    // Mail::to($userData->email)->queue($invoiceMail);
-                    ////////////////////////////////////mail Send ///////////////////////////////////////////////////////////////////////
                     $concatenatedHeadingsresult = "";
                     foreach ($records as $record) {
                         // $concatenatedHeadings .= 'Fee Heading: ' . $record->fees_heading . ' - Subheading: ' . $record->fees_sub_heading . ' - Amount: ' . $record->amount . '<br>';
