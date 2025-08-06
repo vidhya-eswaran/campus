@@ -69,6 +69,7 @@ class PaymentsController extends Controller
 
         $userAccessToken = $data['reqData']['accessToken'];
         $userId = $data['reqData']['userId'];
+        $platform = $data['platform'] ?? 'web';
 
         $transactionId = randomId();
         SchoolLogger::log("🧾 Transaction ID: $transactionId");
@@ -222,7 +223,26 @@ class PaymentsController extends Controller
                 ]);
 
                 SchoolLogger::log(" Razorpay order created. ID: {$razorpayOrder->id}, Amount: ₹" . $payment_order_data['amount']);
-
+                if ($platform === 'mobile') {
+                    return response()->json([
+                        'status' => true,
+                        'data' => [
+                            'key' => config('razorpay.key'),
+                            'amount' => $payment_order_data['amount'] * 100,
+                            'currency' => 'INR',
+                            'name' => env('APP_NAME', 'School Payment'),
+                            'description' => 'School Fee Payment',
+                            'order_id' => $razorpayOrder->id,
+                            'callback_url' => $appUrl . '/redirect',
+                            'prefill' => [
+                                'name' => $user_record->name,
+                                'email' => $user_record->email,
+                                'contact' => $user_record->mobile_no
+                            ],
+                            'notes' => ['transaction_id' => $transactionId]
+                        ]
+                    ]);
+                }
                 return view('razorpay-checkout', [
                     'checkoutData' => [
                         'key' => config('razorpay.key'),
