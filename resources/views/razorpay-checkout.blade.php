@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Razorpay Payment</title>
+    <title>EUCTO CAMPUS - School Fee Payment</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background-color: #f5f5f5;
+        }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+        .subtitle {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 40px;
+        }
+    </style>
 </head>
 <body>
+    <div class="logo">
+        <img src="{{ asset('images/CampusLogo.png') }}" alt="EUCTO Logo" style="width: 20%;">
+    </div>
+    <div class="title">EUCTO CAMPUS</div>
+    <div class="subtitle">School Fee Payment</div>
     <h2>Redirecting to Razorpay...</h2>
 
     <script>
