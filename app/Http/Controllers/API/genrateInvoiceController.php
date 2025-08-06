@@ -492,7 +492,7 @@ class genrateInvoiceController extends Controller
                     "fees_items_details" => json_encode(
                         $data->fees_items_details
                     ),
-                    "discount_items_details" => json_encode($dis_items_details),
+                    "discount_items_details" => json_encode($dis_items_details ?? []),
                     "actual_amount" => $data->amount,
                     "discount_percent" => $discountSum,
                     // 'amount' => (null !== $request->input('discount')) ? $item['amount'] - ($item['amount'] * ($request->input('discount') / 100)) : $item['amount'],
