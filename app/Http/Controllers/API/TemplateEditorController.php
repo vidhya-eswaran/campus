@@ -629,6 +629,7 @@ class TemplateEditorController extends Controller
     // Update an existing template
     public function update(Request $request, $id)
     {
+        $id = $request->id;
         $template = TemplateEditor::find($id);
         if ($template) {
             $data = $request->validate([
