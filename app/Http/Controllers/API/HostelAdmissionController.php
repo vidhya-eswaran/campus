@@ -402,7 +402,7 @@ class HostelAdmissionController extends Controller
                         "notification_type" => "web", // default type
                         "notification_category" =>
                             "submitted_hostel_admission_confirmed", // updated category
-                        "urllink" => $admission->id,
+                        "urllink" => $student->id,
                         "content" =>
                             "Your child’s hostel admission has been confirmed. Further details will be shared shortly.",
                         "created_at" => now(),
