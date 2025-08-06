@@ -1,47 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Payment Receipt</title>
+    <title>EUCTO CAMPUS - School Fee Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-           .header {
+        body {
+            font-family: Arial, sans-serif;
             text-align: center;
+            padding-top: 50px;
+            background-color: #f5f5f5;
+        }
+        .logo {
             margin-bottom: 20px;
         }
-
-        .logo {
-            max-width: 150px;
-            margin-bottom: 10px;
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
         }
-        
+        .subtitle {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 <body>
-    
-     <div class="header">
-                    <img src="{{ $message->embed(public_path('images/CampusLogo.png')) }}" alt="Logo" style="width: 20%;">
+    <div class="logo">
+        <img src="{{ asset('images/CampusLogo.png') }}" alt="EUCTO Logo" style="width: 20%;">
+    </div>
+    <div class="title">EUCTO CAMPUS</div>
+    <div class="subtitle">School Fee Payment</div>
+    <h2>Redirecting to Razorpay...</h2>
 
-             <h1>EUCTO CAMPUS</h1>
-                 <strong>Payment Receipt</strong>
-
-        </div>
-
-    <p>Dear {{ $invoiceDetails->name }},</p>
- <h1 style="color: red;">This is a New Santhosha Vidhyalaya payment software test ,Please ignore this email.</h1>
-     <p>Thank you for your payment. Below are your payment details:</p>
-
-    <ul>   
-        <li>Invoice ID: {{ $invoiceDetails->invoice_no }}</li>
-        <li>Transaction ID: {{ $transactionId}}</li>
-        <li>Amount Paid: Rs. {{ $amount }}.00</li>
-        <li>Payment Status: {{ $payment_status }}</li>
-    </ul>
-
-    <!-- <p>You can download your payment receipt by clicking the link/button below:</p>
-  <a href="{{ $downloadLink }}" class="download-btn">
-        <img src="{{ $message->embed(public_path('images/download.png')) }}" alt="PDF" width="270" height="70"/>
-     </a> -->
-    <p>This email confirms your recent payment!</p>
-
- <p>Sincerely,</p>
-  <p>Santhosha Vidhyalaya Administration</p></body>
+    <script>
+        var options = {
+            "key": "{{ $checkoutData['key'] }}",
+            "amount": "{{ $checkoutData['amount'] }}",
+            "currency": "{{ $checkoutData['currency'] }}",
+            "name": "{{ $checkoutData['name'] }}",
+            "description": "{{ $checkoutData['description'] }}",
+            "order_id": "{{ $checkoutData['order_id'] }}",
+            "handler": function (response){
+                window.location.href = "{{ $checkoutData['callback_url'] }}?payment_id=" + response.razorpay_payment_id + "&order_id=" + response.razorpay_order_id + "&signature=" + response.razorpay_signature;
+            },
+            "prefill": {
+                "name": "{{ $checkoutData['prefill']['name'] }}",
+                "email": "{{ $checkoutData['prefill']['email'] }}",
+                "contact": "{{ $checkoutData['prefill']['contact'] }}"
+            },
+            "notes": {
+                "transaction_id": "{{ $checkoutData['notes']['transaction_id'] }}"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    </script>
+</body>
 </html>
