@@ -365,7 +365,7 @@ class HostelAdmissionController extends Controller
                     );
                 }
                 // Get student details and send email
-                $student = User::find($hostelAdmission->student_id);
+                $student = User::where('admission_no', $hostelAdmission->student_id)->first();
                 $hostelAdmission->student = $student;
 
                 //push notification
