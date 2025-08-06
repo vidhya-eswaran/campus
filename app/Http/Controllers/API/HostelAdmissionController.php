@@ -365,7 +365,7 @@ class HostelAdmissionController extends Controller
                     );
                 }
                 // Get student details and send email
-                $student = User::find($hostelAdmission->student_id);
+                $student = User::where('admission_no', $hostelAdmission->student_id)->first();
                 $hostelAdmission->student = $student;
 
                 //push notification
@@ -402,7 +402,7 @@ class HostelAdmissionController extends Controller
                         "notification_type" => "web", // default type
                         "notification_category" =>
                             "submitted_hostel_admission_confirmed", // updated category
-                        "urllink" => $admission->id,
+                        "urllink" => $student->id,
                         "content" =>
                             "Your child’s hostel admission has been confirmed. Further details will be shared shortly.",
                         "created_at" => now(),
