@@ -328,9 +328,15 @@ class PaymentsController extends Controller
             ])));
         }
     }
-  public function processRetrunResponse(Request $request)
+    public function processRetrunResponse(Request $request)
     {
         SchoolLogger::log('Received payment response', $request->all());
+
+        // Initialize variables to null or default values
+        // This ensures they are always defined, even if an exception occurs early.
+        $internal_transaction_id = null;
+        $payment_orders_details_id = null;
+        $front_end_return_url = config('app.frontend_url') . '/payment-status'; // Sensible default fallback
 
         try {
             $api = new Api(config('razorpay.key'), config('razorpay.secret'));
@@ -341,31 +347,35 @@ class PaymentsController extends Controller
                 'razorpay_signature' => $request->razorpay_signature,
             ];
 
+            // Verify the payment signature
             $api->utility->verifyPaymentSignature($attributes);
 
+            // Fetch payment details from Razorpay
             $payment = $api->payment->fetch($request->razorpay_payment_id);
-            $internal_trasactionid = $payment->notes['transaction_id'];
+            $internal_transaction_id = $payment->notes['transaction_id'] ?? null; // Use null coalescing for safety
 
-            $paymentOrdersDetails_model_data = PaymentOrdersDetails::where('internal_txn_id', $internal_trasactionid)->first();
+            // Retrieve payment order details from your database
+            $paymentOrdersDetails_model_data = PaymentOrdersDetails::where('internal_txn_id', $internal_transaction_id)->first();
 
             if (!$paymentOrdersDetails_model_data) {
+                Log::error("Payment order details not found for internal_txn_id: " . $internal_transaction_id);
                 return response()->json(["message" => "Payment order details not found."], 404);
             }
 
-            $paymentOrdersDetails_id = $paymentOrdersDetails_model_data['id'];
-            $return_res_data['return_data'] = $paymentOrdersDetails_model_data['user_return_req_data'];
-            $front_end_retrun_url = $paymentOrdersDetails_model_data['user_return_Url'];
-            $invoice_lists = Invoice_list::where('unique_payment_transaction_id', $internal_trasactionid)->get();
+            $payment_orders_details_id = $paymentOrdersDetails_model_data['id'];
+            // $return_res_data['return_data'] = $paymentOrdersDetails_model_data['user_return_req_data']; // This variable is not used
+            $front_end_return_url = $paymentOrdersDetails_model_data['user_return_Url'];
+            $invoice_lists = Invoice_list::where('unique_payment_transaction_id', $internal_transaction_id)->get();
 
-            // Save payment status
+            // Prepare common status data for PaymentOrdersStatuses
             $statusData = [
-                'clnt_txn_ref' => $internal_trasactionid,
+                'clnt_txn_ref' => $internal_transaction_id,
                 'txn_status' => $payment->status,
                 'txn_msg' => 'Payment ' . $payment->status,
                 'txn_err_msg' => $payment->error_description ?? '',
                 'tpsl_bank_cd' => 'RAZORPAY',
                 'tpsl_txn_id' => $payment->id,
-                'txn_amt' => $payment->amount / 100,
+                'txn_amt' => $payment->amount / 100, // Convert Razorpay's paise to currency
                 'clnt_rqst_meta' => json_encode($payment->notes),
                 'tpsl_txn_time' => date('Y-m-d H:i:s', $payment->created_at),
                 'bal_amt' => 0,
@@ -381,7 +391,7 @@ class PaymentsController extends Controller
 
             $PaymentOrdersStatus = PaymentOrdersStatuses::create($statusData);
 
-            // Update additional status fields
+            // Update additional status fields for dual verification
             $PaymentOrdersStatus->update([
                 'merchantTransactionIdentifier' => $payment->id,
                 'dual_veri_statusCode' => $payment->status,
@@ -391,8 +401,9 @@ class PaymentsController extends Controller
                 'dual_veri_updatedAt' => now(),
             ]);
 
+            // Handle 'captured' (success) payment status
             if ($payment->status === 'captured') {
-                PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+                PaymentOrdersDetails::find($payment_orders_details_id)->update([
                     'payment_status' => 'success',
                     'payment_code' => 'SUCCESS'
                 ]);
@@ -406,13 +417,13 @@ class PaymentsController extends Controller
                     $invoiceDetails = GenerateInvoiceView::find($invoice_list->invoice_id);
 
                     if (!$invoiceDetails) {
-                        Log::error("Invoice details not found for invoice_id: " . $invoice_list->invoice_id);
+                        Log::error("Invoice details not found for invoice_id: " . $invoice_list->invoice_id . " during successful payment processing.");
                         continue; // Skip to the next invoice if details are missing
                     }
 
                     $student = User::find($invoiceDetails->student_id);
                     if (!$student) {
-                        Log::error("Student not found for student_id: " . $invoiceDetails->student_id);
+                        Log::error("Student not found for student_id: " . $invoiceDetails->student_id . " during successful payment processing.");
                         continue; // Skip to the next invoice if student is missing
                     }
 
@@ -425,9 +436,10 @@ class PaymentsController extends Controller
                         ->latest("id")
                         ->first();
 
+                    // Safely get most recent dues and excess amounts, defaulting to 0
                     $most_recent_dues = $paymentInformation->due_amount ?? 0;
-                    $s_excess = $paymentInformation->s_excess_amount ?? 0;
-                    $h_excess = $paymentInformation->h_excess_amount ?? 0;
+                    $s_excess = $paymentInformation->s_excess_amount ?? 0; // Not directly used in the logic, but retained from original
+                    $h_excess = $paymentInformation->h_excess_amount ?? 0; // Not directly used in the logic, but retained from original
 
                     $dues = 0;
                     $school_excess = 0;
@@ -438,15 +450,11 @@ class PaymentsController extends Controller
                     $student_current_excess_school = $student->excess_amount ?? 0;
                     $student_current_excess_hostel = $student->h_excess_amount ?? 0;
 
-                    // Logic for applying payment and managing excess
-                    // This section largely mirrors the logic from your cashgenratetwo for non-sponsor payments,
-                    // but applied to the online payment's `transaction_amount`.
-
                     // Total amount available including existing excess
                     $totalAvailableAmount = $amountPaidForThisInvoice;
                     if ($invoiceDetails->fees_cat === "school") {
                         $totalAvailableAmount += $student_current_excess_school;
-                    } else {
+                    } else { // Assuming 'hostel' or similar for non-school fees_cat
                         $totalAvailableAmount += $student_current_excess_hostel;
                     }
 
@@ -475,21 +483,21 @@ class PaymentsController extends Controller
                     }
                     $student->save();
 
-
+                    // Update invoice details (store raw numbers, format for display when needed)
                     $invoiceDetails->update([
                         'payment_status' => $payment_status,
-                        'invoice_status' => 4,
-                        'paid_amount' => number_format(($invoiceDetails->paid_amount ?? 0) + $amountPaidForThisInvoice, 2, '.', ''),
-                        'invoice_pending_amount' => number_format($dues, 2, '.', ''),
+                        'invoice_status' => 4, // Assuming '4' means "Paid" or "Completed"
+                        'paid_amount' => ($invoiceDetails->paid_amount ?? 0) + $amountPaidForThisInvoice,
+                        'invoice_pending_amount' => $dues,
                     ]);
 
                     // Insert into by_pay_informations with updated due and excess amounts
                     DB::table('by_pay_informations')->insert([
                         'transactionId' => $invoice_list->payment_transaction_id,
-                        'sponsor' => $paymentOrdersDetails_model_data->sponsor ?? null, // Assuming sponsor might be in paymentOrdersDetails_model_data
+                        'sponsor' => $paymentOrdersDetails_model_data->sponsor ?? null,
                         'student_id' => $invoiceDetails->student_id,
                         'invoice_id' => $invoice_list->invoice_id,
-                        'amount' => $amountPaidForThisInvoice, // This is the amount paid in this transaction
+                        'amount' => $amountPaidForThisInvoice,
                         'payment_status' => $payment_status,
                         'mode' => 'online',
                         'type' => $invoiceDetails->fees_cat,
@@ -500,16 +508,13 @@ class PaymentsController extends Controller
                         'updated_at' => now(),
                     ]);
 
-                    // Receipt email
+                    // Receipt email - Uncomment and complete if needed
                     $transactionId = $invoice_list->payment_transaction_id;
                     // $downloadLink = "https://anandniketanschool.com/anparenthub/PaymentReceipt12345678912345678/$transactionId";
-
-                    // Consider what to pass as $amount to the mailer - typically the actual amount for this invoice
                     // Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink, $amountPaidForThisInvoice, $payment_status, $transactionId));
-                    // The line above was incomplete, so commenting it out. Ensure your Mail class parameters match.
 
-                     try {
-                        $payer = $paymentOrdersDetails_model_data->sponsor ? "Sponsor" : "Parent"; // Adjust if sponsor details are tracked differently for online
+                    try {
+                        $payer = $paymentOrdersDetails_model_data->sponsor ? "Sponsor" : "Parent";
                         LifecycleLogger::log(
                             "Receipt Generated for Invoice: {$invoiceDetails->invoice_no}",
                             $invoiceDetails->student_id,
@@ -523,7 +528,7 @@ class PaymentsController extends Controller
                             ]
                         );
                     } catch (\Exception $e) {
-                        \Log::error("Failed to log receipt generation lifecycle for online payment.", [
+                        Log::error("Failed to log receipt generation lifecycle for online payment.", [
                             "invoice_no" => $invoiceDetails->invoice_no,
                             "student_id" => $invoiceDetails->student_id,
                             "error" => $e->getMessage(),
@@ -531,12 +536,15 @@ class PaymentsController extends Controller
                     }
                 }
 
-                // Redirect to the success URL
-                return redirect()->away($front_end_retrun_url . '?status=success&transaction_id=' . $internal_trasactionid);
-
+                // Return success response for the frontend
+                return response()->json([
+                    'status' => 'success',
+                    'transaction_id' => $internal_transaction_id,
+                    'redirect_url' => $front_end_return_url,
+                ], 200);
             } else {
-                // Payment failed or other status
-                PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+                // Handle payment failed or other non-captured status
+                PaymentOrdersDetails::find($payment_orders_details_id)->update([
                     'payment_status' => 'failed',
                     'payment_code' => $payment->status
                 ]);
@@ -553,53 +561,63 @@ class PaymentsController extends Controller
                             'payment_status' => 'Failed',
                             'invoice_status' => 5, // Assuming '5' means "Failed"
                         ]);
-                    }
-                     try {
-                        LifecycleLogger::log(
-                            "Online Payment Failed for Invoice: {$invoiceDetails->invoice_no}",
-                            $invoiceDetails->student_id,
-                            "payment_failed_online",
-                            [
+
+                        try {
+                            LifecycleLogger::log(
+                                "Online Payment Failed for Invoice: {$invoiceDetails->invoice_no}",
+                                $invoiceDetails->student_id,
+                                "payment_failed_online",
+                                [
+                                    "invoice_no" => $invoiceDetails->invoice_no,
+                                    "amount_attempted" => $payment->amount / 100,
+                                    "payment_mode" => "Online",
+                                    "transaction_id" => $internal_transaction_id,
+                                    "error_description" => $payment->error_description ?? 'Unknown error',
+                                ]
+                            );
+                        } catch (\Exception $e) {
+                            Log::error("Failed to log online payment failure lifecycle.", [
                                 "invoice_no" => $invoiceDetails->invoice_no,
-                                "amount_attempted" => $payment->amount / 100,
-                                "payment_mode" => "Online",
-                                "transaction_id" => $internal_trasactionid,
-                                "error_description" => $payment->error_description ?? 'Unknown error',
-                            ]
-                        );
-                    } catch (\Exception $e) {
-                        \Log::error("Failed to log online payment failure lifecycle.", [
-                            "invoice_no" => $invoiceDetails->invoice_no,
-                            "student_id" => $invoiceDetails->student_id,
-                            "error" => $e->getMessage(),
-                        ]);
+                                "student_id" => $invoiceDetails->student_id,
+                                "error" => $e->getMessage(),
+                            ]);
+                        }
+                    } else {
+                        Log::error("Invoice details not found for invoice_id: " . $invoice_list->invoice_id . " during failed payment processing.");
                     }
                 }
-                // Redirect to the failure URL
-                return redirect()->away($front_end_retrun_url . '?status=failed&transaction_id=' . $internal_trasactionid . '&message=' . urlencode($payment->error_description ?? 'Payment failed'));
-            }
 
+                // Return failure response for the frontend
+                return response()->json([
+                    'status' => 'failed',
+                    'transaction_id' => $internal_transaction_id,
+                    'message' => $payment->error_description ?? 'Payment failed',
+                    'redirect_url' => $front_end_return_url, // Provide redirect URL for failures as well
+                ], 400);
+            }
         } catch (\Exception $e) {
             SchoolLogger::log('Payment verification failed', ['error' => $e->getMessage(), 'request' => $request->all()]);
-            // Log the error for debugging
-            \Log::error("Razorpay payment verification failed: " . $e->getMessage(), ['request_data' => $request->all()]);
+            Log::error("Razorpay payment verification failed: " . $e->getMessage(), ['request_data' => $request->all()]);
 
-            // Retrieve internal transaction ID if possible for consistent error reporting
-            $internal_trasactionid = $request->razorpay_order_id ?? 'N/A';
-            if (isset($payment) && isset($payment->notes['transaction_id'])) {
-                $internal_trasactionid = $payment->notes['transaction_id'];
+            // Attempt to retrieve internal_transaction_id if not set earlier
+            if (is_null($internal_transaction_id)) {
+                $internal_transaction_id = $request->razorpay_order_id ?? 'N/A';
+                // If payment object was created before the exception, try to get transaction_id from it
+                if (isset($payment) && isset($payment->notes['transaction_id'])) {
+                    $internal_transaction_id = $payment->notes['transaction_id'];
+                }
             }
 
-            // Update payment order details and status to reflect failure
-            if (isset($paymentOrdersDetails_id)) {
-                PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+            // Update payment order details and status to reflect failure due to verification
+            if (!is_null($payment_orders_details_id)) {
+                PaymentOrdersDetails::find($payment_orders_details_id)->update([
                     'payment_status' => 'failed',
                     'payment_code' => 'VERIFICATION_FAILED'
                 ]);
             }
 
             PaymentOrdersStatuses::create([
-                'clnt_txn_ref' => $internal_trasactionid,
+                'clnt_txn_ref' => $internal_transaction_id,
                 'txn_status' => 'failed',
                 'txn_msg' => 'Payment verification failed',
                 'txn_err_msg' => $e->getMessage(),
@@ -610,11 +628,16 @@ class PaymentsController extends Controller
                 'dual_veri_updatedAt' => now(),
             ]);
 
-            // Redirect to a generic error page or the front-end with an error message
-            $front_end_retrun_url = $front_end_retrun_url ?? config('app.frontend_url') . '/payment-status'; // Fallback URL
-            return redirect()->away($front_end_retrun_url . '?status=failed&transaction_id=' . $internal_trasactionid . '&message=' . urlencode('Payment verification failed. Please contact support.'));
+            // Return error response to the frontend
+            return response()->json([
+                'status' => 'failed',
+                'transaction_id' => $internal_transaction_id,
+                'message' => 'Payment verification failed. Please contact support.',
+                'redirect_url' => $front_end_return_url, // Always provide a redirect URL
+            ], 500); // Use 500 for server-side errors during verification
         }
     }
+
 
 
     // public function processRetrunResponse(Request $request)
