@@ -196,12 +196,35 @@ class PaymentsController extends Controller
                     'receipt' => (string)$transactionId,
                     'amount' => $payment_order_data['amount'] * 100,
                     'currency' => 'INR',
+                    // 'notes' => [
+                    //     'school_fee' => (string)$total_fee_amount,
+                    //     'customer_name' => $user_record->name,
+                    //     'customer_email' => $user_record->email,
+                    //     'customer_phone' => $user_record->mobile_no,
+                    //     'customer_id' => (string)$user_record->id
+                    // ]
+
                     'notes' => [
-                        'school_fee' => (string)$total_fee_amount,
-                        'customer_name' => $user_record->name,
-                        'customer_email' => $user_record->email,
-                        'customer_phone' => $user_record->mobile_no,
-                        'customer_id' => (string)$user_record->id
+                        'transaction_id'   => $transactionId,
+                        'user_id'          => (string) $user_record->id,
+                        'user_uuid'        => $user_record->uuid,
+                        'user_name'        => $user_record->name,
+                        'user_email'       => $user_record->email,
+                        'user_phone'       => $user_record->mobile_no,
+                        'invoice_ids'      => implode(',', $invoice_list),
+                        'platform'         => $platform,
+                        'pay_amount'       => $payment_order_data['amount'],
+                        'school_name'      => $schoolName,
+                        'return_url'       => $data['returnUrl'],
+                        'currency'         => 'INR',
+                        'customer_type'    => $user_record->user_type ?? 'N/A',
+                        'access_token'     => substr($userAccessToken, 0, 50), // truncate to fit Razorpay limit
+                        'invoice_id' => $invoice->slno,
+                        'payment_transaction_id' => $transactionIdWithSuffix,
+                        'unique_payment_transaction_id' => $baseTransactionId,
+                        'status' => 'intiated',
+                        'transaction_amount' => $due2,
+                        'balance_amount' => 0
                     ]
                 ]);
 
@@ -241,7 +264,28 @@ class PaymentsController extends Controller
                                 'email' => $user_record->email,
                                 'contact' => $user_record->mobile_no
                             ],
-                            'notes' => ['transaction_id' => $transactionId]
+                            'notes' => [
+                                'transaction_id'   => $transactionId,
+                                'user_id'          => (string) $user_record->id,
+                                'user_uuid'        => $user_record->uuid,
+                                'user_name'        => $user_record->name,
+                                'user_email'       => $user_record->email,
+                                'user_phone'       => $user_record->mobile_no,
+                                'invoice_ids'      => implode(',', $invoice_list),
+                                'platform'         => $platform,
+                                'pay_amount'       => $payment_order_data['amount'],
+                                'school_name'      => $schoolName,
+                                'return_url'       => $data['returnUrl'],
+                                'currency'         => 'INR',
+                                'customer_type'    => $user_record->user_type ?? 'N/A',
+                                'access_token'     => substr($userAccessToken, 0, 50), // truncate to fit Razorpay limit
+                                'invoice_id' => $invoice->slno,
+                                'payment_transaction_id' => $transactionIdWithSuffix,
+                                'unique_payment_transaction_id' => $baseTransactionId,
+                                'status' => 'intiated',
+                                'transaction_amount' => $due2,
+                                'balance_amount' => 0
+                            ]
                         ]
                     ]);
                 }
