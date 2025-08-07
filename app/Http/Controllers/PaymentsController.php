@@ -250,8 +250,8 @@ class PaymentsController extends Controller
                         'key' => config('razorpay.key'),
                         'amount' => $payment_order_data['amount'] * 100,
                         'currency' => 'INR',
-                        'name' => env('APP_NAME', 'School Payment'),
-                        'description' => 'School Fee Payment',
+                        'name' =>'EUCTO CAMPUS',
+                        'description' =>  'Fee Payment',
                         'order_id' => $razorpayOrder->id,
                         'callback_url' => $appUrl . '/redirect',
                         'prefill' => [
