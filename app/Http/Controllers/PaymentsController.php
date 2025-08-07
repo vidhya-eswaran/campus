@@ -250,7 +250,7 @@ class PaymentsController extends Controller
                         'key' => config('razorpay.key'),
                         'amount' => $payment_order_data['amount'] * 100,
                         'currency' => 'INR',
-                        'name' =>'EUCTO CAMPUS',
+                        'name' => 'EUCTO CAMPUS',
                         'description' =>  'Fee Payment',
                         'order_id' => $razorpayOrder->id,
                         'callback_url' => $appUrl . '/redirect',
@@ -451,9 +451,9 @@ class PaymentsController extends Controller
             $return_res_data['status'] = 401;
             $return_res_data['msg'] = 'Payment verification failed';
         }
-
-        $urlString = urlencode(json_encode($return_res_data));
-        return redirect($front_end_retrun_url . $urlString);
+        return response()->json($return_res_data);
+        // $urlString = urlencode(json_encode($return_res_data));
+        // return redirect($front_end_retrun_url . $urlString);
     }
     public function getTransactionLogs($studentId)
     {
