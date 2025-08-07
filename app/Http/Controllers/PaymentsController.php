@@ -223,8 +223,7 @@ class PaymentsController extends Controller
                         'payment_transaction_id' => $transactionIdWithSuffix,
                         'unique_payment_transaction_id' => $baseTransactionId,
                         'status' => 'intiated',
-                        'transaction_amount' => $due2,
-                        'balance_amount' => 0
+                         'balance_amount' => 0
                     ]
                 ]);
 
@@ -283,8 +282,7 @@ class PaymentsController extends Controller
                                 'payment_transaction_id' => $transactionIdWithSuffix,
                                 'unique_payment_transaction_id' => $baseTransactionId,
                                 'status' => 'intiated',
-                                'transaction_amount' => $due2,
-                                'balance_amount' => 0
+                                 'balance_amount' => 0
                             ]
                         ]
                     ]);
