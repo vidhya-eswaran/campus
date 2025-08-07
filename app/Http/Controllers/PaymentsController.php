@@ -432,6 +432,8 @@ class PaymentsController extends Controller
                         'payment_status' => $status,
                         'mode' => 'online',
                         'type' => $invoiceDetails->fees_cat,
+                        's_excess_amount'=>0,
+                        'h_excess_amount'=>0,
                         'due_amount' => $new_due,
                         'created_at' => now(),
                     ]);
