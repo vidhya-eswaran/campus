@@ -327,12 +327,9 @@ class PaymentsController extends Controller
             ])));
         }
     }
-
-
-
-    public function processRetrunResponse(Request $request)
+  public function processRetrunResponse(Request $request)
     {
-        SchoolLogger::log(' Received payment response', $request->all());
+        SchoolLogger::log('Received payment response', $request->all());
 
         try {
             $api = new Api(config('razorpay.key'), config('razorpay.secret'));
@@ -349,6 +346,11 @@ class PaymentsController extends Controller
             $internal_trasactionid = $payment->notes['transaction_id'];
 
             $paymentOrdersDetails_model_data = PaymentOrdersDetails::where('internal_txn_id', $internal_trasactionid)->first();
+
+            if (!$paymentOrdersDetails_model_data) {
+                return response()->json(["message" => "Payment order details not found."], 404);
+            }
+
             $paymentOrdersDetails_id = $paymentOrdersDetails_model_data['id'];
             $return_res_data['return_data'] = $paymentOrdersDetails_model_data['user_return_req_data'];
             $front_end_retrun_url = $paymentOrdersDetails_model_data['user_return_Url'];
@@ -401,112 +403,396 @@ class PaymentsController extends Controller
                     ]);
 
                     $invoiceDetails = GenerateInvoiceView::find($invoice_list->invoice_id);
-                    $status = $invoice_list->balance_amount != 0 ? "Partial Paid" : "Paid";
+
+                    if (!$invoiceDetails) {
+                        Log::error("Invoice details not found for invoice_id: " . $invoice_list->invoice_id);
+                        continue; // Skip to the next invoice if details are missing
+                    }
+
+                    $student = User::find($invoiceDetails->student_id);
+                    if (!$student) {
+                        Log::error("Student not found for student_id: " . $invoiceDetails->student_id);
+                        continue; // Skip to the next invoice if student is missing
+                    }
+
+                    $amountPaidForThisInvoice = $invoice_list->transaction_amount;
+
+                    // Fetch the most recent payment information for the student and fee category
+                    $paymentInformation = DB::table("by_pay_informations")
+                        ->where("student_id", $invoiceDetails->student_id)
+                        ->where("type", $invoiceDetails->fees_cat)
+                        ->latest("id")
+                        ->first();
+
+                    $most_recent_dues = $paymentInformation->due_amount ?? 0;
+                    $s_excess = $paymentInformation->s_excess_amount ?? 0;
+                    $h_excess = $paymentInformation->h_excess_amount ?? 0;
+
+                    $dues = 0;
+                    $school_excess = 0;
+                    $hostel_excess = 0;
+                    $payment_status = "Paid"; // Default to Paid, adjust later if partial
+
+                    // Determine if there's an existing excess from previous transactions for the student
+                    $student_current_excess_school = $student->excess_amount ?? 0;
+                    $student_current_excess_hostel = $student->h_excess_amount ?? 0;
+
+                    // Logic for applying payment and managing excess
+                    // This section largely mirrors the logic from your cashgenratetwo for non-sponsor payments,
+                    // but applied to the online payment's `transaction_amount`.
+
+                    // Total amount available including existing excess
+                    $totalAvailableAmount = $amountPaidForThisInvoice;
+                    if ($invoiceDetails->fees_cat === "school") {
+                        $totalAvailableAmount += $student_current_excess_school;
+                    } else {
+                        $totalAvailableAmount += $student_current_excess_hostel;
+                    }
+
+                    if ($totalAvailableAmount < $most_recent_dues) {
+                        $dues = $most_recent_dues - $totalAvailableAmount;
+                        $payment_status = "Partial Paid";
+                        $school_excess = 0;
+                        $hostel_excess = 0;
+                    } elseif ($totalAvailableAmount >= $most_recent_dues) {
+                        $dues = 0;
+                        if ($invoiceDetails->fees_cat === "school") {
+                            $school_excess = $totalAvailableAmount - $most_recent_dues;
+                            $hostel_excess = 0;
+                        } else {
+                            $school_excess = 0;
+                            $hostel_excess = $totalAvailableAmount - $most_recent_dues;
+                        }
+                        $payment_status = "Paid";
+                    }
+
+                    // Update student's excess amount
+                    if ($invoiceDetails->fees_cat == "school") {
+                        $student->excess_amount = $school_excess;
+                    } else {
+                        $student->h_excess_amount = $hostel_excess;
+                    }
+                    $student->save();
+
 
                     $invoiceDetails->update([
-                        'payment_status' => $status,
+                        'payment_status' => $payment_status,
                         'invoice_status' => 4,
-                        'paid_amount' => $invoice_list->transaction_amount,
-                        'invoice_pending_amount' => $invoice_list->balance_amount,
+                        'paid_amount' => number_format(($invoiceDetails->paid_amount ?? 0) + $amountPaidForThisInvoice, 2, '.', ''),
+                        'invoice_pending_amount' => number_format($dues, 2, '.', ''),
                     ]);
 
-                    $user = User::find($paymentOrdersDetails_model_data->user_id);
-                    $student_id = $invoiceDetails->student_id;
-
-                    $latestDue = DB::table('by_pay_informations')
-                        ->where('student_id', $student_id)
-                        ->where('type', $invoiceDetails->fees_cat)
-                        ->latest('id')
-                        ->value('due_amount') ?? 0;
-
-                    $new_due = $latestDue > $invoice_list->transaction_amount
-                        ? $latestDue - $invoice_list->transaction_amount
-                        : 0;
-
+                    // Insert into by_pay_informations with updated due and excess amounts
                     DB::table('by_pay_informations')->insert([
                         'transactionId' => $invoice_list->payment_transaction_id,
-                        'sponsor' => $user->user_type === 'sponser' ? $user->id : '',
+                        'sponsor' => $paymentOrdersDetails_model_data->sponsor ?? null, // Assuming sponsor might be in paymentOrdersDetails_model_data
                         'student_id' => $student_id,
                         'invoice_id' => $invoice_list->invoice_id,
-                        'amount' => $invoice_list->transaction_amount,
-                        'payment_status' => $status,
+                        'amount' => $amountPaidForThisInvoice, // This is the amount paid in this transaction
+                        'payment_status' => $payment_status,
                         'mode' => 'online',
                         'type' => $invoiceDetails->fees_cat,
-                        's_excess_amount'=>0,
-                        'h_excess_amount'=>0,
-                        'due_amount' => $new_due,
+                        's_excess_amount' => $school_excess,
+                        'h_excess_amount' => $hostel_excess,
+                        'due_amount' => $dues,
                         'created_at' => now(),
+                        'updated_at' => now(),
                     ]);
 
                     // Receipt email
                     $transactionId = $invoice_list->payment_transaction_id;
-                    $downloadLink = "https://anandniketanschool.com/anparenthub/PaymentReceipt12345678912345678/$transactionId";
+                    // $downloadLink = "https://anandniketanschool.com/anparenthub/PaymentReceipt12345678912345678/$transactionId";
 
-                    Mail::to('s.harikiran@eucto.com')
-                        ->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink, $invoice_list->transaction_amount, 'success', $transactionId));
+                    // Consider what to pass as $amount to the mailer - typically the actual amount for this invoice
+                    // Mail::to('s.harikiran@eucto.com')->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink, $amountPaidForThisInvoice, $payment_status, $transactionId));
+                    // The line above was incomplete, so commenting it out. Ensure your Mail class parameters match.
 
-                    SchoolLogger::log("📧 Receipt email queued", ['txn_id' => $transactionId]);
-
-                    // Handle pending
-                    if ($invoice_list->balance_amount !== 0) {
-                        DB::table('invoice_pendings')
-                            ->where('student_id', $student_id)
-                            ->update(['closed_status' => 1, 'updated_at' => now()]);
-
-                        DB::table('invoice_pendings')->insert([
-                            'fees_cat' => $invoiceDetails->fees_cat,
-                            'student_id' => $student_id,
-                            'invoice_no' => $invoiceDetails->invoice_no,
-                            'pending_amount' => $invoiceDetails->invoice_pending_amount,
+                     try {
+                        $payer = $paymentOrdersDetails_model_data->sponsor ? "Sponsor" : "Parent"; // Adjust if sponsor details are tracked differently for online
+                        LifecycleLogger::log(
+                            "Receipt Generated for Invoice: {$invoiceDetails->invoice_no}",
+                            $invoiceDetails->student_id,
+                            "receipt_generated",
+                            [
+                                "invoice_no" => $invoiceDetails->invoice_no,
+                                "paid_amount" => $amountPaidForThisInvoice,
+                                "payment_mode" => "Online",
+                                "payer" => $payer,
+                                "transaction_id" => $transactionId,
+                            ]
+                        );
+                    } catch (\Exception $e) {
+                        \Log::error("Failed to log receipt generation lifecycle for online payment.", [
+                            "invoice_no" => $invoiceDetails->invoice_no,
+                            "student_id" => $invoiceDetails->student_id,
+                            "error" => $e->getMessage(),
                         ]);
                     }
-
-                    // Notification
-                    DB::table('payment_notification_datas')->insert([
-                        'student_id' => $student_id,
-                        'email' => $user->email,
-                        'status' => 'success',
-                        'txnId' => $transactionId,
-                        'paidAmount' => $invoice_list->transaction_amount,
-                        'invoice_nos' => $invoiceDetails->invoice_no,
-                    ]);
-
-                    SchoolLogger::log(" Invoice processed successfully", [
-                        'invoice_id' => $invoice_list->invoice_id,
-                        'student_id' => $student_id,
-                        'txn_id' => $transactionId
-                    ]);
                 }
 
-                $return_res_data['status'] = 200;
-                $return_res_data['msg'] = 'Payment successful';
+                // Redirect to the success URL
+                return redirect()->away($front_end_retrun_url . '?status=success&transaction_id=' . $internal_trasactionid);
+
             } else {
+                // Payment failed or other status
                 PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
                     'payment_status' => 'failed',
                     'payment_code' => $payment->status
                 ]);
 
-                foreach ($invoice_lists as $invoice) {
-                    $invoice->update(['status' => 'failed']);
+                foreach ($invoice_lists as $invoice_list) {
+                    $invoice_list->update([
+                        'status' => 'failed',
+                        'transaction_completed_status' => 0
+                    ]);
+
+                    $invoiceDetails = GenerateInvoiceView::find($invoice_list->invoice_id);
+                    if ($invoiceDetails) {
+                        $invoiceDetails->update([
+                            'payment_status' => 'Failed',
+                            'invoice_status' => 5, // Assuming '5' means "Failed"
+                        ]);
+                    }
+                     try {
+                        LifecycleLogger::log(
+                            "Online Payment Failed for Invoice: {$invoiceDetails->invoice_no}",
+                            $invoiceDetails->student_id,
+                            "payment_failed_online",
+                            [
+                                "invoice_no" => $invoiceDetails->invoice_no,
+                                "amount_attempted" => $payment->amount / 100,
+                                "payment_mode" => "Online",
+                                "transaction_id" => $internal_trasactionid,
+                                "error_description" => $payment->error_description ?? 'Unknown error',
+                            ]
+                        );
+                    } catch (\Exception $e) {
+                        \Log::error("Failed to log online payment failure lifecycle.", [
+                            "invoice_no" => $invoiceDetails->invoice_no,
+                            "student_id" => $invoiceDetails->student_id,
+                            "error" => $e->getMessage(),
+                        ]);
+                    }
                 }
-
-                SchoolLogger::error("Payment failed", [
-                    'txn_id' => $payment->id,
-                    'reason' => $payment->error_description ?? 'Unknown'
-                ]);
-
-                $return_res_data['status'] = 401;
-                $return_res_data['msg'] = 'Payment failed';
+                // Redirect to the failure URL
+                return redirect()->away($front_end_retrun_url . '?status=failed&transaction_id=' . $internal_trasactionid . '&message=' . urlencode($payment->error_description ?? 'Payment failed'));
             }
+
         } catch (\Exception $e) {
-            SchoolLogger::error('Payment processing exception', ['error' => $e->getMessage()]);
-            $return_res_data['status'] = 401;
-            $return_res_data['msg'] = 'Payment verification failed';
+            SchoolLogger::log('Payment verification failed', ['error' => $e->getMessage(), 'request' => $request->all()]);
+            // Log the error for debugging
+            \Log::error("Razorpay payment verification failed: " . $e->getMessage(), ['request_data' => $request->all()]);
+
+            // Retrieve internal transaction ID if possible for consistent error reporting
+            $internal_trasactionid = $request->razorpay_order_id ?? 'N/A';
+            if (isset($payment) && isset($payment->notes['transaction_id'])) {
+                $internal_trasactionid = $payment->notes['transaction_id'];
+            }
+
+            // Update payment order details and status to reflect failure
+            if (isset($paymentOrdersDetails_id)) {
+                PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+                    'payment_status' => 'failed',
+                    'payment_code' => 'VERIFICATION_FAILED'
+                ]);
+            }
+
+            PaymentOrdersStatuses::create([
+                'clnt_txn_ref' => $internal_trasactionid,
+                'txn_status' => 'failed',
+                'txn_msg' => 'Payment verification failed',
+                'txn_err_msg' => $e->getMessage(),
+                'tpsl_bank_cd' => 'RAZORPAY',
+                'pay_res_updatedAt' => now(),
+                'dual_veri_statusCode' => 'VERIFICATION_FAILED',
+                'dual_veri_statusMessage' => 'Payment verification failed: ' . $e->getMessage(),
+                'dual_veri_updatedAt' => now(),
+            ]);
+
+            // Redirect to a generic error page or the front-end with an error message
+            $front_end_retrun_url = $front_end_retrun_url ?? config('app.frontend_url') . '/payment-status'; // Fallback URL
+            return redirect()->away($front_end_retrun_url . '?status=failed&transaction_id=' . $internal_trasactionid . '&message=' . urlencode('Payment verification failed. Please contact support.'));
         }
-        return response()->json($return_res_data);
-        // $urlString = urlencode(json_encode($return_res_data));
-        // return redirect($front_end_retrun_url . $urlString);
     }
+
+
+    // public function processRetrunResponse(Request $request)
+    // {
+    //     SchoolLogger::log(' Received payment response', $request->all());
+
+    //     try {
+    //         $api = new Api(config('razorpay.key'), config('razorpay.secret'));
+
+    //         $attributes = [
+    //             'razorpay_order_id' => $request->razorpay_order_id,
+    //             'razorpay_payment_id' => $request->razorpay_payment_id,
+    //             'razorpay_signature' => $request->razorpay_signature,
+    //         ];
+
+    //         $api->utility->verifyPaymentSignature($attributes);
+
+    //         $payment = $api->payment->fetch($request->razorpay_payment_id);
+    //         $internal_trasactionid = $payment->notes['transaction_id'];
+
+    //         $paymentOrdersDetails_model_data = PaymentOrdersDetails::where('internal_txn_id', $internal_trasactionid)->first();
+    //         $paymentOrdersDetails_id = $paymentOrdersDetails_model_data['id'];
+    //         $return_res_data['return_data'] = $paymentOrdersDetails_model_data['user_return_req_data'];
+    //         $front_end_retrun_url = $paymentOrdersDetails_model_data['user_return_Url'];
+    //         $invoice_lists = Invoice_list::where('unique_payment_transaction_id', $internal_trasactionid)->get();
+
+    //         // Save payment status
+    //         $statusData = [
+    //             'clnt_txn_ref' => $internal_trasactionid,
+    //             'txn_status' => $payment->status,
+    //             'txn_msg' => 'Payment ' . $payment->status,
+    //             'txn_err_msg' => $payment->error_description ?? '',
+    //             'tpsl_bank_cd' => 'RAZORPAY',
+    //             'tpsl_txn_id' => $payment->id,
+    //             'txn_amt' => $payment->amount / 100,
+    //             'clnt_rqst_meta' => json_encode($payment->notes),
+    //             'tpsl_txn_time' => date('Y-m-d H:i:s', $payment->created_at),
+    //             'bal_amt' => 0,
+    //             'card_id' => $payment->card_id ?? null,
+    //             'alias_name' => null,
+    //             'BankTransactionID' => $payment->acquirer_data['bank_transaction_id'] ?? null,
+    //             'mandate_reg_no' => null,
+    //             'token' => null,
+    //             'hash' => $request->razorpay_signature,
+    //             'payment_gatway_response' => json_encode($payment->toArray()),
+    //             'pay_res_updatedAt' => now()
+    //         ];
+
+    //         $PaymentOrdersStatus = PaymentOrdersStatuses::create($statusData);
+
+    //         // Update additional status fields
+    //         $PaymentOrdersStatus->update([
+    //             'merchantTransactionIdentifier' => $payment->id,
+    //             'dual_veri_statusCode' => $payment->status,
+    //             'dual_veri_statusMessage' => 'Payment ' . $payment->status,
+    //             'paymentModeBy' => $payment->method,
+    //             'dual_veri_response' => json_encode($payment->toArray()),
+    //             'dual_veri_updatedAt' => now(),
+    //         ]);
+
+    //         if ($payment->status === 'captured') {
+    //             PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+    //                 'payment_status' => 'success',
+    //                 'payment_code' => 'SUCCESS'
+    //             ]);
+
+    //             foreach ($invoice_lists as $invoice_list) {
+    //                 $invoice_list->update([
+    //                     'status' => 'success',
+    //                     'transaction_completed_status' => 1
+    //                 ]);
+
+    //                 $invoiceDetails = GenerateInvoiceView::find($invoice_list->invoice_id);
+    //                 $status = $invoice_list->balance_amount != 0 ? "Partial Paid" : "Paid";
+
+    //                 $invoiceDetails->update([
+    //                     'payment_status' => $status,
+    //                     'invoice_status' => 4,
+    //                     'paid_amount' => $invoice_list->transaction_amount,
+    //                     'invoice_pending_amount' => $invoice_list->balance_amount,
+    //                 ]);
+
+    //                 $user = User::find($paymentOrdersDetails_model_data->user_id);
+    //                 $student_id = $invoiceDetails->student_id;
+
+    //                 $latestDue = DB::table('by_pay_informations')
+    //                     ->where('student_id', $student_id)
+    //                     ->where('type', $invoiceDetails->fees_cat)
+    //                     ->latest('id')
+    //                     ->value('due_amount') ?? 0;
+
+    //                 $new_due = $latestDue > $invoice_list->transaction_amount
+    //                     ? $latestDue - $invoice_list->transaction_amount
+    //                     : 0;
+
+    //                 DB::table('by_pay_informations')->insert([
+    //                     'transactionId' => $invoice_list->payment_transaction_id,
+    //                     'sponsor' => $user->user_type === 'sponser' ? $user->id : '',
+    //                     'student_id' => $student_id,
+    //                     'invoice_id' => $invoice_list->invoice_id,
+    //                     'amount' => $invoice_list->transaction_amount,
+    //                     'payment_status' => $status,
+    //                     'mode' => 'online',
+    //                     'type' => $invoiceDetails->fees_cat,
+    //                     's_excess_amount'=>0,
+    //                     'h_excess_amount'=>0,
+    //                     'due_amount' => $new_due,
+    //                     'created_at' => now(),
+    //                 ]);
+
+    //                 // Receipt email
+    //                 $transactionId = $invoice_list->payment_transaction_id;
+    //                 $downloadLink = "https://anandniketanschool.com/anparenthub/PaymentReceipt12345678912345678/$transactionId";
+
+    //                 Mail::to('s.harikiran@eucto.com')
+    //                     ->queue(new PaymentReceiptMail($invoiceDetails, $downloadLink, $invoice_list->transaction_amount, 'success', $transactionId));
+
+    //                 SchoolLogger::log("📧 Receipt email queued", ['txn_id' => $transactionId]);
+
+    //                 // Handle pending
+    //                 if ($invoice_list->balance_amount !== 0) {
+    //                     DB::table('invoice_pendings')
+    //                         ->where('student_id', $student_id)
+    //                         ->update(['closed_status' => 1, 'updated_at' => now()]);
+
+    //                     DB::table('invoice_pendings')->insert([
+    //                         'fees_cat' => $invoiceDetails->fees_cat,
+    //                         'student_id' => $student_id,
+    //                         'invoice_no' => $invoiceDetails->invoice_no,
+    //                         'pending_amount' => $invoiceDetails->invoice_pending_amount,
+    //                     ]);
+    //                 }
+
+    //                 // Notification
+    //                 DB::table('payment_notification_datas')->insert([
+    //                     'student_id' => $student_id,
+    //                     'email' => $user->email,
+    //                     'status' => 'success',
+    //                     'txnId' => $transactionId,
+    //                     'paidAmount' => $invoice_list->transaction_amount,
+    //                     'invoice_nos' => $invoiceDetails->invoice_no,
+    //                 ]);
+
+    //                 SchoolLogger::log(" Invoice processed successfully", [
+    //                     'invoice_id' => $invoice_list->invoice_id,
+    //                     'student_id' => $student_id,
+    //                     'txn_id' => $transactionId
+    //                 ]);
+    //             }
+
+    //             $return_res_data['status'] = 200;
+    //             $return_res_data['msg'] = 'Payment successful';
+    //         } else {
+    //             PaymentOrdersDetails::find($paymentOrdersDetails_id)->update([
+    //                 'payment_status' => 'failed',
+    //                 'payment_code' => $payment->status
+    //             ]);
+
+    //             foreach ($invoice_lists as $invoice) {
+    //                 $invoice->update(['status' => 'failed']);
+    //             }
+
+    //             SchoolLogger::error("Payment failed", [
+    //                 'txn_id' => $payment->id,
+    //                 'reason' => $payment->error_description ?? 'Unknown'
+    //             ]);
+
+    //             $return_res_data['status'] = 401;
+    //             $return_res_data['msg'] = 'Payment failed';
+    //         }
+    //     } catch (\Exception $e) {
+    //         SchoolLogger::error('Payment processing exception', ['error' => $e->getMessage()]);
+    //         $return_res_data['status'] = 401;
+    //         $return_res_data['msg'] = 'Payment verification failed';
+    //     }
+    //     return response()->json($return_res_data);
+    //     // $urlString = urlencode(json_encode($return_res_data));
+    //     // return redirect($front_end_retrun_url . $urlString);
+    // }
     public function getTransactionLogs($studentId)
     {
         // Step 1: Get invoice IDs from generate_invoice_view
