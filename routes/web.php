@@ -66,7 +66,7 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
     Route::get('/', function () {
         dd("Ffffff");
     });
-    Route::get('/offline-store', [AdmissionController::class,'offline_store'])->name('admission.offline_store');
+    // Route::get('/offline-store', [AdmissionController::class,'offline_store'])->name('admission.offline_store'); //<-need to change
 
     //Route::get('/admission-view/{id}', 'App\Http\Controllers\AdmissionController@view')->name('admission.view_admission');
     Route::get('/documents/{id}',[AdmissionController::class,'documents'])->name('admission.documents');
