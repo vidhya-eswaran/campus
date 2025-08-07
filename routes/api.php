@@ -240,7 +240,7 @@ Route::group(["prefix" => "{school}", "middleware" =>  ['school.db']], function 
         }
     });
     Route::get('/intiate-payment', [PaymentsController::class, 'intiatePayment']);
-    Route::post('/redirect', [PaymentsController::class, 'processRetrunResponse']);
+    Route::post('/redirect', [PaymentsController::class, 'processRetrunResponse'])->name('razorpay.redirect');
     Route::get('/student/{studentId}/transactions', [PaymentsController::class, 'getTransactionLogs']);
 
     Route::post("/users", [SchoolUserController::class , "store"]);

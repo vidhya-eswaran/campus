@@ -10,6 +10,179 @@
         body {
             font-family: 'Poppins', sans-serif;
             text-align: center;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header-container {
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo-text-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .subtitle {
+            font-size: 1.3em;
+            color: #7f8c8d;
+        }
+        .content-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-size: 1.8em;
+            color: #34495e;
+            margin-bottom: 25px;
+        }
+        .loading-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        body:not(.razorpay-loaded) .content-container {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-container">
+        <div class="logo-text-group">
+            <div class="logo">
+                <img src="{{ asset('images/CampusLogo.png') }}" alt="EUCTO Logo">
+            </div>
+            <div class="title">EUCTO CAMPUS</div>
+            <div class="subtitle">School Fee Payment</div>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <h2>Initiating Secure Payment...</h2>
+        <div class="loading-message">
+            <div class="loading-spinner"></div>
+            <p>Please wait while we redirect you to the Razorpay payment gateway.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('razorpay-loaded');
+
+            var options = @json($checkoutData);
+
+            options.handler = function (response) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = options.callback_url;
+                form.style.display = 'none';
+
+                const fields = {
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                    _token: '{{ csrf_token() }}'
+                };
+
+                for (const key in fields) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            };
+
+            options.theme = {
+                color: "#3498db"
+            };
+
+            var rzp1 = new Razorpay(options);
+
+            rzp1.on('payment.failed', function (response) {
+                window.location.href = options.callback_url + '?' + encodeURIComponent(JSON.stringify({
+                    status: false,
+                    msg: response.error?.description || "Payment failed. Please try again."
+                }));
+            });
+
+            rzp1.on('modal.closed', function () {
+                window.location.href = options.callback_url + '?' + encodeURIComponent(JSON.stringify({
+                    status: false,
+                    msg: "Payment cancelled by user."
+                }));
+            });
+
+            rzp1.open();
+        });
+    </script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUCTO CAMPUS - School Fee Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
             background-color: #f8f9fa; /* Light background */
             margin: 0;
             padding: 0;
@@ -186,4 +359,4 @@
         });
     </script>
 </body>
-</html>
+</html> -->
