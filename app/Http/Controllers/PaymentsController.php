@@ -486,7 +486,7 @@ class PaymentsController extends Controller
                     DB::table('by_pay_informations')->insert([
                         'transactionId' => $invoice_list->payment_transaction_id,
                         'sponsor' => $paymentOrdersDetails_model_data->sponsor ?? null, // Assuming sponsor might be in paymentOrdersDetails_model_data
-                        'student_id' => $student_id,
+                        'student_id' => $invoiceDetails->student_id,
                         'invoice_id' => $invoice_list->invoice_id,
                         'amount' => $amountPaidForThisInvoice, // This is the amount paid in this transaction
                         'payment_status' => $payment_status,
