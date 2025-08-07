@@ -212,18 +212,14 @@ class PaymentsController extends Controller
                         'user_email'       => $user_record->email,
                         'user_phone'       => $user_record->mobile_no,
                         'invoice_ids'      => implode(',', $invoice_list),
-                        'platform'         => $platform,
                         'pay_amount'       => $payment_order_data['amount'],
                         'school_name'      => $schoolName,
                         'return_url'       => $data['returnUrl'],
-                        'currency'         => 'INR',
-                        'customer_type'    => $user_record->user_type ?? 'N/A',
                         'access_token'     => substr($userAccessToken, 0, 50), // truncate to fit Razorpay limit
                         'invoice_id' => $invoice->slno,
                         'payment_transaction_id' => $transactionIdWithSuffix,
                         'unique_payment_transaction_id' => $baseTransactionId,
                         'status' => 'intiated',
-                         'balance_amount' => 0
                     ]
                 ]);
 
@@ -271,18 +267,14 @@ class PaymentsController extends Controller
                                 'user_email'       => $user_record->email,
                                 'user_phone'       => $user_record->mobile_no,
                                 'invoice_ids'      => implode(',', $invoice_list),
-                                'platform'         => $platform,
                                 'pay_amount'       => $payment_order_data['amount'],
                                 'school_name'      => $schoolName,
                                 'return_url'       => $data['returnUrl'],
-                                'currency'         => 'INR',
-                                'customer_type'    => $user_record->user_type ?? 'N/A',
                                 'access_token'     => substr($userAccessToken, 0, 50), // truncate to fit Razorpay limit
                                 'invoice_id' => $invoice->slno,
                                 'payment_transaction_id' => $transactionIdWithSuffix,
                                 'unique_payment_transaction_id' => $baseTransactionId,
                                 'status' => 'intiated',
-                                 'balance_amount' => 0
                             ]
                         ]
                     ]);
@@ -301,7 +293,23 @@ class PaymentsController extends Controller
                             'email' => $user_record->email,
                             'contact' => $user_record->mobile_no
                         ],
-                        'notes' => ['transaction_id' => $transactionId]
+                        'notes' => [
+                            'transaction_id'   => $transactionId,
+                            'user_id'          => (string) $user_record->id,
+                            'user_uuid'        => $user_record->uuid,
+                            'user_name'        => $user_record->name,
+                            'user_email'       => $user_record->email,
+                            'user_phone'       => $user_record->mobile_no,
+                            'invoice_ids'      => implode(',', $invoice_list),
+                            'pay_amount'       => $payment_order_data['amount'],
+                            'school_name'      => $schoolName,
+                            'return_url'       => $data['returnUrl'],
+                            'access_token'     => substr($userAccessToken, 0, 50), // truncate to fit Razorpay limit
+                            'invoice_id' => $invoice->slno,
+                            'payment_transaction_id' => $transactionIdWithSuffix,
+                            'unique_payment_transaction_id' => $baseTransactionId,
+                            'status' => 'intiated',
+                        ]
                     ]
                 ]);
             } catch (\Exception $e) {
