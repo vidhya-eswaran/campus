@@ -1448,92 +1448,110 @@ class genrateInvoiceController extends Controller
         }
     }
 
-    public function listgenratefilter(Request $request)
-    {
-        //        return response()->json([
-        //     'totals' => $request->all()
-        // ]);
+   public function listgenratefilter(Request $request)
+{
+    $from = $request->input("from");
+    $to = $request->input("to");
+    $acad_year = $request->input("year");
+    $payment_status = $request->input("payment_status") ?? ""; // new filter
 
-        $from = $request->input("from");
-        $to = $request->input("to");
-        $acad_year = $request->input("year");
-        // Validate date format
-        $dateFormat = "Y-m-d";
-        if ($from !== null && $to !== null) {
-            $fromDate = Carbon::createFromFormat($dateFormat, $from);
-            $toDate = Carbon::createFromFormat($dateFormat, $to);
-            $from = $fromDate->format("Y-m-d");
-            $to = $toDate->format("Y-m-d");
-        } else {
-            $from = "";
-            $to = "";
-        }
-
-        // if (!$fromDate || !$toDate) {
-        //     return response()->json(['error' => 'Invalid date format. Please provide dates in the format DD/MM/YYYY.'], 400);
-        // }
-        //2023-06-20
-
-        // Convert dates to the format used in the database
-
-        $std = $request->input("std") ?? "";
-        $org = $request->input("selectedGen") ?? "";
-
-        if ($request->input("selectedGen") == "Organisation") {
-            $org = 1;
-        } else {
-            $org = 0;
-        }
-        $query = GenerateInvoiceView::query();
-
-        if ($from && $to && !$acad_year) {
-            $query->whereBetween(DB::raw("DATE(created_at)"), [$from, $to]);
-
-            if ($std) {
-                $query->where("standard", $std);
-            }
-
-            if ($org == 1) {
-                $query->where("sponser_id", "!=", "");
-            }
-
-            $query->orderByDesc("slno");
-        } elseif (!$from && !$to && !$acad_year) {
-            if ($std) {
-                $query->where("standard", $std);
-            }
-
-            if ($org == 1) {
-                $query->where("sponser_id", "!=", "");
-            }
-
-            $query->orderByDesc("slno");
-        } elseif ($from && $to && $acad_year) {
-            $query
-                ->where("acad_year", $acad_year)
-                ->whereBetween(DB::raw("DATE(created_at)"), [$from, $to])
-                ->orderByDesc("slno");
-        }
-
-        $students = $query->get();
-        // Calculate totals
-        $totalActualAmount = $students->sum("actual_amount");
-        $totalAmount = $students->sum("amount");
-        $totalDiscountPercent = $students->sum("discount_percent");
-        $totalPaidAmount = $students->sum("paid_amount");
-        $totalInvoicePendingAmount = $students->sum("invoice_pending_amount");
-
-        return response()->json([
-            // 'data'=>$students,
-            "totals" => [
-                "total_actual_amount" => $totalActualAmount,
-                "total_amount" => $totalAmount,
-                "total_discount_percent" => $totalDiscountPercent,
-                "total_paid_amount" => $totalPaidAmount,
-                "total_invoice_pending_amount" => $totalInvoicePendingAmount,
-            ],
-        ]);
+    // Validate and format dates
+    $dateFormat = "Y-m-d";
+    if ($from !== null && $to !== null) {
+        $fromDate = Carbon::createFromFormat($dateFormat, $from);
+        $toDate = Carbon::createFromFormat($dateFormat, $to);
+        $from = $fromDate->format("Y-m-d");
+        $to = $toDate->format("Y-m-d");
+    } else {
+        $from = "";
+        $to = "";
     }
+
+    $std = $request->input("std") ?? "";
+    $org = $request->input("selectedGen") ?? "";
+
+    if ($request->input("selectedGen") == "Organisation") {
+        $org = 1;
+    } else {
+        $org = 0;
+    }
+
+    $query = GenerateInvoiceView::query();
+
+    if ($from && $to && !$acad_year) {
+        $query->whereBetween(DB::raw("DATE(created_at)"), [$from, $to]);
+
+        if ($std) {
+            $query->where("standard", $std);
+        }
+
+        if ($org == 1) {
+            $query->where("sponser_id", "!=", "");
+        }
+
+        if ($payment_status) { // apply payment_status filter
+            $query->where("payment_status", $payment_status);
+        }
+
+        $query->orderByDesc("slno");
+
+    } elseif (!$from && !$to && !$acad_year) {
+
+        if ($std) {
+            $query->where("standard", $std);
+        }
+
+        if ($org == 1) {
+            $query->where("sponser_id", "!=", "");
+        }
+
+        if ($payment_status) {
+            $query->where("payment_status", $payment_status);
+        }
+
+        $query->orderByDesc("slno");
+
+    } elseif ($from && $to && $acad_year) {
+
+        $query
+            ->where("acad_year", $acad_year)
+            ->whereBetween(DB::raw("DATE(created_at)"), [$from, $to]);
+
+        if ($std) {
+            $query->where("standard", $std);
+        }
+
+        if ($org == 1) {
+            $query->where("sponser_id", "!=", "");
+        }
+
+        if ($payment_status) {
+            $query->where("payment_status", $payment_status);
+        }
+
+        $query->orderByDesc("slno");
+    }
+
+    $students = $query->get();
+
+    // Calculate totals
+    $totalActualAmount = $students->sum("actual_amount");
+    $totalAmount = $students->sum("amount");
+    $totalDiscountPercent = $students->sum("discount_percent");
+    $totalPaidAmount = $students->sum("paid_amount");
+    $totalInvoicePendingAmount = $students->sum("invoice_pending_amount");
+
+    return response()->json([
+        "totals" => [
+            "total_actual_amount" => $totalActualAmount,
+            "total_amount" => $totalAmount,
+            "total_discount_percent" => $totalDiscountPercent,
+            "total_paid_amount" => $totalPaidAmount,
+            "total_invoice_pending_amount" => $totalInvoicePendingAmount,
+        ],
+    ]);
+}
+
 
     public function docGenerate(Request $request)
     {
