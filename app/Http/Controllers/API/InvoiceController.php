@@ -269,7 +269,7 @@ class InvoiceController extends Controller
             ->where("sponser_id", $user_id)
             ->where("status", 1)
             ->get();
-    } elseif ($user_type == "parent" || $user_type == "student") {
+    } elseif (in_array($user_type, ["parent", "student"])) {
         $student_records = User::select("roll_no")
             ->where("id", $user_id)
             ->where("status", 1)
@@ -278,10 +278,12 @@ class InvoiceController extends Controller
         $student_records = User::select("roll_no")
             ->where("status", 1)
             ->get();
+    } else {
+        $student_records = collect(); // default empty collection
     }
 
     foreach ($student_records as $student_record) {
-        if ($student_record->roll_no) {
+        if (!empty($student_record->roll_no)) {
             $student_list[] = $student_record->roll_no;
         }
     }
@@ -310,7 +312,7 @@ class InvoiceController extends Controller
     foreach ($invoiceLists as $invoice) {
         $paymentInformation = DB::table("by_pay_informations")
             ->where("student_id", $invoice->student_id)
-            ->where("type", $invoice->fees_cat)
+            ->where("type", $invoice->fees_cat ?? '') // null-safe
             ->latest("id")
             ->first();
 
@@ -326,7 +328,7 @@ class InvoiceController extends Controller
                 "studentName" => $invoice->name,
                 "studentRegNo" => $invoice->roll_no,
                 "academicYear" => $invoice->acad_year,
-                "due_date" => date("d/M/Y", strtotime($invoice->due_date)),
+                "due_date" => !empty($invoice->due_date) ? date("d/M/Y", strtotime($invoice->due_date)) : null,
                 "payStatus" => $invoice->payment_status,
                 "sponserId" => $invoice->slno,
                 "amount" => $invoice->amount,
@@ -340,18 +342,17 @@ class InvoiceController extends Controller
         }
     }
 
-    // Get invoice details for the first invoice in the list
+    // Get invoice details for the first invoice
+    $invoiceDetails = null;
     if ($invoiceLists->isNotEmpty()) {
         $firstInvoice = $invoiceLists->first();
         $invoiceDetails = DB::table("generate_invoice_views")
             ->where("invoice_no", $firstInvoice->invoice_no)
             ->first();
-    } else {
-        $invoiceDetails = null;
     }
 
     // Get bypayDetails and latestbypayDetails safely
-    if ($invoiceDetails) {
+    if (!empty($invoiceDetails) && isset($invoiceDetails->fees_cat)) {
         $bypayDetails = DB::table("by_pay_informations")
             ->where("type", $invoiceDetails->fees_cat)
             ->where("invoice_id", $invoiceDetails->slno)
