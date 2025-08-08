@@ -258,7 +258,7 @@ class InvoiceController extends Controller
                 ])
                 ->header("Access-Control-Allow-Origin", "*");
         } else {
-            $fees_cat = $requestData["inoviceTypes"];
+            // $fees_cat = $requestData["inoviceTypes"];
             $user_id = $requestData["userId"];
             $user_type = $requestData["userType"];
             $payment_status = $requestData["payment_status"] ?? "";
