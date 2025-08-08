@@ -258,160 +258,131 @@ class InvoiceController extends Controller
                 ])
                 ->header("Access-Control-Allow-Origin", "*");
         } else {
-            // $fees_cat = $requestData["inoviceTypes"];
-            $user_id = $requestData["userId"];
-            $user_type = $requestData["userType"];
-            $payment_status = $requestData["payment_status"] ?? "";
-            $student_list = [];
-            if ($user_type == "sponser") {
-                $student_records = User::select("roll_no")
-                    ->where("sponser_id", $user_id)
-                    ->where("status", "=", 1)
-                    ->get();
-            } elseif ($user_type == "parent" || $user_type == "student") {
-                $student_records = User::select("roll_no")
-                    ->where("id", $user_id)
-                    ->where("status", "=", 1)
-                    ->get();
-            } elseif ($user_type == "admin") {
-                $student_records = User::select("roll_no")
-                    ->where("status", "=", 1)
-                    ->get();
-            }
-            foreach ($student_records as $student_record) {
-                if ($student_record->roll_no) {
-                    array_push($student_list, $student_record->roll_no);
-                }
-            }
+    $user_id = $requestData["userId"];
+    $user_type = $requestData["userType"];
+    $payment_status = $requestData["payment_status"] ?? "";
 
-            // $invoiceLists = DB::table('generate_invoice_views')
-            //     ->leftJoin('invoice_lists', function ($join) {
-            //         $join->on('generate_invoice_views.slno', '=', 'invoice_lists.invoice_id')
-            //             ->where('invoice_lists.transaction_completed_status', '=', 1);
-            //     })
-            //  //   ->where('generate_invoice_views.fees_cat', $fees_cat)
-            //     ->whereIn('roll_no', $student_list)
-            //     ->select(
-            //         'generate_invoice_views.*',
-            //         DB::raw("CAST(invoice_lists.payment_transaction_id AS CHAR) AS paymentTransactionId")
-            //     )
-            //     ->get(); //get all invoices
-            $invoiceLists = DB::table("generate_invoice_views")
-                ->leftJoin("invoice_lists", function ($join) {
-                    $join
-                        ->on(
-                            "generate_invoice_views.slno",
-                            "=",
-                            "invoice_lists.invoice_id"
-                        )
-                        ->where(
-                            "invoice_lists.transaction_completed_status",
-                            "=",
-                            1
-                        );
-                })
-                ->whereIn("roll_no", $student_list)
-                ->when($payment_status, function ($query) use ($payment_status) {
-                    $query->where("generate_invoice_views.payment_status", $payment_status);
-                })
-                ->select(
-                    "generate_invoice_views.*",
-                    DB::raw(
-                        "CAST(invoice_lists.payment_transaction_id AS CHAR) AS paymentTransactionId"
-                    )
-                )
-                ->orderBy("generate_invoice_views.slno", "desc") // Arrange in descending order based on slno
-                ->distinct() // Use distinct to eliminate duplicate rows
-                ->get();
+    // Build student list based on user type
+    $student_list = [];
+    if ($user_type == "sponser") {
+        $student_records = User::select("roll_no")
+            ->where("sponser_id", $user_id)
+            ->where("status", 1)
+            ->get();
+    } elseif ($user_type == "parent" || $user_type == "student") {
+        $student_records = User::select("roll_no")
+            ->where("id", $user_id)
+            ->where("status", 1)
+            ->get();
+    } elseif ($user_type == "admin") {
+        $student_records = User::select("roll_no")
+            ->where("status", 1)
+            ->get();
+    }
 
-            //     return response()->json(['data' => $invoiceLists], 200)->header("Access-Control-Allow-Origin",  "*");
+    foreach ($student_records as $student_record) {
+        if ($student_record->roll_no) {
+            $student_list[] = $student_record->roll_no;
+        }
+    }
 
-            $data = [];
-            $slnoSet = [];
-            foreach ($invoiceLists as $invoice) {
-                // Check if slno already exists
-                $paymentInformation = DB::table("by_pay_informations")
-                    ->where("student_id", $invoice->student_id)
-                    ->where("type", $invoice->fees_cat)
-                    ->latest("id")
-                    ->first();
-                $most_recent_dues = $paymentInformation->due_amount;
-                // $s_excess = $paymentInformation->s_excess_amount;
-                // $h_excess = $paymentInformation->h_excess_amount;
-                if (!in_array($invoice->slno, $slnoSet)) {
-                    $slnoSet[] = $invoice->slno;
-                    $data[] = [
-                        "id" => $invoice->slno,
-                        "invoiceNo" => $invoice->invoice_no,
-                        "feesCat" => $invoice->fees_cat,
-                        "paymentTransactionId" =>
-                        $invoice->paymentTransactionId,
-                        "studentName" => $invoice->name,
-                        "studentRegNo" => $invoice->roll_no,
-                        "academicYear" => $invoice->acad_year,
-                        "due_date" => date(
-                            "d/M/Y",
-                            strtotime($invoice->due_date)
-                        ),
-                        "payStatus" => $invoice->payment_status,
-                        "sponserId" => $invoice->slno,
-                        "amount" => $invoice->amount,
-                        "previous_pending_amount" =>
-                        $invoice->previous_pending_amount,
-                        // 'payableAmount' => $invoice->total_invoice_amount,
-                        "paid" => $invoice->paid_amount,
-                        "invoice_pending" => $invoice->invoice_pending_amount,
-                        "payableAmount" => $most_recent_dues,
-                        "dwonloadReceipt" =>
-                        $invoice->payment_status == "Paid" ||
-                            $invoice->payment_status == "Partial Paid"
-                            ? true
-                            : false,
-                        "disable" => $invoice->disable,
-                    ];
-                }
-            }
-            // $invoiceDetails = DB::table("generate_invoice_views")
-            //     ->where("invoice_no", $invoice->invoice_no)
-            //     ->first();
-if (count($invoiceLists) > 0) {
-    $firstInvoice = $invoiceLists->first();
-    $invoiceDetails = DB::table("generate_invoice_views")
-        ->where("invoice_no", $firstInvoice->invoice_no)
-        ->first();
-} else {
-    $invoiceDetails = null;
+    // Fetch invoices
+    $invoiceLists = DB::table("generate_invoice_views")
+        ->leftJoin("invoice_lists", function ($join) {
+            $join->on("generate_invoice_views.slno", "=", "invoice_lists.invoice_id")
+                 ->where("invoice_lists.transaction_completed_status", 1);
+        })
+        ->whereIn("roll_no", $student_list)
+        ->when($payment_status, function ($query) use ($payment_status) {
+            $query->where("generate_invoice_views.payment_status", $payment_status);
+        })
+        ->select(
+            "generate_invoice_views.*",
+            DB::raw("CAST(invoice_lists.payment_transaction_id AS CHAR) AS paymentTransactionId")
+        )
+        ->orderBy("generate_invoice_views.slno", "desc")
+        ->distinct()
+        ->get();
+
+    // Format data
+    $data = [];
+    $slnoSet = [];
+    foreach ($invoiceLists as $invoice) {
+        $paymentInformation = DB::table("by_pay_informations")
+            ->where("student_id", $invoice->student_id)
+            ->where("type", $invoice->fees_cat)
+            ->latest("id")
+            ->first();
+
+        $most_recent_dues = $paymentInformation->due_amount ?? 0;
+
+        if (!in_array($invoice->slno, $slnoSet)) {
+            $slnoSet[] = $invoice->slno;
+            $data[] = [
+                "id" => $invoice->slno,
+                "invoiceNo" => $invoice->invoice_no,
+                "feesCat" => $invoice->fees_cat,
+                "paymentTransactionId" => $invoice->paymentTransactionId,
+                "studentName" => $invoice->name,
+                "studentRegNo" => $invoice->roll_no,
+                "academicYear" => $invoice->acad_year,
+                "due_date" => date("d/M/Y", strtotime($invoice->due_date)),
+                "payStatus" => $invoice->payment_status,
+                "sponserId" => $invoice->slno,
+                "amount" => $invoice->amount,
+                "previous_pending_amount" => $invoice->previous_pending_amount,
+                "paid" => $invoice->paid_amount,
+                "invoice_pending" => $invoice->invoice_pending_amount,
+                "payableAmount" => $most_recent_dues,
+                "dwonloadReceipt" => in_array($invoice->payment_status, ["Paid", "Partial Paid"]),
+                "disable" => $invoice->disable,
+            ];
+        }
+    }
+
+    // Get invoice details for the first invoice in the list
+    if ($invoiceLists->isNotEmpty()) {
+        $firstInvoice = $invoiceLists->first();
+        $invoiceDetails = DB::table("generate_invoice_views")
+            ->where("invoice_no", $firstInvoice->invoice_no)
+            ->first();
+    } else {
+        $invoiceDetails = null;
+    }
+
+    // Get bypayDetails and latestbypayDetails safely
+    if ($invoiceDetails) {
+        $bypayDetails = DB::table("by_pay_informations")
+            ->where("type", $invoiceDetails->fees_cat)
+            ->where("invoice_id", $invoiceDetails->slno)
+            ->where(function ($query) {
+                $query->where("payment_status", "=", "")
+                      ->orWhereNull("payment_status");
+            })
+            ->get();
+
+        $latestbypayDetails = DB::table("by_pay_informations")
+            ->where("type", $invoiceDetails->fees_cat)
+            ->where("student_id", $invoiceDetails->student_id)
+            ->where("invoice_id", "!=", $invoiceDetails->slno)
+            ->latest("id")
+            ->first();
+    } else {
+        $bypayDetails = collect();
+        $latestbypayDetails = null;
+    }
+
+    return response()->json(
+        [
+            "data" => $data,
+            "bypayDetails" => $bypayDetails,
+            "latestbypayDetails" => $latestbypayDetails,
+            "invoiceDetails" => $invoiceDetails,
+        ],
+        200
+    )->header("Access-Control-Allow-Origin", "*");
 }
 
-            $bypayDetails = DB::table("by_pay_informations")
-                ->where("type", $invoiceDetails->fees_cat)
-                ->where("invoice_id", $invoiceDetails->slno)
-                ->where(function ($query) {
-                    $query
-                        ->where("payment_status", "=", "")
-                        ->orWhereNull("payment_status");
-                })
-                ->get();
-
-            $latestbypayDetails = DB::table("by_pay_informations")
-                ->where("type", $invoiceDetails->fees_cat)
-                ->where("student_id", $invoiceDetails->student_id)
-                ->where("invoice_id", "!=", $invoiceDetails->slno)
-                ->latest("id")
-                ->first();
-
-            return response()
-                ->json(
-                    [
-                        "data" => $data,
-                        "bypayDetails" => $bypayDetails,
-                        "latestbypayDetails" => $latestbypayDetails,
-                        "invoiceDetails" => $invoiceDetails,
-                    ],
-                    200
-                )
-                ->header("Access-Control-Allow-Origin", "*");
-        }
     }
     public function getsponinfo()
     {
