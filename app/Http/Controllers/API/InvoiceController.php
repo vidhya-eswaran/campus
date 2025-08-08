@@ -261,7 +261,7 @@ class InvoiceController extends Controller
             $fees_cat = $requestData["inoviceTypes"];
             $user_id = $requestData["userId"];
             $user_type = $requestData["userType"];
-
+            $payment_status = $requestData["payment_status"] ?? "";
             $student_list = [];
             if ($user_type == "sponser") {
                 $student_records = User::select("roll_no")
@@ -311,6 +311,9 @@ class InvoiceController extends Controller
                         );
                 })
                 ->whereIn("roll_no", $student_list)
+                ->when($payment_status, function ($query) use ($payment_status) {
+                    $query->where("generate_invoice_views.payment_status", $payment_status);
+                })
                 ->select(
                     "generate_invoice_views.*",
                     DB::raw(
@@ -342,7 +345,7 @@ class InvoiceController extends Controller
                         "invoiceNo" => $invoice->invoice_no,
                         "feesCat" => $invoice->fees_cat,
                         "paymentTransactionId" =>
-                            $invoice->paymentTransactionId,
+                        $invoice->paymentTransactionId,
                         "studentName" => $invoice->name,
                         "studentRegNo" => $invoice->roll_no,
                         "academicYear" => $invoice->acad_year,
@@ -354,16 +357,16 @@ class InvoiceController extends Controller
                         "sponserId" => $invoice->slno,
                         "amount" => $invoice->amount,
                         "previous_pending_amount" =>
-                            $invoice->previous_pending_amount,
+                        $invoice->previous_pending_amount,
                         // 'payableAmount' => $invoice->total_invoice_amount,
                         "paid" => $invoice->paid_amount,
                         "invoice_pending" => $invoice->invoice_pending_amount,
                         "payableAmount" => $most_recent_dues,
                         "dwonloadReceipt" =>
-                            $invoice->payment_status == "Paid" ||
+                        $invoice->payment_status == "Paid" ||
                             $invoice->payment_status == "Partial Paid"
-                                ? true
-                                : false,
+                            ? true
+                            : false,
                         "disable" => $invoice->disable,
                     ];
                 }
@@ -739,14 +742,14 @@ class InvoiceController extends Controller
             $schoolExcess =
                 $sponsorOption->excess_amount !== null &&
                 $sponsorOption->excess_amount != 0
-                    ? "S(Rs. " . $sponsorOption->excess_amount . ")"
-                    : "S(Rs. 0)";
+                ? "S(Rs. " . $sponsorOption->excess_amount . ")"
+                : "S(Rs. 0)";
 
             $hostelExcess =
                 $sponsorOption->h_excess_amount !== null &&
                 $sponsorOption->h_excess_amount != 0
-                    ? "H(Rs. " . $sponsorOption->h_excess_amount . ")"
-                    : "H(Rs. 0)";
+                ? "H(Rs. " . $sponsorOption->h_excess_amount . ")"
+                : "H(Rs. 0)";
 
             // Update the name field by appending both school and hostel excess amounts
             $sponsorOption->name =
@@ -815,7 +818,7 @@ class InvoiceController extends Controller
                 // Update the 'name' field by appending the excess_amount
                 $sponsorOptiont[] = [
                     "name" =>
-                        $sponsorOption->name .
+                    $sponsorOption->name .
                         " - Rs. " .
                         $sponsorOption->excess_amount,
                     "id" => $sponsorOption->id,
@@ -961,7 +964,7 @@ class InvoiceController extends Controller
     {
         // Fetch and return the sponsor's students based on $sponsorId
         // You can use the code discussed earlier to retrieve the students
-       // dd($request->all());
+        // dd($request->all());
         $sponsorId =  $request->query("sponsorId");
         $sponsorType = $request->query("sponsortype");
         $students = User::where("sponser_id", $sponsorId)
@@ -1111,14 +1114,14 @@ class InvoiceController extends Controller
         }
 
         $updateData = [];
-            if (!is_null($schoolExcess)) {
-                $updateData['excess_amount'] = $schoolExcess;
-            }
-            if (!is_null($hostelExcess)) {
-                $updateData['h_excess_amount'] = $hostelExcess;
-            }
+        if (!is_null($schoolExcess)) {
+            $updateData['excess_amount'] = $schoolExcess;
+        }
+        if (!is_null($hostelExcess)) {
+            $updateData['h_excess_amount'] = $hostelExcess;
+        }
 
-            DB::table('users')->where('id', $sponserId)->update($updateData);
+        DB::table('users')->where('id', $sponserId)->update($updateData);
 
         if ($users->isEmpty()) {
             return response()->json(['message' => 'No users found for this sponsor.'], 404);
@@ -1265,7 +1268,7 @@ class InvoiceController extends Controller
         }
         return response()->json(["data" => $data]);
     }
-    
+
     public function processCashPayment(Request $request)
     {
         $requestData = json_encode($request->all());
@@ -1287,7 +1290,7 @@ class InvoiceController extends Controller
         if ($sponsor_prev_excess < $totalAmount) {
             return response()->json([
                 "message" =>
-                    "Total amount is greater than sponsor excess amount.",
+                "Total amount is greater than sponsor excess amount.",
                 "status" => "NoAmount",
             ]);
         }
@@ -1382,7 +1385,7 @@ class InvoiceController extends Controller
                 ->where("type", $invoiceDetails->fees_cat)
                 ->latest("id")
                 ->first();
-                //   dd( $invoiceDetails->student_id,$invoiceDetails->fees_cat,$totalInvoiceAmountActual,$previousTransactions,$paymentInformation);
+            //   dd( $invoiceDetails->student_id,$invoiceDetails->fees_cat,$totalInvoiceAmountActual,$previousTransactions,$paymentInformation);
             $most_recent_dues = $paymentInformation->due_amount;
             if ($payed_amount < $totalInvoiceAmountActual) {
                 $dues = $most_recent_dues - $payed_amount;
@@ -1614,7 +1617,7 @@ class InvoiceController extends Controller
                         "student_info" => $student,
                         "acad_year" => $acad_year ?? "",
                         "message" =>
-                            "No dues found for the student. Issuing No Due Certificate...",
+                        "No dues found for the student. Issuing No Due Certificate...",
                         "status" => "No Dues Certificate Can be Issued",
                     ];
                 } else {
@@ -1705,7 +1708,7 @@ class InvoiceController extends Controller
                         "student_info" => $student,
                         "acad_year" => $acad_year,
                         "message" =>
-                            "No dues found for the student. Issuing No Due Certificate...",
+                        "No dues found for the student. Issuing No Due Certificate...",
                         "status" => "No Dues Certificate Can be Issued",
                     ];
                 } else {
@@ -1753,7 +1756,7 @@ class InvoiceController extends Controller
             // No records found that match the conditions
             return response()->json([
                 "message" =>
-                    "No unpaid invoices found for the specified slno values.",
+                "No unpaid invoices found for the specified slno values.",
             ]);
         }
         $invoices = [];
@@ -1787,7 +1790,7 @@ class InvoiceController extends Controller
                     $smsResponse = Http::withHeaders([
                         "Content-Type" => "application/json",
                         "Authorization" =>
-                            "Basic MXpnQjhHdHZMNm5DR2ZaeEpKZ1E6Q1o4ZDVBNWNta2k1R0dZaWZlcE5tSG02ZGh1Z0Rwb3haT29TRWRMMQ==", // Replace with your BASIC AUTH string
+                        "Basic MXpnQjhHdHZMNm5DR2ZaeEpKZ1E6Q1o4ZDVBNWNta2k1R0dZaWZlcE5tSG02ZGh1Z0Rwb3haT29TRWRMMQ==", // Replace with your BASIC AUTH string
                     ])->post(
                         "https://restapi.smscountry.com/v0.1/Accounts/1zgB8GtvL6nCGfZxJJgQ/SMSes/",
                         [
@@ -1795,7 +1798,7 @@ class InvoiceController extends Controller
                             "Number" => $phone_no,
                             "SenderId" => "SVHSTL",
                             "DRNotifyUrl" =>
-                                "https://www.domainname.com/notifyurl",
+                            "https://www.domainname.com/notifyurl",
                             "DRNotifyHttpMethod" => "POST",
                             "Tool" => "API",
                         ]
