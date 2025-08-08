@@ -371,9 +371,17 @@ class InvoiceController extends Controller
                     ];
                 }
             }
-            $invoiceDetails = DB::table("generate_invoice_views")
-                ->where("invoice_no", $invoice->invoice_no)
-                ->first();
+            // $invoiceDetails = DB::table("generate_invoice_views")
+            //     ->where("invoice_no", $invoice->invoice_no)
+            //     ->first();
+if (count($invoiceLists) > 0) {
+    $firstInvoice = $invoiceLists->first();
+    $invoiceDetails = DB::table("generate_invoice_views")
+        ->where("invoice_no", $firstInvoice->invoice_no)
+        ->first();
+} else {
+    $invoiceDetails = null;
+}
 
             $bypayDetails = DB::table("by_pay_informations")
                 ->where("type", $invoiceDetails->fees_cat)
